@@ -1,0 +1,72 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Account.AccountListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.AccountPages;
+    ViewBag.GridTitleadmin = Resources.TitleNames.AccountList;
+}
+
+@section AddButtonSection
+{
+    <a href="/BankAccount/Create" title="add"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="accountList">
+        <colgroup>
+            <col width="25%" />
+            <col width="25%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BankName)
+                </th>
+               <th>
+                    @Html.DisplayNameFor(model => model.CurrencyName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.InitialBalance)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurrentBalance)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BankName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrencyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedInitialBalance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedCurrentBalance)
+                    </td>
+                    <td align="right">
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "BankAccount", @Resources.DisabledButtonTooltips.AccountCantBeDeleted)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}

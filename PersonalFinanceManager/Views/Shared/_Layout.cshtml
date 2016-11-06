@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Manager</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.10/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("PFM", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            @Html.Partial("_LoginPartial")
+
+        </div>
+
+        <input type="hidden" id="indexAccountList" value="@Session["IndexAccountList"]"/>
+
+        <div class="container">
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    </li>
+
+                   
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <a href="/Dashboard/Index" >Dashboard</a>
+
+                            @*<ul class="dropdown-menu" aria-labelledby="dropdownMenu3" id="dashboardLink"></ul>*@
+                        </li>
+                        <li>
+                            <a data-toggle="dropdown" href="#" id="id_menu_movements">Movements</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                <li><a href="/Expenditure/Index" id="id_menu_expenditures">Expenditures</a></li>
+                                <li><a href="/AtmWithdraw/Index" id="id_menu_atmwithdraws">ATM Withdraws</a></li>
+                                <li><a href="/Income/Index" id="id_menu_incomes">Incomes</a></li>
+                            </ul>
+                        </li>
+
+                       
+                       @*<li>
+                            <a data-toggle="dropdown" href="#">Budget</a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                <li><a href="/BudgetPlan/Index">Plan Budget</a></li>
+                            </ul>
+                        </li>*@
+                        <li>
+                            <a data-toggle="dropdown" href="#">Configuration</a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <li><a href="/BankAccount/Index">Manage Accounts</a></li>
+                                <li><a href="/Bank/Index">Manage Banks</a></li>
+                                <li><a href="/Country/Index">Manage Countries</a></li>
+                                <li><a href="/Currency/Index">Manage Currencies</a></li>
+                                <li><a href="/ExpenditureType/Index">Manage Expenditure Types</a></li>
+                                <li><a href="/PaymentMethod/Index">Manage Payment Methods</a></li>
+                            </ul>
+                        </li>
+                    }
+                   
+                </ul>
+
+                <ul class="nav navbar-nav pull-right">
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <select id="availableAccounts">
+                            </select>
+                        </li>
+                    }
+
+                </ul>
+                @*@Html.Partial("_LoginPartial")*@
+            </div>
+            
+
+
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        @*<hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>*@
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/plug-ins/1.10.10/sorting/datetime-moment.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/plugins/ddslick/jquery.ddslick.min.js"></script>
+
+    <script type="text/javascript">
+
+        function buildDropDownList(data)
+        {
+            var link = "";
+            var ddData = [];
+            $.each(data, function (index) {
+                console.log(data[index]);
+                var accountId = data[index].Id;
+                var linkName = data[index].Name;
+                var icon = data[index].BankIcon;
+
+                ddData.push({
+                    text: linkName,
+                    value: accountId,
+                    imageSrc: icon
+                });
+            })
+
+            var indexAccountList = $("#indexAccountList").val();
+            if (!indexAccountList)
+            {
+                indexAccountList = 0;
+            }
+
+
+            var selected = false;
+
+            $('#availableAccounts').ddslick({
+                data: ddData,
+                width: 250,
+                imagePosition: "left",
+                defaultSelectedIndex: indexAccountList,
+                onSelected: function (data) {
+                    console.log(data);
+                    var url = "/Home/SaveCurrentAccount?accountId=" + data.selectedData.value + "&indexAccountList=" + data.selectedIndex;
+                    $.get(url, null, function (data) {
+                        if (data.Data.reloadPage == true) {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+
+            $('#availableAccounts').on("click", function () {
+                //location.reload();
+            });
+        }
+
+        function getAccountsForCurrentUser()
+        {
+            $.ajax({
+                url: '@Url.Action("GetAccounts", "BankAccount")',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    buildDropDownList(data);
+                },
+                error: function (xhr) { console.log(xhr); }
+            });
+        }
+
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('DD/MM/YYYY');
+
+            $('#accountList').DataTable({
+                "iDisplayLength": 18,
+                "bLengthChange": false,
+                "bFilter": false
+            });
+
+            $('#mytable').DataTable({
+                "iDisplayLength": 18,
+                "bLengthChange": false,
+                "bFilter": false,
+                "order": [[0, "desc"]]
+            });
+            $('#mytable2').DataTable({
+                "iDisplayLength": 12,
+                "bLengthChange": false,
+                "order": [[0, "desc"]]
+            });
+
+            $('#mytable3').DataTable({
+                "iDisplayLength": 8,
+                "bLengthChange": false,
+                "bFilter": false
+            });
+
+            $('#mytable4').DataTable({
+                "bLengthChange": false,
+                "bFilter": false,
+                "bPaginate": false,
+                "bInfo": false
+            });
+            $('#mytable5').DataTable({
+                "bLengthChange": false,
+                "bFilter": false,
+                "bPaginate": false,
+                "bInfo": false
+            });
+
+
+            getAccountsForCurrentUser();
+
+        });
+
+</script>
+
+</body>
+
+
+</html>

@@ -1,0 +1,116 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.PeriodicOutcome.PeriodicOutcomeListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.PeriodicOutcomePages;
+    ViewBag.FormTitle = Resources.TitleNames.PeriodicOutcomeList;
+}
+
+@section AddButtonSection
+{
+    <a href="/PeriodicOutcome/Create" title="add"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable">
+        <colgroup>
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="10%" />
+            <col width="5%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(modelItem => modelItem.AccountName)
+                </td>
+
+                <td>
+                    @Html.DisplayNameFor(modelItem => modelItem.TypeExpenditureName)
+                </td>
+
+                <td>
+                    @Html.DisplayNameFor(modelItem => modelItem.Description)
+                </td>
+
+                <td>
+                    @Html.DisplayNameFor(modelItem => modelItem.DisplayedCost)
+                </td>
+
+                <td>
+                    @Html.DisplayNameFor(modelItem => modelItem.FrequencyName)
+                </td>
+
+                <td>
+                    @Html.DisplayNameFor(modelItem => modelItem.DisplayedStartDate)
+                </td>
+
+                <td>
+                    @Html.DisplayNameFor(modelItem => modelItem.DisplayedEndDate)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(modelItem => modelItem.IsEnabled)
+                </td>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccountName)
+                    </td>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TypeExpenditureName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedCost)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FrequencyName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedStartDate)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedEndDate)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsEnabled)
+                    </td>
+
+
+                    <td align="right">
+                        @if (item.IsEnabled)
+                        {
+                            <a href="/PeriodicOutcome/Disable/@item.Id" title="disable"><i class="fa fa-thumbs-o-down"></i></a>
+                            @Html.Raw("|")
+                            <a href="/PeriodicOutcome/Edit/@item.Id" title="@Resources.ButtonNames.EditTooltip"><i class="fa fa-pencil-square-o"></i></a>
+                            @Html.Raw("|")
+                        }
+                        <a href="/PeriodicOutcome/Delete/@item.Id" title="@Resources.ButtonNames.DeleteTooltip"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}

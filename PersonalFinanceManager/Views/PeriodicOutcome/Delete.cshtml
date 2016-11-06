@@ -1,0 +1,36 @@
+﻿@model PersonalFinanceManager.Models.PeriodicOutcome.PeriodicOutcomeEditModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutConfirmDeletion.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.PeriodicOutcomePages;
+    ViewBag.FormTitle = Resources.TitleNames.PeriodicOutcomeDelete;
+    ViewBag.ConfirmationMessage = Resources.ConfirmationMessages.PeriodicOutcomeConfirmationDeletion;
+}
+
+@section DetailsSection
+{
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+    </dl>
+}
+
+@section DeletionButtonSection
+{
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="@Resources.ButtonNames.DeleteButton" class="btn btn-primary" /> 
+            @Html.ActionLink(@Resources.ButtonNames.CancelButton, "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+    }
+}
+

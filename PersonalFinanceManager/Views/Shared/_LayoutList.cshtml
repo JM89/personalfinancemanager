@@ -1,0 +1,33 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-9">
+        <h2>@ViewBag.PageTitle</h2>
+        <ol class="breadcrumb">
+            @RenderSection("BreadCrumbSection", false)
+        </ol>
+        <br />
+    </div>
+    <div class="col-lg-3">
+        <br />
+        @RenderSection("AccountDetails", false)
+    </div>
+</div>
+
+<div class="row wrapper wrapper-content">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>@ViewBag.GridTitle</h5>
+                <div class="pull-right">
+                    @RenderSection("AddButtonSection", true)
+                </div>
+            </div>
+            <div class="ibox-content">
+                @RenderSection("GridSection", true)
+            </div>
+        </div>
+    </div>
+</div>

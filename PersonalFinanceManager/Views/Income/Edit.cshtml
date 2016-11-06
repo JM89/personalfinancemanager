@@ -1,0 +1,118 @@
+﻿@model PersonalFinanceManager.Models.Income.IncomeEditModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutEditor.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.IncomePages;
+    ViewBag.FormTitle = Resources.TitleNames.IncomeEdit;
+}
+
+@section BreadCrumbSection
+{
+    <li>
+        @*Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId"></a>*@
+        @ViewBag.AccountName
+    </li>
+    <li>
+        Mouvements
+    </li>
+    <li class="active">
+        <strong>@ViewBag.FormTitle</strong>
+    </li>
+}
+
+@section AccountDetails
+{
+    <div class="alert alert-info" role="alert">
+        <table>
+            <tr>
+                <td><strong>@Html.DisplayName("Current Amount:")</strong></td>
+                <td>@ViewBag.CurrentAmount</td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section EditorSection
+{
+    @using (Html.BeginForm("Edit", "Income", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-lg-2" })
+                <div class="col-lg-10">
+                    @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateIncome, htmlAttributes: new { @class = "control-label col-lg-2" })
+                <div class="col-lg-10">
+                    @Html.TextBoxFor(model => model.DateIncome, new { @Value = Model.DisplayedDateIncome, @class = "form-control datepicker" })
+                    @Html.ValidationMessageFor(model => model.DateIncome, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.AccountId, htmlAttributes: new { @class = "control-label col-lg-2" })
+                <div class="col-lg-10">
+                    @Html.DropDownListFor(model => model.AccountId, @Model.AvailableAccounts, "", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FrequencyId, htmlAttributes: new { @class = "control-label col-lg-2" })
+                <div class="col-lg-10">
+                    @Html.DropDownListFor(model => model.FrequencyId, @Model.AvailableFrequencies, "", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FrequencyId, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="@Resources.ButtonNames.EditSaveButton" class="btn btn-primary" />
+
+                    @Html.ActionLink(Resources.ButtonNames.CancelButton, "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+                </div>
+            </div>
+
+        </div>
+    }
+
+}
+
+@section ScriptsSection {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            $("#DateIncome").datepicker({
+                dateFormat: "dd/mm/yy"
+            });
+
+            $.validator.methods.date = function (value, element) {
+                Globalize.culture("en-UK");
+                return this.optional(element) || Globalize.parseDate(value) !== null;
+            }
+        });
+    </script>
+}
+
+

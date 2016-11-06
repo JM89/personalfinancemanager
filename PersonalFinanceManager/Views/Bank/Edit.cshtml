@@ -1,0 +1,118 @@
+﻿@model PersonalFinanceManager.Models.Bank.BankEditModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutEditor.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.BankPages;
+    ViewBag.FormTitle = Resources.TitleNames.BankEdit;
+}
+
+@section EditorSection
+{
+
+
+@using (Html.BeginForm("Edit", "Bank", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @id = "formBank" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+    
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <input type="hidden" value="@Model.AttemptNumber" id="AttemptNumber" name="AttemptNumber" />
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CountryId, htmlAttributes: new { @class = "control-label col-lg-2" })
+            <div class="col-lg-10">
+                @Html.DropDownListFor(model => model.CountryId, @Model.AvailableCountries, "", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CountryId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="button" id="UploadImage" class="btn btn-warning btn-xs" value="Upload PNG/JPEG" />
+                <input type="file" style="display:block;height:0;width:0;" id="file" name="file" />
+            </div>
+        </div>
+
+        @if (Model.ErrorPreview != null && Model.ErrorPreview != "")
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.UrlPreview, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <p class="text-danger">@Model.ErrorPreview</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            if (Model.UrlPreview != null && Model.UrlPreview != "")
+            {
+                <input type="hidden" value=@Model.UrlPreview id="UrlPreview" name="UrlPreview" />
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UrlPreview, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src="@Model.UrlPreview" width="50" height="50" />
+                                </td>
+                                <td>
+                                    <img src="@Model.UrlPreview" width="18" height="18" />
+                                </td>
+                                <td>
+                                    <label>@Model.FileName</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @if (Model.UrlPreview != null && Model.UrlPreview != "")
+                {
+                    <input type="submit" value="@Resources.ButtonNames.EditSaveButton" class="btn btn-primary" />
+                }
+                else
+                {
+                    <input type="submit" value="@Resources.ButtonNames.EditSaveButton" class="btn btn-primary" disabled />
+                }
+                @Html.ActionLink(Resources.ButtonNames.CancelButton, "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+            </div>
+        </div>
+
+
+    </div>
+}
+    }
+
+@section ScriptsSection {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+            $('#UploadImage').click(function () {
+                $('input[type=file]').trigger('click');
+            });
+
+            $('input[type=file]').change(function () {
+                $("#UrlPreview").val("");
+                $("#formBank").submit();
+            });
+    </script>
+
+}

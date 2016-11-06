@@ -1,0 +1,86 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Income.IncomeListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.IncomePages;
+    ViewBag.GridTitle = Resources.TitleNames.IncomeList;
+}
+
+@section BreadCrumbSection
+{
+    <li>
+        @*Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId"></a>*@
+        @ViewBag.AccountName
+    </li>
+    <li>
+        Mouvements
+    </li>
+    <li class="active">
+        <strong>@ViewBag.GridTitle</strong>
+    </li>
+}
+
+@section AccountDetails
+{
+    <div class="alert alert-info" role="alert">
+        <table>
+            <tr>
+                <td><strong>@Html.DisplayName("Current Amount:")</strong></td>
+                <td>@ViewBag.CurrentAmount</td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section AddButtonSection
+{
+    <a href="/Income/Create" title="add" class="btn_create"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable2">
+        <colgroup>
+            <col width="15%" />
+            <col width="15%" />
+            <col width="50%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(modelItem => modelItem.DateIncome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(modelItem => modelItem.Cost)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(modelItem => modelItem.Description)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedDateIncome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedCost)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td align="right">
+                        <a href="/Income/Edit/@item.Id" title="@Resources.ButtonNames.EditTooltip"><i class="fa fa-pencil-square-o"></i></a>
+                        <a href="/Income/Delete/@item.Id" title="@Resources.ButtonNames.DeleteTooltip"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}

@@ -1,0 +1,183 @@
+﻿@model PersonalFinanceManager.Models.BudgetPlan.BudgetPlanEditModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.PageTitle = "Plan a budget";
+    ViewBag.FormTitle = "Enter monthly budget per expenditure type:";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>@ViewBag.PageTitle</h2>
+        <ol class="breadcrumb">
+            <li>
+                Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId">@ViewBag.AccountName</a>
+            </li>
+            <li class="active">
+                <strong>Budget Plan</strong>
+            </li>
+        </ol>
+    </div>
+   
+    <br />
+   
+</div>
+
+
+<div class="row wrapper wrapper-content">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>Budget Plan</h5>
+            </div>
+            <div class="ibox-content">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BudgetName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.BudgetName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BudgetName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row wrapper wrapper-content">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>@ViewBag.FormTitle</h5>
+            </div>
+            <div class="ibox-content">
+                
+                <table class="stripe" id="mytable4">
+                    <colgroup></colgroup>
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayName("Expenditure Type")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Expected Value")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Periodic Outcome Value")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Previous Month Value")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Average Month Value")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ExpenditureTypes)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ExpenditureType.Name)
+                                </td>
+                                <td>
+                                    @Html.EditorFor(modelItem => item.ExpectedValue)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PeriodicOutcomeValue)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PreviousMonthValue)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AverageMonthValue)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row wrapper wrapper-content">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>Incomes for this account</h5>
+            </div>
+            <div class="ibox-content">
+                <table class="stripe" id="mytable5">
+                    <colgroup>
+                        <col width="90%" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayName("Incomes")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Cost")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Incomes)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DisplayedCost)
+                                </td>
+                            </tr>
+                        }
+                        
+                    </tbody>
+                    <tr>
+                        <td align="right"><strong>Expenditures</strong></td>
+                        <td>-£1000.00</td>
+                    </tr>
+                    <tfoot>
+                        
+                        @*<tr>
+                            <td align="right"><strong>EXPENDITURES</strong></td>
+                            <td>-£1000.00</td>
+                        </tr>*@
+                        <tr>
+                            <td align="right"><strong>TOTAL</strong></td>
+                            <td>£0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<div class="row wrapper wrapper-content">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+
+
+@section Scripts
+{
+}
+

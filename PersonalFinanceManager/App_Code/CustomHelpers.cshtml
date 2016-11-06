@@ -1,0 +1,44 @@
+﻿@helper ListButtons(int id, bool canBeDeleted, string controllerName, string tooltipDeleteButton)
+{
+    var Html = ((System.Web.Mvc.WebViewPage)WebPageContext.Current.Page).Html;
+
+    <a href="/@controllerName/Edit/@id" title="@Resources.ButtonNames.EditTooltip"><i class="fa fa-pencil-square-o"></i></a>    
+    Html.Raw("|");
+
+    if (@canBeDeleted)
+    {
+            <a href="/@controllerName/Delete/@id" title="@Resources.ButtonNames.DeleteTooltip"><i class="fa fa-trash-o"></i></a>
+    }
+    else
+    {
+        <i class="fa fa-trash-o" style="color: darkgrey;" title="@tooltipDeleteButton"></i>
+    }
+}
+
+@helper EditButton(int id, bool canBeEdited, string controllerName, string tooltipEditButton)
+{
+    var Html = ((System.Web.Mvc.WebViewPage)WebPageContext.Current.Page).Html;
+
+    if (@canBeEdited)
+    {
+            <a href="/@controllerName/Edit/@id" title="@Resources.ButtonNames.EditTooltip"><i class="fa fa-pencil-square-o"></i></a>
+    }
+    else
+    {
+            <i class="fa fa-pencil-square-o" style="color: darkgrey;" title="@tooltipEditButton"></i>
+    }
+}
+
+@helper DeleteButton(int id, bool canBeDeleted, string controllerName, string tooltipDeleteButton)
+{
+    var Html = ((System.Web.Mvc.WebViewPage)WebPageContext.Current.Page).Html;
+
+    if (@canBeDeleted)
+    {
+       <a href="/@controllerName/Delete/@id" title="@Resources.ButtonNames.DeleteTooltip"><i class="fa fa-trash-o"></i></a>
+    }
+    else
+    {
+       <i class="fa fa-trash-o" style="color: darkgrey;" title="@tooltipDeleteButton"></i>
+    }
+}

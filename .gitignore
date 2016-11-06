@@ -1,0 +1,7 @@
+bin
+obj
+PersonalFinanceManager.csproj.user
+/PersonalFinanceManager.Database/PersonalFinanceManager.Database.sqlproj.user
+/PersonalFinanceManager.DataAccess/Migrations/201611050727411_InitialCreate.cs
+/PersonalFinanceManager.DataAccess/Migrations/201611050727411_InitialCreate.Designer.cs
+/PersonalFinanceManager.DataAccess/Migrations/201611050727411_InitialCreate.resx

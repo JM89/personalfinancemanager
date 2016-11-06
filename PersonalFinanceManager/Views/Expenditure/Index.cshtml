@@ -1,0 +1,117 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Expenditure.ExpenditureListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = "Manage expenditures";
+    ViewBag.GridTitle = "List of expenditures";
+}
+
+@section BreadCrumbSection
+{
+    <li>
+        @ViewBag.AccountName
+    </li>
+    <li>
+        Mouvements
+    </li>
+    <li class="active">
+        <strong>@ViewBag.GridTitle</strong>
+    </li>
+}
+
+@section AccountDetails
+{
+    <div class="alert alert-info" role="alert">
+        <table>
+            <tr>
+                <td><strong>@Html.DisplayName("Current Amount:")</strong></td>
+                <td>@ViewBag.CurrentAmount</td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section AddButtonSection
+{
+    <a href="/Expenditure/Create" title="add" class="btn_create"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable2">
+        <colgroup>
+            <col width="10%" />
+            <col width="10%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="25%" />
+
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateExpenditure)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cost)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TypeExpenditureName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PaymentMethodName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HasBeenAlreadyDebited)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedDateExpenditure)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.DisplayedCost)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TypeExpenditureName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentMethodName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @if (item.PaymentMethodHasBeenAlreadyDebitedOption)
+                        {
+                            @Html.DisplayFor(modelItem => item.HasBeenAlreadyDebited)
+                        }
+
+                    </td>
+                    <td align="right">
+                        @if (item.PaymentMethodHasBeenAlreadyDebitedOption)
+                        {
+                            if (!item.HasBeenAlreadyDebited)
+                            {
+                                <a href="/Expenditure/Debit/@item.Id?accountId=@ViewBag.AccountId" title="@Resources.ButtonNames.DebitButton"><i class="fa fa-thumbs-o-up"></i></a>
+                                @Html.Raw("|")
+                            }
+                        }
+
+                        <a href="/Expenditure/Edit/@item.Id" title="edit"><i class="fa fa-pencil-square-o"></i></a> |
+                        <a href="/Expenditure/Delete/@item.Id" title="delete"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

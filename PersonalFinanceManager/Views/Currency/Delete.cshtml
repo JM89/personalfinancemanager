@@ -1,0 +1,44 @@
+﻿@model PersonalFinanceManager.Models.Currency.CurrencyEditModel
+
+
+@{
+    Layout = "~/Views/Shared/_LayoutConfirmDeletion.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.CurrencyPages;
+    ViewBag.FormTitle = Resources.TitleNames.CurrencyDelete;
+    ViewBag.ConfirmationMessage = Resources.ConfirmationMessages.CurrencyConfirmationDeletion;
+}
+
+@section DetailsSection
+{
+<dl class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(model => model.Name)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Name)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Symbol)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Symbol)
+    </dd>
+
+</dl>
+}
+
+@section DeletionButtonSection
+{
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="@Resources.ButtonNames.DeleteButton" class="btn btn-primary" />
+            @Html.ActionLink(@Resources.ButtonNames.CancelButton, "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+    }
+}

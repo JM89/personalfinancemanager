@@ -1,0 +1,368 @@
+﻿@model IList<PersonalFinanceManager.Models.Expenditure.ExpenditurePerTypeModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@if (ViewBag.ExpendituresFound)
+{
+    <input type="hidden" value="@ViewBag.AccountId" id="AccountId" />
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-12">
+            <h2>Dashboard</h2>
+            <ol class="breadcrumb">
+                <li>
+                    Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId">@ViewBag.AccountName</a>
+                </li>
+                <li class="active">
+                    <strong>Dashboard (@ViewBag.StartDate - @ViewBag.EndDate)</strong>
+                </li>
+            </ol>
+            <br />
+        </div>
+    </div>
+
+
+    <div class="row wrapper wrapper-content">
+        <div class="col-lg-8">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Overall expenditures (12 last months)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-8" id="myChart3-container">
+                            <canvas id="myChart3" width="700" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="expenditureTypeSelectedPeriod">
+            <div class="col-lg-4">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5 id="expenditureTypeSelectedPeriodTitle">Split per type (Current Month)</h5>
+                        <div class="pull-right">
+                            <a href="#" title="add"><i class="fa fa-area-chart" title="See detailed expenditures and trends over the last 12 months" onclick="ShowExpendituresByType()"></i></a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-4" id="myChart4-container">
+                                <canvas id="myChart4" width="300" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <a name="expenditureByTypeAnchor"></a>
+
+            <div id="expenditureByType" style="display:none;">
+
+                <div class="row wrapper wrapper-content">
+                    <div class="col-lg-4">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Split per type (12 last months)</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-lg-12" id="myChart-container">
+                                        <canvas id="myChart" width="350" height="350"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Split per type comparison (3 last months)</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <table class="stripe" id="mytable3">
+                                            <colgroup>
+                                                <col width="3%" />
+                                                <col width="35%" />
+                                                <col width="20%" />
+                                                <col width="20%" />
+                                                <col width="20%" />
+
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th>
+
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Expenditure Type")
+                                                    </th>
+                                                    @foreach (var month in ViewBag.Labels)
+                                                    {
+                                                        <th>@month</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <svg width="20" height="10">
+                                                                <rect width="20" height="10" style="fill:#@item.TypeExpenditureGraphColor;stroke-width:1;stroke:rgb(0,0,0)" />
+                                                            </svg>
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.TypeExpenditureName)
+                                                        </td>
+                                                        <td align="right">
+                                                            @Html.DisplayFor(modelItem => item.DisplayedTwoMonthAgoCost)
+                                                        </td>
+                                                        <td align="right">
+                                                            @Html.DisplayFor(modelItem => item.DisplayedPreviousMonthCost)
+                                                            @Html.Raw("&nbsp;&nbsp;")
+                                                            @if (item.TwoMonthAgoCost > item.PreviousMonthCost)
+                                                            {
+                                                                <img src="~/Resources/greenarrow.png" width="15" height="15" />
+                                                            }
+                                                            else if (item.TwoMonthAgoCost < item.PreviousMonthCost)
+                                                            {
+                                                                <img src="~/Resources/redarrow.png" width="15" height="15" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Resources/bluearrow.png" width="15" height="15" />
+                                                            }
+                                                        </td>
+                                                        <td align="right">
+                                                            @Html.DisplayFor(modelItem => item.DisplayedCurrentMonthCost)
+                                                            @Html.Raw("&nbsp;&nbsp;")
+                                                            @if (item.PreviousMonthCost > item.CurrentMonthCost)
+                                                            {
+                                                                <img src="~/Resources/greenarrow.png" width="15" height="15" />
+                                                            }
+                                                            else if (item.PreviousMonthCost < item.CurrentMonthCost)
+                                                            {
+                                                                <img src="~/Resources/redarrow.png" width="15" height="15" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Resources/bluearrow.png" width="15" height="15" />
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <a name="expenditureOverTimeAnchor"></a>
+
+            <div id="expenditureOverTime" style="display:none;">
+
+                <div class="row wrapper wrapper-content">
+                    <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5 id="expenditureOverTimeTitle">Expenditures by type (development over last 12 months)</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-lg-9" id="myChart2-container">
+                                        <canvas id="myChart2" width="800" height="300"></canvas>
+                                    </div>
+                                    <div class="col-lg-3" id="myChart2-container">
+                                        <h1 style="font-weight:bolder" id="average"></h1>
+                                        <small>In average / month</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+}
+else
+{
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-12">
+            <h2>Dashboard</h2>
+            <ol class="breadcrumb">
+                <li>
+                    Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId">@ViewBag.AccountName</a>
+                </li>
+                <li class="active">
+                    <strong>Dashboard</strong>
+                </li>
+            </ol>
+            <br />
+        </div>
+    </div>
+
+    <div class="row wrapper wrapper-content">
+        <div class="col-lg-12">
+            <div class="alert alert-danger" role="alert">There is no expenditures for this account.</div>
+        </div>
+    </div>
+
+}
+
+@section scripts
+{
+    <script src="~/Scripts/plugins/chartjs/Chart.min.js"></script>
+    @*<script type="text/javascript" charset="utf8" src="//cdnjs.com/libraries/chart.js"></script>*@
+
+
+    <script type="text/javascript">
+
+        function cleanGraph(canvasName, width, height) {
+            $('#' + canvasName).remove();
+            $('#' + canvasName + "-container").append('<canvas id="' + canvasName + '" width="' + width + '" height="' + height + '"><canvas>');
+        }
+
+        function ShowExpendituresByType() {
+            var accountId = $("#AccountId").val();
+            GetCategoryExpenditures(accountId);
+            $("#expenditureByType").show();
+            ScrollToAnchor("expenditureByTypeAnchor");
+        }
+
+        function GetCategoryExpendituresOverTime(selectedExpenditureType, accountId) {
+
+            $.ajax({
+                url: "/Dashboard/GetCategoryExpendituresOverTime",
+                data: { selectedExpenditureType: selectedExpenditureType, accountId: accountId },
+                success: function (response) {
+                    console.log(response);
+                    cleanGraph("myChart2", 800, 300);
+                    var ctx = document.getElementById("myChart2").getContext("2d");
+                    var myBarChart = new Chart(ctx).Bar(response.data, response.options);
+
+                    $("#average").text(response.averageInfo.average);
+                    $("#average").css("color", response.averageInfo.color);
+
+                    ScrollToAnchor("expenditureOverTimeAnchor");
+                },
+                error: function (error) {
+                    console.error("Something is wrong");
+                }
+            });
+        }
+
+        function GetCategoryExpendituresForGivenMonth(selectedDate, accountId) {
+
+            var month = selectedDate.getMonth() + 1; // for some reasons, javascript begins at index 0 instead of 1...
+            var year = selectedDate.getFullYear();
+
+            //American format
+            var formattedDate = month + "/01/" + year;
+
+            $.ajax({
+                url: "/Dashboard/GetCategoryExpendituresForGivenMonth",
+                data: { selectedDate: formattedDate, accountId: accountId },
+                success: function (response) {
+                    console.log(response);
+                    cleanGraph("myChart4", 300, 300);
+                    var ctx = document.getElementById("myChart4").getContext("2d");
+                    var myPieChart = new Chart(ctx).Pie(response.data, response.options);
+
+                    $("#expenditureTypeSelectedPeriod").show();
+                },
+                error: function (error) {
+                    console.error("Something is wrong");
+                }
+            });
+        }
+
+        function GetExpendituresOverTime(accountId) {
+            $.ajax({
+                url: "/Dashboard/GetExpendituresOverTime",
+                data: { accountId: accountId },
+                success: function (response) {
+                    cleanGraph("myChart3", 700, 300);
+                    var ctx = document.getElementById("myChart3").getContext("2d");
+                    var myLineChart = new Chart(ctx).Line(response.data, response.options);
+
+                    document.getElementById("myChart3").onclick = function (evt) {
+                        var activePoints = myLineChart.getPointsAtEvent(evt);
+                        console.log(activePoints[0].label);
+
+                        var date = activePoints[0].label.split(" ");
+
+                        if (activePoints[0].value != 0) {
+                            var date = new Date(Date.parse(date[0] + " 1, " + date[1]));
+
+                            $("#expenditureTypeSelectedPeriodTitle").text("Details for " + activePoints[0].label);
+
+                            GetCategoryExpendituresForGivenMonth(date, accountId);
+                        }
+
+                    };
+                },
+                error: function (error) {
+                    console.error("Something is wrong");
+                }
+            });
+        }
+
+        function GetCategoryExpenditures(accountId) {
+            $.ajax({
+                url: "/Dashboard/GetCategoryExpenditures",
+                data: { accountId: accountId },
+                success: function (response) {
+                    cleanGraph("myChart", 350, 350);
+                    var ctx = document.getElementById("myChart").getContext("2d");
+                    var myPieChart = new Chart(ctx).Pie(response.data, response.options);
+
+                    document.getElementById("myChart").onclick = function (evt) {
+                        var activePoints = myPieChart.getSegmentsAtEvent(evt);
+                        console.log(activePoints[0].label);
+
+                        var selectedExpenditureType = activePoints[0].label;
+
+                        GetCategoryExpendituresOverTime(selectedExpenditureType, accountId);
+
+                        var title = selectedExpenditureType + " expenditures (last 12 months)";
+
+                        $("#expenditureOverTimeTitle").text(title);
+                        $("#expenditureOverTime").show();
+                    };
+                },
+                error: function (error) {
+                    console.error("Something is wrong");
+                }
+            });
+        }
+
+        function ScrollToAnchor(aid) {
+            var aTag = $("a[name='" + aid + "']");
+            $('html,body').animate({ scrollTop: aTag.offset().top }, 'slow');
+        }
+
+
+        $(document).ready(function () {
+
+            var accountId = $("#AccountId").val();
+            GetExpendituresOverTime(accountId);
+
+            GetCategoryExpendituresForGivenMonth(new Date(), accountId);
+
+        });
+    </script>
+
+}

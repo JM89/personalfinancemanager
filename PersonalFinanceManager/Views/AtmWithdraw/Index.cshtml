@@ -1,0 +1,112 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.AtmWithdraw.AtmWithdrawListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.AtmWithdrawPages;
+    ViewBag.GridTitle = Resources.TitleNames.AtmWithdrawList;
+}
+
+@section BreadCrumbSection
+{
+    <li>
+        @*Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId"></a>*@
+        @ViewBag.AccountName
+    </li>
+    <li>
+        Mouvements
+    </li>
+    <li class="active">
+        <strong>@ViewBag.GridTitle</strong>
+    </li>
+}
+
+@section AccountDetails
+{
+    <div class="alert alert-info" role="alert">
+        <table>
+            <tr>
+                <td><strong>@Html.DisplayName("Current Amount:")</strong></td>
+                <td>@ViewBag.CurrentAmount</td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section AddButtonSection
+{
+    <a href="/AtmWithdraw/Create" title="add" class="btn_create"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable">
+        <colgroup>
+            <col width="15%" />
+            <col width="30%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DisplayedDateExpenditure)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.DisplayedInitialAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DisplayedCurrentAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HasBeenAlreadyDebited)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedDateExpenditure)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedInitialAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedCurrentAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HasBeenAlreadyDebited)
+                    </td>
+                    <td align="right">
+
+                        @if (!item.IsClosed)
+                        {
+                            if (!item.HasBeenAlreadyDebited)
+                            {
+                                <a href="/AtmWithdraw/Debit/@item.Id?accountId=@ViewBag.AccountId" title="@Resources.ButtonNames.DebitButton"><i class="fa fa-thumbs-o-up"></i></a>
+                                @Html.Raw("|")
+                            }
+                            
+                            <a href="/AtmWithdraw/Close/@item.Id" title="@Resources.ButtonNames.CloseATMButton"><i class="fa fa-power-off"></i></a>
+
+                            @CustomHelpers.EditButton(@item.Id, item.CanBeEdited, "AtmWithdraw", @Resources.DisabledButtonTooltips.AtmWithdrawCantBeEdited) @Html.Raw("|")
+                            @CustomHelpers.DeleteButton(@item.Id, item.CanBeDeleted, "AtmWithdraw", @Resources.DisabledButtonTooltips.AtmWithdrawCantBeDeleted)
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.PaymentMethod.PaymentMethodListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.PaymentMethodPages;
+    ViewBag.GridTitle = Resources.TitleNames.PaymentMethodList;
+}
+
+@section AddButtonSection
+{
+    @*<a href="/PaymentMethod/Create" title="add"><i class="fa fa-plus"></i></a>*@
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+}

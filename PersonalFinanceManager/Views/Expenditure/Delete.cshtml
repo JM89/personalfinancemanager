@@ -1,0 +1,82 @@
+﻿@model PersonalFinanceManager.Models.Expenditure.ExpenditureEditModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutConfirmDeletion.cshtml";
+    ViewBag.PageTitle = "Manage expenditures";
+    ViewBag.DetailsTitle = "Delete expenditure";
+    ViewBag.ConfirmationMessage = "Are you sure you want to delete this expenditure?";
+}
+
+@section BreadCrumbSection
+{
+    <li>
+        @*Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId"></a>*@
+        @ViewBag.AccountName
+    </li>
+    <li>
+        Mouvements
+    </li>
+    <li class="active">
+        <strong>@ViewBag.FormTitle</strong>
+    </li>
+}
+
+@section AccountDetails
+{
+    <div class="alert alert-info" role="alert">
+        <table>
+            <tr>
+                <td><strong>@Html.DisplayName("Current Amount:")</strong></td>
+                <td>@ViewBag.CurrentAmount</td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section DetailsSection
+{
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateExpenditure)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DisplayedDateExpenditure)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cost)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+    </dl>
+
+}
+
+@section DeletionButtonSection
+{
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" value="@ViewBag.AccountId" />
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary btn_delete" /> 
+            @Html.ActionLink("Back to List", "Index", new { accountId = @ViewBag.AccountId }, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+    }
+}
