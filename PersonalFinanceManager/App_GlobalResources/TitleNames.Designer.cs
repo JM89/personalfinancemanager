@@ -196,6 +196,60 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a budget plan.
+        /// </summary>
+        internal static string BudgetPlanCreate {
+            get {
+                return ResourceManager.GetString("BudgetPlanCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete a budget plan.
+        /// </summary>
+        internal static string BudgetPlanDelete {
+            get {
+                return ResourceManager.GetString("BudgetPlanDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit a budget plan.
+        /// </summary>
+        internal static string BudgetPlanEdit {
+            get {
+                return ResourceManager.GetString("BudgetPlanEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of budget plans.
+        /// </summary>
+        internal static string BudgetPlanList {
+            get {
+                return ResourceManager.GetString("BudgetPlanList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage budget plans.
+        /// </summary>
+        internal static string BudgetPlanPages {
+            get {
+                return ResourceManager.GetString("BudgetPlanPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View a budget plan.
+        /// </summary>
+        internal static string BudgetPlanView {
+            get {
+                return ResourceManager.GetString("BudgetPlanView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a country.
         /// </summary>
         internal static string CountryCreate {

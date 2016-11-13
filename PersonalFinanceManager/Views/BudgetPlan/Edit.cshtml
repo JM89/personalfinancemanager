@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/_LayoutEditor.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.BudgetPlanPages;
-    ViewBag.FormTitle = Resources.TitleNames.BudgetPlanCreate;
+    ViewBag.FormTitle = Resources.TitleNames.BudgetPlanEdit;
 }
 
 @section EditorSection
@@ -11,6 +11,8 @@
     @using (Html.BeginForm(null, null, FormMethod.Get, new { name = "budgetPlanForm", id = "budgetPlanForm" }))
     {
         @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.Id);
 
         <div class="form-horizontal">
 
@@ -20,7 +22,6 @@
                 @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-1" })
                 <div class="col-md-11">
                     @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                    @*@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })*@
                     <label id="Name_ErrorMsg" style="color: red; display: none; font-weight: normal;" ></label>
                 </div>
             </div>
@@ -68,7 +69,7 @@
                                                        id="model_ExpenditureTypes[@i].ExpectedValue"
                                                        name="ExpenditureTypes[@i].ExpectedValue"
                                                        type="number"
-                                                       value="0.00"
+                                                       value="@item.ExpectedValue"
                                                        min="0"
                                                        step="0.01">
                                         </td>
@@ -165,7 +166,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="button" onclick="createBudgetPlan()" value="@Resources.ButtonNames.AddSaveButton" class="btn btn-primary" />
+                    <input type="button" onclick="editBudgetPlan()" value="@Resources.ButtonNames.AddSaveButton" class="btn btn-primary" />
                     @Html.ActionLink(Resources.ButtonNames.CancelButton, "Index", null, htmlAttributes: new { @class = "btn btn-default" })
                 </div>
             </div>
@@ -177,6 +178,8 @@
 
     <script src="~/Scripts/custom/Utils.js"></script>
     <script src="~/Scripts/custom/BudgetPlan.js"></script>
- 
+    <script type="text/javascript">
+        recompute();
+    </script>
 }
 

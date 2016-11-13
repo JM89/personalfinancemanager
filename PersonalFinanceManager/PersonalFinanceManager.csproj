@@ -196,6 +196,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\JsonError.cs" />
+    <Compile Include="Helpers\ModelStateJsonConvertor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App_GlobalResources\ButtonNames.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -240,6 +242,8 @@
     <Content Include="Scripts\cldr\event.js" />
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
+    <Content Include="Scripts\custom\Utils.js" />
+    <Content Include="Scripts\custom\BudgetPlan.js" />
     <Content Include="Scripts\custom\Expenditure.js" />
     <Content Include="Scripts\globalize.js" />
     <Content Include="Scripts\globalize\currency.js" />
@@ -333,6 +337,9 @@
     <Content Include="Views\AtmWithdraw\Delete.cshtml" />
     <Content Include="Views\AtmWithdraw\Edit.cshtml" />
     <Content Include="Views\AtmWithdraw\Index.cshtml" />
+    <Content Include="Views\BudgetPlan\Index.cshtml" />
+    <Content Include="Views\BudgetPlan\Edit.cshtml" />
+    <Content Include="Views\BudgetPlan\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

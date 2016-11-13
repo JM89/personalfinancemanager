@@ -96,6 +96,7 @@
     <Compile Include="AtmWithdraw\AtmWithdrawEditModel.cs" />
     <Compile Include="BudgetPlan\BudgetPlanEditModel.cs" />
     <Compile Include="BudgetPlan\BudgetPlanExpenditureType.cs" />
+    <Compile Include="BudgetPlan\BudgetPlanListModel.cs" />
     <Compile Include="Country\CountryEditModel.cs" />
     <Compile Include="Country\CountryListModel.cs" />
     <Compile Include="Bank\BankListModel.cs" />

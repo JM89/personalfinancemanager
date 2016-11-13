@@ -131,3 +131,8 @@ body
 h2, .h2 {
     font-size: 25px;
 }
+
+.table.borderless td, .table.borderless th {
+    border: none;
+}
+

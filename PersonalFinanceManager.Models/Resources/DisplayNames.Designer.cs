@@ -151,6 +151,69 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average Month Value.
+        /// </summary>
+        internal static string BudgetPlanAverageMonthValue {
+            get {
+                return ResourceManager.GetString("BudgetPlanAverageMonthValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End Date.
+        /// </summary>
+        internal static string BudgetPlanEndDate {
+            get {
+                return ResourceManager.GetString("BudgetPlanEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expected Value.
+        /// </summary>
+        internal static string BudgetPlanExpectedValue {
+            get {
+                return ResourceManager.GetString("BudgetPlanExpectedValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expenditure Type.
+        /// </summary>
+        internal static string BudgetPlanExpenditureType {
+            get {
+                return ResourceManager.GetString("BudgetPlanExpenditureType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string BudgetPlanName {
+            get {
+                return ResourceManager.GetString("BudgetPlanName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous Month Value.
+        /// </summary>
+        internal static string BudgetPlanPreviousMonthValue {
+            get {
+                return ResourceManager.GetString("BudgetPlanPreviousMonthValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Date.
+        /// </summary>
+        internal static string BudgetPlanStartDate {
+            get {
+                return ResourceManager.GetString("BudgetPlanStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string CountryName {

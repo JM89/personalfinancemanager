@@ -1,0 +1,3 @@
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild "..\PersonalFinanceManager\PersonalFinanceManager.csproj" /t:Package /p:Configuration=Release /p:OutputPath="../DeploymentScripts/ReleaseFolder"
+
+"C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:package="ReleaseFolder/_PublishedWebsites/PersonalFinanceManager_Package/PersonalFinanceManager.zip" -dest:auto -setParam:name="IIS Web Application Name",value="PersonalFinanceManager"

@@ -147,6 +147,27 @@
   <data name="BankUploadImage" xml:space="preserve">
     <value>Upload an icon</value>
   </data>
+  <data name="BudgetPlanAverageMonthValue" xml:space="preserve">
+    <value>Average Month Value</value>
+  </data>
+  <data name="BudgetPlanEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="BudgetPlanExpectedValue" xml:space="preserve">
+    <value>Expected Value</value>
+  </data>
+  <data name="BudgetPlanExpenditureType" xml:space="preserve">
+    <value>Expenditure Type</value>
+  </data>
+  <data name="BudgetPlanName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BudgetPlanPreviousMonthValue" xml:space="preserve">
+    <value>Previous Month Value</value>
+  </data>
+  <data name="BudgetPlanStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
   <data name="CountryName" xml:space="preserve">
     <value>Name</value>
   </data>

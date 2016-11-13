@@ -162,6 +162,24 @@
   <data name="BankPages" xml:space="preserve">
     <value>Manage banks</value>
   </data>
+  <data name="BudgetPlanCreate" xml:space="preserve">
+    <value>Create a budget plan</value>
+  </data>
+  <data name="BudgetPlanDelete" xml:space="preserve">
+    <value>Delete a budget plan</value>
+  </data>
+  <data name="BudgetPlanEdit" xml:space="preserve">
+    <value>Edit a budget plan</value>
+  </data>
+  <data name="BudgetPlanList" xml:space="preserve">
+    <value>List of budget plans</value>
+  </data>
+  <data name="BudgetPlanPages" xml:space="preserve">
+    <value>Manage budget plans</value>
+  </data>
+  <data name="BudgetPlanView" xml:space="preserve">
+    <value>View a budget plan</value>
+  </data>
   <data name="CountryCreate" xml:space="preserve">
     <value>Create a country</value>
   </data>

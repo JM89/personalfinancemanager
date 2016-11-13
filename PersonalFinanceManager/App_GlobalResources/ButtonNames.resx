@@ -150,7 +150,16 @@
   <data name="PreviewButton" xml:space="preserve">
     <value>Preview</value>
   </data>
+  <data name="StartBudgetPlanButton" xml:space="preserve">
+    <value>Start Budget Plan</value>
+  </data>
+  <data name="StopBudgetPlanButton" xml:space="preserve">
+    <value>Stop Budget Plan</value>
+  </data>
   <data name="UndoDebitButton" xml:space="preserve">
     <value>Undo Debit</value>
+  </data>
+  <data name="ViewTooltip" xml:space="preserve">
+    <value>View</value>
   </data>
 </root>

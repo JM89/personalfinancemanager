@@ -33,5 +33,6 @@ namespace PersonalFinanceManager.DataAccess
         public System.Data.Entity.DbSet<PersonalFinanceManager.Entities.BudgetPlanModel> BudgetPlanModels { get; set; }
         public System.Data.Entity.DbSet<PersonalFinanceManager.Entities.AtmWithdrawModel> AtmWithdrawModels { get; set; }
         public System.Data.Entity.DbSet<PersonalFinanceManager.Entities.HistoricMovementModel> HistoricMovementModels { get; set; }
+        public System.Data.Entity.DbSet<PersonalFinanceManager.Entities.BudgetByExpenditureTypeModel> BudgetByExpenditureTypeModels { get; set; }
     }
 }

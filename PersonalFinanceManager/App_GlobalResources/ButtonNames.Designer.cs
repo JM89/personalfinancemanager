@@ -160,11 +160,38 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Budget Plan.
+        /// </summary>
+        internal static string StartBudgetPlanButton {
+            get {
+                return ResourceManager.GetString("StartBudgetPlanButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop Budget Plan.
+        /// </summary>
+        internal static string StopBudgetPlanButton {
+            get {
+                return ResourceManager.GetString("StopBudgetPlanButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Undo Debit.
         /// </summary>
         internal static string UndoDebitButton {
             get {
                 return ResourceManager.GetString("UndoDebitButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        internal static string ViewTooltip {
+            get {
+                return ResourceManager.GetString("ViewTooltip", resourceCulture);
             }
         }
     }

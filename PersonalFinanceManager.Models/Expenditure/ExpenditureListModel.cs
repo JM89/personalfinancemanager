@@ -27,6 +27,8 @@ namespace PersonalFinanceManager.Models.Expenditure
         [LocalizedDisplayName("ExpenditureCost")]
         public decimal Cost { get; set; }
 
+        public int TypeExpenditureId { get; set; }
+
         [LocalizedDisplayName("ExpenditureTypeExpenditure")]
         public string TypeExpenditureName { get; set; }
 
