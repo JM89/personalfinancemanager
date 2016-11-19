@@ -239,6 +239,7 @@
     <Content Include="Resources\dashboard-planBudget.png" />
     <Content Include="Resources\dashboard-visualizeExpenditures.png" />
     <Content Include="Resources\greenarrow.png" />
+    <Content Include="Resources\pfm_logo.png" />
     <Content Include="Resources\redarrow.png" />
     <Content Include="Resources\theme\SmartExpend.png" />
     <Content Include="Resources\theme\SmartExpend_Min.png" />
