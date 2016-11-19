@@ -11,10 +11,12 @@ using AutoMapper;
 using System.IO;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Utils.Exceptions;
+using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.Services.Core;
 
 namespace PersonalFinanceManager.Services
 {
-    public class BankService
+    public class BankService : IBankService
     {
         ApplicationDbContext db;
 

@@ -12,7 +12,7 @@ using PersonalFinanceManager.Services.ExpenditureStrategy;
 
 namespace PersonalFinanceManager.Services
 {
-    public class ExpenditureService
+    public class ExpenditureService : IExpenditureService
     {
         ApplicationDbContext db;
 
@@ -142,6 +142,13 @@ namespace PersonalFinanceManager.Services
             expenditure.HasBeenAlreadyDebited = debitStatus;
             db.Entry(expenditure).State = EntityState.Modified;
             db.SaveChanges();
+        }
+
+        public IList<ExpenditureListModel> GetAll()
+        {
+            var expenditures = db.ExpenditureModels.ToList();
+            var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
+            return mappedExpenditures.ToList();
         }
     }
 

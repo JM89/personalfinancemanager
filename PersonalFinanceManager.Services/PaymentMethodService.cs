@@ -10,10 +10,11 @@ using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Entities.Enumerations;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
-    public class PaymentMethodService
+    public class PaymentMethodService : IPaymentMethodService
     {
         ApplicationDbContext db;
 

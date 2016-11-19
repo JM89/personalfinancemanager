@@ -9,10 +9,11 @@ using PersonalFinanceManager.Models.Country;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using PersonalFinanceManager.DataAccess;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
-    public class CountryService
+    public class CountryService : ICountryService
     {
         ApplicationDbContext db;
 

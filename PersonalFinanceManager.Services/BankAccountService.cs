@@ -8,10 +8,11 @@ using PersonalFinanceManager.Entities;
 using PersonalFinanceManager.Models.Account;
 using AutoMapper;
 using PersonalFinanceManager.DataAccess;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
-    public class BankAccountService: IDisposable
+    public class BankAccountService: IDisposable, IBankAccountService
     {
         ApplicationDbContext db;
 

@@ -11,14 +11,19 @@ namespace PersonalFinanceManager.Models.Home
 {
     public class HomePageModel
     {
+        public HomePageModel()
+        {
+            this.AmountDebitMovementPercentagePerPaymentMethods = new List<NumberOfMvtPerPaymentMethodModel>();
+        }
+
         public int TotalNumberOfDebitMovements { get; set; }
 
-        public DateTime FirstMovementDate { get; set; }
+        public DateTime? FirstMovementDate { get; set; }
 
         public string DisplayFirstMovementDate {
             get
             {
-                return FirstMovementDate.ToString("dd/MM/yyyy");
+                return FirstMovementDate == null ? "-" : FirstMovementDate.Value.ToString("dd/MM/yyyy");
             }
         }
 

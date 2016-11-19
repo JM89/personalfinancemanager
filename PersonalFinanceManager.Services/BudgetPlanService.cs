@@ -11,10 +11,11 @@ using AutoMapper;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Models.ExpenditureType;
 using PersonalFinanceManager.Models.Dashboard;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
-    public class BudgetPlanService
+    public class BudgetPlanService : IBudgetPlanService
     {
         ApplicationDbContext db;
 

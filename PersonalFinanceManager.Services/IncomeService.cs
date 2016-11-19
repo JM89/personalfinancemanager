@@ -13,10 +13,11 @@ using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.Extensions;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
-    public class IncomeService: IDisposable
+    public class IncomeService: IDisposable, IIncomeService
     {
         ApplicationDbContext db;
 

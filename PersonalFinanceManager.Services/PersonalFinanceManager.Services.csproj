@@ -80,6 +80,17 @@
     <Compile Include="Extensions\AccountExtensions.cs" />
     <Compile Include="FrequencyService.cs" />
     <Compile Include="IncomeService.cs" />
+    <Compile Include="Core\IBaseService.cs" />
+    <Compile Include="Interfaces\IAtmWithdrawService.cs" />
+    <Compile Include="Interfaces\IBankAccountService.cs" />
+    <Compile Include="Interfaces\IBudgetPlanService.cs" />
+    <Compile Include="Interfaces\ICountryService.cs" />
+    <Compile Include="Interfaces\ICurrencyService.cs" />
+    <Compile Include="Interfaces\IExpenditureTypeService.cs" />
+    <Compile Include="Interfaces\IExpenditureService.cs" />
+    <Compile Include="Interfaces\IBankService.cs" />
+    <Compile Include="Interfaces\IIncomeService.cs" />
+    <Compile Include="Interfaces\IPaymentMethodService.cs" />
     <Compile Include="PaymentMethodService.cs" />
     <Compile Include="PeriodicOutcomeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

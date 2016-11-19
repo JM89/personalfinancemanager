@@ -32,6 +32,8 @@ namespace PersonalFinanceManager.Models.Expenditure
         [LocalizedDisplayName("ExpenditureTypeExpenditure")]
         public string TypeExpenditureName { get; set; }
 
+        public int PaymentMethodId { get; set; }
+
         [LocalizedDisplayName("ExpenditurePaymentMethod")]
         public string PaymentMethodName { get; set; }
 

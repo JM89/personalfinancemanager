@@ -9,10 +9,11 @@ using PersonalFinanceManager.Models.Currency;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using PersonalFinanceManager.DataAccess;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
-    public class CurrencyService
+    public class CurrencyService : ICurrencyService
     {
         ApplicationDbContext db;
 

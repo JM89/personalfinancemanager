@@ -14,10 +14,11 @@ using System.Diagnostics;
 using System.Data.Entity.Infrastructure;
 using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Entities.Enumerations;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
-    public class AtmWithdrawService
+    public class AtmWithdrawService : IAtmWithdrawService
     {
         ApplicationDbContext db;
 

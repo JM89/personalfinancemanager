@@ -9,10 +9,11 @@ using PersonalFinanceManager.Models.ExpenditureType;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using PersonalFinanceManager.DataAccess;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
-    public class ExpenditureTypeService
+    public class ExpenditureTypeService : IExpenditureTypeService
     {
         ApplicationDbContext db;
 

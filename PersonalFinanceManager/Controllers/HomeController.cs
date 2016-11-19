@@ -1,5 +1,7 @@
 ﻿using PersonalFinanceManager.Models.Helpers.Chart;
 using PersonalFinanceManager.Models.Home;
+using PersonalFinanceManager.Services;
+using PersonalFinanceManager.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,15 @@ namespace PersonalFinanceManager.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IExpenditureService _expenditureService;
+        private readonly IPaymentMethodService _paymentMethodService;
+
+        public HomeController(IExpenditureService expenditureService, IPaymentMethodService paymentMethodService)
+        {
+            this._expenditureService = expenditureService;
+            this._paymentMethodService = paymentMethodService;
+        }
+
         public ActionResult Index()
         {
             if (!User.Identity.IsAuthenticated)
@@ -17,17 +28,42 @@ namespace PersonalFinanceManager.Controllers
                 return Redirect("/Account/Login");
             }
 
-            var fakeData = new HomePageModel();
-            fakeData.TotalNumberOfDebitMovements = 12;
-            fakeData.FirstMovementDate = DateTime.Now;
-            fakeData.UserYearlyWages = 23000;
-            fakeData.FavoriteAccountCurrencySymbol = "£";
-            fakeData.FavoriteConversionRate = new ConversionRateModel() {
+            var model = new HomePageModel();
+
+            var debitMvts = this._expenditureService.GetAll();
+
+            if (debitMvts.Count != 0)
+            {
+                var sumDebitMvt = debitMvts.Sum(x => x.Cost);
+
+                model.AmountDebitMovementPercentagePerPaymentMethods = new List<NumberOfMvtPerPaymentMethodModel>();
+                var paymentMethods = this._paymentMethodService.GetPaymentMethods();
+
+                foreach (var paymentMethod in paymentMethods)
+                {
+                    var costPerPaymentType = debitMvts.Where(x => x.PaymentMethodId == paymentMethod.Id).Sum(x => x.Cost);
+
+                    var debitMvtPerPaymentType = new NumberOfMvtPerPaymentMethodModel()
+                    {
+                        PaymentMethod = paymentMethod,
+                        AmountExpenditures = costPerPaymentType,
+                        AmountExpendituresPercent = sumDebitMvt != 0 ? (int)(costPerPaymentType / sumDebitMvt * 100) : 0
+                    };
+
+                    model.AmountDebitMovementPercentagePerPaymentMethods.Add(debitMvtPerPaymentType);
+                }
+                model.FirstMovementDate = debitMvts.OrderBy(x => x.DateExpenditure).First().DateExpenditure;
+            }
+
+            model.TotalNumberOfDebitMovements = debitMvts.Count();
+            model.UserYearlyWages = 23000;
+            model.FavoriteAccountCurrencySymbol = "£";
+            model.FavoriteConversionRate = new ConversionRateModel() {
                 BaseCurrencySymbol = "€", 
                 CurrencySymbol = "£", 
                 CurrencyConversionRate = 1.17M
             };
-            fakeData.FavoriteBankDetails = new Models.Bank.BankEditModel()
+            model.FavoriteBankDetails = new Models.Bank.BankEditModel()
             {
                 FileName = "/Resources/bank_icons/bank1.jpg",
                 FavoriteBranch = new Models.Bank.BankBrandEditModel()
@@ -42,51 +78,7 @@ namespace PersonalFinanceManager.Controllers
                 Website = "www.myfavoritebank.com",
                 GeneralEnquiryPhoneNumber = "077 8851 8614"
             };
-            fakeData.AmountDebitMovementPercentagePerPaymentMethods = new List<NumberOfMvtPerPaymentMethodModel>();
-            fakeData.AmountDebitMovementPercentagePerPaymentMethods.Add(new NumberOfMvtPerPaymentMethodModel() {
-                AmountExpendituresPercent = 10,
-                PaymentMethod = new Models.PaymentMethod.PaymentMethodListModel() {
-                    Name = "CB",
-                    CssClass = "primary"
-                }
-            });
-            fakeData.AmountDebitMovementPercentagePerPaymentMethods.Add(new NumberOfMvtPerPaymentMethodModel()
-            {
-                AmountExpendituresPercent = 30,
-                PaymentMethod = new Models.PaymentMethod.PaymentMethodListModel()
-                {
-                    Name = "ATM Withdraw",
-                    CssClass = "info"
-                }
-            });
-            fakeData.AmountDebitMovementPercentagePerPaymentMethods.Add(new NumberOfMvtPerPaymentMethodModel()
-            {
-                AmountExpendituresPercent = 40,
-                PaymentMethod = new Models.PaymentMethod.PaymentMethodListModel()
-                {
-                    Name = "Direct Debit",
-                    CssClass = "success"
-                }
-            });
-            fakeData.AmountDebitMovementPercentagePerPaymentMethods.Add(new NumberOfMvtPerPaymentMethodModel()
-            {
-                AmountExpendituresPercent = 5,
-                PaymentMethod = new Models.PaymentMethod.PaymentMethodListModel()
-                {
-                    Name = "Transfer",
-                    CssClass = "warning"
-                }
-            });
-            fakeData.AmountDebitMovementPercentagePerPaymentMethods.Add(new NumberOfMvtPerPaymentMethodModel()
-            {
-                AmountExpendituresPercent = 15,
-                PaymentMethod = new Models.PaymentMethod.PaymentMethodListModel()
-                {
-                    Name = "Internal Transfer",
-                    CssClass = "danger"
-                }
-            });
-            return View(fakeData);
+            return View(model);
         }
 
         public JsonResult GetDebitMovementsOverTime()
