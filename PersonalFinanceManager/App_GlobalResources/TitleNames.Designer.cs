@@ -448,6 +448,15 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        internal static string LoginPages {
+            get {
+                return ResourceManager.GetString("LoginPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a payment method.
         /// </summary>
         internal static string PaymentMethodCreate {

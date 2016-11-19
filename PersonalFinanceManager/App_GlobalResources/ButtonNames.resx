@@ -144,11 +144,17 @@
   <data name="EditTooltip" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="LoginButton" xml:space="preserve">
+    <value>Log in</value>
+  </data>
   <data name="NextSaveButton" xml:space="preserve">
     <value>Next</value>
   </data>
   <data name="PreviewButton" xml:space="preserve">
     <value>Preview</value>
+  </data>
+  <data name="RegisterButton" xml:space="preserve">
+    <value>Register</value>
   </data>
   <data name="StartBudgetPlanButton" xml:space="preserve">
     <value>Start Budget Plan</value>

@@ -246,6 +246,9 @@
   <data name="IncomePages" xml:space="preserve">
     <value>Manage incomes</value>
   </data>
+  <data name="LoginPages" xml:space="preserve">
+    <value>Log in</value>
+  </data>
   <data name="PaymentMethodCreate" xml:space="preserve">
     <value>Create a payment method</value>
   </data>

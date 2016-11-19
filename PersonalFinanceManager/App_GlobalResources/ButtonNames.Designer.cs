@@ -142,6 +142,15 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        internal static string LoginButton {
+            get {
+                return ResourceManager.GetString("LoginButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next.
         /// </summary>
         internal static string NextSaveButton {
@@ -156,6 +165,15 @@ namespace PersonalFinanceManager.App_GlobalResources {
         internal static string PreviewButton {
             get {
                 return ResourceManager.GetString("PreviewButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        internal static string RegisterButton {
+            get {
+                return ResourceManager.GetString("RegisterButton", resourceCulture);
             }
         }
         

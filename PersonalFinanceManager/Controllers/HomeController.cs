@@ -12,6 +12,11 @@ namespace PersonalFinanceManager.Controllers
     {
         public ActionResult Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Account/Login");
+            }
+
             var fakeData = new HomePageModel();
             fakeData.TotalNumberOfDebitMovements = 12;
             fakeData.FirstMovementDate = DateTime.Now;
