@@ -205,6 +205,15 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Budget Planned Dashboard.
+        /// </summary>
+        internal static string BudgetPlanDashboardPages {
+            get {
+                return ResourceManager.GetString("BudgetPlanDashboardPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete a budget plan.
         /// </summary>
         internal static string BudgetPlanDelete {
@@ -336,6 +345,15 @@ namespace PersonalFinanceManager.App_GlobalResources {
         internal static string CurrencyPages {
             get {
                 return ResourceManager.GetString("CurrencyPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expenditure Split Dashboard.
+        /// </summary>
+        internal static string ExpenditureSplitDashboardPages {
+            get {
+                return ResourceManager.GetString("ExpenditureSplitDashboardPages", resourceCulture);
             }
         }
         

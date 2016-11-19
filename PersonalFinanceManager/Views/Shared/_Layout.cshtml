@@ -41,7 +41,12 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>
-                            <a href="/Dashboard/Index" >Dashboard</a>
+                            <a data-toggle="dropdown" href="#">Dashboard</a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                <li><a href="/Dashboard/Index">Expenditure Split</a></li>
+                                <li><a href="/Dashboard/BudgetPlanDashboard">Budget Planned</a></li>
+                            </ul>
 
                             @*<ul class="dropdown-menu" aria-labelledby="dropdownMenu3" id="dashboardLink"></ul>*@
                         </li>
@@ -100,7 +105,7 @@
         @RenderBody()
         @*<hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>@DateTime.Now.Year - Personal Finance Manager - JM89</p>
         </footer>*@
     </div>
 
@@ -110,7 +115,6 @@
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/plug-ins/1.10.10/sorting/datetime-moment.js"></script>
-
     <script type="text/javascript" src="~/Scripts/plugins/ddslick/jquery.ddslick.min.js"></script>
 
     <script type="text/javascript">

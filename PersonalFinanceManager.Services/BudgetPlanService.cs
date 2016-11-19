@@ -10,6 +10,7 @@ using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Models.ExpenditureType;
+using PersonalFinanceManager.Models.Dashboard;
 
 namespace PersonalFinanceManager.Services
 {
@@ -31,6 +32,25 @@ namespace PersonalFinanceManager.Services
             var budgetPlans = db.BudgetPlanModels.ToList();
 
             return budgetPlans.Select(x => Mapper.Map<BudgetPlanListModel>(x)).ToList();
+        }
+
+        public IList<PlannedExpenditure> GetPlannedExpendituresByAccountIdForDashboard(int accountId, DateTime startDate, DateTime endDate)
+        {
+            var budgetPlans = db.BudgetByExpenditureTypeModels
+                .Include(x => x.BudgetPlan)
+                .Where(x => x.AccountId == accountId
+                    && (x.BudgetPlan.StartDate.HasValue && x.BudgetPlan.StartDate >= startDate)
+                    && (!x.BudgetPlan.EndDate.HasValue || x.BudgetPlan.EndDate < endDate)).ToList();
+
+            var mappedBudgetPlans = budgetPlans.Select(x => new PlannedExpenditure()
+            {
+                ExpenditureId = x.ExpenditureTypeId,
+                StartDate = x.BudgetPlan.StartDate.Value,
+                EndDate = x.BudgetPlan.EndDate.HasValue ? x.BudgetPlan.EndDate.Value : endDate,
+                ExpectedValue = x.Budget
+            });
+
+            return mappedBudgetPlans.ToList();
         }
 
         public BudgetPlanEditModel GetById(int id)
@@ -63,7 +83,7 @@ namespace PersonalFinanceManager.Services
 
             return budgetPlanModel;
         }
-
+        
         /// <summary>
         /// Create a budget plan.
         /// </summary>

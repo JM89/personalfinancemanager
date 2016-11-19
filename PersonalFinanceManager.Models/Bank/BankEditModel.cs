@@ -30,6 +30,15 @@ namespace PersonalFinanceManager.Models.Bank
         [LocalizedDisplayName("BankIconPathPreview")]
         public string UrlPreview { get; set; }
 
+        [LocalizedDisplayName("BankFavoriteBranch")]
+        public BankBrandEditModel FavoriteBranch { get; set; }
+
+        [LocalizedDisplayName("BankWebsite")]
+        public string Website { get; set; }
+
+        [LocalizedDisplayName("BankGeneralEnquiryPhoneNumber")]
+        public string GeneralEnquiryPhoneNumber { get; set; }
+
         public string ErrorPreview { get; set; }
 
         public int AttemptNumber { get; set; }

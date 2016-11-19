@@ -20,6 +20,9 @@ namespace PersonalFinanceManager.Models.PaymentMethod
         [Required]
         public bool HasAtmWithdrawOption { get; set; }
 
+        [LocalizedDisplayName("PaymentMethodWidgetCssClass")]
+        public string CssClass { get; set; }
+
         public bool HasInternalAccountOption { get; set; }
     }
 }

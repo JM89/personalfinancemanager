@@ -196,6 +196,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DateTimeUnitEnums.cs" />
+    <Compile Include="Helpers\DateTimeHelper.cs" />
+    <Compile Include="Helpers\Interval.cs" />
     <Compile Include="Helpers\JsonError.cs" />
     <Compile Include="Helpers\ModelStateJsonConvertor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -227,9 +230,14 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Resources\bank_icons\bank1.jpg" />
     <Content Include="Resources\bank_icons\barclays.png" />
     <Content Include="Resources\bank_icons\creditmutuel.png" />
+    <Content Include="Resources\bank_icons\hsbclogo.PNG" />
     <Content Include="Resources\bluearrow.png" />
+    <Content Include="Resources\dashboard-addExpenditures.png" />
+    <Content Include="Resources\dashboard-planBudget.png" />
+    <Content Include="Resources\dashboard-visualizeExpenditures.png" />
     <Content Include="Resources\greenarrow.png" />
     <Content Include="Resources\redarrow.png" />
     <Content Include="Resources\theme\SmartExpend.png" />
@@ -242,6 +250,8 @@
     <Content Include="Scripts\cldr\event.js" />
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
+    <Content Include="Scripts\custom\BudgetPlanDashboard.js" />
+    <Content Include="Scripts\custom\HomePage.js" />
     <Content Include="Scripts\custom\Utils.js" />
     <Content Include="Scripts\custom\BudgetPlan.js" />
     <Content Include="Scripts\custom\Expenditure.js" />
@@ -340,6 +350,7 @@
     <Content Include="Views\BudgetPlan\Index.cshtml" />
     <Content Include="Views\BudgetPlan\Edit.cshtml" />
     <Content Include="Views\BudgetPlan\View.cshtml" />
+    <Content Include="Views\Dashboard\BudgetPlan.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

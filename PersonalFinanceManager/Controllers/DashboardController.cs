@@ -10,6 +10,9 @@ using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Entities;
 using PersonalFinanceManager.Models.Expenditure;
 using System.Globalization;
+using PersonalFinanceManager.Models.Account;
+using PersonalFinanceManager.Helpers;
+using PersonalFinanceManager.Models.Helpers.Chart;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -18,21 +21,26 @@ namespace PersonalFinanceManager.Controllers
         private ExpenditureService expenditureService = new ExpenditureService();
         private ExpenditureTypeService expenditureTypeService = new ExpenditureTypeService();
         private BankAccountService bankAccountService = new BankAccountService();
+        private BudgetPlanService budgetPlanService = new BudgetPlanService();
+
+        private readonly DateTime StartDate;
+        private readonly DateTime EndDate;
+
+        public DashboardController()
+        {
+            var baseStartDate = DateTime.Today.AddMonths(-11);
+            this.StartDate = new DateTime(baseStartDate.Year, baseStartDate.Month, 1);
+
+            var endBaseDate = DateTime.Today;
+            this.EndDate = new DateTime(endBaseDate.Year, endBaseDate.Month, 1).AddMonths(1).AddDays(-1);
+        }
 
         // GET: Dashboard
         public ActionResult Index()
         {
-            var accountId = CurrentAccount;
+            var account = bankAccountService.GetById(CurrentAccount);
 
-            var account = bankAccountService.GetById(accountId);
-
-            var baseStartDate = DateTime.Today.AddMonths(-11);
-            var startDate = new DateTime(baseStartDate.Year, baseStartDate.Month, 1);
-
-            var endBaseDate = DateTime.Today;
-            var endDate = new DateTime(endBaseDate.Year, endBaseDate.Month, 1).AddMonths(1).AddDays(-1);
-
-            var allExpenditures = GetExpendituresFor12Months(accountId);
+            var allExpenditures = GetExpendituresFor12Months(account.Id);
 
             if (!allExpenditures.Any())
             {
@@ -66,10 +74,10 @@ namespace PersonalFinanceManager.Controllers
                     });
                 }
 
-                ViewBag.AccountId = accountId;
+                ViewBag.AccountId = account.Id;
                 ViewBag.AccountName = account.Name;
-                ViewBag.StartDate = startDate.ToString("MMMM yyyy");
-                ViewBag.EndDate = endDate.ToString("MMMM yyyy");
+                ViewBag.StartDate = this.StartDate.ToString("MMMM yyyy");
+                ViewBag.EndDate = this.EndDate.ToString("MMMM yyyy");
 
                 return View(expendituresByTypeModel);
             }
@@ -146,10 +154,15 @@ namespace PersonalFinanceManager.Controllers
 
             var tooltipTemplate = " <%if (label) {%><%= label %>: <%}%> <%= parseFloat(Math.round((value / " + totalSum + ") * 100)).toFixed(0) %>% (" + currency.Symbol + "<%= parseFloat(Math.round(value * 100) / 100).toFixed(2) %>)";
 
-            return Json(new { data = list, options = new
+            return Json(new
             {
-                tooltipFontSize = 10,
-                tooltipTemplate = tooltipTemplate } }, JsonRequestBehavior.AllowGet);
+                data = list,
+                options = new
+                {
+                    tooltipFontSize = 10,
+                    tooltipTemplate = tooltipTemplate
+                }
+            }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: ExpenditureModels
@@ -169,17 +182,22 @@ namespace PersonalFinanceManager.Controllers
                         {
                             label = x.Key.Name,
                             color = "#" + x.Key.GraphColor,
-                            value = x.Sum() 
+                            value = x.Sum()
                         });
 
             var currency = allExpenditures.First().Account.Currency;
 
             var tooltipTemplate = " <%if (label) {%><%= label %>: <%}%> <%= parseFloat(Math.round((value / " + totalSum + ") * 100)).toFixed(0) %>% (" + currency.Symbol + "<%= parseFloat(Math.round(value * 100) / 100).toFixed(2) %>)";
 
-            return Json(new { data = list, options = new
+            return Json(new
             {
-                tooltipFontSize = 10,
-                tooltipTemplate = tooltipTemplate } }, JsonRequestBehavior.AllowGet);
+                data = list,
+                options = new
+                {
+                    tooltipFontSize = 10,
+                    tooltipTemplate = tooltipTemplate
+                }
+            }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetCategoryExpendituresOverTime(string selectedExpenditureType)
@@ -188,11 +206,11 @@ namespace PersonalFinanceManager.Controllers
 
             var expenditureTypeColor = expenditureTypeService.GetExpenditureTypes().Single(x => x.Name == selectedExpenditureType).GraphColor;
 
-            var color = System.Drawing.ColorTranslator.FromHtml("#"+expenditureTypeColor);
-            
+            var color = System.Drawing.ColorTranslator.FromHtml("#" + expenditureTypeColor);
+
             string fillColor = String.Format("rgba({0},{1},{2},{3})", color.R, color.G, color.B, 0.5);
-            string strokeColor = String.Format("rgba({0},{1},{2},{3})", color.R, color.G, color.B, 0.8); 
-            string highlightFill = String.Format("rgba({0},{1},{2},{3})", color.R, color.G, color.B, 0.75); 
+            string strokeColor = String.Format("rgba({0},{1},{2},{3})", color.R, color.G, color.B, 0.8);
+            string highlightFill = String.Format("rgba({0},{1},{2},{3})", color.R, color.G, color.B, 0.75);
             string highlightStroke = String.Format("rgba({0},{1},{2},{3})", color.R, color.G, color.B, 1);
 
             var allExpenditures = GetExpendituresFor12Months(accountId);
@@ -205,15 +223,16 @@ namespace PersonalFinanceManager.Controllers
             var costOverTime = GetCostOverTime(expenditurePerType.ToList(), 11, referenceDate, true);
 
             var currencySymbol = allExpenditures.First().Account.Currency.Symbol;
-            
+
             var tooltipTemplate = " <%if (label) {%><%= label %>: <%}%> " + currencySymbol + "<%= parseFloat(Math.round(value * 100) / 100).toFixed(2) %>";
 
-            var average = costOverTime.Average.ToString("#.00", CultureInfo.InvariantCulture) + currencySymbol; 
+            var average = costOverTime.Average.ToString("#.00", CultureInfo.InvariantCulture) + currencySymbol;
 
             return Json(
                 new
                 {
-                    data = new {
+                    data = new
+                    {
                         labels = costOverTime.Labels,
                         datasets =
                         new[]
@@ -263,24 +282,28 @@ namespace PersonalFinanceManager.Controllers
             var now = DateTime.Now;
             now = now.Date.AddDays(1 - now.Day);
             var months = Enumerable.Range(0 - numberOfMonth, numberOfMonth + 1)
-                .Select(x => new {
+                .Select(x => new
+                {
                     year = now.AddMonths(x).Year,
-                    month = now.AddMonths(x).Month, 
+                    month = now.AddMonths(x).Month,
                     day = now.AddMonths(x),
                     registered = now.AddMonths(x) >= referenceDate
                 });
 
             var expendituresPerYearAndMonth =
                 months.GroupJoin(allExpenditures,
-                    m => new {
+                    m => new
+                    {
                         month = m.month,
                         year = m.year
                     },
-                    expenditure => new {
+                    expenditure => new
+                    {
                         month = expenditure.DateExpenditure.Month,
                         year = expenditure.DateExpenditure.Year
                     },
-                    (p, g) => new SumCostPerMonthAndYear() {
+                    (p, g) => new SumCostPerMonthAndYear()
+                    {
                         Month = p.month,
                         Year = p.year,
                         Registered = p.registered,
@@ -324,6 +347,95 @@ namespace PersonalFinanceManager.Controllers
             var expenditures = expenditureService.GetExpendituresByAccountIdForDashboard(accountId, startDate, endDate);
 
             return expenditures;
+        }
+
+        public ActionResult BudgetPlanDashboard()
+        {
+            var account = bankAccountService.GetById(CurrentAccount);
+
+            ViewBag.BudgetPlanFound = true;
+            ViewBag.BudgetPlanName = "Budget Name";
+            ViewBag.BudgetPlanStartDate = this.StartDate.ToString("MMMM yyyy");
+
+            ViewBag.AccountId = account.Id;
+            ViewBag.AccountName = account.Name;
+            ViewBag.StartDate = this.StartDate.ToString("MMMM yyyy");
+            ViewBag.EndDate = this.EndDate.ToString("MMMM yyyy");
+
+            return View("BudgetPlan");
+        }
+
+        public JsonResult GetTop10ExpenditureTypes()
+        {
+            var pBudgetPlan = 52;
+
+            var interval = DateTimeHelper.GetInterval(DateTime.Now, DateTimeUnitEnums.Months, 6);
+
+            // Get Actual Expenditures
+            var expenditures = expenditureService.GetExpendituresByAccountIdForDashboard(CurrentAccount, interval.StartDate, interval.EndDate);
+            var expendituresGroupByType = expenditures
+                                            .GroupBy(x => x.TypeExpenditure)
+                                            .ToDictionary(x => new { Id = x.Key.Id, Name = x.Key.Name }, y => y.Sum(x => x.Cost))
+                                            .OrderBy(x => x.Value)
+                                            .Take(10);
+
+            var expenditureCostPerTypeData = new ChartDataset()
+            {
+                Values = expendituresGroupByType.Select(x => ((int)x.Value).ToString()).ToList()
+            };
+
+            var budgetPlan = budgetPlanService.GetById(pBudgetPlan);
+
+            var budgetPlannedCostPerType = expendituresGroupByType.Join(
+                                                budgetPlan.ExpenditureTypes, exp => exp.Key.Id, bp => bp.ExpenditureType.Id, (exp, bp) => bp.ExpectedValue);
+
+            var budgetPlannedCostPerTypeData = new ChartDataset()
+            {
+                Values = budgetPlannedCostPerType.Select(x => ((int)x).ToString()).ToList()
+            };
+
+            var chartData = new ChartData()
+            {
+                Labels = expendituresGroupByType.Select(x => x.Key.Name).ToList(),
+                ChartDatasets = new List<ChartDataset>()
+                {
+                    expenditureCostPerTypeData,
+                    budgetPlannedCostPerTypeData
+                }
+            };
+
+            return Json(chartData, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetActualVsPlanned()
+        {
+            var interval = DateTimeHelper.GetInterval(DateTime.Now, DateTimeUnitEnums.Months, 6);
+            var intervalsByMonth = interval.GetIntervalsByMonth();
+
+            var dataSetActualExpenditures = new ChartDataset();
+            var expenditures = expenditureService.GetExpendituresByAccountIdForDashboard(CurrentAccount, interval.StartDate, interval.EndDate);
+            foreach (var intervalByMonth in intervalsByMonth)
+            {
+                var expendituresByMonth = expenditures.Where(x => intervalByMonth.Value.IsBetween(x.DateExpenditure));
+                dataSetActualExpenditures.Values.Add(((int)expendituresByMonth.Sum(x => x.Cost)).ToString());
+            }
+
+            //var budgetPlans = budgetPlanService.GetPlannedExpendituresByAccountIdForDashboard(CurrentAccount, interval.StartDate, interval.EndDate);
+            //foreach (var intervalByMonth in intervalsByMonth)
+            //{
+            //    var budgetPlansByMonth = budgetPlans.Where(x => intervalByMonth.Value.IsBetween(x.DateExpenditure));
+            //    dataSetActualExpenditures.Values.Add(((int)budgetPlansByMonth.Sum(x => x.ExpectedValue)).ToString());
+            //}
+
+            var chartData = new ChartData()
+            {
+                Labels = intervalsByMonth.Keys.ToList(), 
+                ChartDatasets = new List<ChartDataset>()
+                {
+                    dataSetActualExpenditures
+                }
+            };
+            return Json(chartData, JsonRequestBehavior.AllowGet);
         }
     }
 }

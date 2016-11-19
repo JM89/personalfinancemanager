@@ -1,7 +1,7 @@
 ﻿@model IList<PersonalFinanceManager.Models.Expenditure.ExpenditurePerTypeModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = Resources.TitleNames.ExpenditureSplitDashboardPages;
 }
 
 @if (ViewBag.ExpendituresFound)
@@ -10,13 +10,13 @@
 
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-12">
-            <h2>Dashboard</h2>
+            <h2>@ViewBag.Title</h2>
             <ol class="breadcrumb">
                 <li>
                     Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId">@ViewBag.AccountName</a>
                 </li>
                 <li class="active">
-                    <strong>Dashboard (@ViewBag.StartDate - @ViewBag.EndDate)</strong>
+                    <strong>@ViewBag.Title (@ViewBag.StartDate - @ViewBag.EndDate)</strong>
                 </li>
             </ol>
             <br />
@@ -50,7 +50,7 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-lg-4" id="myChart4-container">
+                            <div class="col-lg-4" id="myChart4-container" >
                                 <canvas id="myChart4" width="300" height="300"></canvas>
                             </div>
                         </div>

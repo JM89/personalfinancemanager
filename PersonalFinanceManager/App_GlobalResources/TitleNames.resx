@@ -165,6 +165,9 @@
   <data name="BudgetPlanCreate" xml:space="preserve">
     <value>Create a budget plan</value>
   </data>
+  <data name="BudgetPlanDashboardPages" xml:space="preserve">
+    <value>Budget Planned Dashboard</value>
+  </data>
   <data name="BudgetPlanDelete" xml:space="preserve">
     <value>Delete a budget plan</value>
   </data>
@@ -209,6 +212,9 @@
   </data>
   <data name="CurrencyPages" xml:space="preserve">
     <value>Manage currencies</value>
+  </data>
+  <data name="ExpenditureSplitDashboardPages" xml:space="preserve">
+    <value>Expenditure Split Dashboard</value>
   </data>
   <data name="ExpenditureTypeCreate" xml:space="preserve">
     <value>Create an expenditure type</value>
