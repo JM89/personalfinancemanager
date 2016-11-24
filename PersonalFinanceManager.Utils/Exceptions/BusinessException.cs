@@ -8,20 +8,31 @@ namespace PersonalFinanceManager.Utils.Exceptions
 {
     public class BusinessException: Exception
     {
-        public string Property { get; set; }
+        public IDictionary<string,List<string>> ErrorMessages;
 
-        public string Description { get; set; }
-
-        public BusinessException(string property, string resource): base()
+        public BusinessException() : base()
         {
-            Property = property;
-            Description = BusinessExceptionMessage.ResourceManager.GetString(resource);
+            ErrorMessages = new Dictionary<string, List<string>>();
         }
 
-        public BusinessException(string resource) : base()
+        public BusinessException(string property, string description) : base()
         {
-            Property = "_FORM";
-            Description = BusinessExceptionMessage.ResourceManager.GetString(resource);
+            ErrorMessages = new Dictionary<string, List<string>>();
+            AddErrorMessage(property, description);
+        }
+
+        public void AddErrorMessage(string property, string description)
+        {
+            if (!ErrorMessages.ContainsKey(property))
+            {
+                ErrorMessages.Add(property, new List<string>());
+            }
+            ErrorMessages[property].Add(description);
+        }
+
+        public bool HasError()
+        {
+            return ErrorMessages.Any();
         }
     }
 }

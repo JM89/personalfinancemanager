@@ -65,7 +65,7 @@ namespace PersonalFinanceManager.Controllers
             };
             model.FavoriteBankDetails = new Models.Bank.BankEditModel()
             {
-                FileName = "/Resources/bank_icons/bank1.jpg",
+                //FileName = "/Resources/bank_icons/bank1.jpg",
                 FavoriteBranch = new Models.Bank.BankBrandEditModel()
                 {
                     Name = "HIGH LORTON Branch",

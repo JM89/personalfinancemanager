@@ -12,20 +12,31 @@ namespace PersonalFinanceManager.Controllers
 {
     public class BaseController : Controller
     {
-        //protected override void OnException(ExceptionContext filterContext)
-        //{
-        //    var ex = filterContext.Exception;
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            var ex = filterContext.Exception;
 
-        //    if (ex.GetType() == typeof(BusinessException))
-        //    {
-        //        filterContext.ExceptionHandled = true;
+            if (ex.GetType() == typeof(BusinessException))
+            {
+                filterContext.ExceptionHandled = true;
 
-        //        var bex = ((BusinessException)ex);
+                var errorMessages = ((BusinessException)ex).ErrorMessages;
+                foreach(var errorMessagePerField in errorMessages)
+                {
+                    foreach(var errorMessage in errorMessagePerField.Value)
+                    {
+                        ModelState.AddModelError(errorMessagePerField.Key, errorMessage);
+                    }
+                }
 
-        //        ModelState.AddModelError(bex.Property, bex.Description);
-        //    }
-            
-        //}
+                var controller = filterContext.Controller;
+                filterContext.Result = new ViewResult
+                {
+                    ViewData = controller.ViewData,
+                    TempData = controller.TempData
+                };
+            }
+        }
 
         protected string CurrentUser
         {

@@ -35,6 +35,7 @@ namespace PersonalFinanceManager.Utils.Automapper
 
             Mapper.CreateMap<Entities.BankModel, Models.Bank.BankListModel>();
             Mapper.CreateMap<Entities.BankModel, Models.Bank.BankEditModel>();
+            Mapper.CreateMap<Entities.BankBrandModel, Models.Bank.BankBrandEditModel>();
 
             Mapper.CreateMap<Entities.CurrencyModel, Models.Currency.CurrencyListModel>();
             Mapper.CreateMap<Entities.CurrencyModel, Models.Currency.CurrencyEditModel>();

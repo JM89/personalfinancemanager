@@ -67,6 +67,7 @@
     <Compile Include="AccountModel.cs" />
     <Compile Include="ApplicationUser.cs" />
     <Compile Include="AtmWithdrawModel.cs" />
+    <Compile Include="BankBrandModel.cs" />
     <Compile Include="Enumerations\MovementType.cs" />
     <Compile Include="Enumerations\TargetOptions.cs" />
     <Compile Include="HistoricMovementModel.cs" />

@@ -19,11 +19,11 @@ namespace PersonalFinanceManager.Services.Interfaces
     {
         IList<BankListModel> GetBanks();
 
-        void CreateBank(BankEditModel bankEditModel, string folderPath);
+        void CreateBank(BankEditModel bankEditModel);
 
         BankEditModel GetById(int id);
 
-        void EditBank(BankEditModel bankEditModel, string folderPath);
+        void EditBank(BankEditModel bankEditModel);
 
         void DeleteBank(int id);
     }

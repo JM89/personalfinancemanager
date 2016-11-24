@@ -14,8 +14,8 @@ namespace PersonalFinanceManager.Utils.Automapper
             Mapper.CreateMap<Models.Expenditure.ExpenditureEditModel, Entities.ExpenditureModel>();
             Mapper.CreateMap<Models.Expenditure.ExpenditureListModel, Entities.ExpenditureModel>();
 
-            Mapper.CreateMap<Models.Bank.BankListModel, Entities.BankModel>();
             Mapper.CreateMap<Models.Bank.BankEditModel, Entities.BankModel>();
+            Mapper.CreateMap<Models.Bank.BankBrandEditModel, Entities.BankBrandModel>();
 
             Mapper.CreateMap<Models.AtmWithdraw.AtmWithdrawListModel, Entities.AtmWithdrawModel>();
             Mapper.CreateMap<Models.AtmWithdraw.AtmWithdrawEditModel, Entities.AtmWithdrawModel>();
@@ -44,6 +44,7 @@ namespace PersonalFinanceManager.Utils.Automapper
 
             Mapper.CreateMap<Models.BudgetPlan.BudgetPlanListModel, Entities.BudgetPlanModel>();
             Mapper.CreateMap<Models.BudgetPlan.BudgetPlanEditModel, Entities.BudgetPlanModel>();
+            
         }
     }
 }

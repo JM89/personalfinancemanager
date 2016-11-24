@@ -189,7 +189,13 @@
       <DependentUpon>DisabledButtonTooltips.resx</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="App_GlobalResources\FieldHelper.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FieldHelper.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CustomModelBinder.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\NinjectConfig.cs" />
@@ -216,6 +222,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\FileUpload.cs" />
+    <Compile Include="Helpers\MvcHtmlExtensions.cs" />
     <Compile Include="Helpers\DateTimeUnitEnums.cs" />
     <Compile Include="Helpers\DateTimeHelper.cs" />
     <Compile Include="Helpers\Interval.cs" />
@@ -271,6 +279,7 @@
     <Content Include="Scripts\cldr\event.js" />
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
+    <Content Include="Scripts\custom\Bank.js" />
     <Content Include="Scripts\custom\BudgetPlanDashboard.js" />
     <Content Include="Scripts\custom\HomePage.js" />
     <Content Include="Scripts\custom\Utils.js" />
@@ -426,6 +435,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TitleNames.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\FieldHelper.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>FieldHelper.Designer.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <PropertyGroup>

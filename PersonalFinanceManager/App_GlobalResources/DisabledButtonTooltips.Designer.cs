@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The bank is used by at least one account. Please delete the account first. .
+        /// </summary>
+        internal static string BankCantBeDeleted {
+            get {
+                return ResourceManager.GetString("BankCantBeDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The account is used by at least one account. Please delete the accounts first..
         /// </summary>
         internal static string CurrencyCantBeDeleted {

@@ -106,6 +106,60 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address Line 1.
+        /// </summary>
+        internal static string BankBranchAddressLine1 {
+            get {
+                return ResourceManager.GetString("BankBranchAddressLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address Line 2.
+        /// </summary>
+        internal static string BankBranchAddressLine2 {
+            get {
+                return ResourceManager.GetString("BankBranchAddressLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to City.
+        /// </summary>
+        internal static string BankBranchCity {
+            get {
+                return ResourceManager.GetString("BankBranchCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string BankBranchName {
+            get {
+                return ResourceManager.GetString("BankBranchName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone Number.
+        /// </summary>
+        internal static string BankBranchPhoneNumber {
+            get {
+                return ResourceManager.GetString("BankBranchPhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Post Code.
+        /// </summary>
+        internal static string BankBranchPostCode {
+            get {
+                return ResourceManager.GetString("BankBranchPostCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Country.
         /// </summary>
         internal static string BankCountry {
@@ -115,7 +169,25 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Icon.
+        ///   Looks up a localized string similar to Favorite Branch.
+        /// </summary>
+        internal static string BankFavoriteBranch {
+            get {
+                return ResourceManager.GetString("BankFavoriteBranch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone Number.
+        /// </summary>
+        internal static string BankGeneralEnquiryPhoneNumber {
+            get {
+                return ResourceManager.GetString("BankGeneralEnquiryPhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logo.
         /// </summary>
         internal static string BankIconPath {
             get {
@@ -147,6 +219,15 @@ namespace PersonalFinanceManager.Models.Resources {
         internal static string BankUploadImage {
             get {
                 return ResourceManager.GetString("BankUploadImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website.
+        /// </summary>
+        internal static string BankWebsite {
+            get {
+                return ResourceManager.GetString("BankWebsite", resourceCulture);
             }
         }
         

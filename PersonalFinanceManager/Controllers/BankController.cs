@@ -1,30 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using PersonalFinanceManager.Entities;
-using PersonalFinanceManager.Models;
-using System.Web.Helpers;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.Bank;
-using AutoMapper;
 using System.IO;
 using PersonalFinanceManager.Utils.Exceptions;
+using PersonalFinanceManager.Helpers;
+using System.Collections.Generic;
+using PersonalFinanceManager.Utils;
 
 namespace PersonalFinanceManager.Controllers
 {
     [Authorize]
     public class BankController : BaseController
     {
-        private BankService bankService = new BankService();
-        private CountryService countryService = new CountryService();
+        private readonly BankService _bankService;
+        private readonly CountryService _countryService;
+
+        public BankController(BankService bankService, CountryService countryService)
+        {
+            this._bankService = bankService;
+            this._countryService = countryService;
+        }
+
         private const int MaxAttempt = 5;
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var model = bankService.GetBanks();
+            var model = _bankService.GetBanks();
 
             return View(model);
         }
@@ -44,7 +45,7 @@ namespace PersonalFinanceManager.Controllers
         /// <param name="accountModel"></param>
         private void PopulateDropDownLists(BankEditModel bankModel)
         {
-            bankModel.AvailableCountries = countryService.GetCountries().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            bankModel.AvailableCountries = _countryService.GetCountries().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace PersonalFinanceManager.Controllers
         public ActionResult Create()
         {
             var bankEditModel = new BankEditModel();
-
+            bankEditModel.DisplayIconFlags = DisplayIcon.DisplayUploader;
             PopulateDropDownLists(bankEditModel);
 
             return View(bankEditModel);
@@ -66,39 +67,36 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,CountryId,file,AttemptNumber,UrlPreview")] BankEditModel bankEditModel, HttpPostedFileBase file)
+        public ActionResult Create(BankEditModel bankEditModel, HttpPostedFileBase UploadImage)
         {
+            PopulateDropDownLists(bankEditModel);
+
             if (ModelState.IsValid)
             {
-                if (String.IsNullOrEmpty(bankEditModel.UrlPreview))
+                bankEditModel.DisplayIconFlags = DisplayIcon.DisplayUploader;
+
+                var upload = false;
+                if (string.IsNullOrEmpty(bankEditModel.IconPath))
                 {
-                    UploadImageForPreview(bankEditModel, file);
-
-                    PopulateDropDownLists(bankEditModel);
-
-                    return View(bankEditModel);
+                    upload = true;
+                }
+                else if (UploadImage != null)
+                {
+                    bankEditModel.DisplayIconFlags = DisplayIcon.DisplayUploader | DisplayIcon.DisplayExistingIcon | DisplayIcon.DisplayIconPathPreview;
+                    upload = true;
                 }
 
-                try
+                if (upload)
                 {
-                    bankService.CreateBank(bankEditModel, Server.MapPath("~/"));
-                }
-                catch (BusinessException ex)
-                {
-                    ModelState.AddModelError(String.Empty, ex.Description);
-
-                    PopulateDropDownLists(bankEditModel);
-
-                    return View(bankEditModel);
+                    bankEditModel.IconPath = FileUpload.UploadFileToServer(UploadImage, "IconPath", Config.BankIconBasePath, Config.BankIconMaxSize, Config.BankIconAllowedExtensions);
                 }
 
-                CleanPreviewFolder();
+                bankEditModel.DisplayIconFlags = DisplayIcon.DisplayExistingIcon | DisplayIcon.DisplayIconPathPreview;
+
+                _bankService.CreateBank(bankEditModel);
 
                 return RedirectToAction("Index");
             }
-
-            PopulateDropDownLists(bankEditModel);
-
             return View(bankEditModel);
         }
 
@@ -114,12 +112,14 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var bankModel = bankService.GetById(id.Value);
+            var bankModel = _bankService.GetById(id.Value);
 
             if (bankModel == null)
             {
                 return HttpNotFound();
             }
+
+            bankModel.DisplayIconFlags = DisplayIcon.DisplayExistingIcon | DisplayIcon.DisplayIconPathPreview;
 
             PopulateDropDownLists(bankModel);
 
@@ -133,80 +133,27 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,CountryId,file,AttemptNumber,UrlPreview")] BankEditModel bankEditModel, HttpPostedFileBase file)
+        public ActionResult Edit(BankEditModel bankEditModel, HttpPostedFileBase UploadImage)
         {
+            PopulateDropDownLists(bankEditModel);
+
+            bankEditModel.DisplayIconFlags = DisplayIcon.DisplayExistingIcon | DisplayIcon.DisplayIconPathPreview;
+
             if (ModelState.IsValid)
             {
-                if (String.IsNullOrEmpty(bankEditModel.UrlPreview))
+                if (UploadImage != null && UploadImage.FileName != bankEditModel.FileName)
                 {
-                    UploadImageForPreview(bankEditModel, file);
-
-                    PopulateDropDownLists(bankEditModel);
-
-                    return View(bankEditModel);
+                    bankEditModel.DisplayIconFlags = bankEditModel.DisplayIconFlags | DisplayIcon.DisplayUploader;
+                    bankEditModel.IconPath = FileUpload.UploadFileToServer(UploadImage, "IconPath", Config.BankIconBasePath, Config.BankIconMaxSize, Config.BankIconAllowedExtensions);
                 }
 
-                bankService.EditBank(bankEditModel, Server.MapPath("~/"));
+                bankEditModel.DisplayIconFlags = DisplayIcon.DisplayExistingIcon | DisplayIcon.DisplayIconPathPreview;
 
-                CleanPreviewFolder();
+                _bankService.EditBank(bankEditModel);
 
                 return RedirectToAction("Index");
             }
-
-            PopulateDropDownLists(bankEditModel);
-
             return View(bankEditModel);
-        }
-
-        /// <summary>
-        /// Upload the file in a preview location. 
-        /// </summary>
-        /// <param name="bankEditModel"></param>
-        /// <param name="file"></param>
-        public void UploadImageForPreview(BankEditModel bankEditModel, HttpPostedFileBase file)
-        {
-            if (bankEditModel.AttemptNumber == MaxAttempt)
-            {
-                bankEditModel.ErrorPreview = "Max attempt reached. Preview folder is now empty.";
-                bankEditModel.UrlPreview = "";
-                bankEditModel.FileName = "";
-
-                CleanPreviewFolder();
-               
-            }
-            else
-            {
-                if (file != null && file.ContentLength > 0)
-                {
-                    if (file.ContentType != "image/png" && file.ContentType != "image/jpeg")
-                    {
-                        bankEditModel.ErrorPreview = "Invalid file type";
-                    }
-                    else
-                    {
-                        var fileName = Path.GetFileName(file.FileName);
-                        var path = Path.Combine(Server.MapPath("~/Resources/preview"), fileName);
-                        file.SaveAs(path);
-                        bankEditModel.FileName = fileName.Replace(".png", "").Replace(".jpg", "");
-                        bankEditModel.UrlPreview = "/Resources/preview/" + fileName;
-                        bankEditModel.AttemptNumber += 1;
-                    }
-                }
-                else
-                {
-                    bankEditModel.ErrorPreview = "File is empty.";
-                }
-            }
-        }
-
-        private void CleanPreviewFolder()
-        {
-            System.IO.DirectoryInfo downloadedMessageInfo = new DirectoryInfo(Server.MapPath("~/Resources/preview"));
-
-            foreach (FileInfo previewFile in downloadedMessageInfo.GetFiles())
-            {
-                previewFile.Delete();
-            }
         }
 
         /// <summary>
@@ -221,7 +168,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            BankEditModel bankModel = bankService.GetById(id.Value);
+            BankEditModel bankModel = _bankService.GetById(id.Value);
 
             if (bankModel == null)
             {
@@ -239,7 +186,7 @@ namespace PersonalFinanceManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            bankService.DeleteBank(id);
+            _bankService.DeleteBank(id);
 
             return RedirectToAction("Index");
         }
@@ -248,8 +195,8 @@ namespace PersonalFinanceManager.Controllers
         {
             if (disposing)
             {
-                bankService.Dispose();
-                countryService.Dispose();
+                _bankService.Dispose();
+                _countryService.Dispose();
             }
             base.Dispose(disposing);
         }

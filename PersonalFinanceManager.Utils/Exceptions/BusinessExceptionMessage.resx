@@ -138,6 +138,21 @@
   <data name="ExpenditureTypeDuplicateName" xml:space="preserve">
     <value>Duplicate expenditure type name. Choose another name.</value>
   </data>
+  <data name="FileUploadEmpty" xml:space="preserve">
+    <value>The file is empty.</value>
+  </data>
+  <data name="FileUploadHasNotBeenSelected" xml:space="preserve">
+    <value>No file has been selected. </value>
+  </data>
+  <data name="FileUploadMaxSize" xml:space="preserve">
+    <value>The file should not exceed {0} bytes.</value>
+  </data>
+  <data name="FileUploadSameName" xml:space="preserve">
+    <value>A file with the same name already exists.</value>
+  </data>
+  <data name="FileUploadWrongExtensions" xml:space="preserve">
+    <value>The file extension {0} does not match the allowed extensions ({1}).</value>
+  </data>
   <data name="PaymentMethodDuplicateName" xml:space="preserve">
     <value>Duplicate payment method name. Choose another name.</value>
   </data>

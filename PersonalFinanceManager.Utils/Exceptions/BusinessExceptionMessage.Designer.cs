@@ -124,6 +124,51 @@ namespace PersonalFinanceManager.Utils.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file is empty..
+        /// </summary>
+        public static string FileUploadEmpty {
+            get {
+                return ResourceManager.GetString("FileUploadEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No file has been selected. .
+        /// </summary>
+        public static string FileUploadHasNotBeenSelected {
+            get {
+                return ResourceManager.GetString("FileUploadHasNotBeenSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file should not exceed {0} bytes..
+        /// </summary>
+        public static string FileUploadMaxSize {
+            get {
+                return ResourceManager.GetString("FileUploadMaxSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A file with the same name already exists..
+        /// </summary>
+        public static string FileUploadSameName {
+            get {
+                return ResourceManager.GetString("FileUploadSameName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file extension {0} does not match the allowed extensions ({1})..
+        /// </summary>
+        public static string FileUploadWrongExtensions {
+            get {
+                return ResourceManager.GetString("FileUploadWrongExtensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate payment method name. Choose another name..
         /// </summary>
         public static string PaymentMethodDuplicateName {

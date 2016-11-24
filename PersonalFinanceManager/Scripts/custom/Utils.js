@@ -22,3 +22,8 @@
         $(errorLabel).css("display", "block")
     });
 }
+
+var strContains = function(str, sstr)
+{
+    return str.indexOf(sstr) !== -1;
+}

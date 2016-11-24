@@ -1,5 +1,7 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using PersonalFinanceManager.App_Start;
+using System.Web.Mvc;
 
 [assembly: OwinStartupAttribute(typeof(PersonalFinanceManager.Startup))]
 namespace PersonalFinanceManager
@@ -10,6 +12,8 @@ namespace PersonalFinanceManager
         {
             ConfigureAuth(app);
             ConfigureNinject(app);
+
+            ModelBinders.Binders.DefaultBinder = new CustomModelBinder();
         }
     }
 }

@@ -21,5 +21,9 @@ namespace PersonalFinanceManager.Entities
 
         [ForeignKey("CountryId")]
         public CountryModel Country { get; set; }
+
+        public string Website { get; set; }
+
+        public string GeneralEnquiryPhoneNumber { get; set; }
     }
 }

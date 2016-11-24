@@ -132,11 +132,35 @@
   <data name="AtmWithdrawInitialAmount" xml:space="preserve">
     <value>Initial Amount</value>
   </data>
+  <data name="BankBranchAddressLine1" xml:space="preserve">
+    <value>Address Line 1</value>
+  </data>
+  <data name="BankBranchAddressLine2" xml:space="preserve">
+    <value>Address Line 2</value>
+  </data>
+  <data name="BankBranchCity" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="BankBranchName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BankBranchPhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="BankBranchPostCode" xml:space="preserve">
+    <value>Post Code</value>
+  </data>
   <data name="BankCountry" xml:space="preserve">
     <value>Country</value>
   </data>
+  <data name="BankFavoriteBranch" xml:space="preserve">
+    <value>Favorite Branch</value>
+  </data>
+  <data name="BankGeneralEnquiryPhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
   <data name="BankIconPath" xml:space="preserve">
-    <value>Icon</value>
+    <value>Logo</value>
   </data>
   <data name="BankIconPathPreview" xml:space="preserve">
     <value>Preview</value>
@@ -146,6 +170,9 @@
   </data>
   <data name="BankUploadImage" xml:space="preserve">
     <value>Upload an icon</value>
+  </data>
+  <data name="BankWebsite" xml:space="preserve">
+    <value>Website</value>
   </data>
   <data name="BudgetPlanAverageMonthValue" xml:space="preserve">
     <value>Average Month Value</value>

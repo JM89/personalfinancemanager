@@ -16,6 +16,7 @@ namespace PersonalFinanceManager.Models.Bank
 
         [Required]
         [LocalizedDisplayName("BankName")]
+        [MaxLength(50)]
         public string Name { get; set; }
 
         [Required]
@@ -24,23 +25,47 @@ namespace PersonalFinanceManager.Models.Bank
 
         public IList<SelectListItem> AvailableCountries { get; set; }
 
-        [LocalizedDisplayName("BankUploadImage")]
-        public string FileName { get; set; }
-
-        [LocalizedDisplayName("BankIconPathPreview")]
-        public string UrlPreview { get; set; }
-
         [LocalizedDisplayName("BankFavoriteBranch")]
         public BankBrandEditModel FavoriteBranch { get; set; }
 
         [LocalizedDisplayName("BankWebsite")]
+        [MaxLength(200)]
+        [Required]
         public string Website { get; set; }
 
         [LocalizedDisplayName("BankGeneralEnquiryPhoneNumber")]
+        [RegularExpression(@"[0-9]{11}", ErrorMessage = "Not a valid Phone number (00000000000)")]
+        [Required]
         public string GeneralEnquiryPhoneNumber { get; set; }
 
-        public string ErrorPreview { get; set; }
+        [LocalizedDisplayName("BankIconPath")]
+        public string IconPath { get; set; }
 
-        public int AttemptNumber { get; set; }
-    } 
+        public string FileName { get
+            {
+                if (IconPath != null)
+                {
+                    var indexLastSlash = IconPath.LastIndexOf("/") + 1;
+                    var fileName = IconPath.Substring(indexLastSlash, IconPath.Length - indexLastSlash);
+                    return fileName;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        public DisplayIcon DisplayIconFlags { get; set; }
+    }
+
+    [Flags]
+    public enum DisplayIcon
+    {
+        None = 0,
+        DisplayUploader = 1, 
+        DisplayExistingIcon = 2,
+        DisplayIconPathPreview = 4,
+        DisplayFilePreview = 8
+    }
 }

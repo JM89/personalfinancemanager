@@ -41,7 +41,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>
-                            @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                           <a href="/Home/Index"><strong>Home</strong></a>
                         </li>
                         <li>
                             <a data-toggle="dropdown" href="#">Dashboard</a>
@@ -50,8 +50,6 @@
                                 <li><a href="/Dashboard/Index">Expenditure Split</a></li>
                                 <li><a href="/Dashboard/BudgetPlanDashboard">Budget Planned</a></li>
                             </ul>
-
-                            @*<ul class="dropdown-menu" aria-labelledby="dropdownMenu3" id="dashboardLink"></ul>*@
                         </li>
                         <li>
                             <a data-toggle="dropdown" href="#" id="id_menu_movements">Movements</a>

@@ -46,10 +46,8 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.CountryName)
                     </td>
-                    
                     <td align="right">
-                        <a href="/Bank/Edit/@item.Id" title="@Resources.ButtonNames.EditTooltip"><i class="fa fa-pencil-square-o"></i></a> |
-                        <a href="/Bank/Delete/@item.Id" title="@Resources.ButtonNames.DeleteTooltip"><i class="fa fa-trash-o"></i></a>
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "Bank", @Resources.DisabledButtonTooltips.BankCantBeDeleted)
                     </td>
                 </tr>
             }

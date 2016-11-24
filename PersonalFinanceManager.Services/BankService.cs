@@ -29,7 +29,15 @@ namespace PersonalFinanceManager.Services
         {
             var banks = db.BankModels.Include(u => u.Country).ToList();
 
-            return banks.Select(x => Mapper.Map<BankListModel>(x)).ToList();
+            var banksModel = banks.Select(x => Mapper.Map<BankListModel>(x)).ToList();
+
+            banksModel.ForEach(bank =>
+            {
+                var hasAccounts = db.AccountModels.Any(x => x.BankId == bank.Id);
+                bank.CanBeDeleted = !hasAccounts;
+            });
+
+            return banksModel;
         }
 
         public void Dispose()
@@ -37,25 +45,26 @@ namespace PersonalFinanceManager.Services
             db.Dispose();
         }
 
-        public void CreateBank(BankEditModel bankEditModel, string folderPath)
+        public void Validate(BankEditModel bankEditModel)
         {
-            var duplicateName = db.BankModels.Any(x => x.Name.ToLower() == bankEditModel.Name.Trim().ToLower());
-
+            var duplicateName = db.BankModels.Any(x => x.Name.ToLower() == bankEditModel.Name.Trim().ToLower() && x.Id != bankEditModel.Id);
             if (duplicateName)
             {
                 throw new BusinessException("Name", BusinessExceptionMessage.BankDuplicateName);
             }
+        }
+
+        public void CreateBank(BankEditModel bankEditModel)
+        {
+            Validate(bankEditModel);
 
             var bankModel = Mapper.Map<BankModel>(bankEditModel);
-
-            var fileSource = bankEditModel.UrlPreview;
-            var fileDestination = fileSource.Replace("preview", "bank_icons");
-
-            bankModel.IconPath = fileDestination;
-
-            File.Copy(folderPath + fileSource, folderPath + fileDestination);
-            
             db.BankModels.Add(bankModel);
+            db.SaveChanges();
+
+            var bankBranchModel = Mapper.Map<BankBrandModel>(bankEditModel.FavoriteBranch);
+            bankBranchModel.BankId = bankModel.Id;
+            db.BankBranchModels.Add(bankBranchModel);
             db.SaveChanges();
         }
 
@@ -70,33 +79,36 @@ namespace PersonalFinanceManager.Services
 
             var mappedBank = Mapper.Map<BankEditModel>(bank);
 
-            mappedBank.UrlPreview = bank.IconPath;
+            var bankBranch = db.BankBranchModels.SingleOrDefault(x => x.BankId == id);
+            mappedBank.FavoriteBranch = Mapper.Map<BankBrandEditModel>(bankBranch);
 
             return mappedBank;
         }
 
-        public void EditBank(BankEditModel bankEditModel, string folderPath)
+        public void EditBank(BankEditModel bankEditModel)
         {
-            var bankModel = db.BankModels.SingleOrDefault(x => x.Id == bankEditModel.Id);
+            Validate(bankEditModel);
 
-            bankModel.Name = bankEditModel.Name;
-            bankModel.CountryId = bankEditModel.CountryId;
+            var bankModel = db.BankModels.AsNoTracking().SingleOrDefault(x => x.Id == bankEditModel.Id);
+            var oldFileDestination = bankModel.IconPath;
 
-            var fileSource = bankEditModel.UrlPreview;
-            var fileDestination = fileSource.Replace("preview", "bank_icons");
-
-            bankModel.IconPath = fileDestination;
-
-            File.Copy(folderPath + fileSource, folderPath + fileDestination);
-
+            bankModel = Mapper.Map<BankModel>(bankEditModel);
             db.Entry(bankModel).State = EntityState.Modified;
+            db.SaveChanges();
 
+            var bankBranchModel = db.BankBranchModels.AsNoTracking().SingleOrDefault(x => x.BankId == bankModel.Id);
+            bankBranchModel = Mapper.Map<BankBrandModel>(bankEditModel.FavoriteBranch);
+            db.Entry(bankBranchModel).State = EntityState.Modified;
             db.SaveChanges();
         }
 
         public void DeleteBank(int id)
         {
-            BankModel bankModel = db.BankModels.Find(id);
+            var bankBranchModel = db.BankBranchModels.SingleOrDefault(x => x.BankId == id);
+            db.BankBranchModels.Remove(bankBranchModel);
+            db.SaveChanges();
+
+            var bankModel = db.BankModels.Find(id);
             db.BankModels.Remove(bankModel);
             db.SaveChanges();
         }
