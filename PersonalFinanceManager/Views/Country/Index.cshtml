@@ -36,8 +36,7 @@
                     </td>
 
                     <td align="right">
-                        <a href="/Country/Edit/@item.Id" title="@Resources.ButtonNames.EditTooltip"><i class="fa fa-pencil-square-o"></i></a> |
-                        <a href="/Country/Delete/@item.Id" title="@Resources.ButtonNames.DeleteTooltip"><i class="fa fa-trash-o"></i></a>
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "Currency", @Resources.DisabledButtonTooltips.CurrencyCantBeDeleted)
                     </td>
                 </tr>
             }

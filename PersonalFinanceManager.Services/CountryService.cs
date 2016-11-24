@@ -26,7 +26,14 @@ namespace PersonalFinanceManager.Services
         {
             var countries = db.CountryModels.ToList();
 
-            return countries.Select(x => Mapper.Map<CountryListModel>(x)).ToList();
+            var countriesModel = countries.Select(x => Mapper.Map<CountryListModel>(x)).ToList();
+
+            countriesModel.ForEach(country =>
+            {
+                country.CanBeDeleted = !db.BankModels.Any(x => x.CountryId == country.Id);
+            });
+
+            return countriesModel;
         }
 
         public void Dispose()

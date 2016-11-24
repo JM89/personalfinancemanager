@@ -16,7 +16,12 @@ namespace PersonalFinanceManager.Controllers
     [Authorize]
     public class PaymentMethodController : BaseController
     {
-        private PaymentMethodService paymentMethodService = new PaymentMethodService();
+        private readonly PaymentMethodService _paymentMethodService;
+
+        public PaymentMethodController(PaymentMethodService paymentMethodService)
+        {
+            this._paymentMethodService = paymentMethodService;
+        }
 
         /// <summary>
         /// Return the list of payment methods.
@@ -24,7 +29,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var model = paymentMethodService.GetPaymentMethods();
+            var model = _paymentMethodService.GetPaymentMethods();
 
             return View(model);
         }
@@ -33,7 +38,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (disposing)
             {
-                paymentMethodService.Dispose();
+                _paymentMethodService.Dispose();
             }
             base.Dispose(disposing);
         }

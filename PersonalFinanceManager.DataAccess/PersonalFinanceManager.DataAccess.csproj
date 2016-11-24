@@ -62,6 +62,10 @@
     <Compile Include="Migrations\201611191704166_BankInfo.Designer.cs">
       <DependentUpon>201611191704166_BankInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611240759345_PaymentMethod.CssClassProp.cs" />
+    <Compile Include="Migrations\201611240759345_PaymentMethod.CssClassProp.Designer.cs">
+      <DependentUpon>201611240759345_PaymentMethod.CssClassProp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -78,6 +82,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611191704166_BankInfo.resx">
       <DependentUpon>201611191704166_BankInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611240759345_PaymentMethod.CssClassProp.resx">
+      <DependentUpon>201611240759345_PaymentMethod.CssClassProp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

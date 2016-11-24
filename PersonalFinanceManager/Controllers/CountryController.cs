@@ -21,7 +21,12 @@ namespace PersonalFinanceManager.Controllers
     [Authorize]
     public class CountryController : BaseController
     {
-        private CountryService countryService = new CountryService();
+        private readonly CountryService _countryService;
+
+        public CountryController(CountryService countryService)
+        {
+            this._countryService = countryService;
+        }
 
         /// <summary>
         /// Return the list of countries.
@@ -29,7 +34,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var model = countryService.GetCountries();
+            var model = _countryService.GetCountries();
 
             return View(model);
         }
@@ -51,11 +56,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] CountryEditModel countryEditModel)
+        public ActionResult Create(CountryEditModel countryEditModel)
         {
             if (ModelState.IsValid)
             {
-                countryService.CreateCountry(countryEditModel);
+                _countryService.CreateCountry(countryEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -75,7 +80,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var countryModel = countryService.GetById(id.Value);
+            var countryModel = _countryService.GetById(id.Value);
             
             if (countryModel == null)
             {
@@ -92,11 +97,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] CountryEditModel countryEditModel)
+        public ActionResult Edit(CountryEditModel countryEditModel)
         {
             if (ModelState.IsValid)
             {
-                countryService.EditCountry(countryEditModel);
+                _countryService.EditCountry(countryEditModel);
                 
                 return RedirectToAction("Index");
             }
@@ -115,7 +120,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CountryEditModel countryModel = countryService.GetById(id.Value);
+            CountryEditModel countryModel = _countryService.GetById(id.Value);
 
             if (countryModel == null)
             {
@@ -133,7 +138,7 @@ namespace PersonalFinanceManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            countryService.DeleteCountry(id);
+            _countryService.DeleteCountry(id);
 
             return RedirectToAction("Index");
         }
@@ -142,7 +147,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (disposing)
             {
-                countryService.Dispose();
+                _countryService.Dispose();
             }
             base.Dispose(disposing);
         }

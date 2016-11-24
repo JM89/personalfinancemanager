@@ -16,7 +16,12 @@ namespace PersonalFinanceManager.Controllers
     [Authorize]
     public class CurrencyController : BaseController
     {
-        private CurrencyService currencyService = new CurrencyService();
+        private CurrencyService _currencyService;
+
+        public CurrencyController(CurrencyService currencyService)
+        {
+            this._currencyService = currencyService;
+        }
 
         /// <summary>
         /// Return the list of currencies.
@@ -24,7 +29,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var model = currencyService.GetCurrencies();
+            var model = _currencyService.GetCurrencies();
 
             return View(model);
         }
@@ -44,11 +49,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Symbol")] CurrencyEditModel currencyModel)
+        public ActionResult Create(CurrencyEditModel currencyModel)
         {
             if (ModelState.IsValid)
             {
-                currencyService.CreateCurrency(currencyModel);
+                _currencyService.CreateCurrency(currencyModel);
 
                 return RedirectToAction("Index");
             }
@@ -68,7 +73,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var currencyModel = currencyService.GetById(id.Value);
+            var currencyModel = _currencyService.GetById(id.Value);
 
             if (currencyModel == null)
             {
@@ -85,11 +90,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Symbol")] CurrencyEditModel currencyEditModel)
+        public ActionResult Edit(CurrencyEditModel currencyEditModel)
         {
             if (ModelState.IsValid)
             {
-                currencyService.EditCurrency(currencyEditModel);
+                _currencyService.EditCurrency(currencyEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -108,7 +113,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CurrencyEditModel currencyModel = currencyService.GetById(id.Value);
+            CurrencyEditModel currencyModel = _currencyService.GetById(id.Value);
 
             if (currencyModel == null)
             {
@@ -126,7 +131,7 @@ namespace PersonalFinanceManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            currencyService.DeleteCurrency(id);
+            _currencyService.DeleteCurrency(id);
 
             return RedirectToAction("Index");
         }
@@ -135,7 +140,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (disposing)
             {
-                currencyService.Dispose();
+                _currencyService.Dispose();
             }
             base.Dispose(disposing);
         }

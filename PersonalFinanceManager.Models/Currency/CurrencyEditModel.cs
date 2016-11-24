@@ -15,10 +15,12 @@ namespace PersonalFinanceManager.Models.Currency
 
         [LocalizedDisplayName("CurrencyName")]
         [Required]
+        [MaxLength(3)]
         public string Name { get; set; }
 
         [LocalizedDisplayName("CurrencySymbol")]
         [Required]
+        [MaxLength(3)]
         public string Symbol { get; set; }
    } 
 }

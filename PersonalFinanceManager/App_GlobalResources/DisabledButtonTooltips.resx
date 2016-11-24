@@ -127,7 +127,10 @@
     <value>The ATM withdraw is used by at least one expenditure. Please move first the expenditures to another ATM withdraw.</value>
   </data>
   <data name="BankCantBeDeleted" xml:space="preserve">
-    <value>The bank is used by at least one account. Please delete the account first. </value>
+    <value>The bank is used by at least one account. Please delete the accounts first. </value>
+  </data>
+  <data name="CountryCantBeDeleted" xml:space="preserve">
+    <value>The country is used by at least one bank. Please delete the banks first. </value>
   </data>
   <data name="CurrencyCantBeDeleted" xml:space="preserve">
     <value>The account is used by at least one account. Please delete the accounts first.</value>
