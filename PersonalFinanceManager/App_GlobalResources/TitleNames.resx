@@ -279,4 +279,16 @@
   <data name="PeriodicOutcomePages" xml:space="preserve">
     <value>Manage outcomes</value>
   </data>
+  <data name="UserProfileCreate" xml:space="preserve">
+    <value>Create user profile</value>
+  </data>
+  <data name="UserProfileEdit" xml:space="preserve">
+    <value>Edit user profile</value>
+  </data>
+  <data name="UserProfilePages" xml:space="preserve">
+    <value>Manage user profile</value>
+  </data>
+  <data name="UserProfileView" xml:space="preserve">
+    <value>View user profile</value>
+  </data>
 </root>

@@ -45,6 +45,8 @@ namespace PersonalFinanceManager.Utils.Automapper
 
             Mapper.CreateMap<Entities.BudgetPlanModel, Models.BudgetPlan.BudgetPlanListModel>();
             Mapper.CreateMap<Entities.BudgetPlanModel, Models.BudgetPlan.BudgetPlanEditModel>();
+
+            Mapper.CreateMap<Entities.UserProfileModel, Models.UserProfile.UserProfileEditModel>();
         }
     }
 }

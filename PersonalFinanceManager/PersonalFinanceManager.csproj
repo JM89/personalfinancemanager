@@ -381,6 +381,9 @@
     <Content Include="Views\BudgetPlan\Edit.cshtml" />
     <Content Include="Views\BudgetPlan\View.cshtml" />
     <Content Include="Views\Dashboard\BudgetPlan.cshtml" />
+    <Content Include="Views\UserProfile\Create.cshtml" />
+    <Content Include="Views\UserProfile\Edit.cshtml" />
+    <Content Include="Views\UserProfile\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

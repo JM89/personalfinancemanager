@@ -123,6 +123,9 @@
   <data name="AddTooltip" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="BackButton" xml:space="preserve">
+    <value>Back</value>
+  </data>
   <data name="CancelButton" xml:space="preserve">
     <value>Back to List</value>
   </data>

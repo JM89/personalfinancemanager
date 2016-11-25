@@ -25,17 +25,35 @@ namespace PersonalFinanceManager.Services
         
         public void CreateUserProfile(UserProfileEditModel userProfileEditModel)
         {
-            throw new NotImplementedException();
+            var userProfile = Mapper.Map<UserProfileModel>(userProfileEditModel);
+
+            db.UserProfileModels.Add(userProfile);
+            db.SaveChanges();
         }
 
-        public UserProfileEditModel GetById(int id)
+        public UserProfileEditModel GetByUserId(string userId)
         {
-            throw new NotImplementedException();
+            var userProfile = db.UserProfileModels.SingleOrDefault(x => x.User_Id == userId);
+            if (userProfile != null)
+            {
+                return Mapper.Map<UserProfileEditModel>(userProfile);
+            }
+            return new UserProfileEditModel();
         }
 
         public void EditUserProfile(UserProfileEditModel userProfileEditModel)
         {
-            throw new NotImplementedException();
+            var userProfile = db.UserProfileModels.AsNoTracking().SingleOrDefault(x => x.Id == userProfileEditModel.Id);
+            userProfile = Mapper.Map<UserProfileModel>(userProfileEditModel);
+
+            db.Entry(userProfile).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        public UserProfileEditModel GetById(int id)
+        {
+            var userProfile = db.UserProfileModels.Single(x => x.Id == id);
+            return Mapper.Map<UserProfileEditModel>(userProfile);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace PersonalFinanceManager.Models.Home
 
         public string FavoriteAccountCurrencySymbol { get; set; }
 
-        public int UserYearlyWages { get; set; }
+        public decimal UserYearlyWages { get; set; }
       
         public string DisplayUserYearlyIncome { get {
                 return FavoriteAccountCurrencySymbol + UserYearlyWages.ToString(CultureInfo.CurrentCulture);

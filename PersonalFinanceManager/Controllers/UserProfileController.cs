@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Models.UserProfile;
+using Microsoft.AspNet.Identity;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -26,21 +27,12 @@ namespace PersonalFinanceManager.Controllers
         /// Initialize the View.
         /// </summary>
         /// <returns></returns>
-        public ActionResult View(int? id)
+        [HttpGet, ActionName("ViewDetails")]
+        public ActionResult ViewDetails()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            var userProfileModel = _userProfileService.GetByUserId(User.Identity.GetUserId());
 
-            var userProfileModel = _userProfileService.GetById(id.Value);
-
-            if (userProfileModel == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(userProfileModel);
+            return View("View", userProfileModel);
         }
         
         /// <summary>
@@ -64,9 +56,10 @@ namespace PersonalFinanceManager.Controllers
         {
             if (ModelState.IsValid)
             {
+                userProfileEditModel.User_Id = User.Identity.GetUserId();
                 _userProfileService.CreateUserProfile(userProfileEditModel);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("ViewDetails");
             }
 
             return View(userProfileEditModel);
@@ -107,7 +100,7 @@ namespace PersonalFinanceManager.Controllers
             {
                 _userProfileService.EditUserProfile(userProfileEditModel);
                 
-                return RedirectToAction("Index");
+                return RedirectToAction("ViewDetails");
             }
             return View(userProfileEditModel);
         }

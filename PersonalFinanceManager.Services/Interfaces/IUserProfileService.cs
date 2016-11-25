@@ -21,5 +21,7 @@ namespace PersonalFinanceManager.Services.Interfaces
         UserProfileEditModel GetById(int id);
 
         void EditUserProfile(UserProfileEditModel userProfileEditModel);
+
+        UserProfileEditModel GetByUserId(string userId);
     }
 }

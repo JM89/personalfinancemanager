@@ -77,5 +77,14 @@ namespace Resources {
                 return ResourceManager.GetString("BankGeneralEnquiryPhoneNumberHelper", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency used is the currency of favorite account. .
+        /// </summary>
+        internal static string UserProfileYearlyWagesCurrency {
+            get {
+                return ResourceManager.GetString("UserProfileYearlyWagesCurrency", resourceCulture);
+            }
+        }
     }
 }

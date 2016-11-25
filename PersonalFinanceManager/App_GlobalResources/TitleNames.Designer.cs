@@ -545,5 +545,41 @@ namespace PersonalFinanceManager.App_GlobalResources {
                 return ResourceManager.GetString("PeriodicOutcomePages", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create user profile.
+        /// </summary>
+        internal static string UserProfileCreate {
+            get {
+                return ResourceManager.GetString("UserProfileCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit user profile.
+        /// </summary>
+        internal static string UserProfileEdit {
+            get {
+                return ResourceManager.GetString("UserProfileEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage user profile.
+        /// </summary>
+        internal static string UserProfilePages {
+            get {
+                return ResourceManager.GetString("UserProfilePages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View user profile.
+        /// </summary>
+        internal static string UserProfileView {
+            get {
+                return ResourceManager.GetString("UserProfileView", resourceCulture);
+            }
+        }
     }
 }

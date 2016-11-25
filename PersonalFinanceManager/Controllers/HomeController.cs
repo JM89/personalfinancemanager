@@ -16,12 +16,14 @@ namespace PersonalFinanceManager.Controllers
         private readonly IExpenditureService _expenditureService;
         private readonly IPaymentMethodService _paymentMethodService;
         private readonly IBankAccountService _bankAccountService;
+        private readonly IUserProfileService _userProfileService;
 
-        public HomeController(IExpenditureService expenditureService, IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService)
+        public HomeController(IExpenditureService expenditureService, IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService, IUserProfileService userProfileService)
         {
             this._expenditureService = expenditureService;
             this._paymentMethodService = paymentMethodService;
             this._bankAccountService = bankAccountService;
+            this._userProfileService = userProfileService;
         }
 
         public ActionResult Index()
@@ -59,7 +61,12 @@ namespace PersonalFinanceManager.Controllers
             }
 
             model.TotalNumberOfDebitMovements = debitMvts.Count();
-            model.UserYearlyWages = 23000;
+
+            var userProfile = _userProfileService.GetByUserId(User.Identity.GetUserId());
+            if (userProfile.Id != 0)
+            {
+                model.UserYearlyWages = userProfile.YearlyWages;
+            }
 
             var account = _bankAccountService.GetAccountsByUser(User.Identity.GetUserId()).SingleOrDefault(x => x.IsFavorite);
             if (account != null)

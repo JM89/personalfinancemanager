@@ -123,4 +123,7 @@
   <data name="BankGeneralEnquiryPhoneNumberHelper" xml:space="preserve">
     <value>General Enquiries / Customer Services</value>
   </data>
+  <data name="UserProfileYearlyWagesCurrency" xml:space="preserve">
+    <value>Currency used is the currency of favorite account. </value>
+  </data>
 </root>

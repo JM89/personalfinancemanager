@@ -13,6 +13,8 @@ namespace PersonalFinanceManager.Models.UserProfile
     {
         public int Id { get; set; }
 
+        public string User_Id { get; set; }
+
         [LocalizedDisplayName("UserProfileFirstName")]
         [Required]
         [MaxLength(50)]
@@ -25,7 +27,6 @@ namespace PersonalFinanceManager.Models.UserProfile
 
         [LocalizedDisplayName("UserProfileYearlyWages")]
         [Required]
-        [MaxLength(10)]
         public decimal YearlyWages { get; set; }
 
         [LocalizedDisplayName("UserProfileSourceWages")]
