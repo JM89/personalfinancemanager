@@ -12,11 +12,11 @@ namespace PersonalFinanceManager.DataAccess.Migrations
 
         protected override void Seed(ApplicationDbContext context)
         {
-            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 1, Name = "CB" });
-            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 2, Name = "Cash" });
-            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 3, Name = "Direct Debit" });
-            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 4, Name = "Transfer" });
-            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 5, Name = "Internal Transfer" });
+            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 1, Name = "CB", CssClass = "primary" });
+            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 2, Name = "Cash", CssClass = "info" });
+            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 3, Name = "Direct Debit", CssClass = "success" });
+            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 4, Name = "Transfer", CssClass = "warning" });
+            context.PaymentMethodModels.AddOrUpdate(new Entities.PaymentMethodModel() { Id = 5, Name = "Internal Transfer", CssClass = "danger" });
         }
     }
 }

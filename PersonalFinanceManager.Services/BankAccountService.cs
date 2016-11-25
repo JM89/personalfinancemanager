@@ -68,8 +68,9 @@ namespace PersonalFinanceManager.Services
                                      Name = x.Name,
                                      Id = x.Id,
                                      BankIcon = x.Bank.IconPath,
-                                     HasExpenditures = expenditures.Any(y => y.Account.Id == x.Id)
-                                 });
+                                     HasExpenditures = expenditures.Any(y => y.Account.Id == x.Id),
+                                     IsFavorite = x.IsFavorite
+                                });
 
             return accountsModel.ToList();
         }

@@ -38,7 +38,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public JsonResult GetAccounts()
         {
-            var generatedAccountMenu = _bankAccountService.GetAccountsByUserForMenu(User.Identity.GetUserId()).OrderBy(x => x.Name);
+            var accountsMenu = _bankAccountService.GetAccountsByUserForMenu(User.Identity.GetUserId());
+
+            var first = accountsMenu.First(x => x.IsFavorite);
+            var otherAccounts = accountsMenu.Where(x => !x.IsFavorite).OrderBy(x => x.Name);
+
+            var generatedAccountMenu = new List<AccountForMenuModel>();
+            generatedAccountMenu.Add(first);
+            generatedAccountMenu.AddRange(otherAccounts);
 
             return Json(generatedAccountMenu, JsonRequestBehavior.AllowGet);
         }
