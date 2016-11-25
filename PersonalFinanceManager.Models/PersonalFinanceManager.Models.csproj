@@ -130,6 +130,7 @@
     <Compile Include="Resources\LocalizedDisplayNameAttribute.cs" />
     <Compile Include="Shared\ICanBeDeleted.cs" />
     <Compile Include="Shared\ICanBeEdited.cs" />
+    <Compile Include="UserProfile\UserProfileEditModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

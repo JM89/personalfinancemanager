@@ -581,5 +581,41 @@ namespace PersonalFinanceManager.Models.Resources {
                 return ResourceManager.GetString("PeriodicOutcomeTypeExpenditure", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Name.
+        /// </summary>
+        internal static string UserProfileFirstName {
+            get {
+                return ResourceManager.GetString("UserProfileFirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Name.
+        /// </summary>
+        internal static string UserProfileLastName {
+            get {
+                return ResourceManager.GetString("UserProfileLastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source Wages.
+        /// </summary>
+        internal static string UserProfileSourceWages {
+            get {
+                return ResourceManager.GetString("UserProfileSourceWages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yearly Wages.
+        /// </summary>
+        internal static string UserProfileYearlyWages {
+            get {
+                return ResourceManager.GetString("UserProfileYearlyWages", resourceCulture);
+            }
+        }
     }
 }

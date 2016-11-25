@@ -11,7 +11,7 @@ using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Services.Core;
 
-namespace PersonalFinanceManager.Services
+namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IExpenditureService : IBaseService
     {

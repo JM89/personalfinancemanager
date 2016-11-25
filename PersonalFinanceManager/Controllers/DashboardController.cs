@@ -13,21 +13,28 @@ using System.Globalization;
 using PersonalFinanceManager.Models.Account;
 using PersonalFinanceManager.Helpers;
 using PersonalFinanceManager.Models.Helpers.Chart;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
     public class DashboardController : BaseController
     {
-        private ExpenditureService expenditureService = new ExpenditureService();
-        private ExpenditureTypeService expenditureTypeService = new ExpenditureTypeService();
-        private BankAccountService bankAccountService = new BankAccountService();
-        private BudgetPlanService budgetPlanService = new BudgetPlanService();
+        private readonly IExpenditureService _expenditureService;
+        private readonly IExpenditureTypeService _expenditureTypeService;
+        private readonly IBankAccountService _bankAccountService;
+        private readonly IBudgetPlanService _budgetPlanService;
 
         private readonly DateTime StartDate;
         private readonly DateTime EndDate;
 
-        public DashboardController()
+        public DashboardController(IExpenditureService expenditureService, IExpenditureTypeService expenditureTypeService,
+            IBankAccountService bankAccountService, IBudgetPlanService budgetPlanService)
         {
+            this._budgetPlanService = budgetPlanService;
+            this._expenditureTypeService = expenditureTypeService;
+            this._expenditureService = expenditureService;
+            this._bankAccountService = bankAccountService;
+
             var baseStartDate = DateTime.Today.AddMonths(-11);
             this.StartDate = new DateTime(baseStartDate.Year, baseStartDate.Month, 1);
 
@@ -38,7 +45,7 @@ namespace PersonalFinanceManager.Controllers
         // GET: Dashboard
         public ActionResult Index()
         {
-            var account = bankAccountService.GetById(CurrentAccount);
+            var account = _bankAccountService.GetById(CurrentAccount);
 
             var allExpenditures = GetExpendituresFor12Months(account.Id);
 
@@ -86,7 +93,7 @@ namespace PersonalFinanceManager.Controllers
         // GET: ExpenditureModels
         public JsonResult GetExpendituresOverTime(int accountId)
         {
-            var expenditureTypeColor = expenditureTypeService.GetExpenditureTypes().First().GraphColor;
+            var expenditureTypeColor = _expenditureTypeService.GetExpenditureTypes().First().GraphColor;
 
             var color = System.Drawing.ColorTranslator.FromHtml("#" + expenditureTypeColor);
 
@@ -135,7 +142,7 @@ namespace PersonalFinanceManager.Controllers
         {
             var accountId = CurrentAccount;
 
-            var allExpenditures = expenditureService.GetExpendituresByAccountIdForDashboard(accountId, selectedDate, selectedDate.AddMonths(1));
+            var allExpenditures = _expenditureService.GetExpendituresByAccountIdForDashboard(accountId, selectedDate, selectedDate.AddMonths(1));
 
             var totalSum = allExpenditures.Sum(x => x.Cost);
 
@@ -204,7 +211,7 @@ namespace PersonalFinanceManager.Controllers
         {
             var accountId = CurrentAccount;
 
-            var expenditureTypeColor = expenditureTypeService.GetExpenditureTypes().Single(x => x.Name == selectedExpenditureType).GraphColor;
+            var expenditureTypeColor = _expenditureTypeService.GetExpenditureTypes().Single(x => x.Name == selectedExpenditureType).GraphColor;
 
             var color = System.Drawing.ColorTranslator.FromHtml("#" + expenditureTypeColor);
 
@@ -325,17 +332,6 @@ namespace PersonalFinanceManager.Controllers
             return costOverTime;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                expenditureService.Dispose();
-                expenditureTypeService.Dispose();
-                bankAccountService.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         private IList<ExpenditureModel> GetExpendituresFor12Months(int accountId)
         {
             var baseStartDate = DateTime.Today.AddMonths(-11);
@@ -344,14 +340,14 @@ namespace PersonalFinanceManager.Controllers
             var endBaseDate = DateTime.Today;
             var endDate = new DateTime(endBaseDate.Year, endBaseDate.Month, 1).AddMonths(1).AddDays(-1);
 
-            var expenditures = expenditureService.GetExpendituresByAccountIdForDashboard(accountId, startDate, endDate);
+            var expenditures = _expenditureService.GetExpendituresByAccountIdForDashboard(accountId, startDate, endDate);
 
             return expenditures;
         }
 
         public ActionResult BudgetPlanDashboard()
         {
-            var account = bankAccountService.GetById(CurrentAccount);
+            var account = _bankAccountService.GetById(CurrentAccount);
 
             ViewBag.BudgetPlanFound = true;
             ViewBag.BudgetPlanName = "Budget Name";
@@ -372,7 +368,7 @@ namespace PersonalFinanceManager.Controllers
             var interval = DateTimeHelper.GetInterval(DateTime.Now, DateTimeUnitEnums.Months, 6);
 
             // Get Actual Expenditures
-            var expenditures = expenditureService.GetExpendituresByAccountIdForDashboard(CurrentAccount, interval.StartDate, interval.EndDate);
+            var expenditures = _expenditureService.GetExpendituresByAccountIdForDashboard(CurrentAccount, interval.StartDate, interval.EndDate);
             var expendituresGroupByType = expenditures
                                             .GroupBy(x => x.TypeExpenditure)
                                             .ToDictionary(x => new { Id = x.Key.Id, Name = x.Key.Name }, y => y.Sum(x => x.Cost))
@@ -384,7 +380,7 @@ namespace PersonalFinanceManager.Controllers
                 Values = expendituresGroupByType.Select(x => ((int)x.Value).ToString()).ToList()
             };
 
-            var budgetPlan = budgetPlanService.GetById(pBudgetPlan);
+            var budgetPlan = _budgetPlanService.GetById(pBudgetPlan);
 
             var budgetPlannedCostPerType = expendituresGroupByType.Join(
                                                 budgetPlan.ExpenditureTypes, exp => exp.Key.Id, bp => bp.ExpenditureType.Id, (exp, bp) => bp.ExpectedValue);
@@ -413,7 +409,7 @@ namespace PersonalFinanceManager.Controllers
             var intervalsByMonth = interval.GetIntervalsByMonth();
 
             var dataSetActualExpenditures = new ChartDataset();
-            var expenditures = expenditureService.GetExpendituresByAccountIdForDashboard(CurrentAccount, interval.StartDate, interval.EndDate);
+            var expenditures = _expenditureService.GetExpendituresByAccountIdForDashboard(CurrentAccount, interval.StartDate, interval.EndDate);
             foreach (var intervalByMonth in intervalsByMonth)
             {
                 var expendituresByMonth = expenditures.Where(x => intervalByMonth.Value.IsBetween(x.DateExpenditure));

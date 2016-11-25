@@ -16,13 +16,19 @@ using PersonalFinanceManager.Services;
 using AutoMapper;
 using PersonalFinanceManager.Models.Income;
 using PersonalFinanceManager.Models.AtmWithdraw;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
     [Authorize]
     public class AtmWithdrawController : BaseController
     {
-        private AtmWithdrawService atmWithdrawService = new AtmWithdrawService();
+        private readonly IAtmWithdrawService _atmWithdrawService;
+
+        public AtmWithdrawController(IAtmWithdrawService atmWithdrawService)
+        {
+            this._atmWithdrawService = atmWithdrawService;
+        }
 
         /// <summary>
         /// Return the list of ATM withdraws.
@@ -34,7 +40,7 @@ namespace PersonalFinanceManager.Controllers
 
             AccountBasicInfo();
 
-            var model = atmWithdrawService.GetAtmWithdrawsByAccountId(accountId).OrderByDescending(x => x.DateExpenditure).ThenByDescending(x => x.Id).ToList();
+            var model = _atmWithdrawService.GetAtmWithdrawsByAccountId(accountId).OrderByDescending(x => x.DateExpenditure).ThenByDescending(x => x.Id).ToList();
 
             return View(model);
         }
@@ -60,14 +66,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,DateExpenditure,InitialAmount,HasBeenAlreadyDebited")] AtmWithdrawEditModel atmWithdrawEditModel)
+        public ActionResult Create(AtmWithdrawEditModel atmWithdrawEditModel)
         {
             if (ModelState.IsValid)
             {
                 var accountId = CurrentAccount;
                 atmWithdrawEditModel.AccountId = accountId;
 
-                atmWithdrawService.CreateAtmWithdraw(atmWithdrawEditModel);
+                _atmWithdrawService.CreateAtmWithdraw(atmWithdrawEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -89,7 +95,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var atmWithdrawModel = atmWithdrawService.GetById(id.Value);
+            var atmWithdrawModel = _atmWithdrawService.GetById(id.Value);
             
             if (atmWithdrawModel == null)
             {
@@ -106,14 +112,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,DateExpenditure,InitialAmount,HasBeenAlreadyDebited")] AtmWithdrawEditModel atmWithdrawEditModel)
+        public ActionResult Edit(AtmWithdrawEditModel atmWithdrawEditModel)
         {
             if (ModelState.IsValid)
             {
                 var accountId = CurrentAccount;
                 atmWithdrawEditModel.AccountId = accountId;
 
-                atmWithdrawService.EditAtmWithdraw(atmWithdrawEditModel);
+                _atmWithdrawService.EditAtmWithdraw(atmWithdrawEditModel);
                 
                 return RedirectToAction("Index");
             }
@@ -127,7 +133,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Close(int id)
         {
-            atmWithdrawService.CloseAtmWithdraw(id);
+            _atmWithdrawService.CloseAtmWithdraw(id);
 
             return RedirectToAction("Index");
         }
@@ -146,7 +152,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            AtmWithdrawEditModel atmWithdrawEditModel = atmWithdrawService.GetById(id.Value);
+            AtmWithdrawEditModel atmWithdrawEditModel = _atmWithdrawService.GetById(id.Value);
 
             if (atmWithdrawEditModel == null)
             {
@@ -164,7 +170,7 @@ namespace PersonalFinanceManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            atmWithdrawService.DeleteAtmWithdraw(id);
+            _atmWithdrawService.DeleteAtmWithdraw(id);
 
             return RedirectToAction("Index");
         }
@@ -176,7 +182,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            atmWithdrawService.ChangeDebitStatus(id.Value, false);
+            _atmWithdrawService.ChangeDebitStatus(id.Value, false);
 
             var accountId = CurrentAccount;
 
@@ -190,20 +196,11 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            atmWithdrawService.ChangeDebitStatus(id.Value, true);
+            _atmWithdrawService.ChangeDebitStatus(id.Value, true);
 
             var accountId = CurrentAccount;
 
             return RedirectToAction("Index", new { accountId });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                atmWithdrawService.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

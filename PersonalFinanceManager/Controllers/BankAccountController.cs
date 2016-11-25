@@ -15,17 +15,18 @@ using Microsoft.AspNet.Identity.Owin;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.Account;
 using AutoMapper;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
     [Authorize]
     public class BankAccountController : BaseController
     {
-        private readonly BankAccountService _bankAccountService;
-        private readonly CurrencyService _currencyService;
-        private readonly BankService _bankService;
+        private readonly IBankAccountService _bankAccountService;
+        private readonly ICurrencyService _currencyService;
+        private readonly IBankService _bankService;
 
-        public BankAccountController(BankAccountService bankAccountService, CurrencyService currencyService, BankService bankService)
+        public BankAccountController(IBankAccountService bankAccountService, ICurrencyService currencyService, IBankService bankService)
         {
             this._bankAccountService = bankAccountService;
             this._currencyService = currencyService;
@@ -193,18 +194,6 @@ namespace PersonalFinanceManager.Controllers
             var accountId = CurrentAccount;
 
             return RedirectToAction("Index");
-        }
-
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _bankAccountService.Dispose();
-                _currencyService.Dispose();
-                _bankService.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

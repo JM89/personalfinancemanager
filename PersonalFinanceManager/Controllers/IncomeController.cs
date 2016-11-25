@@ -15,13 +15,19 @@ using Microsoft.AspNet.Identity.Owin;
 using PersonalFinanceManager.Services;
 using AutoMapper;
 using PersonalFinanceManager.Models.Income;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
     [Authorize]
     public class IncomeController : BaseController
     {
-        private IncomeService incomeService = new IncomeService();
+        private readonly IIncomeService _incomeService;
+
+        public IncomeController(IIncomeService incomeService)
+        {
+            this._incomeService = incomeService;
+        }
 
         /// <summary>
         /// Return the list of incomes.
@@ -33,7 +39,7 @@ namespace PersonalFinanceManager.Controllers
 
             AccountBasicInfo();
 
-            var model = incomeService.GetIncomes(accountId).OrderByDescending(x => x.DateIncome).ThenByDescending(x => x.Id).ToList();
+            var model = _incomeService.GetIncomes(accountId).OrderByDescending(x => x.DateIncome).ThenByDescending(x => x.Id).ToList();
 
             return View(model);
         }
@@ -59,14 +65,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Description,Cost,DateIncome")] IncomeEditModel incomeEditModel)
+        public ActionResult Create(IncomeEditModel incomeEditModel)
         {
             if (ModelState.IsValid)
             {
                 var accountId = CurrentAccount;
                 incomeEditModel.AccountId = accountId;
 
-                incomeService.CreateIncome(incomeEditModel);
+                _incomeService.CreateIncome(incomeEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -88,7 +94,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var incomeModel = incomeService.GetById(id.Value);
+            var incomeModel = _incomeService.GetById(id.Value);
             
             if (incomeModel == null)
             {
@@ -105,14 +111,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Description,Cost,DateIncome")] IncomeEditModel incomeEditModel)
+        public ActionResult Edit(IncomeEditModel incomeEditModel)
         {
             if (ModelState.IsValid)
             {
                 var accountId = CurrentAccount;
                 incomeEditModel.AccountId = accountId;
 
-                incomeService.EditIncome(incomeEditModel);
+                _incomeService.EditIncome(incomeEditModel);
                 
                 return RedirectToAction("Index");
             }
@@ -133,7 +139,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            IncomeEditModel incomeModel = incomeService.GetById(id.Value);
+            IncomeEditModel incomeModel = _incomeService.GetById(id.Value);
 
             if (incomeModel == null)
             {
@@ -151,18 +157,9 @@ namespace PersonalFinanceManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            incomeService.DeleteIncome(id);
+            _incomeService.DeleteIncome(id);
 
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                incomeService.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

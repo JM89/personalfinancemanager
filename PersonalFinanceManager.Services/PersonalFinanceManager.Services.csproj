@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="BankAccountService.cs" />
     <Compile Include="BudgetPlanService.cs" />
+    <Compile Include="Interfaces\IUserProfileService.cs" />
+    <Compile Include="UserProfileService.cs" />
     <Compile Include="HistoricMovementService.cs" />
     <Compile Include="BankService.cs" />
     <Compile Include="CountryService.cs" />

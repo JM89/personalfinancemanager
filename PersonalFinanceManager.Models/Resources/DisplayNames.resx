@@ -291,4 +291,16 @@
   <data name="PeriodicOutcomeTypeExpenditure" xml:space="preserve">
     <value>Expenditure Type</value>
   </data>
+  <data name="UserProfileFirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="UserProfileLastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="UserProfileSourceWages" xml:space="preserve">
+    <value>Source Wages</value>
+  </data>
+  <data name="UserProfileYearlyWages" xml:space="preserve">
+    <value>Yearly Wages</value>
+  </data>
 </root>

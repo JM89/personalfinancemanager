@@ -15,15 +15,16 @@ using Microsoft.AspNet.Identity.Owin;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.Country;
 using AutoMapper;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
     [Authorize]
     public class CountryController : BaseController
     {
-        private readonly CountryService _countryService;
+        private readonly ICountryService _countryService;
 
-        public CountryController(CountryService countryService)
+        public CountryController(ICountryService countryService)
         {
             this._countryService = countryService;
         }
@@ -141,15 +142,6 @@ namespace PersonalFinanceManager.Controllers
             _countryService.DeleteCountry(id);
 
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _countryService.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

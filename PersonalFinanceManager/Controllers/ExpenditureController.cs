@@ -11,18 +11,28 @@ using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Entities;
 using Microsoft.AspNet.Identity;
 using PersonalFinanceManager.Models.Expenditure;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
     [Authorize]
     public class ExpenditureController : BaseController
     {
-        //private ApplicationDbContext db = new ApplicationDbContext();
-        private ExpenditureService expenditureService = new ExpenditureService();
-        private ExpenditureTypeService expenditureTypeService = new ExpenditureTypeService();
-        private BankAccountService bankAccountService = new BankAccountService();
-        private PaymentMethodService paymentMethodService = new PaymentMethodService();
-        private AtmWithdrawService atmWithdrawService = new AtmWithdrawService();
+        private readonly IExpenditureService _expenditureService;
+        private readonly IExpenditureTypeService _expenditureTypeService;
+        private readonly IBankAccountService _bankAccountService;
+        private readonly IPaymentMethodService _paymentMethodService;
+        private readonly IAtmWithdrawService _atmWithdrawService;
+
+        public ExpenditureController(IExpenditureService expenditureService, IExpenditureTypeService expenditureTypeService, IBankAccountService bankAccountService,
+            IPaymentMethodService paymentMethodService, IAtmWithdrawService atmWithdrawService)
+        {
+            this._bankAccountService = bankAccountService;
+            this._expenditureService = expenditureService;
+            this._expenditureTypeService = expenditureTypeService;
+            this._paymentMethodService = paymentMethodService;
+            this._atmWithdrawService = atmWithdrawService;
+        }
 
         // GET: ExpenditureModels
         public ActionResult Index()
@@ -31,7 +41,7 @@ namespace PersonalFinanceManager.Controllers
 
             AccountBasicInfo();
 
-            var expenditures = expenditureService.GetExpendituresByAccountId2(accountId)
+            var expenditures = _expenditureService.GetExpendituresByAccountId2(accountId)
                 .OrderByDescending(x => x.DateExpenditure)
                 .ThenByDescending(x => x.Id)
                 .ToList();
@@ -42,10 +52,10 @@ namespace PersonalFinanceManager.Controllers
         private void PopulateDropDownLists(ExpenditureEditModel expenditureModel)
         {
             //expenditureModel.AvailableAccounts = bankAccountService.GetAccountsByUser(CurrentUser).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            expenditureModel.AvailableInternalAccounts = bankAccountService.GetAccountsByUser(CurrentUser).Where(x => x.Id != CurrentAccount).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            expenditureModel.AvailableExpenditureTypes = expenditureTypeService.GetExpenditureTypes().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).OrderBy(x => x.Text).ToList();
-            expenditureModel.AvailablePaymentMethods = paymentMethodService.GetPaymentMethods().ToList();
-            expenditureModel.AvailableAtmWithdraws = atmWithdrawService.GetAtmWithdrawsByAccountId(CurrentAccount).Where(x => !x.IsClosed).OrderBy(x => x.DateExpenditure).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Description }).ToList();
+            expenditureModel.AvailableInternalAccounts = _bankAccountService.GetAccountsByUser(CurrentUser).Where(x => x.Id != CurrentAccount).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            expenditureModel.AvailableExpenditureTypes = _expenditureTypeService.GetExpenditureTypes().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).OrderBy(x => x.Text).ToList();
+            expenditureModel.AvailablePaymentMethods = _paymentMethodService.GetPaymentMethods().ToList();
+            expenditureModel.AvailableAtmWithdraws = _atmWithdrawService.GetAtmWithdrawsByAccountId(CurrentAccount).Where(x => !x.IsClosed).OrderBy(x => x.DateExpenditure).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Description }).ToList();
         }
 
         // GET: ExpenditureModels/Create
@@ -63,14 +73,14 @@ namespace PersonalFinanceManager.Controllers
         // POST: ExpenditureModels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,AccountId,DateExpenditure,Cost,TypeExpenditureId,PaymentMethodId,Description,HasBeenAlreadyDebited,AtmWithdrawId,TargetInternalAccountId")] ExpenditureEditModel expenditureModel, bool stayHere)
+        public ActionResult Create(ExpenditureEditModel expenditureModel, bool stayHere)
         {
             if (ModelState.IsValid)
             {
                 var accountId = CurrentAccount;
 
                 expenditureModel.AccountId = accountId;
-                expenditureService.CreateExpenditure(expenditureModel);
+                _expenditureService.CreateExpenditure(expenditureModel);
 
                 if (stayHere)
                 {
@@ -97,11 +107,11 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var accountName = bankAccountService.GetById(accountId).Name;
+            var accountName = _bankAccountService.GetById(accountId).Name;
 
             AccountBasicInfo();
 
-            var expenditureModel = expenditureService.GetById(id.Value);
+            var expenditureModel = _expenditureService.GetById(id.Value);
 
             if (expenditureModel == null)
             {
@@ -115,7 +125,7 @@ namespace PersonalFinanceManager.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,AccountId,DateExpenditure,Cost,TypeExpenditureId,PaymentMethodId,Description,HasBeenAlreadyDebited,AtmWithdrawId,TargetInternalAccountId")] ExpenditureEditModel expenditureModel)
+        public ActionResult Edit(ExpenditureEditModel expenditureModel)
         {
             if (ModelState.IsValid)
             {
@@ -123,7 +133,7 @@ namespace PersonalFinanceManager.Controllers
 
                 expenditureModel.AccountId = accountId;
 
-                expenditureService.EditExpenditure(expenditureModel);
+                _expenditureService.EditExpenditure(expenditureModel);
 
                 return RedirectToAction("Index", new { accountId });
             }
@@ -137,7 +147,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            expenditureService.ChangeDebitStatus(id.Value, false);
+            _expenditureService.ChangeDebitStatus(id.Value, false);
 
             var accountId = CurrentAccount;
 
@@ -151,7 +161,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            expenditureService.ChangeDebitStatus(id.Value, true);
+            _expenditureService.ChangeDebitStatus(id.Value, true);
 
             var accountId = CurrentAccount;
 
@@ -169,7 +179,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ExpenditureEditModel expenditureModel = expenditureService.GetById(id.Value);
+            ExpenditureEditModel expenditureModel = _expenditureService.GetById(id.Value);
 
             if (expenditureModel == null)
             {
@@ -183,23 +193,11 @@ namespace PersonalFinanceManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            expenditureService.DeleteExpenditure(id);
+            _expenditureService.DeleteExpenditure(id);
 
             var accountId = CurrentAccount;
 
             return RedirectToAction("Index", new { accountId });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                expenditureService.Dispose();
-                paymentMethodService.Dispose();
-                expenditureTypeService.Dispose();
-                bankAccountService.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

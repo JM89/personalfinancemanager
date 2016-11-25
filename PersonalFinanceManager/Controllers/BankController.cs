@@ -11,16 +11,17 @@ using PersonalFinanceManager.Utils.Exceptions;
 using PersonalFinanceManager.Helpers;
 using System.Collections.Generic;
 using PersonalFinanceManager.Utils;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
     [Authorize]
     public class BankController : BaseController
     {
-        private readonly BankService _bankService;
-        private readonly CountryService _countryService;
+        private readonly IBankService _bankService;
+        private readonly ICountryService _countryService;
 
-        public BankController(BankService bankService, CountryService countryService)
+        public BankController(IBankService bankService, ICountryService countryService)
         {
             this._bankService = bankService;
             this._countryService = countryService;
@@ -189,16 +190,6 @@ namespace PersonalFinanceManager.Controllers
             _bankService.DeleteBank(id);
 
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _bankService.Dispose();
-                _countryService.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

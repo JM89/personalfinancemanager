@@ -35,5 +35,6 @@ namespace PersonalFinanceManager.DataAccess
         public System.Data.Entity.DbSet<PersonalFinanceManager.Entities.HistoricMovementModel> HistoricMovementModels { get; set; }
         public System.Data.Entity.DbSet<PersonalFinanceManager.Entities.BudgetByExpenditureTypeModel> BudgetByExpenditureTypeModels { get; set; }
         public System.Data.Entity.DbSet<PersonalFinanceManager.Entities.BankBrandModel> BankBranchModels { get; set; }
+        public System.Data.Entity.DbSet<PersonalFinanceManager.Entities.UserProfileModel> UserProfileModels { get; set; }
     }
 }

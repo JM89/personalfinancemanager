@@ -70,6 +70,10 @@
     <Compile Include="Migrations\201611250640342_AddingAccountIsFavoriteProp.Designer.cs">
       <DependentUpon>201611250640342_AddingAccountIsFavoriteProp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611250753241_AddingUserProfile.cs" />
+    <Compile Include="Migrations\201611250753241_AddingUserProfile.Designer.cs">
+      <DependentUpon>201611250753241_AddingUserProfile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -92,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611250640342_AddingAccountIsFavoriteProp.resx">
       <DependentUpon>201611250640342_AddingAccountIsFavoriteProp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611250753241_AddingUserProfile.resx">
+      <DependentUpon>201611250753241_AddingUserProfile.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

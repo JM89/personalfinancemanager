@@ -10,13 +10,19 @@ using PersonalFinanceManager.Models;
 using PersonalFinanceManager.Entities;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.ExpenditureType;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
     [Authorize]
     public class ExpenditureTypeController : BaseController
     {
-        private ExpenditureTypeService expenditureTypeService = new ExpenditureTypeService();
+        private readonly IExpenditureTypeService _expenditureTypeService;
+
+        public ExpenditureTypeController(IExpenditureTypeService expenditureTypeService)
+        {
+            this._expenditureTypeService = expenditureTypeService;
+        }
 
         /// <summary>
         /// Return the list of expenditure types.
@@ -24,7 +30,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var model = expenditureTypeService.GetExpenditureTypes();
+            var model = _expenditureTypeService.GetExpenditureTypes();
 
             return View(model);
         }
@@ -44,11 +50,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,GraphColor,ShowOnDashboard")] ExpenditureTypeEditModel expenditureTypeModel)
+        public ActionResult Create(ExpenditureTypeEditModel expenditureTypeModel)
         {
             if (ModelState.IsValid)
             {
-                expenditureTypeService.CreateExpenditureType(expenditureTypeModel);
+                _expenditureTypeService.CreateExpenditureType(expenditureTypeModel);
 
                 return RedirectToAction("Index");
             }
@@ -68,7 +74,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var expenditureTypeModel = expenditureTypeService.GetById(id.Value);
+            var expenditureTypeModel = _expenditureTypeService.GetById(id.Value);
 
             if (expenditureTypeModel == null)
             {
@@ -84,11 +90,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,GraphColor,ShowOnDashboard")] ExpenditureTypeEditModel expenditureTypeEditModel)
+        public ActionResult Edit(ExpenditureTypeEditModel expenditureTypeEditModel)
         {
             if (ModelState.IsValid)
             {
-                expenditureTypeService.EditExpenditureType(expenditureTypeEditModel);
+                _expenditureTypeService.EditExpenditureType(expenditureTypeEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -107,7 +113,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ExpenditureTypeEditModel expenditureTypeModel = expenditureTypeService.GetById(id.Value);
+            ExpenditureTypeEditModel expenditureTypeModel = _expenditureTypeService.GetById(id.Value);
 
             if (expenditureTypeModel == null)
             {
@@ -125,18 +131,9 @@ namespace PersonalFinanceManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            expenditureTypeService.DeleteExpenditureType(id);
+            _expenditureTypeService.DeleteExpenditureType(id);
 
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                expenditureTypeService.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

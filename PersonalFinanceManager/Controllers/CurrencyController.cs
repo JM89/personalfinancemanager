@@ -10,15 +10,16 @@ using PersonalFinanceManager.Models;
 using PersonalFinanceManager.Entities;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.Currency;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
     [Authorize]
     public class CurrencyController : BaseController
     {
-        private CurrencyService _currencyService;
+        private ICurrencyService _currencyService;
 
-        public CurrencyController(CurrencyService currencyService)
+        public CurrencyController(ICurrencyService currencyService)
         {
             this._currencyService = currencyService;
         }
@@ -134,15 +135,6 @@ namespace PersonalFinanceManager.Controllers
             _currencyService.DeleteCurrency(id);
 
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _currencyService.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

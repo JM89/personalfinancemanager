@@ -1,6 +1,7 @@
 ﻿using PersonalFinanceManager.Helpers;
 using PersonalFinanceManager.Models.BudgetPlan;
 using PersonalFinanceManager.Services;
+using PersonalFinanceManager.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,25 @@ namespace PersonalFinanceManager.Controllers
 {
     public class BudgetPlanController : BaseController
     {
-        private ExpenditureTypeService expenditureTypeService = new ExpenditureTypeService();
-        private ExpenditureService expenditureService = new ExpenditureService();
-        private IncomeService incomeService = new IncomeService();
-        private BudgetPlanService budgetPlanService = new BudgetPlanService();
-        private BankAccountService accountService = new BankAccountService();
+        private readonly IExpenditureTypeService _expenditureTypeService;
+        private readonly IExpenditureService _expenditureService;
+        private readonly IIncomeService _incomeService;
+        private readonly IBudgetPlanService _budgetPlanService;
+        private readonly IBankAccountService _accountService;
+
+        public BudgetPlanController(IExpenditureTypeService expenditureTypeService, IExpenditureService expenditureService,
+            IIncomeService incomeService, IBudgetPlanService budgetPlanService, IBankAccountService accountService)
+        {
+            this._accountService = accountService;
+            this._expenditureService = expenditureService;
+            this._expenditureTypeService = expenditureTypeService;
+            this._budgetPlanService = budgetPlanService;
+            this._incomeService = incomeService;
+        }
 
         public ActionResult Index()
         {
-            var model = budgetPlanService.GetBudgetPlans();
+            var model = _budgetPlanService.GetBudgetPlans();
 
             return View(model);
         }
@@ -44,7 +55,7 @@ namespace PersonalFinanceManager.Controllers
 
             if (ModelState.IsValid)
             {
-                budgetPlanService.CreateBudgetPlan(budgetPlanEditModel, CurrentAccount);
+                _budgetPlanService.CreateBudgetPlan(budgetPlanEditModel, CurrentAccount);
                 result = true;
             }
             else
@@ -86,7 +97,7 @@ namespace PersonalFinanceManager.Controllers
 
             if (ModelState.IsValid)
             {
-                budgetPlanService.EditBudgetPlan(budgetPlanEditModel, CurrentAccount);
+                _budgetPlanService.EditBudgetPlan(budgetPlanEditModel, CurrentAccount);
                 result = true;
             }
             else
@@ -109,10 +120,10 @@ namespace PersonalFinanceManager.Controllers
             BudgetPlanEditModel existingBudgetPlan = null;
             if (id.HasValue)
             {
-                existingBudgetPlan = budgetPlanService.GetById(id.Value);
+                existingBudgetPlan = _budgetPlanService.GetById(id.Value);
             }
 
-            var currencySymbol = accountService.GetById(CurrentAccount).CurrencySymbol;
+            var currencySymbol = _accountService.GetById(CurrentAccount).CurrencySymbol;
 
             var nextMonth = DateTime.Now.AddMonths(1);
             var firstOfNextMonth = new DateTime(nextMonth.Year, nextMonth.Month, 1);
@@ -141,13 +152,13 @@ namespace PersonalFinanceManager.Controllers
                 };
             }
 
-            var expenditureTypes = expenditureTypeService.GetExpenditureTypes();
+            var expenditureTypes = _expenditureTypeService.GetExpenditureTypes();
 
             var lastMonth = DateTime.Today.AddMonths(-1);
             var firstDayLastMonth = new DateTime(lastMonth.Year, lastMonth.Month, 1);
             var lastDayLastMonth = DateTime.Today.AddMonths(1).AddDays(-1);
 
-            var expenditures = expenditureService.GetExpendituresByAccountId2(CurrentAccount);
+            var expenditures = _expenditureService.GetExpendituresByAccountId2(CurrentAccount);
 
             var nbMonthsSinceFirstExpenditures = 1;
             var firstExpenditure = expenditures.OrderBy(x => x.DateExpenditure).FirstOrDefault();
@@ -203,7 +214,7 @@ namespace PersonalFinanceManager.Controllers
             budgetPlanEditModel.ExpenditurePreviousMonthValue = expenditurePreviousMonthValue;
             budgetPlanEditModel.ExpenditureAverageMonthValue = expenditureAverageMonthValue;
 
-            var incomes = incomeService.GetIncomes(CurrentAccount);
+            var incomes = _incomeService.GetIncomes(CurrentAccount);
             decimal incomePreviousMonthValue = 0;
             decimal incomeAverageMonthValue = 0;
             if (incomes.Any())
@@ -228,7 +239,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            budgetPlanService.StartBudgetPlan(id.Value);
+            _budgetPlanService.StartBudgetPlan(id.Value);
 
             return RedirectToAction("View", new { id=id });
         }
@@ -240,7 +251,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            budgetPlanService.StopBudgetPlan(id.Value);
+            _budgetPlanService.StopBudgetPlan(id.Value);
 
             return RedirectToAction("View", new { id = id });
         }
