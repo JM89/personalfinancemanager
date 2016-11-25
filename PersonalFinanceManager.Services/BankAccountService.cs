@@ -36,10 +36,6 @@ namespace PersonalFinanceManager.Services
 
         public IList<AccountListModel> GetAccountsByUser(string userId)
         {
-            var expenditures = db.ExpenditureModels
-                .Include(u => u.Account)
-                .Where(x => x.Account.User_Id == userId);
-
             var accounts = db.AccountModels
                 .Include(u => u.Currency)
                 .Include(u => u.Bank)
@@ -50,7 +46,11 @@ namespace PersonalFinanceManager.Services
 
             accountsModel.ForEach(account =>
             {
-                account.CanBeDeleted = !expenditures.Any(x => x.AccountId == account.Id);
+                var hasExpenditures = db.ExpenditureModels.Any(x => x.AccountId == account.Id);
+                var hasIncome = db.IncomeModels.Any(x => x.AccountId == account.Id);
+                var hasAtmWithdraw = db.AtmWithdrawModels.Any(x => x.AccountId == account.Id);
+
+                account.CanBeDeleted = !hasExpenditures && !hasIncome && !hasAtmWithdraw;
             });
 
             return accountsModel;
@@ -103,6 +103,17 @@ namespace PersonalFinanceManager.Services
         {
             AccountModel accountModel = db.AccountModels.Find(id);
             db.AccountModels.Remove(accountModel);
+            db.SaveChanges();
+        }
+        
+        public void SetAsFavorite(int id)
+        {
+            foreach(var account in db.AccountModels)
+            {
+                account.IsFavorite = account.Id == id;
+                db.Entry(account).State = EntityState.Modified;
+            }
+
             db.SaveChanges();
         }
 

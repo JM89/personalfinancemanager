@@ -21,9 +21,16 @@ namespace PersonalFinanceManager.Controllers
     [Authorize]
     public class BankAccountController : BaseController
     {
-        private BankAccountService bankAccountService = new BankAccountService();
-        private CurrencyService currencyService = new CurrencyService();
-        private BankService bankService = new BankService();
+        private readonly BankAccountService _bankAccountService;
+        private readonly CurrencyService _currencyService;
+        private readonly BankService _bankService;
+
+        public BankAccountController(BankAccountService bankAccountService, CurrencyService currencyService, BankService bankService)
+        {
+            this._bankAccountService = bankAccountService;
+            this._currencyService = currencyService;
+            this._bankService = bankService;
+        }
 
         /// <summary>
         /// Return the list of accounts of an authenticated user as a Json object, for the menu. 
@@ -31,7 +38,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public JsonResult GetAccounts()
         {
-            var generatedAccountMenu = bankAccountService.GetAccountsByUserForMenu(User.Identity.GetUserId()).OrderBy(x => x.Name);
+            var generatedAccountMenu = _bankAccountService.GetAccountsByUserForMenu(User.Identity.GetUserId()).OrderBy(x => x.Name);
 
             return Json(generatedAccountMenu, JsonRequestBehavior.AllowGet);
         }
@@ -42,7 +49,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var model = bankAccountService.GetAccountsByUser(User.Identity.GetUserId()).OrderBy(x => x.Name);
+            var model = _bankAccountService.GetAccountsByUser(User.Identity.GetUserId()).OrderBy(x => x.Name);
 
             return View(model);
         }
@@ -53,8 +60,8 @@ namespace PersonalFinanceManager.Controllers
         /// <param name="accountModel"></param>
         private void PopulateDropDownLists(AccountEditModel accountModel)
         {
-            accountModel.AvailableCurrencies = currencyService.GetCurrencies().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            accountModel.AvailableBanks = bankService.GetBanks().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            accountModel.AvailableCurrencies = _currencyService.GetCurrencies().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            accountModel.AvailableBanks = _bankService.GetBanks().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
         }
 
         /// <summary>
@@ -76,11 +83,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,CurrencyId,BankId,InitialBalance")] AccountEditModel accountEditModel)
+        public ActionResult Create(AccountEditModel accountEditModel)
         {
             if (ModelState.IsValid)
             {
-                bankAccountService.CreateBankAccount(accountEditModel, User.Identity.GetUserId());
+                _bankAccountService.CreateBankAccount(accountEditModel, User.Identity.GetUserId());
 
                 return RedirectToAction("Index");
             }
@@ -102,7 +109,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var accountModel = bankAccountService.GetById(id.Value);
+            var accountModel = _bankAccountService.GetById(id.Value);
             
             if (accountModel == null)
             {
@@ -121,11 +128,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,CurrencyId,BankId")] AccountEditModel accountEditModel)
+        public ActionResult Edit(AccountEditModel accountEditModel)
         {
             if (ModelState.IsValid)
             {
-                bankAccountService.EditBankAccount(accountEditModel, User.Identity.GetUserId());
+                _bankAccountService.EditBankAccount(accountEditModel, User.Identity.GetUserId());
                 
                 return RedirectToAction("Index");
             }
@@ -144,7 +151,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            AccountEditModel accountModel = bankAccountService.GetById(id.Value);
+            AccountEditModel accountModel = _bankAccountService.GetById(id.Value);
 
             if (accountModel == null)
             {
@@ -162,18 +169,33 @@ namespace PersonalFinanceManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            bankAccountService.DeleteBankAccount(id);
+            _bankAccountService.DeleteBankAccount(id);
 
             return RedirectToAction("Index");
         }
+
+        public ActionResult SetAsFavorite(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            _bankAccountService.SetAsFavorite(id.Value);
+
+            var accountId = CurrentAccount;
+
+            return RedirectToAction("Index");
+        }
+
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                bankAccountService.Dispose();
-                currencyService.Dispose();
-                bankService.Dispose();
+                _bankAccountService.Dispose();
+                _currencyService.Dispose();
+                _bankService.Dispose();
             }
             base.Dispose(disposing);
         }

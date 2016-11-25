@@ -66,6 +66,10 @@
     <Compile Include="Migrations\201611240759345_PaymentMethod.CssClassProp.Designer.cs">
       <DependentUpon>201611240759345_PaymentMethod.CssClassProp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611250640342_AddingAccountIsFavoriteProp.cs" />
+    <Compile Include="Migrations\201611250640342_AddingAccountIsFavoriteProp.Designer.cs">
+      <DependentUpon>201611250640342_AddingAccountIsFavoriteProp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -85,6 +89,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611240759345_PaymentMethod.CssClassProp.resx">
       <DependentUpon>201611240759345_PaymentMethod.CssClassProp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611250640342_AddingAccountIsFavoriteProp.resx">
+      <DependentUpon>201611250640342_AddingAccountIsFavoriteProp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -156,6 +156,9 @@
   <data name="RegisterButton" xml:space="preserve">
     <value>Register</value>
   </data>
+  <data name="SetAsFavoriteTooltip" xml:space="preserve">
+    <value>Set as Favorite</value>
+  </data>
   <data name="StartBudgetPlanButton" xml:space="preserve">
     <value>Start Budget Plan</value>
   </data>

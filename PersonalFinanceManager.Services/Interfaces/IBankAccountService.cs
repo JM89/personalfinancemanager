@@ -25,5 +25,7 @@ namespace PersonalFinanceManager.Services.Interfaces
         void EditBankAccount(AccountEditModel accountEditModel, string userId);
 
         void DeleteBankAccount(int id);
+
+        void SetAsFavorite(int id);
     }
 }

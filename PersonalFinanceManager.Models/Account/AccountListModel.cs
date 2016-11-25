@@ -43,7 +43,7 @@ namespace PersonalFinanceManager.Models.Account
                 return this.CurrencySymbol + this.CurrentBalance;
             }
         }
-
+        
         public bool CanBeDeleted { get; set; }
 
         public string TooltipResourceName
@@ -57,5 +57,7 @@ namespace PersonalFinanceManager.Models.Account
 
             }
         }
+        
+        public bool IsFavorite { get; set; }
     }
 }

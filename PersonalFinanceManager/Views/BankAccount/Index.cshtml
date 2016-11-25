@@ -15,15 +15,17 @@
 {
     <table class="stripe" id="accountList">
         <colgroup>
-            <col width="25%" />
-            <col width="25%" />
+            <col width="2%" />
+            <col width="23%" />
+            <col width="20%" />
             <col width="15%" />
             <col width="15%" />
             <col width="15%" />
-            <col width="10%" />
+            <col width="15%" />
         </colgroup>
         <thead>
             <tr>
+                <th></th>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
@@ -47,6 +49,12 @@
             {
                 <tr>
                     <td>
+                        @if (item.IsFavorite)
+                        {
+                            <i class="fa fa-star" aria-hidden="true" style="color:#ffca00"></i>
+                        }     
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
@@ -62,6 +70,12 @@
                         @Html.DisplayFor(modelItem => item.DisplayedCurrentBalance)
                     </td>
                     <td align="right">
+                        @if (!item.IsFavorite)
+                        {
+                            <a href="/BankAccount/SetAsFavorite/@item.Id" title="@Resources.ButtonNames.SetAsFavoriteTooltip">
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                            </a>
+                        }                            
                         @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "BankAccount", @Resources.DisabledButtonTooltips.AccountCantBeDeleted)
                     </td>
                 </tr>

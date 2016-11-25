@@ -48,5 +48,7 @@ namespace PersonalFinanceManager.Entities
                 return this.Currency.Symbol + this.CurrentBalance;
             }
         }
+
+        public bool IsFavorite { get; set; }
     }
 }

@@ -178,6 +178,15 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set as Favorite.
+        /// </summary>
+        internal static string SetAsFavoriteTooltip {
+            get {
+                return ResourceManager.GetString("SetAsFavoriteTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Budget Plan.
         /// </summary>
         internal static string StartBudgetPlanButton {
