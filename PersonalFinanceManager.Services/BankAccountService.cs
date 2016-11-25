@@ -76,14 +76,25 @@ namespace PersonalFinanceManager.Services
 
         public AccountEditModel GetById(int id)
         {
-            var account = db.AccountModels.Include(x => x.Currency).SingleOrDefault(x => x.Id == id);
+            var account = db.AccountModels.Include(x => x.Currency).Include(x => x.Bank).SingleOrDefault(x => x.Id == id);
 
             if (account == null)
             {
                 return null;
             }
 
-            return Mapper.Map<AccountEditModel>(account);
+            var favoriteBankDetails = db.BankBranchModels.Single(x => x.BankId == account.BankId);
+
+            var accountModel = Mapper.Map<AccountEditModel>(account);
+
+            accountModel.BankBranchName = favoriteBankDetails.Name;
+            accountModel.BankBranchAddressLine1 = favoriteBankDetails.AddressLine1;
+            accountModel.BankBranchAddressLine2 = favoriteBankDetails.AddressLine2;
+            accountModel.BankBranchPostCode = favoriteBankDetails.PostCode;
+            accountModel.BankBranchCity = favoriteBankDetails.City;
+            accountModel.BankBranchPhoneNumber = favoriteBankDetails.PhoneNumber;
+
+            return accountModel;
         }
 
         public void EditBankAccount(AccountEditModel accountEditModel, string userId)

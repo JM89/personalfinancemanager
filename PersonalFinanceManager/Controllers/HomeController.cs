@@ -1,4 +1,5 @@
-﻿using PersonalFinanceManager.Models.Helpers.Chart;
+﻿using Microsoft.AspNet.Identity;
+using PersonalFinanceManager.Models.Helpers.Chart;
 using PersonalFinanceManager.Models.Home;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Services.Interfaces;
@@ -14,11 +15,13 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IExpenditureService _expenditureService;
         private readonly IPaymentMethodService _paymentMethodService;
+        private readonly IBankAccountService _bankAccountService;
 
-        public HomeController(IExpenditureService expenditureService, IPaymentMethodService paymentMethodService)
+        public HomeController(IExpenditureService expenditureService, IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService)
         {
             this._expenditureService = expenditureService;
             this._paymentMethodService = paymentMethodService;
+            this._bankAccountService = bankAccountService;
         }
 
         public ActionResult Index()
@@ -27,7 +30,7 @@ namespace PersonalFinanceManager.Controllers
             {
                 return Redirect("/Account/Login");
             }
-
+            
             var model = new HomePageModel();
 
             var debitMvts = this._expenditureService.GetAll();
@@ -57,27 +60,34 @@ namespace PersonalFinanceManager.Controllers
 
             model.TotalNumberOfDebitMovements = debitMvts.Count();
             model.UserYearlyWages = 23000;
-            model.FavoriteAccountCurrencySymbol = "£";
-            model.FavoriteConversionRate = new ConversionRateModel() {
-                BaseCurrencySymbol = "€", 
-                CurrencySymbol = "£", 
-                CurrencyConversionRate = 1.17M
-            };
-            model.FavoriteBankDetails = new Models.Bank.BankEditModel()
+
+            var account = _bankAccountService.GetAccountsByUser(User.Identity.GetUserId()).SingleOrDefault(x => x.IsFavorite);
+            if (account != null)
             {
-                //FileName = "/Resources/bank_icons/bank1.jpg",
-                FavoriteBranch = new Models.Bank.BankBrandEditModel()
+                var fullAccountDetails = _bankAccountService.GetById(account.Id);
+                model.FavoriteAccountCurrencySymbol = fullAccountDetails.CurrencySymbol;
+                model.FavoriteConversionRate = new ConversionRateModel()
                 {
-                    Name = "HIGH LORTON Branch",
-                    AddressLine1 = "72 Nenthead Road",
-                    AddressLine2 = "1st Floor",
-                    PostCode = "A130GS",
-                    City = "HIGH LORTON",
-                    PhoneNumber = "077 8851 8618"
-                },
-                Website = "www.myfavoritebank.com",
-                GeneralEnquiryPhoneNumber = "077 8851 8614"
-            };
+                    BaseCurrencySymbol = "€",
+                    CurrencySymbol = fullAccountDetails.CurrencySymbol,
+                    CurrencyConversionRate = 1.17M
+                };
+                model.FavoriteBankDetails = new Models.Bank.BankEditModel()
+                {
+                    IconPath = fullAccountDetails.BankIconPath,
+                    FavoriteBranch = new Models.Bank.BankBrandEditModel()
+                    {
+                        Name = fullAccountDetails.BankBranchName,
+                        AddressLine1 = fullAccountDetails.BankBranchAddressLine1,
+                        AddressLine2 = fullAccountDetails.BankBranchAddressLine2,
+                        PostCode = fullAccountDetails.BankBranchPostCode,
+                        City = fullAccountDetails.BankBranchCity,
+                        PhoneNumber = fullAccountDetails.BankBranchPhoneNumber
+                    },
+                    Website = fullAccountDetails.BankWebsite,
+                };
+            }
+            
             return View(model);
         }
 

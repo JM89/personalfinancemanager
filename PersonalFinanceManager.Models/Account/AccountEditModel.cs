@@ -34,5 +34,21 @@ namespace PersonalFinanceManager.Models.Account
         public IList<SelectListItem> AvailableCurrencies { get; set; }
 
         public IList<SelectListItem> AvailableBanks { get; set; }
+
+        public string BankWebsite { get; set; }
+
+        public string BankIconPath { get; set; }
+
+        public string BankBranchName { get; set; }
+
+        public string BankBranchAddressLine1 { get; set; }
+
+        public string BankBranchAddressLine2 { get; set; }
+
+        public string BankBranchPostCode { get; set; }
+
+        public string BankBranchCity { get; set; }
+
+        public string BankBranchPhoneNumber { get; set; }
     }
 }
