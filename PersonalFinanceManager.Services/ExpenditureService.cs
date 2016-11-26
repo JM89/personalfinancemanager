@@ -151,7 +151,12 @@ namespace PersonalFinanceManager.Services
             var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
             return mappedExpenditures.ToList();
         }
+
+        public IList<ExpenditureListModel> GetExpenditures(DateTime startDate, DateTime endDate)
+        {
+            var expenditures = db.ExpenditureModels.Where(x => x.DateExpenditure >= startDate && x.DateExpenditure < endDate).ToList();
+            var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
+            return mappedExpenditures.ToList();
+        }
     }
-
-
 }

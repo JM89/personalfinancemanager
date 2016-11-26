@@ -18,6 +18,8 @@ namespace PersonalFinanceManager.Services.Interfaces
         [Obsolete]
         IList<ExpenditureModel> GetExpendituresByAccountId(int accountId);
 
+        IList<ExpenditureListModel> GetExpenditures(DateTime startDate, DateTime endDate);
+
         IList<ExpenditureModel> GetExpendituresByAccountIdForDashboard(int accountId, DateTime startDate, DateTime endDate);
 
         IList<ExpenditureListModel> GetExpendituresByAccountId2(int accountId);
