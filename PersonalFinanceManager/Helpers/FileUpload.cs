@@ -63,7 +63,7 @@ namespace PersonalFinanceManager.Helpers
                         {
                             file.SaveAs(filePath);
 
-                            relativeFilePath = $"{relativeLocation}/{file.FileName}";
+                            relativeFilePath = string.Format("{0}/{1}", relativeLocation, file.FileName);
                         }
                     }
                 }

@@ -42,8 +42,9 @@ namespace PersonalFinanceManager.Models.Home
         {
             get
             {
-                return $"{FavoriteBankDetails.FavoriteBranch.AddressLine1} {FavoriteBankDetails.FavoriteBranch.AddressLine2}"
-                    + $"{FavoriteBankDetails.FavoriteBranch.PostCode} {FavoriteBankDetails.FavoriteBranch.City}";
+                return string.Format("{0} {1} {2} {3}", FavoriteBankDetails.FavoriteBranch.AddressLine1,
+                    FavoriteBankDetails.FavoriteBranch.AddressLine2, FavoriteBankDetails.FavoriteBranch.PostCode,
+                    FavoriteBankDetails.FavoriteBranch.City);
             }
         }
 

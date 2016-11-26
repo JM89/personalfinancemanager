@@ -102,17 +102,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="widget yellow-bg p-lg text-center">
-                            <div class="m-b-md">
-                                <i class="fa fa-refresh fa-4x"></i>
-                                <h1 class="m-xs" style="font-size: 26px;">@Model.FavoriteConversionRate.DisplayCurrencyConversionRate</h1>
-                                <h3 class="font-bold no-margins" style="font-size: 15px;">
-                                    Worth 1 @Model.FavoriteConversionRate.BaseCurrencySymbol
-                                </h3>
+                    @if (@Model.FavoriteConversionRate != null)
+                    { 
+                        <div class="col-lg-6">
+                            <div class="widget yellow-bg p-lg text-center">
+                                <div class="m-b-md">
+                                    <i class="fa fa-refresh fa-4x"></i>
+                                    <h1 class="m-xs" style="font-size: 26px;">@Model.FavoriteConversionRate.DisplayCurrencyConversionRate</h1>
+                                    <h3 class="font-bold no-margins" style="font-size: 15px;">
+                                        Worth 1 @Model.FavoriteConversionRate.BaseCurrencySymbol
+                                    </h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
 
                 </div>
 
