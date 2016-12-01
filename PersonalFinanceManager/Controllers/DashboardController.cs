@@ -44,7 +44,7 @@ namespace PersonalFinanceManager.Controllers
             var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId = CurrentAccount });
             var expenditureTypesOrder = expenditures.GroupBy(x => x.TypeExpenditureId).ToDictionary(x => x.Key, y => y.Sum(z => z.Cost));
             var expenditureTypes = _expenditureTypeService.GetExpenditureTypes().Join(expenditureTypesOrder, x => x.Id, y => y.Key, (x, y) => new { x.Id, x.Name, x.GraphColor, y.Value }).OrderByDescending(x => x.Value);
-            var budgetPlan = _budgetPlanService.GetCurrent();
+            var budgetPlan = _budgetPlanService.GetCurrent(CurrentAccount);
 
             var splitByTypeDashboard = new SplitByTypeDashboardModel()
             {

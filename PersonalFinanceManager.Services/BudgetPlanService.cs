@@ -29,38 +29,20 @@ namespace PersonalFinanceManager.Services
         /// Return the list of budget plans.
         /// </summary>
         /// <returns></returns>
-        public IList<BudgetPlanListModel> GetBudgetPlans()
+        public IList<BudgetPlanListModel> GetBudgetPlans(int accountId)
         {
-            var budgetPlans = db.BudgetPlanModels.ToList();
+            var budgetPlansForAccount = db.BudgetByExpenditureTypeModels.Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+
+            var budgetPlans = db.BudgetPlanModels.Where(x => budgetPlansForAccount.Contains(x.Id)).ToList();
 
             return budgetPlans.Select(x => Mapper.Map<BudgetPlanListModel>(x)).ToList();
         }
-
-        //public IList<BudgetPlanListModel> GetBudgetPlans(BudgetPlanSearch search)
-        //{
-        //    var budgetPlans = db.BudgetByExpenditureTypeModels
-        //        .Include(x => x.BudgetPlan)
-        //        .Where(x => (search.AccountId.HasValue && x.AccountId == search.AccountId.Value)
-        //            && (search.StartDate.HasValue && x.BudgetPlan.StartDate.HasValue && x.BudgetPlan.StartDate >= search.StartDate.Value)
-        //            && (search.EndDate.HasValue && !x.BudgetPlan.EndDate.HasValue || x.BudgetPlan.EndDate < search.EndDate.Value)).ToList();
-
-        //    var mappedBudgetPlans = budgetPlans.Select(x => new BudgetPlanListModel()
-        //    {
-
-        //    });
-        //    //{
-        //    //    ExpenditureId = x.ExpenditureTypeId,
-        //    //    StartDate = x.BudgetPlan.StartDate.Value,
-        //    //    EndDate = x.BudgetPlan.EndDate.HasValue ? x.BudgetPlan.EndDate.Value : search.EndDate.Value,
-        //    //    ExpectedValue = x.Budget
-        //    //});
-
-        //    return mappedBudgetPlans.ToList();
-        //}
-
-        public BudgetPlanEditModel GetCurrent()
+        
+        public BudgetPlanEditModel GetCurrent(int accountId)
         {
-            var currentBudgetPlan = db.BudgetPlanModels.SingleOrDefault(x => !x.EndDate.HasValue);
+            var budgetPlansForAccount = db.BudgetByExpenditureTypeModels.Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+
+            var currentBudgetPlan = db.BudgetPlanModels.SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && !x.EndDate.HasValue);
             if (currentBudgetPlan != null)
             {
                 return GetById(currentBudgetPlan.Id);

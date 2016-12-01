@@ -17,9 +17,9 @@ namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IBudgetPlanService : IBaseService
     {
-        IList<BudgetPlanListModel> GetBudgetPlans();
+        IList<BudgetPlanListModel> GetBudgetPlans(int accountId);
 
-        BudgetPlanEditModel GetCurrent();
+        BudgetPlanEditModel GetCurrent(int accountId);
 
         BudgetPlanEditModel GetById(int id);
 

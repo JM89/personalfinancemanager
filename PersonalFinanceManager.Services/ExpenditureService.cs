@@ -23,42 +23,6 @@ namespace PersonalFinanceManager.Services
             db = new ApplicationDbContext();
         }
 
-        [Obsolete]
-        public IList<ExpenditureModel> GetExpendituresByAccountId(int accountId)
-        {
-            return db.ExpenditureModels
-                .Include(u => u.Account.Currency)
-                .Include(u => u.TypeExpenditure)
-                .Include(u => u.PaymentMethod)
-                .Where(x => x.Account.Id == accountId).ToList();
-        }
-
-        public IList<ExpenditureModel> GetExpendituresByAccountIdForDashboard(int accountId, DateTime startDate, DateTime endDate)
-        {
-            return db.ExpenditureModels
-                .Include(u => u.Account.Currency)
-                .Include(u => u.TypeExpenditure)
-                .Include(u => u.PaymentMethod)
-                .Where(x => x.Account.Id == accountId 
-                    && x.TypeExpenditure.ShowOnDashboard 
-                    && x.DateExpenditure >= startDate 
-                    && x.DateExpenditure < endDate).ToList();
-        }
-
-        public IList<ExpenditureListModel> GetExpendituresByAccountId2(int accountId)
-        {
-            var expenditures = db.ExpenditureModels
-                .Include(u => u.Account.Currency)
-                .Include(u => u.TypeExpenditure)
-                .Include(u => u.PaymentMethod)
-                .Where(x => x.Account.Id == accountId)
-                .ToList();
-
-            var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
-
-            return mappedExpenditures.ToList();
-        }
-
         public void CreateExpenditure(ExpenditureEditModel expenditureEditModel)
         {
             var expenditureModel = Mapper.Map<ExpenditureModel>(expenditureEditModel);
@@ -106,11 +70,6 @@ namespace PersonalFinanceManager.Services
             strategy.UpdateDebit(expenditureModel);
         }
 
-        public void Dispose()
-        {
-            db.Dispose();
-        }
-
         public void DeleteExpenditure(int id)
         {
             ExpenditureModel expenditureModel = db.ExpenditureModels.Find(id);
@@ -146,27 +105,17 @@ namespace PersonalFinanceManager.Services
             db.SaveChanges();
         }
 
-        public IList<ExpenditureListModel> GetAll()
-        {
-            var expenditures = db.ExpenditureModels.ToList();
-            var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
-            return mappedExpenditures.ToList();
-        }
-
-        public IList<ExpenditureListModel> GetExpenditures(DateTime startDate, DateTime endDate)
-        {
-            var expenditures = db.ExpenditureModels.Where(x => x.DateExpenditure >= startDate && x.DateExpenditure < endDate).ToList();
-            var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
-            return mappedExpenditures.ToList();
-        }
-
         public IList<ExpenditureListModel> GetExpenditures(ExpenditureSearch search)
         {
-            var expenditures = db.ExpenditureModels.Where(x =>
-                (!search.AccountId.HasValue || (search.AccountId.HasValue && x.AccountId == search.AccountId.Value))
-                && (!search.StartDate.HasValue || (search.StartDate.HasValue && x.DateExpenditure >= search.StartDate))
-                && (!search.EndDate.HasValue || (search.EndDate.HasValue && x.DateExpenditure < search.EndDate))
-                && (!search.ExpenditureTypeId.HasValue || (search.ExpenditureTypeId.HasValue && x.TypeExpenditureId == search.ExpenditureTypeId.Value))).ToList();
+            var expenditures = db.ExpenditureModels
+                .Where(x =>
+                    (!search.AccountId.HasValue || (search.AccountId.HasValue && x.AccountId == search.AccountId.Value))
+                    && (!search.StartDate.HasValue || (search.StartDate.HasValue && x.DateExpenditure >= search.StartDate))
+                    && (!search.EndDate.HasValue || (search.EndDate.HasValue && x.DateExpenditure < search.EndDate))
+                    && (!search.ExpenditureTypeId.HasValue || (search.ExpenditureTypeId.HasValue && x.TypeExpenditureId == search.ExpenditureTypeId.Value)))
+                .Include(u => u.Account.Currency)
+                .Include(u => u.TypeExpenditure)
+                .Include(u => u.PaymentMethod).ToList();
 
             var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
 

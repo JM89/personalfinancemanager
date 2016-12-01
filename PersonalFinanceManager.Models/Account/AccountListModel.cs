@@ -1,4 +1,5 @@
-﻿using PersonalFinanceManager.Models.Shared;
+﻿using PersonalFinanceManager.Models.Helpers;
+using PersonalFinanceManager.Models.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,8 @@ namespace PersonalFinanceManager.Models.Account
         [DisplayName("Bank")]
         public string BankName { get; set; }
 
+        public string BankIconPath { get; set; }
+
         [DisplayName("Currency")]
         public string CurrencyName { get; set; }
 
@@ -29,7 +32,7 @@ namespace PersonalFinanceManager.Models.Account
         {
             get
             {
-                return this.CurrencySymbol + this.InitialBalance;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.InitialBalance, this.CurrencySymbol);
             }
         }
 
@@ -40,7 +43,7 @@ namespace PersonalFinanceManager.Models.Account
         {
             get
             {
-                return this.CurrencySymbol + this.CurrentBalance;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.CurrentBalance, this.CurrencySymbol);
             }
         }
         

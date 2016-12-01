@@ -4,6 +4,7 @@ using PersonalFinanceManager.Models.Helpers.Chart;
 using PersonalFinanceManager.Models.Home;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.Services.RequestObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace PersonalFinanceManager.Controllers
             
             var model = new HomePageModel();
 
-            var debitMvts = this._expenditureService.GetAll();
+            var debitMvts = this._expenditureService.GetExpenditures(new ExpenditureSearch());
 
             if (debitMvts.Count != 0)
             {
@@ -106,7 +107,7 @@ namespace PersonalFinanceManager.Controllers
             var intervalsByMonth = interval.GetIntervalsByMonth();
 
             var dataSetActualExpenditures = new ChartDataset();
-            var expenditures = _expenditureService.GetExpenditures(interval.StartDate, interval.EndDate);
+            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { StartDate=interval.StartDate, EndDate=interval.EndDate });
             foreach (var intervalByMonth in intervalsByMonth)
             {
                 var expendituresByMonth = expenditures.Where(x => intervalByMonth.Value.IsBetween(x.DateExpenditure));

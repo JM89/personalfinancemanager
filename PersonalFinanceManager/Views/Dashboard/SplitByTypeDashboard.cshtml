@@ -74,7 +74,7 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-lg-12">
-                            <table class="stripe" id="mytable3">
+                            <table class="stripe" id="split-table">
                                 <colgroup>
                                     <col width="3%" />
                                     <col width="20%" />
@@ -228,6 +228,13 @@
             updatePieChart("currentMonth", model, model.CurrentMonthTotalCost, "CurrentMonthCost", "Actual", model.CurrentMonthName);
             updatePieChart("expected", model, model.ExpectedTotalCost, "ExpectedCost", "Expected", model.BudgetPlanName);
             updatePieChart("previous", model, model.PreviousMonthTotalCost, "PreviousMonthCost", "Previous", model.PreviousMonthName);
+
+            $('#split-table').DataTable({
+                "iDisplayLength": 8,
+                "bLengthChange": false,
+                "bFilter": false
+            });
+
         });
 
     </script>

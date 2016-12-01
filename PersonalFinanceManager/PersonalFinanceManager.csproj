@@ -272,6 +272,7 @@
     <Content Include="Scripts\cldr\unresolved.js" />
     <Content Include="Scripts\custom\Bank.js" />
     <Content Include="Scripts\custom\HomePage.js" />
+    <Content Include="Scripts\custom\Shared.js" />
     <Content Include="Scripts\custom\SplitByTypeDashboard.js" />
     <Content Include="Scripts\custom\Utils.js" />
     <Content Include="Scripts\custom\BudgetPlan.js" />

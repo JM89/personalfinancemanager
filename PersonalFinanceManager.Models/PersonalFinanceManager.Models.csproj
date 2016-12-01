@@ -88,7 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountEditModel.cs" />
-    <Compile Include="Account\AccountForMenuModel.cs" />
     <Compile Include="Account\AccountListModel.cs" />
     <Compile Include="AspNetUserAccount\AccountViewModels.cs" />
     <Compile Include="AspNetUserAccount\ManageViewModels.cs" />

@@ -12,6 +12,7 @@ using PersonalFinanceManager.Entities;
 using Microsoft.AspNet.Identity;
 using PersonalFinanceManager.Models.Expenditure;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.Services.RequestObjects;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -41,7 +42,7 @@ namespace PersonalFinanceManager.Controllers
 
             AccountBasicInfo();
 
-            var expenditures = _expenditureService.GetExpendituresByAccountId2(accountId)
+            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId = CurrentAccount })
                 .OrderByDescending(x => x.DateExpenditure)
                 .ThenByDescending(x => x.Id)
                 .ToList();

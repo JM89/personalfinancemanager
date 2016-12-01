@@ -18,8 +18,6 @@ namespace PersonalFinanceManager.Services.Interfaces
 
         IList<AccountListModel> GetAccountsByUser(string userId);
 
-        IList<AccountForMenuModel> GetAccountsByUserForMenu(string userId);
-
         AccountEditModel GetById(int id);
 
         void EditBankAccount(AccountEditModel accountEditModel, string userId);

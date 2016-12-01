@@ -2,6 +2,7 @@
 using PersonalFinanceManager.Models.BudgetPlan;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.Services.RequestObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult Index()
         {
-            var model = _budgetPlanService.GetBudgetPlans();
+            var model = _budgetPlanService.GetBudgetPlans(CurrentAccount);
 
             return View(model);
         }
@@ -158,7 +159,7 @@ namespace PersonalFinanceManager.Controllers
             var firstDayLastMonth = new DateTime(lastMonth.Year, lastMonth.Month, 1);
             var lastDayLastMonth = DateTime.Today.AddMonths(1).AddDays(-1);
 
-            var expenditures = _expenditureService.GetExpendituresByAccountId2(CurrentAccount);
+            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId=CurrentAccount });
 
             var nbMonthsSinceFirstExpenditures = 1;
             var firstExpenditure = expenditures.OrderBy(x => x.DateExpenditure).FirstOrDefault();

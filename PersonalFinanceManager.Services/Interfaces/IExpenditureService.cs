@@ -16,17 +16,6 @@ namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IExpenditureService : IBaseService
     {
-        [Obsolete]
-        IList<ExpenditureModel> GetExpendituresByAccountId(int accountId);
-
-        IList<ExpenditureListModel> GetExpenditures(DateTime startDate, DateTime endDate);
-
-        IList<ExpenditureModel> GetExpendituresByAccountIdForDashboard(int accountId, DateTime startDate, DateTime endDate);
-
-        IList<ExpenditureListModel> GetExpendituresByAccountId2(int accountId);
-
-        IList<ExpenditureListModel> GetAll();
-
         void CreateExpenditure(ExpenditureEditModel expenditureEditModel);
 
         void EditExpenditure(ExpenditureEditModel expenditureEditModel);

@@ -29,7 +29,8 @@ namespace PersonalFinanceManager.Services
 
             accountModel.User_Id = user.Id;
             accountModel.CurrentBalance = accountModel.InitialBalance;
-
+            accountModel.IsFavorite = !db.AccountModels.Any(x => x.User_Id == userId);
+            
             db.AccountModels.Add(accountModel);
             db.SaveChanges();
         }
@@ -55,26 +56,7 @@ namespace PersonalFinanceManager.Services
 
             return accountsModel;
         }
-
-        public IList<AccountForMenuModel> GetAccountsByUserForMenu(string userId)
-        {
-            var accounts = db.AccountModels.Include(u => u.Bank)
-                             .Where(x => x.User_Id == userId).ToList();
-
-            var expenditures = db.ExpenditureModels.Include(u => u.Account);
-
-            var accountsModel = accounts.Select(x => new AccountForMenuModel()
-                                 {
-                                     Name = x.Name,
-                                     Id = x.Id,
-                                     BankIcon = x.Bank.IconPath,
-                                     HasExpenditures = expenditures.Any(y => y.Account.Id == x.Id),
-                                     IsFavorite = x.IsFavorite
-                                });
-
-            return accountsModel.ToList();
-        }
-
+        
         public AccountEditModel GetById(int id)
         {
             var account = db.AccountModels.Include(x => x.Currency).Include(x => x.Bank).SingleOrDefault(x => x.Id == id);

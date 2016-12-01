@@ -22,14 +22,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-
                 <br/>
                 <img src="~/Resources/pfm_logo.png" style="width: 150px;border-radius: 5px;" />
                 <br /><br />
-                @*@Html.ActionLink("PFM", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", disabled="disabled" })*@
             </div>
             @Html.Partial("_LoginPartial")
-
         </div>
 
         <input type="hidden" id="indexAccountList" value="@Session["IndexAccountList"]"/>
@@ -41,19 +38,16 @@
                   
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>
+                        <li class="menuitem" id="home">
                            <a href="/Home/Index"><strong>Home</strong></a>
                         </li>
-                        <li>
+                        <li class="menuitem" id="dashboard">
                             <a data-toggle="dropdown" href="#">Dashboard</a>
-
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                @*<li><a href="/Dashboard/Index">Expenditure Split</a></li>*@
                                 <li><a href="/Dashboard/SplitByTypeDashboard">Split by type</a></li>
-                                @*<li><a href="/Dashboard/BudgetPlanDashboard">Budget Planned</a></li>*@
                             </ul>
                         </li>
-                        <li>
+                        <li class="menuitem" id="movements">
                             <a data-toggle="dropdown" href="#" id="id_menu_movements">Movements</a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
                                 <li><a href="/Expenditure/Index" id="id_menu_expenditures">Expenditures</a></li>
@@ -61,18 +55,14 @@
                                 <li><a href="/Income/Index" id="id_menu_incomes">Incomes</a></li>
                             </ul>
                         </li>
-
-                       
-                       <li>
+                       <li class="menuitem" id="budget">
                             <a data-toggle="dropdown" href="#">Budget</a>
-
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
                                 <li><a href="/BudgetPlan/Index">Manage Budget</a></li>
                             </ul>
                         </li>
-                        <li>
+                        <li class="menuitem" id="configuration">
                             <a data-toggle="dropdown" href="#">Configuration</a>
-
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                 <li><a href="/BankAccount/Index">Manage Accounts</a></li>
                                 <li><a href="/Bank/Index">Manage Banks</a></li>
@@ -86,7 +76,7 @@
                    
                 </ul>
 
-                <ul class="nav navbar-nav pull-right">
+                <ul class="nav navbar-nav pull-right" id="userBankAccounts">
                     
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -97,19 +87,11 @@
                     }
 
                 </ul>
-                @*@Html.Partial("_LoginPartial")*@
             </div>
-            
-
-
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
-        @*<hr />
-        <footer>
-            <p>@DateTime.Now.Year - Personal Finance Manager - JM89</p>
-        </footer>*@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -119,69 +101,9 @@
     <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/plug-ins/1.10.10/sorting/datetime-moment.js"></script>
     <script type="text/javascript" src="~/Scripts/plugins/ddslick/jquery.ddslick.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/custom/Shared.js"></script>
 
     <script type="text/javascript">
-
-        function buildDropDownList(data)
-        {
-            var link = "";
-            var ddData = [];
-            $.each(data, function (index) {
-                console.log(data[index]);
-                var accountId = data[index].Id;
-                var linkName = data[index].Name;
-                var icon = data[index].BankIcon;
-
-                ddData.push({
-                    text: linkName,
-                    value: accountId,
-                    imageSrc: icon
-                });
-            })
-
-            var indexAccountList = $("#indexAccountList").val();
-            if (!indexAccountList)
-            {
-                indexAccountList = 0;
-            }
-
-
-            var selected = false;
-
-            $('#availableAccounts').ddslick({
-                data: ddData,
-                width: 250,
-                imagePosition: "left",
-                defaultSelectedIndex: indexAccountList,
-                onSelected: function (data) {
-                    console.log(data);
-                    var url = "/Home/SaveCurrentAccount?accountId=" + data.selectedData.value + "&indexAccountList=" + data.selectedIndex;
-                    $.get(url, null, function (data) {
-                        if (data.Data.reloadPage == true) {
-                            location.reload();
-                        }
-                    });
-                }
-            });
-
-            $('#availableAccounts').on("click", function () {
-                //location.reload();
-            });
-        }
-
-        function getAccountsForCurrentUser()
-        {
-            $.ajax({
-                url: '@Url.Action("GetAccounts", "BankAccount")',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    buildDropDownList(data);
-                },
-                error: function (xhr) { console.log(xhr); }
-            });
-        }
 
         $(document).ready(function () {
 
@@ -204,27 +126,12 @@
                 "bLengthChange": false,
                 "order": [[0, "desc"]]
             });
-
-            $('#mytable3').DataTable({
-                "iDisplayLength": 8,
-                "bLengthChange": false,
-                "bFilter": false
-            });
-
             $('#mytable4').DataTable({
                 "bLengthChange": false,
                 "bFilter": false,
                 "bPaginate": false,
                 "bInfo": false
             });
-            $('#mytable5').DataTable({
-                "bLengthChange": false,
-                "bFilter": false,
-                "bPaginate": false,
-                "bInfo": false
-            });
-
-
             getAccountsForCurrentUser();
 
         });
