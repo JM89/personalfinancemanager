@@ -224,8 +224,10 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var model = @Html.Raw(Json.Encode(Model));
-            getSplitByType(model);
             updateRadarChart(model);
+            updatePieChart("currentMonth", model, model.CurrentMonthTotalCost, "CurrentMonthCost", "Actual", model.CurrentMonthName);
+            updatePieChart("expected", model, model.ExpectedTotalCost, "ExpectedCost", "Expected", model.BudgetPlanName);
+            updatePieChart("previous", model, model.PreviousMonthTotalCost, "PreviousMonthCost", "Previous", model.PreviousMonthName);
         });
 
     </script>

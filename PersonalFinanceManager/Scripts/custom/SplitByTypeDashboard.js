@@ -70,13 +70,6 @@ function updateRadarChart(model)
     var chart = new Chart(ctx).Radar(data);
 }
 
-function getSplitByType(model) {
-    updatePieChart("currentMonth", model, model.CurrentMonthTotalCost, "CurrentMonthCost", "Actual", model.CurrentMonthName);
-    updatePieChart("expected", model, model.ExpectedTotalCost, "ExpectedCost", "Expected", model.BudgetPlanName);
-    updatePieChart("previous", model, model.PreviousMonthTotalCost, "PreviousMonthCost", "Previous", model.PreviousMonthName);
-   // updatePieChart("overall", model, model.AverageTotalCost, "AverageCost", "Average", "Since " + model.FirstMovementDate);
-}
-
 function showExpenditureTypeOverTime(expenditureTypeId) {
 
     var url = "/Dashboard/GetSplitByTypeOverLast12Months?expenditureTypeId=" + expenditureTypeId;

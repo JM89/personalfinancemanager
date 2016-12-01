@@ -111,7 +111,6 @@
     <Compile Include="Bank\BankEditModel.cs" />
     <Compile Include="Currency\CurrencyEditModel.cs" />
     <Compile Include="Currency\CurrencyListModel.cs" />
-    <Compile Include="Dashboard\PlannedExpenditure.cs" />
     <Compile Include="ExpenditureType\ExpenditureTypeEditModel.cs" />
     <Compile Include="ExpenditureType\ExpenditureTypeListModel.cs" />
     <Compile Include="Expenditure\ExpenditureEditModel.cs" />

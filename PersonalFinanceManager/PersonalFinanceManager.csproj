@@ -271,7 +271,6 @@
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
     <Content Include="Scripts\custom\Bank.js" />
-    <Content Include="Scripts\custom\BudgetPlanDashboard.js" />
     <Content Include="Scripts\custom\HomePage.js" />
     <Content Include="Scripts\custom\SplitByTypeDashboard.js" />
     <Content Include="Scripts\custom\Utils.js" />
@@ -343,7 +342,6 @@
     <Content Include="Views\Currency\Delete.cshtml" />
     <Content Include="Views\Currency\Edit.cshtml" />
     <Content Include="Views\Currency\Index.cshtml" />
-    <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutList.cshtml" />
     <Content Include="Views\Shared\_LayoutEditor.cshtml" />
     <Content Include="Views\Shared\_LayoutConfirmDeletion.cshtml" />
@@ -372,7 +370,6 @@
     <Content Include="Views\BudgetPlan\Index.cshtml" />
     <Content Include="Views\BudgetPlan\Edit.cshtml" />
     <Content Include="Views\BudgetPlan\View.cshtml" />
-    <Content Include="Views\Dashboard\BudgetPlan.cshtml" />
     <Content Include="Views\UserProfile\Create.cshtml" />
     <Content Include="Views\UserProfile\Edit.cshtml" />
     <Content Include="Views\UserProfile\View.cshtml" />
