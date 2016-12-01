@@ -273,6 +273,7 @@
     <Content Include="Scripts\custom\Bank.js" />
     <Content Include="Scripts\custom\BudgetPlanDashboard.js" />
     <Content Include="Scripts\custom\HomePage.js" />
+    <Content Include="Scripts\custom\SplitByTypeDashboard.js" />
     <Content Include="Scripts\custom\Utils.js" />
     <Content Include="Scripts\custom\BudgetPlan.js" />
     <Content Include="Scripts\custom\Expenditure.js" />
@@ -375,6 +376,7 @@
     <Content Include="Views\UserProfile\Create.cshtml" />
     <Content Include="Views\UserProfile\Edit.cshtml" />
     <Content Include="Views\UserProfile\View.cshtml" />
+    <Content Include="Views\Dashboard\SplitByTypeDashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

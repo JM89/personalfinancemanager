@@ -42,3 +42,24 @@
        <i class="fa fa-trash-o" style="color: darkgrey;" title="@tooltipDeleteButton"></i>
     }
 }
+
+@helper ShowArrow(decimal value1, decimal value2)
+{
+var Html = ((System.Web.Mvc.WebViewPage)WebPageContext.Current.Page).Html;
+
+Html.Raw("&nbsp;&nbsp;");
+
+if (value1 > value2)
+{
+    <i class="fa fa-level-down" aria-hidden="true" style="color:green"></i>
+}
+else if (value1 < value2)
+{
+    <i class="fa fa-level-up" aria-hidden="true" style="color:red"></i>
+}
+else
+{
+    <i class="fa fa-minus" aria-hidden="true" style="color:grey"></i>
+}
+
+}

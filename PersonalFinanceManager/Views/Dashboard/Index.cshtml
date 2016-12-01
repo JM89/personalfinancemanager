@@ -128,6 +128,7 @@
                                                         <td align="right">
                                                             @Html.DisplayFor(modelItem => item.DisplayedPreviousMonthCost)
                                                             @Html.Raw("&nbsp;&nbsp;")
+                                                           
                                                             @if (item.TwoMonthAgoCost > item.PreviousMonthCost)
                                                             {
                                                                 <img src="~/Resources/greenarrow.png" width="15" height="15" />
@@ -144,18 +145,8 @@
                                                         <td align="right">
                                                             @Html.DisplayFor(modelItem => item.DisplayedCurrentMonthCost)
                                                             @Html.Raw("&nbsp;&nbsp;")
-                                                            @if (item.PreviousMonthCost > item.CurrentMonthCost)
-                                                            {
-                                                                <img src="~/Resources/greenarrow.png" width="15" height="15" />
-                                                            }
-                                                            else if (item.PreviousMonthCost < item.CurrentMonthCost)
-                                                            {
-                                                                <img src="~/Resources/redarrow.png" width="15" height="15" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <img src="~/Resources/bluearrow.png" width="15" height="15" />
-                                                            }
+                                                            @CustomHelpers.ShowArrow(item.PreviousMonthCost, item.CurrentMonthCost)
+
                                                         </td>
                                                     </tr>
                                                 }

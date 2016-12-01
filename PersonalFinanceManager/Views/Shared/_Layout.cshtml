@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    @RenderSection("style", required: false)
 </head>
 <body>
 
@@ -47,7 +48,8 @@
                             <a data-toggle="dropdown" href="#">Dashboard</a>
 
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                <li><a href="/Dashboard/Index">Expenditure Split</a></li>
+                                @*<li><a href="/Dashboard/Index">Expenditure Split</a></li>*@
+                                <li><a href="/Dashboard/SplitByTypeDashboard">Split by type</a></li>
                                 @*<li><a href="/Dashboard/BudgetPlanDashboard">Budget Planned</a></li>*@
                             </ul>
                         </li>

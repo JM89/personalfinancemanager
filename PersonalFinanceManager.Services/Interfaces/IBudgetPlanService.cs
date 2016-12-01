@@ -19,7 +19,7 @@ namespace PersonalFinanceManager.Services.Interfaces
     {
         IList<BudgetPlanListModel> GetBudgetPlans();
 
-        IList<PlannedExpenditure> GetPlannedExpendituresByAccountIdForDashboard(int accountId, DateTime startDate, DateTime endDate);
+        BudgetPlanEditModel GetCurrent();
 
         BudgetPlanEditModel GetById(int id);
 

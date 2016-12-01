@@ -10,5 +10,7 @@ namespace PersonalFinanceManager.Models.Helpers.Chart
         public IList<string> Labels { get; set; }
 
         public IList<ChartDataset> ChartDatasets { get; set; }
+
+        public dynamic OtherInformation { get; set; }
     }
 }

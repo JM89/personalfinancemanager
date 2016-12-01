@@ -101,7 +101,7 @@ namespace PersonalFinanceManager.Controllers
 
         public JsonResult GetDebitMovementsOverTime()
         {
-            var interval = DateTimeHelper.GetInterval(DateTime.Now, DateTimeUnitEnums.Months, 6);
+            var interval = new Interval(DateTime.Now, DateTimeUnitEnums.Months, 6);
 
             var intervalsByMonth = interval.GetIntervalsByMonth();
 
@@ -110,7 +110,8 @@ namespace PersonalFinanceManager.Controllers
             foreach (var intervalByMonth in intervalsByMonth)
             {
                 var expendituresByMonth = expenditures.Where(x => intervalByMonth.Value.IsBetween(x.DateExpenditure));
-                dataSetActualExpenditures.Values.Add(((int)expendituresByMonth.Sum(x => x.Cost)).ToString());
+                var value = new ChartValue(((int)expendituresByMonth.Sum(x => x.Cost)).ToString());
+                dataSetActualExpenditures.Values.Add(value);
             }
 
             var chartData = new ChartData()

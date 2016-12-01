@@ -98,6 +98,11 @@
     <Compile Include="BudgetPlan\BudgetPlanEditModel.cs" />
     <Compile Include="BudgetPlan\BudgetPlanExpenditureType.cs" />
     <Compile Include="BudgetPlan\BudgetPlanListModel.cs" />
+    <Compile Include="Dashboard\SplitByTypeOverTimeModel.cs" />
+    <Compile Include="Dashboard\SplitByTypeModel.cs" />
+    <Compile Include="Dashboard\SplitByTypeDashboardModel.cs" />
+    <Compile Include="Dashboard\SplitByTypeOverTimeValueModel.cs" />
+    <Compile Include="Helpers\Chart\ChartValue.cs" />
     <Compile Include="Helpers\Chart\ChartData.cs" />
     <Compile Include="Helpers\Chart\ChartDataset.cs" />
     <Compile Include="Country\CountryEditModel.cs" />
@@ -113,6 +118,7 @@
     <Compile Include="Expenditure\ExpenditureListModel.cs" />
     <Compile Include="Expenditure\ExpenditurePerTypeModel.cs" />
     <Compile Include="Frequency\FrequencyListModel.cs" />
+    <Compile Include="Helpers\DecimalFormatHelper.cs" />
     <Compile Include="Home\ConversionRateModel.cs" />
     <Compile Include="Home\HomePageModel.cs" />
     <Compile Include="Home\NumberOfMvtPerPaymentMethodModel.cs" />

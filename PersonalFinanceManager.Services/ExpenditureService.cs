@@ -10,6 +10,7 @@ using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.Services.RequestObjects;
 
 namespace PersonalFinanceManager.Services
 {
@@ -156,6 +157,19 @@ namespace PersonalFinanceManager.Services
         {
             var expenditures = db.ExpenditureModels.Where(x => x.DateExpenditure >= startDate && x.DateExpenditure < endDate).ToList();
             var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
+            return mappedExpenditures.ToList();
+        }
+
+        public IList<ExpenditureListModel> GetExpenditures(ExpenditureSearch search)
+        {
+            var expenditures = db.ExpenditureModels.Where(x =>
+                (!search.AccountId.HasValue || (search.AccountId.HasValue && x.AccountId == search.AccountId.Value))
+                && (!search.StartDate.HasValue || (search.StartDate.HasValue && x.DateExpenditure >= search.StartDate))
+                && (!search.EndDate.HasValue || (search.EndDate.HasValue && x.DateExpenditure < search.EndDate))
+                && (!search.ExpenditureTypeId.HasValue || (search.ExpenditureTypeId.HasValue && x.TypeExpenditureId == search.ExpenditureTypeId.Value))).ToList();
+
+            var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
+
             return mappedExpenditures.ToList();
         }
     }

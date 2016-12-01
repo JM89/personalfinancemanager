@@ -10,6 +10,7 @@ using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Services.Core;
+using PersonalFinanceManager.Services.RequestObjects;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
@@ -35,5 +36,7 @@ namespace PersonalFinanceManager.Services.Interfaces
         ExpenditureEditModel GetById(int id);
 
         void ChangeDebitStatus(int id, bool debitStatus);
+
+        IList<ExpenditureListModel> GetExpenditures(ExpenditureSearch search);
     }
 }

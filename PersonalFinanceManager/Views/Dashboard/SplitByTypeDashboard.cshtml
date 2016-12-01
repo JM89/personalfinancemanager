@@ -1,0 +1,243 @@
+﻿@model PersonalFinanceManager.Models.Dashboard.SplitByTypeDashboardModel
+
+@{
+    ViewBag.Title = Resources.TitleNames.ExpenditureSplitDashboardPages;
+}
+
+@if (@Model.DisplayDashboard)
+{
+    <div class="row wrapper wrapper-content">
+        <div class="col-lg-3">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right"><small id="currentMonth-desc"></small></span>
+                    <h5 id="currentMonth-title"></h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas id="currentMonth" width="250" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right"><small id="expected-desc"></small></span>
+                    <h5 id="expected-title"></h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas id="expected" width="250" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right"><small id="previous-desc"></small></span>
+                    <h5 id="previous-title"></h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas id="previous" width="250" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right"><small id="top5-desc"></small></span>
+                    <h5 id="top5-title"></h5><br />
+                </div>
+                <div class="ibox-content">
+                    <canvas id="top5" width="250" height="230"></canvas>
+                    <small>Actual</small>
+                    <svg width="20" height="10">
+                        <rect width="20" height="10" style="fill:rgba(38, 94, 217, 0.5);stroke-width:1;stroke:rgb(0,0,0)"></rect>
+                    </svg>
+                    <small>Expected</small>
+                    <svg width="20" height="10">
+                        <rect width="20" height="10" style="fill:rgba(128, 128, 128, 0.5);stroke-width:1;stroke:rgb(0,0,0)"></rect>
+                    </svg>
+                </div>
+            </div>
+        </div>
+   
+     </div>
+
+    <div class="row wrapper wrapper-content">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Actual Vs Expected</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="stripe" id="mytable3">
+                                <colgroup>
+                                    <col width="3%" />
+                                    <col width="20%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="7%" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>
+
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Expenditure Type")
+                                        </th>
+                                        <th  style="border-left:solid 1px lightgrey;">
+                                            @Html.DisplayName("Actual")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Expected")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Difference")
+                                        </th>
+                                        <th style="border-left:solid 1px lightgrey;">
+                                            @Html.DisplayName("Previous")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Expected")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Difference")
+                                        </th>
+                                        <th>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in @Model.SplitByTypes)
+                                    {
+                                        <tr id="row-@item.ExpenditureTypeId">
+                                            <td>
+                                                <svg width="20" height="10">
+                                                    <rect width="20" height="10" style="fill:#@item.GraphColor;stroke-width:1;stroke:rgb(0,0,0)" />
+                                                </svg>
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ExpenditureTypeName)
+                                            </td>
+                                            <td align="right"  style="border-left:solid 1px lightgrey;">
+                                                @Html.DisplayFor(modelItem => item.CurrentMonthCost)
+                                               
+                                            </td>
+                                            <td align="right">
+                                                @Html.DisplayFor(modelItem => item.ExpectedCost)
+                                            </td>
+                                            <td align="right">
+                                                @if (item.DifferenceCost > 0)
+                                                {
+                                                    <span style="color:red;">@item.DifferenceCost</span>
+                                                }
+                                                else if (item.DifferenceCost < 0)
+                                                {
+                                                    <span style="color:green;">@item.DifferenceCost</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@item.DifferenceCost</span>
+                                                }
+                                            </td>
+                                            <td align="right" style="border-left:solid 1px lightgrey;">
+                                                @Html.DisplayFor(modelItem => item.PreviousMonthCost)
+                                            </td>
+                                            <td align="right">
+                                                @Html.DisplayFor(modelItem => item.ExpectedCost)
+                                            </td>
+                                            <td align="right">
+                                                @if (item.DifferenceCost > 0)
+                                                {
+                                                    <span style="color:red;">@item.DifferencePreviousCost</span>
+                                                }
+                                                else if (item.DifferenceCost < 0)
+                                                {
+                                                    <span style="color:green;">@item.DifferencePreviousCost</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@item.DifferencePreviousCost</span>
+                                                }                                            
+                                            </td>
+                                            <td align="center">
+                                                <a onclick="showExpenditureTypeOverTime(@item.ExpenditureTypeId)"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a name="typeOverTimeAnchor"></a>
+
+    <div id="typeOverTimeDiv" style="display:none;">
+        <div class="row wrapper wrapper-content">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5 id="typeOverTime-title"></h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-9" id="typeOverTime-container">
+                                <canvas id="typeOverTime" width="800" height="300"></canvas>
+                            </div>
+                            <div class="col-lg-3">
+                                <h1 style="font-weight:bolder" id="typeOverTime-average"></h1>
+                                <small>In average / month</small>
+
+                                <h1 style="font-weight:bolder" id="typeOverTime-differencecurrentpreviouscost"></h1>
+                                <small>Difference Current vs Previous</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+}
+
+@section scripts
+{
+    <script src="~/Scripts/plugins/chartjs/Chart.min.js"></script>
+    <script src="~/Scripts/custom/Utils.js"></script>
+    <script src="~/Scripts/custom/SplitByTypeDashboard.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var model = @Html.Raw(Json.Encode(Model));
+            getSplitByType(model);
+            updateRadarChart(model);
+        });
+
+    </script>
+
+}
+
+@section style
+{
+    <style>
+        .pull-right {
+            font-size: 14px;
+            margin-top: -3px;
+        }
+    </style>
+}

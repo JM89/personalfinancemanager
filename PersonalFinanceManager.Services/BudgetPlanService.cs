@@ -12,6 +12,7 @@ using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Models.ExpenditureType;
 using PersonalFinanceManager.Models.Dashboard;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.Services.RequestObjects;
 
 namespace PersonalFinanceManager.Services
 {
@@ -35,23 +36,36 @@ namespace PersonalFinanceManager.Services
             return budgetPlans.Select(x => Mapper.Map<BudgetPlanListModel>(x)).ToList();
         }
 
-        public IList<PlannedExpenditure> GetPlannedExpendituresByAccountIdForDashboard(int accountId, DateTime startDate, DateTime endDate)
+        //public IList<BudgetPlanListModel> GetBudgetPlans(BudgetPlanSearch search)
+        //{
+        //    var budgetPlans = db.BudgetByExpenditureTypeModels
+        //        .Include(x => x.BudgetPlan)
+        //        .Where(x => (search.AccountId.HasValue && x.AccountId == search.AccountId.Value)
+        //            && (search.StartDate.HasValue && x.BudgetPlan.StartDate.HasValue && x.BudgetPlan.StartDate >= search.StartDate.Value)
+        //            && (search.EndDate.HasValue && !x.BudgetPlan.EndDate.HasValue || x.BudgetPlan.EndDate < search.EndDate.Value)).ToList();
+
+        //    var mappedBudgetPlans = budgetPlans.Select(x => new BudgetPlanListModel()
+        //    {
+
+        //    });
+        //    //{
+        //    //    ExpenditureId = x.ExpenditureTypeId,
+        //    //    StartDate = x.BudgetPlan.StartDate.Value,
+        //    //    EndDate = x.BudgetPlan.EndDate.HasValue ? x.BudgetPlan.EndDate.Value : search.EndDate.Value,
+        //    //    ExpectedValue = x.Budget
+        //    //});
+
+        //    return mappedBudgetPlans.ToList();
+        //}
+
+        public BudgetPlanEditModel GetCurrent()
         {
-            var budgetPlans = db.BudgetByExpenditureTypeModels
-                .Include(x => x.BudgetPlan)
-                .Where(x => x.AccountId == accountId
-                    && (x.BudgetPlan.StartDate.HasValue && x.BudgetPlan.StartDate >= startDate)
-                    && (!x.BudgetPlan.EndDate.HasValue || x.BudgetPlan.EndDate < endDate)).ToList();
-
-            var mappedBudgetPlans = budgetPlans.Select(x => new PlannedExpenditure()
+            var currentBudgetPlan = db.BudgetPlanModels.SingleOrDefault(x => !x.EndDate.HasValue);
+            if (currentBudgetPlan != null)
             {
-                ExpenditureId = x.ExpenditureTypeId,
-                StartDate = x.BudgetPlan.StartDate.Value,
-                EndDate = x.BudgetPlan.EndDate.HasValue ? x.BudgetPlan.EndDate.Value : endDate,
-                ExpectedValue = x.Budget
-            });
-
-            return mappedBudgetPlans.ToList();
+                return GetById(currentBudgetPlan.Id);
+            }
+            return null;
         }
 
         public BudgetPlanEditModel GetById(int id)

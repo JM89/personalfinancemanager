@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -7,29 +8,14 @@ namespace PersonalFinanceManager.Helpers
 {
     public class DateTimeHelper
     {
-        public static Interval GetInterval(DateTime baseDate, DateTimeUnitEnums unit, int nb)
+        public static string GetMonthNameAndYear(DateTime date)
         {
-            DateTime baseStartDate;
+            return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month) + " " + date.Year;
+        }
 
-            if (unit == DateTimeUnitEnums.Months)
-            {
-                baseStartDate = baseDate.AddMonths(-nb);
-            }
-            else 
-            {
-                baseStartDate = baseDate.AddYears(-nb);
-            }
-
-            // First date of the month
-            DateTime startDate = new DateTime(baseStartDate.Year, baseStartDate.Month, 1);
-
-            // Last date of the month
-            DateTime baseEndDate = new DateTime(baseDate.Year, baseDate.Month, 1).AddDays(-1);
-
-            return new Interval() {
-                StartDate = startDate,
-                EndDate = baseEndDate
-            };
+        public static string GetStringFormat(DateTime date)
+        {
+            return date.ToString("dd/MM/yyyy");
         }
     }
 }
