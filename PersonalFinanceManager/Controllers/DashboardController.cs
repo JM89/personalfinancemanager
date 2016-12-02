@@ -1,18 +1,9 @@
-﻿using PersonalFinanceManager.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity;
-using System.Diagnostics;
-using PersonalFinanceManager.Services;
-using PersonalFinanceManager.Entities;
 using PersonalFinanceManager.Models.Expenditure;
-using System.Globalization;
-using PersonalFinanceManager.Models.Account;
 using PersonalFinanceManager.Helpers;
-using PersonalFinanceManager.Models.Helpers.Chart;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Services.RequestObjects;
 using PersonalFinanceManager.Models.Dashboard;
@@ -37,11 +28,16 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult SplitByTypeDashboard()
         {
+            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId = CurrentAccount });
+            var account = _bankAccountService.GetById(CurrentAccount);
+
+            if (!expenditures.Any())
+            {
+                return View("SplitByTypeDashboard", new SplitByTypeDashboardModel() { DisplayDashboard = false, AccountName = account.Name });
+            }
+
             var currentMonthInterval = new Interval(DateTime.Now.AddMonths(1), DateTimeUnitEnums.Months, 1);
             var previousMonthInterval = new Interval(DateTime.Now, DateTimeUnitEnums.Months, 1);
-
-            var account = _bankAccountService.GetById(CurrentAccount);
-            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId = CurrentAccount });
             var expenditureTypesOrder = expenditures.GroupBy(x => x.TypeExpenditureId).ToDictionary(x => x.Key, y => y.Sum(z => z.Cost));
             var expenditureTypes = _expenditureTypeService.GetExpenditureTypes().Join(expenditureTypesOrder, x => x.Id, y => y.Key, (x, y) => new { x.Id, x.Name, x.GraphColor, y.Value }).OrderByDescending(x => x.Value);
             var budgetPlan = _budgetPlanService.GetCurrent(CurrentAccount);
@@ -53,7 +49,8 @@ namespace PersonalFinanceManager.Controllers
                 CurrentMonthName = currentMonthInterval.GetSingleMonthName(),
                 PreviousMonthName = previousMonthInterval.GetSingleMonthName(),
                 FirstMovementDate = DateTimeHelper.GetStringFormat(expenditures.OrderBy(x => x.DateExpenditure).First().DateExpenditure),
-                BudgetPlanName = budgetPlan != null ? budgetPlan.Name : string.Empty
+                BudgetPlanName = budgetPlan != null ? budgetPlan.Name : string.Empty,
+                AccountName = account.Name
             };
 
             var expendituresByTypeModel = new List<SplitByTypeModel>();

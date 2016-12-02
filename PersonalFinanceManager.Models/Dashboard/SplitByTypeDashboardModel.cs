@@ -14,6 +14,8 @@ namespace PersonalFinanceManager.Models.Dashboard
 
         public IList<SplitByTypeModel> SplitByTypes { get; set; }
 
+        public string AccountName { get; set; }
+
         public string CurrencySymbol { get; set; }
 
         public decimal CurrentMonthTotalCost;
