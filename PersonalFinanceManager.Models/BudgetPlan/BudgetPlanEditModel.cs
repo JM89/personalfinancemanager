@@ -1,4 +1,5 @@
-﻿using PersonalFinanceManager.Models.Income;
+﻿using PersonalFinanceManager.Models.Helpers;
+using PersonalFinanceManager.Models.Income;
 using PersonalFinanceManager.Models.Resources;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace PersonalFinanceManager.Models.BudgetPlan
         {
             get
             {
-                return this.CurrencySymbol + this.ExpenditurePreviousMonthValue;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.ExpenditurePreviousMonthValue, this.CurrencySymbol);
             }
         }
         
@@ -52,7 +53,7 @@ namespace PersonalFinanceManager.Models.BudgetPlan
         {
             get
             {
-                return this.CurrencySymbol + this.ExpenditureAverageMonthValue;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.ExpenditureAverageMonthValue, this.CurrencySymbol);
             }
         }
 
@@ -62,7 +63,7 @@ namespace PersonalFinanceManager.Models.BudgetPlan
         {
             get
             {
-                return this.CurrencySymbol + this.IncomePreviousMonthValue;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.IncomePreviousMonthValue, this.CurrencySymbol);
             }
         }
         
@@ -72,7 +73,7 @@ namespace PersonalFinanceManager.Models.BudgetPlan
         {
             get
             {
-                return this.CurrencySymbol + this.IncomeAverageMonthValue;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.IncomeAverageMonthValue, this.CurrencySymbol);
             }
         }
 
@@ -82,7 +83,7 @@ namespace PersonalFinanceManager.Models.BudgetPlan
         {
             get
             {
-                return this.CurrencySymbol + this.TotalPreviousMonthValue;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.TotalPreviousMonthValue, this.CurrencySymbol);
             }
         }
 
@@ -92,7 +93,7 @@ namespace PersonalFinanceManager.Models.BudgetPlan
         {
             get
             {
-                return this.CurrencySymbol + this.TotalAverageMonthValue;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.TotalAverageMonthValue, this.CurrencySymbol);
             }
         }
 

@@ -145,20 +145,20 @@
                                                 @Html.DisplayFor(modelItem => item.ExpenditureTypeName)
                                             </td>
                                             <td align="right"  style="border-left:solid 1px lightgrey;">
-                                                @Html.DisplayFor(modelItem => item.CurrentMonthCost)
+                                                @Html.DisplayFor(modelItem => item.DisplayCurrentMonthCost)
                                                
                                             </td>
                                             <td align="right">
-                                                @Html.DisplayFor(modelItem => item.ExpectedCost)
+                                                @Html.DisplayFor(modelItem => item.DisplayExpectedCost)
                                             </td>
                                             <td align="right">
                                                 @if (item.DifferenceCost > 0)
                                                 {
-                                                    <span style="color:red;">@item.DifferenceCost</span>
+                                                    <span style="color:red;">@item.DisplayDifferenceCost</span>
                                                 }
                                                 else if (item.DifferenceCost < 0)
                                                 {
-                                                    <span style="color:green;">@item.DifferenceCost</span>
+                                                    <span style="color:green;">@item.DisplayDifferenceCost</span>
                                                 }
                                                 else
                                                 {
@@ -166,23 +166,23 @@
                                                 }
                                             </td>
                                             <td align="right" style="border-left:solid 1px lightgrey;">
-                                                @Html.DisplayFor(modelItem => item.PreviousMonthCost)
+                                                @Html.DisplayFor(modelItem => item.DisplayPreviousMonthCost)
                                             </td>
                                             <td align="right">
-                                                @Html.DisplayFor(modelItem => item.ExpectedCost)
+                                                @Html.DisplayFor(modelItem => item.DisplayExpectedCost)
                                             </td>
                                             <td align="right">
                                                 @if (item.DifferenceCost > 0)
                                                 {
-                                                    <span style="color:red;">@item.DifferencePreviousCost</span>
+                                                    <span style="color:red;">@item.DisplayDifferencePreviousCost</span>
                                                 }
                                                 else if (item.DifferenceCost < 0)
                                                 {
-                                                    <span style="color:green;">@item.DifferencePreviousCost</span>
+                                                    <span style="color:green;">@item.DisplayDifferencePreviousCost</span>
                                                 }
                                                 else
                                                 {
-                                                    <span>@item.DifferencePreviousCost</span>
+                                                    <span>@item.DisplayDifferencePreviousCost</span>
                                                 }                                            
                                             </td>
                                             <td align="center">

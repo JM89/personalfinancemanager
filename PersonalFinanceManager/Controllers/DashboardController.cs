@@ -60,18 +60,17 @@ namespace PersonalFinanceManager.Controllers
                 {
                     ExpenditureTypeId = expenditureType.Id,
                     ExpenditureTypeName = expenditureType.Name,
-                    GraphColor = expenditureType.GraphColor
+                    GraphColor = expenditureType.GraphColor,
+                    CurrencySymbol = account.CurrencySymbol
                 };
 
                 var expendituresByType = expenditures.Where(x => x.TypeExpenditureId == expenditureType.Id);
 
                 if (expendituresByType.Any())
                 {
-                    splitByTypeModel.AverageCost = expendituresByType.Average(x => x.Cost);
                     splitByTypeModel.PreviousMonthCost = expendituresByType.Where(x => previousMonthInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost);
                     splitByTypeModel.CurrentMonthCost = expendituresByType.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost);
 
-                    splitByTypeDashboard.AverageTotalCost += splitByTypeModel.AverageCost;
                     splitByTypeDashboard.PreviousMonthTotalCost += splitByTypeModel.PreviousMonthCost;
                     splitByTypeDashboard.CurrentMonthTotalCost += splitByTypeModel.CurrentMonthCost;
                 }
@@ -120,7 +119,9 @@ namespace PersonalFinanceManager.Controllers
             foreach (var intervalByMonth in intervalsByMonth)
             {
                 var expendituresInInterval = expenditures.Where(x => intervalByMonth.Value.IsBetween(x.DateExpenditure));
-                splitOverTime.Values.Add(new SplitByTypeOverTimeValueModel() { MonthName = intervalByMonth.Key, Value = expendituresInInterval.Sum(x => x.Cost).ToString() });
+                splitOverTime.Values.Add(new SplitByTypeOverTimeValueModel() {
+                    MonthName = intervalByMonth.Key,
+                    Value = expendituresInInterval.Sum(x => x.Cost) });
             }
 
             return Json(splitOverTime, JsonRequestBehavior.AllowGet);

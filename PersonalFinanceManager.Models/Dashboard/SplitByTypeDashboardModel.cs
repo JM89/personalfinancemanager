@@ -24,8 +24,6 @@ namespace PersonalFinanceManager.Models.Dashboard
 
         public decimal PreviousMonthTotalCost { get; set; }
 
-        public decimal AverageTotalCost { get; set; }
-
         public string BudgetPlanName { get; set; }
 
         public string FirstMovementDate { get; set; }
@@ -37,7 +35,6 @@ namespace PersonalFinanceManager.Models.Dashboard
         public SplitByTypeDashboardModel()
         {
             this.SplitByTypes = new List<SplitByTypeModel>();
-            this.AverageTotalCost = 0;
             this.CurrentMonthTotalCost = 0;
             this.PreviousMonthTotalCost = 0;
             this.ExpectedTotalCost = 0;

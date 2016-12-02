@@ -1,4 +1,5 @@
 ﻿using PersonalFinanceManager.Models.ExpenditureType;
+using PersonalFinanceManager.Models.Helpers;
 using PersonalFinanceManager.Models.Resources;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace PersonalFinanceManager.Models.BudgetPlan
         {
             get
             {
-                return this.CurrencySymbol + this.PreviousMonthValue;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.PreviousMonthValue, this.CurrencySymbol);
             }
         }
 
@@ -34,7 +35,7 @@ namespace PersonalFinanceManager.Models.BudgetPlan
         {
             get
             {
-                return this.CurrencySymbol + this.AverageMonthValue;
+                return DecimalFormatHelper.GetDisplayDecimalValue(this.AverageMonthValue, this.CurrencySymbol);
             }
         }
 

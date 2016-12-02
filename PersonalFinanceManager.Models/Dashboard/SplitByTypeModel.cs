@@ -1,5 +1,6 @@
 ﻿using PersonalFinanceManager.Models.Expenditure;
 using PersonalFinanceManager.Models.ExpenditureType;
+using PersonalFinanceManager.Models.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace PersonalFinanceManager.Models.Dashboard
         public string ExpenditureTypeName { get; set; }
 
         public string GraphColor { get; set; }
+
+        public string CurrencySymbol { get; set; }
 
         public decimal CurrentMonthCost { get; set; }
 
@@ -44,6 +47,14 @@ namespace PersonalFinanceManager.Models.Dashboard
             }
         }
 
-        public decimal AverageCost { get; set; }
+        public string DisplayExpectedCost => DecimalFormatHelper.GetDisplayDecimalValue(this.ExpectedCost, this.CurrencySymbol);
+
+        public string DisplayCurrentMonthCost => DecimalFormatHelper.GetDisplayDecimalValue(this.CurrentMonthCost, this.CurrencySymbol);
+
+        public string DisplayDifferenceCost => DecimalFormatHelper.GetDisplayDecimalValue(this.DifferenceCost, this.CurrencySymbol);
+
+        public string DisplayPreviousMonthCost => DecimalFormatHelper.GetDisplayDecimalValue(this.PreviousMonthCost, this.CurrencySymbol);
+
+        public string DisplayDifferencePreviousCost => DecimalFormatHelper.GetDisplayDecimalValue(this.DifferencePreviousCost, this.CurrencySymbol);
     }
 }

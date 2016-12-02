@@ -168,6 +168,10 @@ namespace PersonalFinanceManager.Controllers
                 var now = DateTime.Now;
                 var firstExpenditureDate = firstExpenditure.DateExpenditure;
                 nbMonthsSinceFirstExpenditures = ((now.Year - firstExpenditureDate.Year) * 12) + now.Month - firstExpenditureDate.Month;
+                if (nbMonthsSinceFirstExpenditures == 0)
+                {
+                    nbMonthsSinceFirstExpenditures = 1;
+                }
             }
 
             decimal expenditurePreviousMonthValue = 0;
