@@ -12,13 +12,13 @@ using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
-    public class BankAccountService: IDisposable, IBankAccountService
+    public class BankAccountService: IBankAccountService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public BankAccountService()
+        public BankAccountService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
 
         public void CreateBankAccount(AccountEditModel accountEditModel, string userId)
@@ -29,15 +29,15 @@ namespace PersonalFinanceManager.Services
 
             accountModel.User_Id = user.Id;
             accountModel.CurrentBalance = accountModel.InitialBalance;
-            accountModel.IsFavorite = !db.AccountModels.Any(x => x.User_Id == userId);
+            accountModel.IsFavorite = !_db.AccountModels.Any(x => x.User_Id == userId);
             
-            db.AccountModels.Add(accountModel);
-            db.SaveChanges();
+            _db.AccountModels.Add(accountModel);
+            _db.SaveChanges();
         }
 
         public IList<AccountListModel> GetAccountsByUser(string userId)
         {
-            var accounts = db.AccountModels
+            var accounts = _db.AccountModels
                 .Include(u => u.Currency)
                 .Include(u => u.Bank)
                 .Where(x => x.User_Id == userId)
@@ -47,9 +47,9 @@ namespace PersonalFinanceManager.Services
 
             accountsModel.ForEach(account =>
             {
-                var hasExpenditures = db.ExpenditureModels.Any(x => x.AccountId == account.Id);
-                var hasIncome = db.IncomeModels.Any(x => x.AccountId == account.Id);
-                var hasAtmWithdraw = db.AtmWithdrawModels.Any(x => x.AccountId == account.Id);
+                var hasExpenditures = _db.ExpenditureModels.Any(x => x.AccountId == account.Id);
+                var hasIncome = _db.IncomeModels.Any(x => x.AccountId == account.Id);
+                var hasAtmWithdraw = _db.AtmWithdrawModels.Any(x => x.AccountId == account.Id);
 
                 account.CanBeDeleted = !hasExpenditures && !hasIncome && !hasAtmWithdraw;
             });
@@ -59,14 +59,14 @@ namespace PersonalFinanceManager.Services
         
         public AccountEditModel GetById(int id)
         {
-            var account = db.AccountModels.Include(x => x.Currency).Include(x => x.Bank).SingleOrDefault(x => x.Id == id);
+            var account = _db.AccountModels.Include(x => x.Currency).Include(x => x.Bank).SingleOrDefault(x => x.Id == id);
 
             if (account == null)
             {
                 return null;
             }
 
-            var favoriteBankDetails = db.BankBranchModels.Single(x => x.BankId == account.BankId);
+            var favoriteBankDetails = _db.BankBranchModels.Single(x => x.BankId == account.BankId);
 
             var accountModel = Mapper.Map<AccountEditModel>(account);
 
@@ -82,38 +82,33 @@ namespace PersonalFinanceManager.Services
 
         public void EditBankAccount(AccountEditModel accountEditModel, string userId)
         {
-            var accountModel = db.AccountModels.SingleOrDefault(x => x.Id == accountEditModel.Id);
+            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == accountEditModel.Id);
 
             accountModel.Name = accountEditModel.Name;
             accountModel.CurrencyId = accountEditModel.CurrencyId;
             accountModel.BankId = accountEditModel.BankId;
 
-            db.Entry(accountModel).State = EntityState.Modified;
+            _db.Entry(accountModel).State = EntityState.Modified;
 
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         public void DeleteBankAccount(int id)
         {
-            AccountModel accountModel = db.AccountModels.Find(id);
-            db.AccountModels.Remove(accountModel);
-            db.SaveChanges();
+            AccountModel accountModel = _db.AccountModels.Find(id);
+            _db.AccountModels.Remove(accountModel);
+            _db.SaveChanges();
         }
         
         public void SetAsFavorite(int id)
         {
-            foreach(var account in db.AccountModels)
+            foreach(var account in _db.AccountModels)
             {
                 account.IsFavorite = account.Id == id;
-                db.Entry(account).State = EntityState.Modified;
+                _db.Entry(account).State = EntityState.Modified;
             }
 
-            db.SaveChanges();
-        }
-
-        public void Dispose()
-        {
-            db.Dispose();
+            _db.SaveChanges();
         }
     }
 }

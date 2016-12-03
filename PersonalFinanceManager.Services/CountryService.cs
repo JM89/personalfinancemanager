@@ -15,22 +15,22 @@ namespace PersonalFinanceManager.Services
 {
     public class CountryService : ICountryService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public CountryService()
+        public CountryService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
 
         public IList<CountryListModel> GetCountries()
         {
-            var countries = db.CountryModels.ToList();
+            var countries = _db.CountryModels.ToList();
 
             var countriesModel = countries.Select(x => Mapper.Map<CountryListModel>(x)).ToList();
 
             countriesModel.ForEach(country =>
             {
-                country.CanBeDeleted = !db.BankModels.Any(x => x.CountryId == country.Id);
+                country.CanBeDeleted = !_db.BankModels.Any(x => x.CountryId == country.Id);
             });
 
             return countriesModel;
@@ -38,20 +38,20 @@ namespace PersonalFinanceManager.Services
 
         public void Dispose()
         {
-            db.Dispose();
+            _db.Dispose();
         }
 
         public void CreateCountry(CountryEditModel countryEditModel)
         {
             var countryModel = Mapper.Map<CountryModel>(countryEditModel);
 
-            db.CountryModels.Add(countryModel);
-            db.SaveChanges();
+            _db.CountryModels.Add(countryModel);
+            _db.SaveChanges();
         }
 
         public CountryEditModel GetById(int id)
         {
-            var country = db.CountryModels.SingleOrDefault(x => x.Id == id);
+            var country = _db.CountryModels.SingleOrDefault(x => x.Id == id);
 
             if (country == null)
             {
@@ -63,20 +63,20 @@ namespace PersonalFinanceManager.Services
 
         public void EditCountry(CountryEditModel countryEditModel)
         {
-            var countryModel = db.CountryModels.SingleOrDefault(x => x.Id == countryEditModel.Id);
+            var countryModel = _db.CountryModels.SingleOrDefault(x => x.Id == countryEditModel.Id);
 
             countryModel.Name = countryEditModel.Name;
 
-            db.Entry(countryModel).State = EntityState.Modified;
+            _db.Entry(countryModel).State = EntityState.Modified;
 
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         public void DeleteCountry(int id)
         {
-            CountryModel countryModel = db.CountryModels.Find(id);
-            db.CountryModels.Remove(countryModel);
-            db.SaveChanges();
+            CountryModel countryModel = _db.CountryModels.Find(id);
+            _db.CountryModels.Remove(countryModel);
+            _db.SaveChanges();
         }
     }
 }

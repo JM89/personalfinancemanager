@@ -67,7 +67,6 @@
     <Compile Include="RequestObjects\BudgetPlanSearch.cs" />
     <Compile Include="RequestObjects\ExpenditureSearch.cs" />
     <Compile Include="UserProfileService.cs" />
-    <Compile Include="HistoricMovementService.cs" />
     <Compile Include="BankService.cs" />
     <Compile Include="CountryService.cs" />
     <Compile Include="CurrencyService.cs" />
@@ -82,7 +81,6 @@
     <Compile Include="ExpenditureTypeService.cs" />
     <Compile Include="Extensions\AtmWithdrawExtensions.cs" />
     <Compile Include="Extensions\AccountExtensions.cs" />
-    <Compile Include="FrequencyService.cs" />
     <Compile Include="IncomeService.cs" />
     <Compile Include="Core\IBaseService.cs" />
     <Compile Include="Interfaces\IAtmWithdrawService.cs" />
@@ -96,7 +94,6 @@
     <Compile Include="Interfaces\IIncomeService.cs" />
     <Compile Include="Interfaces\IPaymentMethodService.cs" />
     <Compile Include="PaymentMethodService.cs" />
-    <Compile Include="PeriodicOutcomeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

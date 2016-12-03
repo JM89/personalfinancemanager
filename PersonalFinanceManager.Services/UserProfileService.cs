@@ -16,24 +16,24 @@ namespace PersonalFinanceManager.Services
 {
     public class UserProfileService : IUserProfileService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public UserProfileService()
+        public UserProfileService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
         
         public void CreateUserProfile(UserProfileEditModel userProfileEditModel)
         {
             var userProfile = Mapper.Map<UserProfileModel>(userProfileEditModel);
 
-            db.UserProfileModels.Add(userProfile);
-            db.SaveChanges();
+            _db.UserProfileModels.Add(userProfile);
+            _db.SaveChanges();
         }
 
         public UserProfileEditModel GetByUserId(string userId)
         {
-            var userProfile = db.UserProfileModels.SingleOrDefault(x => x.User_Id == userId);
+            var userProfile = _db.UserProfileModels.SingleOrDefault(x => x.User_Id == userId);
             if (userProfile != null)
             {
                 return Mapper.Map<UserProfileEditModel>(userProfile);
@@ -43,16 +43,16 @@ namespace PersonalFinanceManager.Services
 
         public void EditUserProfile(UserProfileEditModel userProfileEditModel)
         {
-            var userProfile = db.UserProfileModels.AsNoTracking().SingleOrDefault(x => x.Id == userProfileEditModel.Id);
+            var userProfile = _db.UserProfileModels.AsNoTracking().SingleOrDefault(x => x.Id == userProfileEditModel.Id);
             userProfile = Mapper.Map<UserProfileModel>(userProfileEditModel);
 
-            db.Entry(userProfile).State = EntityState.Modified;
-            db.SaveChanges();
+            _db.Entry(userProfile).State = EntityState.Modified;
+            _db.SaveChanges();
         }
 
         public UserProfileEditModel GetById(int id)
         {
-            var userProfile = db.UserProfileModels.Single(x => x.Id == id);
+            var userProfile = _db.UserProfileModels.Single(x => x.Id == id);
             return Mapper.Map<UserProfileEditModel>(userProfile);
         }
     }

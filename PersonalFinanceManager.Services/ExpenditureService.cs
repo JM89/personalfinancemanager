@@ -16,22 +16,22 @@ namespace PersonalFinanceManager.Services
 {
     public class ExpenditureService : IExpenditureService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public ExpenditureService()
+        public ExpenditureService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
 
         public void CreateExpenditure(ExpenditureEditModel expenditureEditModel)
         {
             var expenditureModel = Mapper.Map<ExpenditureModel>(expenditureEditModel);
 
-            db.ExpenditureModels.Add(expenditureModel);
+            _db.ExpenditureModels.Add(expenditureModel);
 
-            db.SaveChanges();
+            _db.SaveChanges();
 
-            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(db, expenditureModel);
+            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_db, expenditureModel);
 
             strategy.Debit();
         }
@@ -39,7 +39,7 @@ namespace PersonalFinanceManager.Services
         
         public void EditExpenditure(ExpenditureEditModel expenditureEditModel)
         {
-            var expenditureModel = db.ExpenditureModels.Single(x => x.Id == expenditureEditModel.Id);
+            var expenditureModel = _db.ExpenditureModels.Single(x => x.Id == expenditureEditModel.Id);
 
             var oldExpenditureModel = new ExpenditureModel() {
                 AccountId = expenditureModel.AccountId, 
@@ -51,7 +51,7 @@ namespace PersonalFinanceManager.Services
                 TargetInternalAccountId = expenditureModel.TargetInternalAccountId
             };
             
-            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(db, oldExpenditureModel);
+            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_db, oldExpenditureModel);
 
             expenditureModel.DateExpenditure = expenditureEditModel.DateExpenditure;
             expenditureModel.Description = expenditureEditModel.Description;
@@ -63,28 +63,28 @@ namespace PersonalFinanceManager.Services
             expenditureModel.AtmWithdrawId = expenditureEditModel.AtmWithdrawId;
             expenditureModel.TargetInternalAccountId = expenditureEditModel.TargetInternalAccountId;
 
-            db.Entry(expenditureModel).State = EntityState.Modified;
+            _db.Entry(expenditureModel).State = EntityState.Modified;
 
-            db.SaveChanges();
+            _db.SaveChanges();
             
             strategy.UpdateDebit(expenditureModel);
         }
 
         public void DeleteExpenditure(int id)
         {
-            ExpenditureModel expenditureModel = db.ExpenditureModels.Find(id);
+            ExpenditureModel expenditureModel = _db.ExpenditureModels.Find(id);
 
-            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(db, expenditureModel);
+            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_db, expenditureModel);
 
             strategy.Credit();
 
-            db.ExpenditureModels.Remove(expenditureModel);
-            db.SaveChanges();
+            _db.ExpenditureModels.Remove(expenditureModel);
+            _db.SaveChanges();
         }
 
         public ExpenditureEditModel GetById(int id)
         {
-            var expenditure = db.ExpenditureModels
+            var expenditure = _db.ExpenditureModels
                                     .Include(u => u.Account.Currency)
                                     .Include(u => u.TypeExpenditure)
                                     .Include(u => u.PaymentMethod).SingleOrDefault(x => x.Id == id);
@@ -99,15 +99,15 @@ namespace PersonalFinanceManager.Services
 
         public void ChangeDebitStatus(int id, bool debitStatus)
         {
-            var expenditure = db.ExpenditureModels.Single(x => x.Id == id);
+            var expenditure = _db.ExpenditureModels.Single(x => x.Id == id);
             expenditure.HasBeenAlreadyDebited = debitStatus;
-            db.Entry(expenditure).State = EntityState.Modified;
-            db.SaveChanges();
+            _db.Entry(expenditure).State = EntityState.Modified;
+            _db.SaveChanges();
         }
 
         public IList<ExpenditureListModel> GetExpenditures(ExpenditureSearch search)
         {
-            var expenditures = db.ExpenditureModels
+            var expenditures = _db.ExpenditureModels
                 .Where(x =>
                     (!search.AccountId.HasValue || (search.AccountId.HasValue && x.AccountId == search.AccountId.Value))
                     && (!search.StartDate.HasValue || (search.StartDate.HasValue && x.DateExpenditure >= search.StartDate))

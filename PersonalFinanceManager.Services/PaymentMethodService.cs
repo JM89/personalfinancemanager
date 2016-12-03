@@ -16,18 +16,18 @@ namespace PersonalFinanceManager.Services
 {
     public class PaymentMethodService : IPaymentMethodService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public PaymentMethodService()
+        public PaymentMethodService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
-
+       
         public IList<PaymentMethodListModel> GetPaymentMethods()
         {
-            var expenditures = db.ExpenditureModels;
+            var expenditures = _db.ExpenditureModels;
 
-            var paymentMethods = db.PaymentMethodModels.ToList();
+            var paymentMethods = _db.PaymentMethodModels.ToList();
 
             var paymentMethodsModel = paymentMethods.Select(x => Mapper.Map<PaymentMethodListModel>(x)).ToList();
 
@@ -39,11 +39,6 @@ namespace PersonalFinanceManager.Services
             });
 
             return paymentMethodsModel;
-        }
-
-        public void Dispose()
-        {
-            db.Dispose();
         }
     }
 }

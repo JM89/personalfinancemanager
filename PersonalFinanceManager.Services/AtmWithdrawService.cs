@@ -20,21 +20,21 @@ namespace PersonalFinanceManager.Services
 {
     public class AtmWithdrawService : IAtmWithdrawService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public AtmWithdrawService()
+        public AtmWithdrawService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
-
+        
         public IList<AtmWithdrawListModel> GetAtmWithdrawsByAccountId(int accountId)
         {
-            var atmWithdraws = db.AtmWithdrawModels
+            var atmWithdraws = _db.AtmWithdrawModels
                 .Include(u => u.Account.Currency)
                 .Where(x => x.Account.Id == accountId)
                 .ToList();
 
-            var expenditures = db.ExpenditureModels;
+            var expenditures = _db.ExpenditureModels;
 
             var mappedAtmWithdraws = atmWithdraws.Select(x => Mapper.Map<AtmWithdrawListModel>(x)).ToList();
 
@@ -54,23 +54,23 @@ namespace PersonalFinanceManager.Services
             atmWithdrawModel.CurrentAmount = atmWithdrawEditModel.InitialAmount;
             atmWithdrawModel.IsClosed = false;
 
-            db.AtmWithdrawModels.Add(atmWithdrawModel);
+            _db.AtmWithdrawModels.Add(atmWithdrawModel);
 
-            db.SaveChanges();
+            _db.SaveChanges();
 
-            var accountModel = db.AccountModels.SingleOrDefault(x => x.Id == atmWithdrawModel.AccountId);
+            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == atmWithdrawModel.AccountId);
             accountModel.CurrentBalance -= atmWithdrawModel.InitialAmount;
 
-            db.Entry(accountModel).State = EntityState.Modified;
+            _db.Entry(accountModel).State = EntityState.Modified;
 
-            HistoricMovementHelper.SaveDebitMovement(db, atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+            HistoricMovementHelper.SaveDebitMovement(_db, atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
 
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         public AtmWithdrawEditModel GetById(int id)
         {
-            var atmWithdraw = db.AtmWithdrawModels.SingleOrDefault(x => x.Id == id);
+            var atmWithdraw = _db.AtmWithdrawModels.SingleOrDefault(x => x.Id == id);
 
             if (atmWithdraw == null)
             {
@@ -82,7 +82,7 @@ namespace PersonalFinanceManager.Services
 
         public void EditAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel)
         {
-            var atmWithdrawModel = db.AtmWithdrawModels.SingleOrDefault(x => x.Id == atmWithdrawEditModel.Id);
+            var atmWithdrawModel = _db.AtmWithdrawModels.SingleOrDefault(x => x.Id == atmWithdrawEditModel.Id);
 
             var oldCost = atmWithdrawModel.InitialAmount;
             atmWithdrawModel.InitialAmount = atmWithdrawEditModel.InitialAmount;
@@ -90,62 +90,62 @@ namespace PersonalFinanceManager.Services
             atmWithdrawModel.DateExpenditure = atmWithdrawEditModel.DateExpenditure;
             atmWithdrawModel.HasBeenAlreadyDebited = atmWithdrawEditModel.HasBeenAlreadyDebited;
 
-            db.Entry(atmWithdrawModel).State = EntityState.Modified;
+            _db.Entry(atmWithdrawModel).State = EntityState.Modified;
 
-            db.SaveChanges();
+            _db.SaveChanges();
 
             if (oldCost != atmWithdrawModel.InitialAmount)
             {
-                var accountModel = db.AccountModels.SingleOrDefault(x => x.Id == atmWithdrawModel.AccountId);
+                var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == atmWithdrawModel.AccountId);
                 accountModel.CurrentBalance += oldCost;
                 accountModel.CurrentBalance -= atmWithdrawModel.InitialAmount;
 
-                db.Entry(accountModel).State = EntityState.Modified;
+                _db.Entry(accountModel).State = EntityState.Modified;
 
-                HistoricMovementHelper.SaveCreditMovement(db, atmWithdrawModel.AccountId, oldCost, TargetOptions.Account, MovementType.AtmWithdraw);
-                HistoricMovementHelper.SaveDebitMovement(db, atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+                HistoricMovementHelper.SaveCreditMovement(_db, atmWithdrawModel.AccountId, oldCost, TargetOptions.Account, MovementType.AtmWithdraw);
+                HistoricMovementHelper.SaveDebitMovement(_db, atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
             }
 
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
 
         public void CloseAtmWithdraw(int id)
         {
-            var atmWithdrawModel = db.AtmWithdrawModels.Single(x => x.Id == id);
+            var atmWithdrawModel = _db.AtmWithdrawModels.Single(x => x.Id == id);
 
             atmWithdrawModel.IsClosed = true;
 
-            db.Entry(atmWithdrawModel).State = EntityState.Modified;
-            db.SaveChanges();
+            _db.Entry(atmWithdrawModel).State = EntityState.Modified;
+            _db.SaveChanges();
         }
 
         public void DeleteAtmWithdraw(int id)
         {
-            AtmWithdrawModel atmWithdrawModel = db.AtmWithdrawModels.Find(id);
+            AtmWithdrawModel atmWithdrawModel = _db.AtmWithdrawModels.Find(id);
 
-            var accountModel = db.AccountModels.SingleOrDefault(x => x.Id == atmWithdrawModel.AccountId);
+            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == atmWithdrawModel.AccountId);
             accountModel.CurrentBalance += atmWithdrawModel.InitialAmount;
-            db.Entry(accountModel).State = EntityState.Modified;
+            _db.Entry(accountModel).State = EntityState.Modified;
 
-            HistoricMovementHelper.SaveCreditMovement(db, atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+            HistoricMovementHelper.SaveCreditMovement(_db, atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
 
-            db.AtmWithdrawModels.Remove(atmWithdrawModel);
+            _db.AtmWithdrawModels.Remove(atmWithdrawModel);
 
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         public void ChangeDebitStatus(int id, bool debitStatus)
         {
-            AtmWithdrawModel atmWithdrawModel = db.AtmWithdrawModels.SingleOrDefault(x => x.Id == id);
+            AtmWithdrawModel atmWithdrawModel = _db.AtmWithdrawModels.SingleOrDefault(x => x.Id == id);
             atmWithdrawModel.HasBeenAlreadyDebited = debitStatus;
-            db.Entry(atmWithdrawModel).State = EntityState.Modified;
-            db.SaveChanges();
+            _db.Entry(atmWithdrawModel).State = EntityState.Modified;
+            _db.SaveChanges();
         }
 
         public void Dispose()
         {
-            db.Dispose();
+            _db.Dispose();
         }
     }
 }

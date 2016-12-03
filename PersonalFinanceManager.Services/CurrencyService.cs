@@ -15,18 +15,18 @@ namespace PersonalFinanceManager.Services
 {
     public class CurrencyService : ICurrencyService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public CurrencyService()
+        public CurrencyService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
 
         public IList<CurrencyListModel> GetCurrencies()
         {
-            var currencies = db.CurrencyModels.ToList();
+            var currencies = _db.CurrencyModels.ToList();
 
-            var accounts = db.AccountModels;
+            var accounts = _db.AccountModels;
 
             var currenciesModel = currencies.Select(x => Mapper.Map<CurrencyListModel>(x)).ToList();
 
@@ -40,7 +40,7 @@ namespace PersonalFinanceManager.Services
 
         public CurrencyEditModel GetById(int id)
         {
-            var currency = db.CurrencyModels.SingleOrDefault(x => x.Id == id);
+            var currency = _db.CurrencyModels.SingleOrDefault(x => x.Id == id);
 
             if (currency == null)
             {
@@ -54,31 +54,26 @@ namespace PersonalFinanceManager.Services
         {
             var currencyModel = Mapper.Map<CurrencyModel>(currencyEditModel);
 
-            db.CurrencyModels.Add(currencyModel);
-            db.SaveChanges();
+            _db.CurrencyModels.Add(currencyModel);
+            _db.SaveChanges();
         }
 
         public void EditCurrency(CurrencyEditModel currencyEditModel)
         {
-            var currencyModel = db.CurrencyModels.SingleOrDefault(x => x.Id == currencyEditModel.Id);
+            var currencyModel = _db.CurrencyModels.SingleOrDefault(x => x.Id == currencyEditModel.Id);
             currencyModel.Name = currencyEditModel.Name;
             currencyModel.Symbol = currencyEditModel.Symbol;
 
-            db.Entry(currencyModel).State = EntityState.Modified;
+            _db.Entry(currencyModel).State = EntityState.Modified;
 
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         public void DeleteCurrency(int id)
         {
-            CurrencyModel currencyModel = db.CurrencyModels.Find(id);
-            db.CurrencyModels.Remove(currencyModel);
-            db.SaveChanges();
-        }
-
-        public void Dispose()
-        {
-            db.Dispose();
+            CurrencyModel currencyModel = _db.CurrencyModels.Find(id);
+            _db.CurrencyModels.Remove(currencyModel);
+            _db.SaveChanges();
         }
     }
 }

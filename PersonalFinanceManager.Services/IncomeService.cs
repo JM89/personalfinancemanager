@@ -19,26 +19,26 @@ namespace PersonalFinanceManager.Services
 {
     public class IncomeService: IDisposable, IIncomeService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public IncomeService()
+        public IncomeService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
 
         public void CreateIncome(IncomeEditModel incomeEditModel)
         {
             var incomeModel = Mapper.Map<IncomeModel>(incomeEditModel);
-            db.IncomeModels.Add(incomeModel);
-            db.SaveChanges();
+            _db.IncomeModels.Add(incomeModel);
+            _db.SaveChanges();
 
-            var accountModel = db.AccountModels.SingleOrDefault(x => x.Id == incomeModel.AccountId);
-            accountModel.Credit(db, incomeModel.Cost, MovementType.Income);
+            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == incomeModel.AccountId);
+            accountModel.Credit(_db, incomeModel.Cost, MovementType.Income);
         }
 
         public IList<IncomeListModel> GetIncomes(int accountId)
         {
-            var incomes = db.IncomeModels.Include(u => u.Account.Currency).Where(x => x.AccountId == accountId).ToList();
+            var incomes = _db.IncomeModels.Include(u => u.Account.Currency).Where(x => x.AccountId == accountId).ToList();
 
             var incomesModel = incomes.Select(x => Mapper.Map<IncomeListModel>(x));
             
@@ -47,7 +47,7 @@ namespace PersonalFinanceManager.Services
 
         public IncomeEditModel GetById(int id)
         {
-            var income = db.IncomeModels.SingleOrDefault(x => x.Id == id);
+            var income = _db.IncomeModels.SingleOrDefault(x => x.Id == id);
 
             if (income == null)
             {
@@ -59,7 +59,7 @@ namespace PersonalFinanceManager.Services
 
         public void EditIncome(IncomeEditModel incomeEditModel)
         {
-            var income = db.IncomeModels.Single(x => x.Id == incomeEditModel.Id);
+            var income = _db.IncomeModels.Single(x => x.Id == incomeEditModel.Id);
 
             var oldCost = income.Cost;
 
@@ -68,31 +68,31 @@ namespace PersonalFinanceManager.Services
             income.AccountId = incomeEditModel.AccountId;
             income.DateIncome = incomeEditModel.DateIncome;
 
-            db.Entry(income).State = EntityState.Modified;
+            _db.Entry(income).State = EntityState.Modified;
 
-            db.SaveChanges();
+            _db.SaveChanges();
 
             if (oldCost != income.Cost)
             {
-                var account = db.AccountModels.SingleOrDefault(x => x.Id == income.AccountId);
-                account.Credit(db, oldCost, MovementType.Income);
-                account.Debit(db, income.Cost, MovementType.Income);
+                var account = _db.AccountModels.SingleOrDefault(x => x.Id == income.AccountId);
+                account.Credit(_db, oldCost, MovementType.Income);
+                account.Debit(_db, income.Cost, MovementType.Income);
             }
         }
 
         public void DeleteIncome(int id)
         {
-            IncomeModel incomeModel = db.IncomeModels.Find(id);
-            db.IncomeModels.Remove(incomeModel);
-            db.SaveChanges();
+            IncomeModel incomeModel = _db.IncomeModels.Find(id);
+            _db.IncomeModels.Remove(incomeModel);
+            _db.SaveChanges();
 
-            var accountModel = db.AccountModels.SingleOrDefault(x => x.Id == incomeModel.AccountId);
-            accountModel.Debit(db, incomeModel.Cost, MovementType.Income);
+            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == incomeModel.AccountId);
+            accountModel.Debit(_db, incomeModel.Cost, MovementType.Income);
         }
 
         public void Dispose()
         {
-            db.Dispose();
+            _db.Dispose();
         }
     }
 }

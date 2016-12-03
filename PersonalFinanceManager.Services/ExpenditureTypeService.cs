@@ -15,18 +15,18 @@ namespace PersonalFinanceManager.Services
 {
     public class ExpenditureTypeService : IExpenditureTypeService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public ExpenditureTypeService()
+        public ExpenditureTypeService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
 
         public IList<ExpenditureTypeListModel> GetExpenditureTypes()
         {
-            var expenditures = db.ExpenditureModels;
+            var expenditures = _db.ExpenditureModels;
 
-            var expenditureTypes = db.ExpenditureTypeModels.ToList();
+            var expenditureTypes = _db.ExpenditureTypeModels.ToList();
 
             var expenditureTypesModel = expenditureTypes.Select(x => Mapper.Map<ExpenditureTypeListModel>(x)).ToList();
 
@@ -40,7 +40,7 @@ namespace PersonalFinanceManager.Services
 
         public ExpenditureTypeEditModel GetById(int id)
         {
-            var expenditureType = db.ExpenditureTypeModels.SingleOrDefault(x => x.Id == id);
+            var expenditureType = _db.ExpenditureTypeModels.SingleOrDefault(x => x.Id == id);
 
             if (expenditureType == null)
             {
@@ -54,32 +54,27 @@ namespace PersonalFinanceManager.Services
         {
             var expenditureTypeModel = Mapper.Map<ExpenditureTypeModel>(expenditureTypeEditModel);
 
-            db.ExpenditureTypeModels.Add(expenditureTypeModel);
-            db.SaveChanges();
+            _db.ExpenditureTypeModels.Add(expenditureTypeModel);
+            _db.SaveChanges();
         }
 
         public void EditExpenditureType(ExpenditureTypeEditModel expenditureTypeEditModel)
         {
-            var expenditureTypeModel = db.ExpenditureTypeModels.SingleOrDefault(x => x.Id == expenditureTypeEditModel.Id);
+            var expenditureTypeModel = _db.ExpenditureTypeModels.SingleOrDefault(x => x.Id == expenditureTypeEditModel.Id);
             expenditureTypeModel.Name = expenditureTypeEditModel.Name;
             expenditureTypeModel.GraphColor = expenditureTypeEditModel.GraphColor;
             expenditureTypeModel.ShowOnDashboard = expenditureTypeEditModel.ShowOnDashboard;
 
-            db.Entry(expenditureTypeModel).State = EntityState.Modified;
+            _db.Entry(expenditureTypeModel).State = EntityState.Modified;
 
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         public void DeleteExpenditureType(int id)
         {
-            ExpenditureTypeModel expenditureTypeModel = db.ExpenditureTypeModels.Find(id);
-            db.ExpenditureTypeModels.Remove(expenditureTypeModel);
-            db.SaveChanges();
-        }
-
-        public void Dispose()
-        {
-            db.Dispose();
+            ExpenditureTypeModel expenditureTypeModel = _db.ExpenditureTypeModels.Find(id);
+            _db.ExpenditureTypeModels.Remove(expenditureTypeModel);
+            _db.SaveChanges();
         }
     }
 }

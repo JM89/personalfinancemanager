@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNet.Identity;
+using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Models.Account;
 using PersonalFinanceManager.Services;
+using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,17 @@ namespace PersonalFinanceManager.Controllers
 {
     public class BaseController : Controller
     {
+        private readonly IBankAccountService _baseBankAccountService;
+
+        public BaseController()
+        {
+        }
+
+        public BaseController(IBankAccountService bankAccountService)
+        {
+            this._baseBankAccountService = bankAccountService;
+        }
+
         protected override void OnException(ExceptionContext filterContext)
         {
             var ex = filterContext.Exception;
@@ -56,9 +69,7 @@ namespace PersonalFinanceManager.Controllers
                 }
                 else
                 {
-                    var bankAccountService = new BankAccountService();
-
-                    var firstAccount = bankAccountService.GetAccountsByUser(CurrentUser).FirstOrDefault();
+                    var firstAccount = _baseBankAccountService.GetAccountsByUser(CurrentUser).FirstOrDefault();
 
                     if (firstAccount != null)
                     {
@@ -76,9 +87,7 @@ namespace PersonalFinanceManager.Controllers
         {
             int accountId = CurrentAccount;
 
-            var bankAccountService = new BankAccountService();
-
-            var account = bankAccountService.GetById(accountId);
+            var account = _baseBankAccountService.GetById(accountId);
             var accountName = account.Name;
             var accountCurrentAmount = account.CurrencySymbol + account.CurrentBalance;
 

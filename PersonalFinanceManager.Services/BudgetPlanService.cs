@@ -18,11 +18,11 @@ namespace PersonalFinanceManager.Services
 {
     public class BudgetPlanService : IBudgetPlanService
     {
-        ApplicationDbContext db;
+        private ApplicationDbContext _db;
 
-        public BudgetPlanService()
+        public BudgetPlanService(ApplicationDbContext db)
         {
-            db = new ApplicationDbContext();
+            this._db = db;
         }
 
         /// <summary>
@@ -31,18 +31,18 @@ namespace PersonalFinanceManager.Services
         /// <returns></returns>
         public IList<BudgetPlanListModel> GetBudgetPlans(int accountId)
         {
-            var budgetPlansForAccount = db.BudgetByExpenditureTypeModels.Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+            var budgetPlansForAccount = _db.BudgetByExpenditureTypeModels.Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
 
-            var budgetPlans = db.BudgetPlanModels.Where(x => budgetPlansForAccount.Contains(x.Id)).ToList();
+            var budgetPlans = _db.BudgetPlanModels.Where(x => budgetPlansForAccount.Contains(x.Id)).ToList();
 
             return budgetPlans.Select(x => Mapper.Map<BudgetPlanListModel>(x)).ToList();
         }
         
         public BudgetPlanEditModel GetCurrent(int accountId)
         {
-            var budgetPlansForAccount = db.BudgetByExpenditureTypeModels.Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+            var budgetPlansForAccount = _db.BudgetByExpenditureTypeModels.Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
 
-            var currentBudgetPlan = db.BudgetPlanModels.SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && !x.EndDate.HasValue);
+            var currentBudgetPlan = _db.BudgetPlanModels.SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && !x.EndDate.HasValue);
             if (currentBudgetPlan != null)
             {
                 return GetById(currentBudgetPlan.Id);
@@ -52,13 +52,13 @@ namespace PersonalFinanceManager.Services
 
         public BudgetPlanEditModel GetById(int id)
         {
-            var budgetPlan = db.BudgetPlanModels.SingleOrDefault(x => x.Id == id);
+            var budgetPlan = _db.BudgetPlanModels.SingleOrDefault(x => x.Id == id);
             if (budgetPlan == null)
             {
                 return null;
             }
 
-            var budgetPlanExpenditures = db.BudgetByExpenditureTypeModels
+            var budgetPlanExpenditures = _db.BudgetByExpenditureTypeModels
                 .Include(x => x.ExpenditureType)
                 .Where(x => x.BudgetPlanId == id);
 
@@ -88,8 +88,8 @@ namespace PersonalFinanceManager.Services
         public void CreateBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId)
         {
             var budgetPlanModel = Mapper.Map<BudgetPlanModel>(budgetPlanEditModel);
-            db.BudgetPlanModels.Add(budgetPlanModel);
-            db.SaveChanges();
+            _db.BudgetPlanModels.Add(budgetPlanModel);
+            _db.SaveChanges();
 
             var plannedExpenditures = new List<BudgetByExpenditureTypeModel>();
             foreach(var expenditureType in budgetPlanEditModel.ExpenditureTypes)
@@ -103,9 +103,9 @@ namespace PersonalFinanceManager.Services
                 // It might evolve later so for now, I keep it here, independently from BudgetByExpenditureTypeModel.
                 plannedExpenditure.AccountId = accountId;
 
-                db.BudgetByExpenditureTypeModels.Add(plannedExpenditure);
+                _db.BudgetByExpenditureTypeModels.Add(plannedExpenditure);
             }
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         /// <summary>
@@ -114,10 +114,10 @@ namespace PersonalFinanceManager.Services
         /// <param name="budgetPlanEditModel"></param>
         public void EditBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId)
         {
-            var budgetPlan = db.BudgetPlanModels.SingleOrDefault(x => x.Id == budgetPlanEditModel.Id);
+            var budgetPlan = _db.BudgetPlanModels.SingleOrDefault(x => x.Id == budgetPlanEditModel.Id);
             budgetPlan.Name = budgetPlanEditModel.Name;
 
-            var existingBudgetPlanExpenditures = db.BudgetByExpenditureTypeModels
+            var existingBudgetPlanExpenditures = _db.BudgetByExpenditureTypeModels
                   .Include(x => x.ExpenditureType)
                   .Where(x => x.BudgetPlanId == budgetPlanEditModel.Id);
 
@@ -138,7 +138,7 @@ namespace PersonalFinanceManager.Services
                         BudgetPlanId = budgetPlanEditModel.Id,
                         AccountId = accountId
                     };
-                    db.BudgetByExpenditureTypeModels.Add(plannedExpenditure);
+                    _db.BudgetByExpenditureTypeModels.Add(plannedExpenditure);
                 }
                 else
                 {
@@ -155,37 +155,30 @@ namespace PersonalFinanceManager.Services
             //    db.BudgetByExpenditureTypeModels.Remove(budgetExpenditureTypeToRemove);
             //}
 
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         public void StartBudgetPlan(int value)
         {
-            var currentBudgetPlan = db.BudgetPlanModels.SingleOrDefault(x => x.Id != value && !x.EndDate.HasValue);
+            var currentBudgetPlan = _db.BudgetPlanModels.SingleOrDefault(x => x.Id != value && !x.EndDate.HasValue);
             if (currentBudgetPlan != null)
             {
                 currentBudgetPlan.EndDate = DateTime.Now;
             }
 
-            var budgetPlan = db.BudgetPlanModels.Single(x => x.Id == value);
+            var budgetPlan = _db.BudgetPlanModels.Single(x => x.Id == value);
             var nextMonth = DateTime.Now.AddMonths(1);
             var firstOfNextMonth = new DateTime(nextMonth.Year,nextMonth.Month, 1);
             budgetPlan.StartDate = firstOfNextMonth;
 
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         public void StopBudgetPlan(int value)
         {
-            var budgetPlan = db.BudgetPlanModels.Single(x => x.Id == value);
+            var budgetPlan = _db.BudgetPlanModels.Single(x => x.Id == value);
             budgetPlan.EndDate = DateTime.Now;
-            db.SaveChanges();
+            _db.SaveChanges();
         }
-
-        public void Dispose()
-        {
-            db.Dispose();
-        }
-
-
     }
 }
