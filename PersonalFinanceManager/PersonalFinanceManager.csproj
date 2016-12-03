@@ -253,6 +253,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Resources\bank_icons\Icon.PNG" />
     <Content Include="Resources\bluearrow.png" />
     <Content Include="Resources\dashboard-addExpenditures.png" />
     <Content Include="Resources\dashboard-planBudget.png" />
@@ -375,11 +376,16 @@
     <Content Include="Views\UserProfile\Edit.cshtml" />
     <Content Include="Views\UserProfile\View.cshtml" />
     <Content Include="Views\Dashboard\SplitByTypeDashboard.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Resources\bank_icons\" />
-    <Folder Include="Resources\preview\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
