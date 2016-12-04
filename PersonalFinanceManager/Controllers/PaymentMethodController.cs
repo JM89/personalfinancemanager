@@ -19,7 +19,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IPaymentMethodService _paymentMethodService;
 
-        public PaymentMethodController(IPaymentMethodService paymentMethodService)
+        public PaymentMethodController(IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService) : base(bankAccountService)
         {
             this._paymentMethodService = paymentMethodService;
         }

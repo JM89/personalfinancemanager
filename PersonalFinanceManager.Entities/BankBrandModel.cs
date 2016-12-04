@@ -9,11 +9,8 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class BankBrandModel
+    public class BankBrandModel : PersistedEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Required]
         public string Name { get; set; }
 

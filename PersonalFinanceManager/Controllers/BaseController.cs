@@ -14,15 +14,11 @@ namespace PersonalFinanceManager.Controllers
 {
     public class BaseController : Controller
     {
-        private readonly IBankAccountService _baseBankAccountService;
-
-        public BaseController()
-        {
-        }
+        private readonly IBankAccountService _bankAccountService;
 
         public BaseController(IBankAccountService bankAccountService)
         {
-            this._baseBankAccountService = bankAccountService;
+            this._bankAccountService = bankAccountService;
         }
 
         protected override void OnException(ExceptionContext filterContext)
@@ -69,7 +65,7 @@ namespace PersonalFinanceManager.Controllers
                 }
                 else
                 {
-                    var firstAccount = _baseBankAccountService.GetAccountsByUser(CurrentUser).FirstOrDefault();
+                    var firstAccount = _bankAccountService.GetAccountsByUser(CurrentUser).FirstOrDefault();
 
                     if (firstAccount != null)
                     {
@@ -87,7 +83,7 @@ namespace PersonalFinanceManager.Controllers
         {
             int accountId = CurrentAccount;
 
-            var account = _baseBankAccountService.GetById(accountId);
+            var account = _bankAccountService.GetById(accountId);
             var accountName = account.Name;
             var accountCurrentAmount = account.CurrencySymbol + account.CurrentBalance;
 

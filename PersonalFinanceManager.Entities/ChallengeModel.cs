@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class ChallengeModel
+    public class ChallengeModel : PersistedEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public string Objective { get; set; }
         public decimal? InitialPrice { get; set; }
         public decimal? ObjectivePrice { get; set; }

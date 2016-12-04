@@ -7,12 +7,8 @@ using System.Web;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class HistoricMovementModel
+    public class HistoricMovementModel : PersistedEntity
     {
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         public int? AccountId { get; set; }
 
         [ForeignKey("AccountId")]

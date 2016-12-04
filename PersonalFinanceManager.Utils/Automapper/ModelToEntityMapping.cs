@@ -28,11 +28,6 @@ namespace PersonalFinanceManager.Utils.Automapper
             Mapper.CreateMap<Models.Income.IncomeListModel, Entities.IncomeModel>();
             Mapper.CreateMap<Models.Income.IncomeEditModel, Entities.IncomeModel>();
 
-            Mapper.CreateMap<Models.PeriodicOutcome.PeriodicOutcomeListModel, Entities.PeriodicOutcomeModel>();
-            Mapper.CreateMap<Models.PeriodicOutcome.PeriodicOutcomeEditModel, Entities.PeriodicOutcomeModel>();
-
-            Mapper.CreateMap<Models.Frequency.FrequencyListModel, Entities.FrequencyModel>();
-
             Mapper.CreateMap<Models.ExpenditureType.ExpenditureTypeListModel, Entities.ExpenditureTypeModel>();
             Mapper.CreateMap<Models.ExpenditureType.ExpenditureTypeEditModel, Entities.ExpenditureTypeModel>();
 

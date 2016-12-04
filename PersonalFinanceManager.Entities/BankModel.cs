@@ -7,12 +7,8 @@ using System.Web;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class BankModel
+    public class BankModel : PersistedEntity
     {
-        [Required(ErrorMessage = "The Bank field is required.")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public string IconPath { get; set; }

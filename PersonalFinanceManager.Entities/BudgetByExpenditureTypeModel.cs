@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class BudgetByExpenditureTypeModel
+    public class BudgetByExpenditureTypeModel : PersistedEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Required]
         public int ExpenditureTypeId { get; set; }
 

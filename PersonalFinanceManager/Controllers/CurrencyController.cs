@@ -19,7 +19,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private ICurrencyService _currencyService;
 
-        public CurrencyController(ICurrencyService currencyService)
+        public CurrencyController(ICurrencyService currencyService, IBankAccountService bankAccountService) : base(bankAccountService)
         {
             this._currencyService = currencyService;
         }

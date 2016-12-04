@@ -24,7 +24,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IIncomeService _incomeService;
 
-        public IncomeController(IIncomeService incomeService)
+        public IncomeController(IIncomeService incomeService, IBankAccountService bankAccountService) : base(bankAccountService)
         {
             this._incomeService = incomeService;
         }

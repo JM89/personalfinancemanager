@@ -115,7 +115,6 @@
     <Compile Include="Expenditure\ExpenditureEditModel.cs" />
     <Compile Include="Expenditure\ExpenditureListModel.cs" />
     <Compile Include="Expenditure\ExpenditurePerTypeModel.cs" />
-    <Compile Include="Frequency\FrequencyListModel.cs" />
     <Compile Include="Helpers\DecimalFormatHelper.cs" />
     <Compile Include="Home\ConversionRateModel.cs" />
     <Compile Include="Home\HomePageModel.cs" />
@@ -123,8 +122,6 @@
     <Compile Include="Income\IncomeListModel.cs" />
     <Compile Include="Income\IncomeEditModel.cs" />
     <Compile Include="PaymentMethod\PaymentMethodListModel.cs" />
-    <Compile Include="PeriodicOutcome\PeriodicOutcomeEditModel.cs" />
-    <Compile Include="PeriodicOutcome\PeriodicOutcomeListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\DisplayNames.Designer.cs">
       <AutoGen>True</AutoGen>

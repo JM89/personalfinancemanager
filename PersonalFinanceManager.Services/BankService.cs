@@ -13,41 +13,41 @@ using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Utils.Exceptions;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Services.Core;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
     public class BankService : IBankService
     {
-        private ApplicationDbContext _db;
+        private IBankRepository _bankRepository;
+        private IBankAccountRepository _bankAccountRepository;
+        private IBankBranchRepository _bankBranchRepository;
 
-        public BankService(ApplicationDbContext db)
+        public BankService(IBankRepository bankRepository, IBankAccountRepository bankAccountRepository, IBankBranchRepository bankBranchRepository)
         {
-            this._db = db;
+            this._bankRepository = bankRepository;
+            this._bankAccountRepository = bankAccountRepository;
+            this._bankBranchRepository = bankBranchRepository;
         }
 
         public IList<BankListModel> GetBanks()
         {
-            var banks = _db.BankModels.Include(u => u.Country).ToList();
+            var banks = _bankRepository.GetList().Include(u => u.Country).ToList();
 
             var banksModel = banks.Select(x => Mapper.Map<BankListModel>(x)).ToList();
 
             banksModel.ForEach(bank =>
             {
-                var hasAccounts = _db.AccountModels.Any(x => x.BankId == bank.Id);
+                var hasAccounts = _bankAccountRepository.GetList().Any(x => x.BankId == bank.Id);
                 bank.CanBeDeleted = !hasAccounts;
             });
 
             return banksModel;
         }
 
-        public void Dispose()
-        {
-            _db.Dispose();
-        }
-
         public void Validate(BankEditModel bankEditModel)
         {
-            var duplicateName = _db.BankModels.Any(x => x.Name.ToLower() == bankEditModel.Name.Trim().ToLower() && x.Id != bankEditModel.Id);
+            var duplicateName = _bankRepository.GetList().Any(x => x.Name.ToLower() == bankEditModel.Name.Trim().ToLower() && x.Id != bankEditModel.Id);
             if (duplicateName)
             {
                 throw new BusinessException("Name", BusinessExceptionMessage.BankDuplicateName);
@@ -59,18 +59,16 @@ namespace PersonalFinanceManager.Services
             Validate(bankEditModel);
 
             var bankModel = Mapper.Map<BankModel>(bankEditModel);
-            _db.BankModels.Add(bankModel);
-            _db.SaveChanges();
-
+            _bankRepository.Create(bankModel);
+         
             var bankBranchModel = Mapper.Map<BankBrandModel>(bankEditModel.FavoriteBranch);
             bankBranchModel.BankId = bankModel.Id;
-            _db.BankBranchModels.Add(bankBranchModel);
-            _db.SaveChanges();
+            _bankBranchRepository.Create(bankBranchModel);
         }
 
         public BankEditModel GetById(int id)
         {
-            var bank = _db.BankModels.SingleOrDefault(x => x.Id == id);
+            var bank = _bankRepository.GetById(id);
 
             if (bank == null)
             {
@@ -79,7 +77,7 @@ namespace PersonalFinanceManager.Services
 
             var mappedBank = Mapper.Map<BankEditModel>(bank);
 
-            var bankBranch = _db.BankBranchModels.SingleOrDefault(x => x.BankId == id);
+            var bankBranch = _bankBranchRepository.GetList().SingleOrDefault(x => x.BankId == id);
             mappedBank.FavoriteBranch = Mapper.Map<BankBrandEditModel>(bankBranch);
 
             return mappedBank;
@@ -89,28 +87,23 @@ namespace PersonalFinanceManager.Services
         {
             Validate(bankEditModel);
 
-            var bankModel = _db.BankModels.AsNoTracking().SingleOrDefault(x => x.Id == bankEditModel.Id);
+            var bankModel = _bankRepository.GetList().AsNoTracking().SingleOrDefault(x => x.Id == bankEditModel.Id);
             var oldFileDestination = bankModel.IconPath;
-
             bankModel = Mapper.Map<BankModel>(bankEditModel);
-            _db.Entry(bankModel).State = EntityState.Modified;
-            _db.SaveChanges();
+            _bankRepository.Update(bankModel);
 
-            var bankBranchModel = _db.BankBranchModels.AsNoTracking().SingleOrDefault(x => x.BankId == bankModel.Id);
+            var bankBranchModel = _bankBranchRepository.GetList().AsNoTracking().SingleOrDefault(x => x.BankId == bankModel.Id);
             bankBranchModel = Mapper.Map<BankBrandModel>(bankEditModel.FavoriteBranch);
-            _db.Entry(bankBranchModel).State = EntityState.Modified;
-            _db.SaveChanges();
+            _bankBranchRepository.Update(bankBranchModel);
         }
 
         public void DeleteBank(int id)
         {
-            var bankBranchModel = _db.BankBranchModels.SingleOrDefault(x => x.BankId == id);
-            _db.BankBranchModels.Remove(bankBranchModel);
-            _db.SaveChanges();
+            var bankBranchModel = _bankBranchRepository.GetList().SingleOrDefault(x => x.BankId == id);
+            _bankBranchRepository.Delete(bankBranchModel);
 
-            var bankModel = _db.BankModels.Find(id);
-            _db.BankModels.Remove(bankModel);
-            _db.SaveChanges();
+            var bankModel = _bankRepository.GetList().Find(id);
+            _bankRepository.Delete(bankModel);
         }
     }
 }

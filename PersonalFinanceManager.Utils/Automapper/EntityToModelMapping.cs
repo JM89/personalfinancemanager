@@ -25,13 +25,8 @@ namespace PersonalFinanceManager.Utils.Automapper
             Mapper.CreateMap<Entities.CountryModel, Models.Country.CountryListModel>();
             Mapper.CreateMap<Entities.CountryModel, Models.Country.CountryEditModel>();
 
-            Mapper.CreateMap<Entities.PeriodicOutcomeModel, Models.PeriodicOutcome.PeriodicOutcomeListModel>();
-            Mapper.CreateMap<Entities.PeriodicOutcomeModel, Models.PeriodicOutcome.PeriodicOutcomeEditModel>();
-
             Mapper.CreateMap<Entities.IncomeModel, Models.Income.IncomeListModel>();
             Mapper.CreateMap<Entities.IncomeModel, Models.Income.IncomeEditModel>();
-
-            Mapper.CreateMap<Entities.FrequencyModel, Models.Frequency.FrequencyListModel>();
 
             Mapper.CreateMap<Entities.BankModel, Models.Bank.BankListModel>();
             Mapper.CreateMap<Entities.BankModel, Models.Bank.BankEditModel>();

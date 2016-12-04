@@ -8,11 +8,8 @@ using System.Web;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class IncomeModel
+    public class IncomeModel : PersistedEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Required]
         public int AccountId { get; set; }
 

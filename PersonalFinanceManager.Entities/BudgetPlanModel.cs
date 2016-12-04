@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class BudgetPlanModel
+    public class BudgetPlanModel : PersistedEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public DateTime? StartDate { get; set; }

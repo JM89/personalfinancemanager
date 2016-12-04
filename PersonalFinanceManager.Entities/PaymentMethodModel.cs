@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class PaymentMethodModel
+    public class PaymentMethodModel 
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

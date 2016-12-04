@@ -7,11 +7,8 @@ using System.Linq;
 using System.Web;
 namespace PersonalFinanceManager.Entities
 {
-    public class ExpenditureModel
+    public class ExpenditureModel : PersistedEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Required]
         public int AccountId { get; set; }
 

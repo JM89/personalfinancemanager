@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PersistedEntity.cs" />
     <Compile Include="UserProfileModel.cs" />
     <Compile Include="AccountModel.cs" />
     <Compile Include="ApplicationUser.cs" />
@@ -82,11 +83,9 @@
     <Compile Include="Enumerations\PaymentMethod.cs" />
     <Compile Include="ExpenditureModel.cs" />
     <Compile Include="ExpenditureTypeModel.cs" />
-    <Compile Include="FrequencyModel.cs" />
     <Compile Include="IncomeModel.cs" />
     <Compile Include="MonthNames.cs" />
     <Compile Include="PaymentMethodModel.cs" />
-    <Compile Include="PeriodicOutcomesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SavingsModel.cs" />
     <Compile Include="SavingsPlanModel.cs" />

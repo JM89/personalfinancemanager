@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class SavingsPlanModel
+    public class SavingsPlanModel : PersistedEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public IList<SavingsModel> Savings { get; set; }
         public AccountModel SourceAccount { get; set; }
         public AccountModel DestinationAccount { get; set; }

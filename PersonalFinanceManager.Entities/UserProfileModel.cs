@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class UserProfileModel
+    public class UserProfileModel : PersistedEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Required]
         public string User_Id { get; set; }
 

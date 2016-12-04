@@ -5,12 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PersonalFinanceManager.Entities
 {
-    public class AccountModel
+    public class AccountModel : PersistedEntity
     {
-        [Required(ErrorMessage = "The Account field is required.")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public int BankId { get; set; }

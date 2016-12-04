@@ -218,6 +218,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\FileUpload.cs" />
+    <Compile Include="Helpers\Filters\UnitOrWorkAttribute.cs" />
     <Compile Include="Helpers\MvcHtmlExtensions.cs" />
     <Compile Include="Helpers\DateTimeUnitEnums.cs" />
     <Compile Include="Helpers\DateTimeHelper.cs" />
@@ -385,7 +386,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Helpers\Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

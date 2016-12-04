@@ -6,6 +6,7 @@ using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.DataAccess;
 using Ninject.Web.Common;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.App_Start
 {
@@ -15,14 +16,23 @@ namespace PersonalFinanceManager.App_Start
 
         public override void Load()
         {
+            RegisterRepositories();
             RegisterServices();
         }
 
-        private void RegisterServices()
+        private void RegisterRepositories()
         {
             //PerRequet, we inject an instance of DbContext.
             Kernel.Bind<ApplicationDbContext>().ToMethod(ctx => { return (ApplicationDbContext)System.Web.HttpContext.Current.Items["_DbContext"]; }).InRequestScope();
 
+            //Default interface in this scenario means that if your interface is named IXService, then the class named XService will be binded to it. 
+            Kernel.Bind(x => x.FromAssemblyContaining(typeof(IBaseRepository<>))
+                            .SelectAllClasses()
+                            .BindDefaultInterface());
+        }
+
+        private void RegisterServices()
+        {
             //Default interface in this scenario means that if your interface is named IXService, then the class named XService will be binded to it. 
             Kernel.Bind(x => x.FromAssemblyContaining(typeof(IBaseService))
                             .SelectAllClasses()

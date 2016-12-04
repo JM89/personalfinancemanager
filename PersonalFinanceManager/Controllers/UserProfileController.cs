@@ -18,7 +18,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IUserProfileService _userProfileService;
 
-        public UserProfileController(IUserProfileService userProfileService)
+        public UserProfileController(IUserProfileService userProfileService, IBankAccountService bankAccountService) : base(bankAccountService)
         {
             this._userProfileService = userProfileService;
         }

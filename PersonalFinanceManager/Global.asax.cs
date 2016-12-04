@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Utils.Automapper;
+using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -16,7 +17,8 @@ namespace PersonalFinanceManager
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            Mapper.Initialize(cfg => {
+            Mapper.Initialize(cfg =>
+            {
                 cfg.AddProfile<ModelToEntityMapping>();
                 cfg.AddProfile<EntityToModelMapping>();
             });
@@ -24,14 +26,24 @@ namespace PersonalFinanceManager
 
         protected virtual void Application_BeginRequest()
         {
-            HttpContext.Current.Items["_DbContext"] = new ApplicationDbContext();
+            var ctx = HttpContext.Current;
+            var requestMethod = ctx.Request.HttpMethod;
+            ctx.Items["_DbContext"] = new ApplicationDbContext();
         }
 
         protected virtual void Application_EndRequest()
         {
-            var entityContext = HttpContext.Current.Items["_DbContext"] as ApplicationDbContext;
-            if (entityContext != null)
-                entityContext.Dispose();
+            var ctx = HttpContext.Current;
+            var dbCtx = ctx.Items["_DbContext"] as ApplicationDbContext;
+            if (dbCtx != null)
+            {
+                var currentTransaction = dbCtx.Database.CurrentTransaction;
+                if (currentTransaction != null)
+                {
+                    currentTransaction.Dispose();
+                }
+                dbCtx.Dispose();
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ namespace PersonalFinanceManager.Controllers
         private readonly IBankService _bankService;
         private readonly ICountryService _countryService;
 
-        public BankController(IBankService bankService, ICountryService countryService)
+        public BankController(IBankService bankService, ICountryService countryService, IBankAccountService bankAccountService) : base(bankAccountService)
         {
             this._bankService = bankService;
             this._countryService = countryService;

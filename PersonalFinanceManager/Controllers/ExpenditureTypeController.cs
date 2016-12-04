@@ -19,7 +19,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IExpenditureTypeService _expenditureTypeService;
 
-        public ExpenditureTypeController(IExpenditureTypeService expenditureTypeService)
+        public ExpenditureTypeController(IExpenditureTypeService expenditureTypeService, IBankAccountService bankAccountService) : base(bankAccountService)
         {
             this._expenditureTypeService = expenditureTypeService;
         }

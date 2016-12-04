@@ -26,7 +26,7 @@ namespace PersonalFinanceManager.Controllers
         private readonly IAtmWithdrawService _atmWithdrawService;
 
         public ExpenditureController(IExpenditureService expenditureService, IExpenditureTypeService expenditureTypeService, IBankAccountService bankAccountService,
-            IPaymentMethodService paymentMethodService, IAtmWithdrawService atmWithdrawService)
+            IPaymentMethodService paymentMethodService, IAtmWithdrawService atmWithdrawService) : base(bankAccountService)
         {
             this._bankAccountService = bankAccountService;
             this._expenditureService = expenditureService;
