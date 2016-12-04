@@ -11,35 +11,41 @@ using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Services.RequestObjects;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
     public class ExpenditureService : IExpenditureService
     {
-        private ApplicationDbContext _db;
+        private readonly IExpenditureRepository _expenditureRepository;
+        protected IBankAccountRepository _bankAccountRepository;
+        protected IAtmWithdrawRepository _atmWithdrawRepository;
+        protected IIncomeRepository _incomeRepository;
+        protected IHistoricMovementRepository _historicMovementRepository;
 
-        public ExpenditureService(ApplicationDbContext db)
+        public ExpenditureService(IExpenditureRepository expenditureRepository, IBankAccountRepository bankAccountRepository, IAtmWithdrawRepository atmWithdrawRepository, IIncomeRepository incomeRepository,
+            IHistoricMovementRepository historicMovementRepository)
         {
-            this._db = db;
+            this._expenditureRepository = expenditureRepository;
+            this._bankAccountRepository = bankAccountRepository;
+            this._atmWithdrawRepository = atmWithdrawRepository;
+            this._incomeRepository = incomeRepository;
+            this._historicMovementRepository = historicMovementRepository;
         }
 
         public void CreateExpenditure(ExpenditureEditModel expenditureEditModel)
         {
             var expenditureModel = Mapper.Map<ExpenditureModel>(expenditureEditModel);
+            _expenditureRepository.Create(expenditureModel);
 
-            _db.ExpenditureModels.Add(expenditureModel);
-
-            _db.SaveChanges();
-
-            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_db, expenditureModel);
+            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_bankAccountRepository, _atmWithdrawRepository, _incomeRepository, _historicMovementRepository, expenditureModel);
 
             strategy.Debit();
         }
-
         
         public void EditExpenditure(ExpenditureEditModel expenditureEditModel)
         {
-            var expenditureModel = _db.ExpenditureModels.Single(x => x.Id == expenditureEditModel.Id);
+            var expenditureModel = _expenditureRepository.GetById(expenditureEditModel.Id);
 
             var oldExpenditureModel = new ExpenditureModel() {
                 AccountId = expenditureModel.AccountId, 
@@ -51,7 +57,7 @@ namespace PersonalFinanceManager.Services
                 TargetInternalAccountId = expenditureModel.TargetInternalAccountId
             };
             
-            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_db, oldExpenditureModel);
+            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_bankAccountRepository, _atmWithdrawRepository, _incomeRepository, _historicMovementRepository, oldExpenditureModel);
 
             expenditureModel.DateExpenditure = expenditureEditModel.DateExpenditure;
             expenditureModel.Description = expenditureEditModel.Description;
@@ -63,28 +69,25 @@ namespace PersonalFinanceManager.Services
             expenditureModel.AtmWithdrawId = expenditureEditModel.AtmWithdrawId;
             expenditureModel.TargetInternalAccountId = expenditureEditModel.TargetInternalAccountId;
 
-            _db.Entry(expenditureModel).State = EntityState.Modified;
-
-            _db.SaveChanges();
+            _expenditureRepository.Update(expenditureModel);
             
             strategy.UpdateDebit(expenditureModel);
         }
 
         public void DeleteExpenditure(int id)
         {
-            ExpenditureModel expenditureModel = _db.ExpenditureModels.Find(id);
+            var expenditureModel = _expenditureRepository.GetById(id);
 
-            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_db, expenditureModel);
+            var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_bankAccountRepository, _atmWithdrawRepository, _incomeRepository, _historicMovementRepository, expenditureModel);
 
             strategy.Credit();
 
-            _db.ExpenditureModels.Remove(expenditureModel);
-            _db.SaveChanges();
+            _expenditureRepository.Delete(expenditureModel);
         }
 
         public ExpenditureEditModel GetById(int id)
         {
-            var expenditure = _db.ExpenditureModels
+            var expenditure = _expenditureRepository.GetList()
                                     .Include(u => u.Account.Currency)
                                     .Include(u => u.TypeExpenditure)
                                     .Include(u => u.PaymentMethod).SingleOrDefault(x => x.Id == id);
@@ -99,15 +102,14 @@ namespace PersonalFinanceManager.Services
 
         public void ChangeDebitStatus(int id, bool debitStatus)
         {
-            var expenditure = _db.ExpenditureModels.Single(x => x.Id == id);
+            var expenditure = _expenditureRepository.GetById(id);
             expenditure.HasBeenAlreadyDebited = debitStatus;
-            _db.Entry(expenditure).State = EntityState.Modified;
-            _db.SaveChanges();
+            _expenditureRepository.Update(expenditure);
         }
 
         public IList<ExpenditureListModel> GetExpenditures(ExpenditureSearch search)
         {
-            var expenditures = _db.ExpenditureModels
+            var expenditures = _expenditureRepository.GetList()
                 .Where(x =>
                     (!search.AccountId.HasValue || (search.AccountId.HasValue && x.AccountId == search.AccountId.Value))
                     && (!search.StartDate.HasValue || (search.StartDate.HasValue && x.DateExpenditure >= search.StartDate))

@@ -11,29 +11,28 @@ using AutoMapper;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Models.UserProfile;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
     public class UserProfileService : IUserProfileService
     {
-        private ApplicationDbContext _db;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public UserProfileService(ApplicationDbContext db)
+        public UserProfileService(IUserProfileRepository userProfileRepository)
         {
-            this._db = db;
+            this._userProfileRepository = userProfileRepository;
         }
         
         public void CreateUserProfile(UserProfileEditModel userProfileEditModel)
         {
             var userProfile = Mapper.Map<UserProfileModel>(userProfileEditModel);
-
-            _db.UserProfileModels.Add(userProfile);
-            _db.SaveChanges();
+            _userProfileRepository.Create(userProfile);
         }
 
         public UserProfileEditModel GetByUserId(string userId)
         {
-            var userProfile = _db.UserProfileModels.SingleOrDefault(x => x.User_Id == userId);
+            var userProfile = _userProfileRepository.GetList().SingleOrDefault(x => x.User_Id == userId);
             if (userProfile != null)
             {
                 return Mapper.Map<UserProfileEditModel>(userProfile);
@@ -43,16 +42,14 @@ namespace PersonalFinanceManager.Services
 
         public void EditUserProfile(UserProfileEditModel userProfileEditModel)
         {
-            var userProfile = _db.UserProfileModels.AsNoTracking().SingleOrDefault(x => x.Id == userProfileEditModel.Id);
+            var userProfile = _userProfileRepository.GetList().AsNoTracking().SingleOrDefault(x => x.Id == userProfileEditModel.Id);
             userProfile = Mapper.Map<UserProfileModel>(userProfileEditModel);
-
-            _db.Entry(userProfile).State = EntityState.Modified;
-            _db.SaveChanges();
+            _userProfileRepository.Update(userProfile);
         }
 
         public UserProfileEditModel GetById(int id)
         {
-            var userProfile = _db.UserProfileModels.Single(x => x.Id == id);
+            var userProfile = _userProfileRepository.GetById(id);
             return Mapper.Map<UserProfileEditModel>(userProfile);
         }
     }

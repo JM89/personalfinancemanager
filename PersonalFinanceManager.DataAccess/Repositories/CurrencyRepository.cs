@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.DataAccess.Repositories
 {
-    public class BankAccountRepository : BaseRepository<AccountModel>, IBankAccountRepository
+    public class CurrencyRepository : BaseRepository<CurrencyModel>, ICurrencyRepository
     {
-        public BankAccountRepository(ApplicationDbContext db) : base(db)
+        public CurrencyRepository(ApplicationDbContext db) : base(db)
         {
-            
+
         }
     }
 }

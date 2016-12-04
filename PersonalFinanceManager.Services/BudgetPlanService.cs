@@ -13,16 +13,19 @@ using PersonalFinanceManager.Models.ExpenditureType;
 using PersonalFinanceManager.Models.Dashboard;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Services.RequestObjects;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
     public class BudgetPlanService : IBudgetPlanService
     {
-        private ApplicationDbContext _db;
+        private readonly IBudgetPlanRepository _budgetPlanRepository;
+        private readonly IBudgetByExpenditureTypeRepository _budgetByExpenditureTypeRepository;
 
-        public BudgetPlanService(ApplicationDbContext db)
+        public BudgetPlanService(IBudgetPlanRepository budgetPlanRepository, IBudgetByExpenditureTypeRepository budgetByExpenditureTypeRepository)
         {
-            this._db = db;
+            this._budgetPlanRepository = budgetPlanRepository;
+            this._budgetByExpenditureTypeRepository = budgetByExpenditureTypeRepository;
         }
 
         /// <summary>
@@ -31,18 +34,18 @@ namespace PersonalFinanceManager.Services
         /// <returns></returns>
         public IList<BudgetPlanListModel> GetBudgetPlans(int accountId)
         {
-            var budgetPlansForAccount = _db.BudgetByExpenditureTypeModels.Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+            var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList().Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
 
-            var budgetPlans = _db.BudgetPlanModels.Where(x => budgetPlansForAccount.Contains(x.Id)).ToList();
+            var budgetPlans = _budgetPlanRepository.GetList().Where(x => budgetPlansForAccount.Contains(x.Id)).ToList();
 
             return budgetPlans.Select(x => Mapper.Map<BudgetPlanListModel>(x)).ToList();
         }
         
         public BudgetPlanEditModel GetCurrent(int accountId)
         {
-            var budgetPlansForAccount = _db.BudgetByExpenditureTypeModels.Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+            var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList().Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
 
-            var currentBudgetPlan = _db.BudgetPlanModels.SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && !x.EndDate.HasValue);
+            var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && !x.EndDate.HasValue);
             if (currentBudgetPlan != null)
             {
                 return GetById(currentBudgetPlan.Id);
@@ -52,13 +55,13 @@ namespace PersonalFinanceManager.Services
 
         public BudgetPlanEditModel GetById(int id)
         {
-            var budgetPlan = _db.BudgetPlanModels.SingleOrDefault(x => x.Id == id);
+            var budgetPlan = _budgetPlanRepository.GetById(id);
             if (budgetPlan == null)
             {
                 return null;
             }
 
-            var budgetPlanExpenditures = _db.BudgetByExpenditureTypeModels
+            var budgetPlanExpenditures = _budgetByExpenditureTypeRepository.GetList()
                 .Include(x => x.ExpenditureType)
                 .Where(x => x.BudgetPlanId == id);
 
@@ -88,8 +91,7 @@ namespace PersonalFinanceManager.Services
         public void CreateBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId)
         {
             var budgetPlanModel = Mapper.Map<BudgetPlanModel>(budgetPlanEditModel);
-            _db.BudgetPlanModels.Add(budgetPlanModel);
-            _db.SaveChanges();
+            _budgetPlanRepository.Create(budgetPlanModel);
 
             var plannedExpenditures = new List<BudgetByExpenditureTypeModel>();
             foreach(var expenditureType in budgetPlanEditModel.ExpenditureTypes)
@@ -103,9 +105,8 @@ namespace PersonalFinanceManager.Services
                 // It might evolve later so for now, I keep it here, independently from BudgetByExpenditureTypeModel.
                 plannedExpenditure.AccountId = accountId;
 
-                _db.BudgetByExpenditureTypeModels.Add(plannedExpenditure);
+                _budgetByExpenditureTypeRepository.Create(plannedExpenditure);
             }
-            _db.SaveChanges();
         }
 
         /// <summary>
@@ -114,10 +115,10 @@ namespace PersonalFinanceManager.Services
         /// <param name="budgetPlanEditModel"></param>
         public void EditBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId)
         {
-            var budgetPlan = _db.BudgetPlanModels.SingleOrDefault(x => x.Id == budgetPlanEditModel.Id);
+            var budgetPlan = _budgetPlanRepository.GetById(budgetPlanEditModel.Id);
             budgetPlan.Name = budgetPlanEditModel.Name;
 
-            var existingBudgetPlanExpenditures = _db.BudgetByExpenditureTypeModels
+            var existingBudgetPlanExpenditures = _budgetByExpenditureTypeRepository.GetList()
                   .Include(x => x.ExpenditureType)
                   .Where(x => x.BudgetPlanId == budgetPlanEditModel.Id);
 
@@ -138,7 +139,7 @@ namespace PersonalFinanceManager.Services
                         BudgetPlanId = budgetPlanEditModel.Id,
                         AccountId = accountId
                     };
-                    _db.BudgetByExpenditureTypeModels.Add(plannedExpenditure);
+                    _budgetByExpenditureTypeRepository.Create(plannedExpenditure);
                 }
                 else
                 {
@@ -154,31 +155,27 @@ namespace PersonalFinanceManager.Services
             //    var budgetExpenditureTypeToRemove = db.BudgetByExpenditureTypeModels.Single(x => x.BudgetPlanId == budgetPlanEditModel.Id && x.ExpenditureTypeId == deletedExpenditureId);
             //    db.BudgetByExpenditureTypeModels.Remove(budgetExpenditureTypeToRemove);
             //}
-
-            _db.SaveChanges();
         }
 
         public void StartBudgetPlan(int value)
         {
-            var currentBudgetPlan = _db.BudgetPlanModels.SingleOrDefault(x => x.Id != value && !x.EndDate.HasValue);
+            var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => x.Id != value && !x.EndDate.HasValue);
             if (currentBudgetPlan != null)
             {
                 currentBudgetPlan.EndDate = DateTime.Now;
             }
 
-            var budgetPlan = _db.BudgetPlanModels.Single(x => x.Id == value);
+            var budgetPlan = _budgetPlanRepository.GetById(value);
             var nextMonth = DateTime.Now.AddMonths(1);
             var firstOfNextMonth = new DateTime(nextMonth.Year,nextMonth.Month, 1);
             budgetPlan.StartDate = firstOfNextMonth;
-
-            _db.SaveChanges();
         }
 
         public void StopBudgetPlan(int value)
         {
-            var budgetPlan = _db.BudgetPlanModels.Single(x => x.Id == value);
+            var budgetPlan = _budgetPlanRepository.GetById(value);
             budgetPlan.EndDate = DateTime.Now;
-            _db.SaveChanges();
+            _budgetPlanRepository.Update(budgetPlan);
         }
     }
 }

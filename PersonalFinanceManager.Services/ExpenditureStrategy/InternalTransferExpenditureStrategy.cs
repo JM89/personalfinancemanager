@@ -1,7 +1,8 @@
 ﻿using PersonalFinanceManager.DataAccess;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 using PersonalFinanceManager.Entities;
 using PersonalFinanceManager.Entities.Enumerations;
-using PersonalFinanceManager.Services.Extensions;
+using PersonalFinanceManager.Services.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,67 +14,68 @@ namespace PersonalFinanceManager.Services.ExpenditureStrategy
 {
     public class InternalTransferExpenditureStrategy : ExpenditureStrategy
     {
-        public InternalTransferExpenditureStrategy(ApplicationDbContext dbContext, ExpenditureModel expenditureModel)
-            : base(dbContext, expenditureModel)
+        public InternalTransferExpenditureStrategy(IBankAccountRepository bankAccountRepository, IAtmWithdrawRepository atmWithdrawRepository, IIncomeRepository incomeRepository,
+            IHistoricMovementRepository historicMovementRepository, ExpenditureModel expenditureModel)
+            : base(bankAccountRepository, atmWithdrawRepository, incomeRepository, historicMovementRepository, expenditureModel)
         { }
 
         public override void Debit()
         {
-            var accountModel = _dbContext.AccountModels.SingleOrDefault(x => x.Id == _expenditureModel.AccountId);
-            accountModel.Debit(_dbContext, _expenditureModel.Cost, MovementType.Expenditure);
+            var accountModel = _bankAccountRepository.GetById(_expenditureModel.AccountId);
+            MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, accountModel, _expenditureModel.Cost, MovementType.Expenditure);
 
             if (!_expenditureModel.TargetInternalAccountId.HasValue)
                 throw new ArgumentException("For an internal transfer, we should have a TargetInternalAccountId");
 
             CreateIncomeForTransfer(_expenditureModel);
 
-            var targetAccountModel = _dbContext.AccountModels.SingleOrDefault(x => x.Id == _expenditureModel.TargetInternalAccountId);
-            targetAccountModel.Credit(_dbContext, _expenditureModel.Cost, MovementType.Income);
+            var targetAccountModel = _bankAccountRepository.GetById(_expenditureModel.TargetInternalAccountId.Value);
+            MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, targetAccountModel, _expenditureModel.Cost, MovementType.Income);
         }
 
         public override void Credit()
         {
-            var accountModel = _dbContext.AccountModels.SingleOrDefault(x => x.Id == _expenditureModel.AccountId);
-            accountModel.Credit(_dbContext, _expenditureModel.Cost, MovementType.Income);
+            var accountModel = _bankAccountRepository.GetById(_expenditureModel.AccountId);
+            MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, accountModel, _expenditureModel.Cost, MovementType.Income);
 
             if (!_expenditureModel.TargetInternalAccountId.HasValue)
                 throw new ArgumentException("For an internal transfer, we should have a TargetInternalAccountId");
 
             RemoveIncome();
 
-            var targetAccountModel = _dbContext.AccountModels.SingleOrDefault(x => x.Id == _expenditureModel.TargetInternalAccountId);
-            targetAccountModel.Debit(_dbContext, _expenditureModel.Cost, MovementType.Expenditure);
+            var targetAccountModel = _bankAccountRepository.GetById(_expenditureModel.TargetInternalAccountId.Value);
+            MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, targetAccountModel, _expenditureModel.Cost, MovementType.Expenditure);
         }
 
         public override void UpdateDebit(ExpenditureModel newExpenditure)
         {
             if (_expenditureModel.PaymentMethodId != newExpenditure.PaymentMethodId)
             {
-                var account = _dbContext.AccountModels.Single(x => x.Id == _expenditureModel.AccountId);
-                account.Credit(_dbContext, _expenditureModel.Cost, MovementType.Income);
+                var account = _bankAccountRepository.GetById(_expenditureModel.AccountId);
+                MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, account, _expenditureModel.Cost, MovementType.Income);
 
-                var internalAccount = _dbContext.AccountModels.Single(x => x.Id == _expenditureModel.TargetInternalAccountId);
-                internalAccount.Debit(_dbContext, _expenditureModel.Cost, MovementType.Expenditure);
+                var internalAccount = _bankAccountRepository.GetById(_expenditureModel.TargetInternalAccountId.Value);
+                MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, internalAccount, _expenditureModel.Cost, MovementType.Expenditure);
 
                 RemoveIncome();
 
-                var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_dbContext, newExpenditure);
+                var strategy = ContextExpenditureStrategy.GetExpenditureStrategy(_bankAccountRepository, _atmWithdrawRepository, _incomeRepository, _historicMovementRepository, newExpenditure);
                 strategy.Debit();
             }
             else
             {
                 if (_expenditureModel.Cost != newExpenditure.Cost)
                 {
-                    var account = _dbContext.AccountModels.Single(x => x.Id == newExpenditure.AccountId);
-                    var internalAccount = _dbContext.AccountModels.Single(x => x.Id == newExpenditure.TargetInternalAccountId);
+                    var account = _bankAccountRepository.GetById(newExpenditure.AccountId);
+                    var internalAccount = _bankAccountRepository.GetById(newExpenditure.TargetInternalAccountId.Value);
                     if (_expenditureModel.TargetInternalAccountId != newExpenditure.TargetInternalAccountId)
                     {
-                        account.Credit(_dbContext, _expenditureModel.Cost, MovementType.Income);
-                        account.Debit(_dbContext, newExpenditure.Cost, MovementType.Expenditure);
+                        MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, account, _expenditureModel.Cost, MovementType.Income);
+                        MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, account, newExpenditure.Cost, MovementType.Expenditure);
 
-                        var oldInternalAccount = _dbContext.AccountModels.Single(x => x.Id == _expenditureModel.TargetInternalAccountId);
-                        oldInternalAccount.Debit(_dbContext, _expenditureModel.Cost, MovementType.Expenditure);
-                        internalAccount.Credit(_dbContext, newExpenditure.Cost, MovementType.Income);
+                        var oldInternalAccount = _bankAccountRepository.GetById(_expenditureModel.TargetInternalAccountId.Value);
+                        MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, oldInternalAccount, _expenditureModel.Cost, MovementType.Expenditure);
+                        MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, internalAccount, newExpenditure.Cost, MovementType.Income);
 
                         RemoveIncome();
 
@@ -81,15 +83,14 @@ namespace PersonalFinanceManager.Services.ExpenditureStrategy
                     }
                     else
                     {
-                        account.Credit(_dbContext, _expenditureModel.Cost, MovementType.Income);
-                        account.Debit(_dbContext, newExpenditure.Cost, MovementType.Expenditure);
+                        MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, account, _expenditureModel.Cost, MovementType.Income);
+                        MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, account, newExpenditure.Cost, MovementType.Expenditure);
                         
-                        internalAccount.Debit(_dbContext, _expenditureModel.Cost, MovementType.Expenditure);
-                        internalAccount.Credit(_dbContext, newExpenditure.Cost, MovementType.Income);
+                        MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, internalAccount, _expenditureModel.Cost, MovementType.Expenditure);
+                        MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, internalAccount, newExpenditure.Cost, MovementType.Income);
 
                         var income = GetIncome(_expenditureModel);
                         income.Cost = newExpenditure.Cost;
-                        _dbContext.SaveChanges();
                     }
                 }
             }
@@ -97,7 +98,7 @@ namespace PersonalFinanceManager.Services.ExpenditureStrategy
 
         private IncomeModel GetIncome(ExpenditureModel transfer)
         {
-            var income = _dbContext.IncomeModels.Single(x =>
+            var income = _incomeRepository.GetList().Single(x =>
                             x.Cost == transfer.Cost &&
                             x.DateIncome == transfer.DateExpenditure &&
                             x.Description == "Transfer: " + transfer.Description);
@@ -108,8 +109,7 @@ namespace PersonalFinanceManager.Services.ExpenditureStrategy
         private void RemoveIncome()
         {
             var income = GetIncome(_expenditureModel);
-            _dbContext.IncomeModels.Remove(income);
-            _dbContext.SaveChanges();
+            _incomeRepository.Delete(income);
         }
 
         private void CreateIncomeForTransfer(ExpenditureModel expenditureModel)
@@ -121,8 +121,7 @@ namespace PersonalFinanceManager.Services.ExpenditureStrategy
                 AccountId = expenditureModel.TargetInternalAccountId.Value,
                 DateIncome = expenditureModel.DateExpenditure
             };
-            _dbContext.IncomeModels.Add(incomeModel);
-            _dbContext.SaveChanges();
+            _incomeRepository.Create(incomeModel);
         }
     }
 }

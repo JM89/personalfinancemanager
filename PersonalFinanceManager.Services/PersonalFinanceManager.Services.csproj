@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="BankAccountService.cs" />
     <Compile Include="BudgetPlanService.cs" />
+    <Compile Include="Helpers\MovementHelpers.cs" />
     <Compile Include="Interfaces\IUserProfileService.cs" />
     <Compile Include="RequestObjects\BudgetPlanSearch.cs" />
     <Compile Include="RequestObjects\ExpenditureSearch.cs" />
@@ -74,13 +75,10 @@
     <Compile Include="ExpenditureService.cs" />
     <Compile Include="ExpenditureStrategy\AtmWithdrawExpenditureStrategy.cs" />
     <Compile Include="ExpenditureStrategy\CommonExpenditureStrategy.cs" />
-    <Compile Include="ExpenditureStrategy\HistoricMovementHelper.cs" />
     <Compile Include="ExpenditureStrategy\InternalTransferExpenditureStrategy.cs" />
     <Compile Include="ExpenditureStrategy\ContextExpenditureStrategy.cs" />
     <Compile Include="ExpenditureStrategy\ExpenditureStrategy.cs" />
     <Compile Include="ExpenditureTypeService.cs" />
-    <Compile Include="Extensions\AtmWithdrawExtensions.cs" />
-    <Compile Include="Extensions\AccountExtensions.cs" />
     <Compile Include="IncomeService.cs" />
     <Compile Include="Core\IBaseService.cs" />
     <Compile Include="Interfaces\IAtmWithdrawService.cs" />

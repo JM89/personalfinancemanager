@@ -10,48 +10,44 @@ using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
     public class CountryService : ICountryService
     {
-        private ApplicationDbContext _db;
+        private readonly ICountryRepository _countryRepository;
+        private readonly IBankRepository _bankRepository;
 
-        public CountryService(ApplicationDbContext db)
+        public CountryService(ICountryRepository countryRepository, IBankRepository bankRepository)
         {
-            this._db = db;
+            this._countryRepository = countryRepository;
+            this._bankRepository = bankRepository;
         }
 
         public IList<CountryListModel> GetCountries()
         {
-            var countries = _db.CountryModels.ToList();
+            var countries = _countryRepository.GetList().ToList();
 
             var countriesModel = countries.Select(x => Mapper.Map<CountryListModel>(x)).ToList();
 
             countriesModel.ForEach(country =>
             {
-                country.CanBeDeleted = !_db.BankModels.Any(x => x.CountryId == country.Id);
+                country.CanBeDeleted = !_bankRepository.GetList().Any(x => x.CountryId == country.Id);
             });
 
             return countriesModel;
         }
 
-        public void Dispose()
-        {
-            _db.Dispose();
-        }
-
         public void CreateCountry(CountryEditModel countryEditModel)
         {
             var countryModel = Mapper.Map<CountryModel>(countryEditModel);
-
-            _db.CountryModels.Add(countryModel);
-            _db.SaveChanges();
+            _countryRepository.Create(countryModel);
         }
 
         public CountryEditModel GetById(int id)
         {
-            var country = _db.CountryModels.SingleOrDefault(x => x.Id == id);
+            var country = _countryRepository.GetById(id);
 
             if (country == null)
             {
@@ -63,20 +59,15 @@ namespace PersonalFinanceManager.Services
 
         public void EditCountry(CountryEditModel countryEditModel)
         {
-            var countryModel = _db.CountryModels.SingleOrDefault(x => x.Id == countryEditModel.Id);
-
+            var countryModel = _countryRepository.GetById(countryEditModel.Id);
             countryModel.Name = countryEditModel.Name;
-
-            _db.Entry(countryModel).State = EntityState.Modified;
-
-            _db.SaveChanges();
+            _countryRepository.Update(countryModel);
         }
 
         public void DeleteCountry(int id)
         {
-            CountryModel countryModel = _db.CountryModels.Find(id);
-            _db.CountryModels.Remove(countryModel);
-            _db.SaveChanges();
+            var countryModel = _countryRepository.GetById(id);
+            _countryRepository.Delete(countryModel);
         }
     }
 }

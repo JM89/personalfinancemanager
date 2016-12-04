@@ -9,16 +9,26 @@ using PersonalFinanceManager.Models.Account;
 using AutoMapper;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
     public class BankAccountService: IBankAccountService
     {
-        private ApplicationDbContext _db;
+        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IExpenditureRepository _expenditureRepository;
+        private readonly IIncomeRepository _incomeRepository;
+        private readonly IAtmWithdrawRepository _atmWithdrawRepository;
+        private readonly IBankBranchRepository _bankBranchRepository;
 
-        public BankAccountService(ApplicationDbContext db)
+        public BankAccountService(IBankAccountRepository bankAccountRepository, IExpenditureRepository expenditureRepository, IIncomeRepository incomeRepository,
+            IAtmWithdrawRepository atmWithdrawRepository, IBankBranchRepository bankBranchRepository)
         {
-            this._db = db;
+            this._bankAccountRepository = bankAccountRepository;
+            this._expenditureRepository = expenditureRepository;
+            this._incomeRepository = incomeRepository;
+            this._atmWithdrawRepository = atmWithdrawRepository;
+            this._bankBranchRepository = bankBranchRepository;
         }
 
         public void CreateBankAccount(AccountEditModel accountEditModel, string userId)
@@ -29,15 +39,14 @@ namespace PersonalFinanceManager.Services
 
             accountModel.User_Id = user.Id;
             accountModel.CurrentBalance = accountModel.InitialBalance;
-            accountModel.IsFavorite = !_db.AccountModels.Any(x => x.User_Id == userId);
-            
-            _db.AccountModels.Add(accountModel);
-            _db.SaveChanges();
+            accountModel.IsFavorite = !_bankAccountRepository.GetList().Any(x => x.User_Id == userId);
+
+            _bankAccountRepository.Create(accountModel);
         }
 
         public IList<AccountListModel> GetAccountsByUser(string userId)
         {
-            var accounts = _db.AccountModels
+            var accounts = _bankAccountRepository.GetList()
                 .Include(u => u.Currency)
                 .Include(u => u.Bank)
                 .Where(x => x.User_Id == userId)
@@ -47,9 +56,9 @@ namespace PersonalFinanceManager.Services
 
             accountsModel.ForEach(account =>
             {
-                var hasExpenditures = _db.ExpenditureModels.Any(x => x.AccountId == account.Id);
-                var hasIncome = _db.IncomeModels.Any(x => x.AccountId == account.Id);
-                var hasAtmWithdraw = _db.AtmWithdrawModels.Any(x => x.AccountId == account.Id);
+                var hasExpenditures = _expenditureRepository.GetList().Any(x => x.AccountId == account.Id);
+                var hasIncome = _incomeRepository.GetList().Any(x => x.AccountId == account.Id);
+                var hasAtmWithdraw = _atmWithdrawRepository.GetList().Any(x => x.AccountId == account.Id);
 
                 account.CanBeDeleted = !hasExpenditures && !hasIncome && !hasAtmWithdraw;
             });
@@ -59,14 +68,14 @@ namespace PersonalFinanceManager.Services
         
         public AccountEditModel GetById(int id)
         {
-            var account = _db.AccountModels.Include(x => x.Currency).Include(x => x.Bank).SingleOrDefault(x => x.Id == id);
+            var account = _bankAccountRepository.GetList().Include(x => x.Currency).Include(x => x.Bank).SingleOrDefault(x => x.Id == id);
 
             if (account == null)
             {
                 return null;
             }
 
-            var favoriteBankDetails = _db.BankBranchModels.Single(x => x.BankId == account.BankId);
+            var favoriteBankDetails = _bankBranchRepository.GetList().Single(x => x.BankId == account.BankId);
 
             var accountModel = Mapper.Map<AccountEditModel>(account);
 
@@ -82,33 +91,28 @@ namespace PersonalFinanceManager.Services
 
         public void EditBankAccount(AccountEditModel accountEditModel, string userId)
         {
-            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == accountEditModel.Id);
+            var accountModel = _bankAccountRepository.GetById(accountEditModel.Id);
 
             accountModel.Name = accountEditModel.Name;
             accountModel.CurrencyId = accountEditModel.CurrencyId;
             accountModel.BankId = accountEditModel.BankId;
 
-            _db.Entry(accountModel).State = EntityState.Modified;
-
-            _db.SaveChanges();
+            _bankAccountRepository.Update(accountModel);
         }
 
         public void DeleteBankAccount(int id)
         {
-            AccountModel accountModel = _db.AccountModels.Find(id);
-            _db.AccountModels.Remove(accountModel);
-            _db.SaveChanges();
+            var accountModel = _bankAccountRepository.GetById(id);
+            _bankAccountRepository.Delete(accountModel);
         }
         
         public void SetAsFavorite(int id)
         {
-            foreach(var account in _db.AccountModels)
+            foreach(var account in _bankAccountRepository.GetList())
             {
                 account.IsFavorite = account.Id == id;
-                _db.Entry(account).State = EntityState.Modified;
+                _bankAccountRepository.Update(account);
             }
-
-            _db.SaveChanges();
         }
     }
 }

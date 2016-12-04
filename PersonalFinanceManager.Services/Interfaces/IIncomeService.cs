@@ -12,7 +12,6 @@ using System.Diagnostics;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Entities.Enumerations;
-using PersonalFinanceManager.Services.Extensions;
 using PersonalFinanceManager.Services.Core;
 
 namespace PersonalFinanceManager.Services.Interfaces

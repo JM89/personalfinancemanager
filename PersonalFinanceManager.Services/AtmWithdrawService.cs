@@ -15,26 +15,34 @@ using System.Data.Entity.Infrastructure;
 using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
     public class AtmWithdrawService : IAtmWithdrawService
     {
-        private ApplicationDbContext _db;
+        private readonly IAtmWithdrawRepository _atmWithdrawRepository;
+        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IExpenditureRepository _expenditureRepository;
+        private readonly IHistoricMovementRepository _historicMovementRepository;
 
-        public AtmWithdrawService(ApplicationDbContext db)
+        public AtmWithdrawService(IAtmWithdrawRepository atmWithdrawRepository, IBankAccountRepository bankAccountRepository, IExpenditureRepository expenditureRepository,
+            IHistoricMovementRepository historicMovementRepository)
         {
-            this._db = db;
+            this._atmWithdrawRepository = atmWithdrawRepository;
+            this._bankAccountRepository = bankAccountRepository;
+            this._expenditureRepository = expenditureRepository;
+            this._historicMovementRepository = historicMovementRepository;
         }
-        
+              
         public IList<AtmWithdrawListModel> GetAtmWithdrawsByAccountId(int accountId)
         {
-            var atmWithdraws = _db.AtmWithdrawModels
+            var atmWithdraws = _atmWithdrawRepository.GetList()
                 .Include(u => u.Account.Currency)
                 .Where(x => x.Account.Id == accountId)
                 .ToList();
 
-            var expenditures = _db.ExpenditureModels;
+            var expenditures = _expenditureRepository.GetList();
 
             var mappedAtmWithdraws = atmWithdraws.Select(x => Mapper.Map<AtmWithdrawListModel>(x)).ToList();
 
@@ -50,27 +58,20 @@ namespace PersonalFinanceManager.Services
         public void CreateAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel)
         {
             var atmWithdrawModel = Mapper.Map<AtmWithdrawModel>(atmWithdrawEditModel);
-
             atmWithdrawModel.CurrentAmount = atmWithdrawEditModel.InitialAmount;
             atmWithdrawModel.IsClosed = false;
+            _atmWithdrawRepository.Create(atmWithdrawModel);
 
-            _db.AtmWithdrawModels.Add(atmWithdrawModel);
-
-            _db.SaveChanges();
-
-            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == atmWithdrawModel.AccountId);
+            var accountModel = _bankAccountRepository.GetById(atmWithdrawModel.AccountId);
             accountModel.CurrentBalance -= atmWithdrawModel.InitialAmount;
+            _bankAccountRepository.Update(accountModel);
 
-            _db.Entry(accountModel).State = EntityState.Modified;
-
-            HistoricMovementHelper.SaveDebitMovement(_db, atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
-
-            _db.SaveChanges();
+            _historicMovementRepository.SaveDebitMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
         }
 
         public AtmWithdrawEditModel GetById(int id)
         {
-            var atmWithdraw = _db.AtmWithdrawModels.SingleOrDefault(x => x.Id == id);
+            var atmWithdraw = _atmWithdrawRepository.GetById(id);
 
             if (atmWithdraw == null)
             {
@@ -82,7 +83,7 @@ namespace PersonalFinanceManager.Services
 
         public void EditAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel)
         {
-            var atmWithdrawModel = _db.AtmWithdrawModels.SingleOrDefault(x => x.Id == atmWithdrawEditModel.Id);
+            var atmWithdrawModel = _atmWithdrawRepository.GetById(atmWithdrawEditModel.Id);
 
             var oldCost = atmWithdrawModel.InitialAmount;
             atmWithdrawModel.InitialAmount = atmWithdrawEditModel.InitialAmount;
@@ -90,62 +91,46 @@ namespace PersonalFinanceManager.Services
             atmWithdrawModel.DateExpenditure = atmWithdrawEditModel.DateExpenditure;
             atmWithdrawModel.HasBeenAlreadyDebited = atmWithdrawEditModel.HasBeenAlreadyDebited;
 
-            _db.Entry(atmWithdrawModel).State = EntityState.Modified;
-
-            _db.SaveChanges();
-
+            _atmWithdrawRepository.Update(atmWithdrawModel);
+            
             if (oldCost != atmWithdrawModel.InitialAmount)
             {
-                var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == atmWithdrawModel.AccountId);
+                var accountModel = _bankAccountRepository.GetById(atmWithdrawModel.AccountId);
                 accountModel.CurrentBalance += oldCost;
                 accountModel.CurrentBalance -= atmWithdrawModel.InitialAmount;
+                _bankAccountRepository.Update(accountModel);
 
-                _db.Entry(accountModel).State = EntityState.Modified;
-
-                HistoricMovementHelper.SaveCreditMovement(_db, atmWithdrawModel.AccountId, oldCost, TargetOptions.Account, MovementType.AtmWithdraw);
-                HistoricMovementHelper.SaveDebitMovement(_db, atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+                _historicMovementRepository.SaveCreditMovement(atmWithdrawModel.AccountId, oldCost, TargetOptions.Account, MovementType.AtmWithdraw);
+                _historicMovementRepository.SaveDebitMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
             }
-
-            _db.SaveChanges();
         }
 
 
         public void CloseAtmWithdraw(int id)
         {
-            var atmWithdrawModel = _db.AtmWithdrawModels.Single(x => x.Id == id);
-
+            var atmWithdrawModel = _atmWithdrawRepository.GetById(id); 
             atmWithdrawModel.IsClosed = true;
-
-            _db.Entry(atmWithdrawModel).State = EntityState.Modified;
-            _db.SaveChanges();
+            _atmWithdrawRepository.Update(atmWithdrawModel);
         }
 
         public void DeleteAtmWithdraw(int id)
         {
-            AtmWithdrawModel atmWithdrawModel = _db.AtmWithdrawModels.Find(id);
+            var atmWithdrawModel = _atmWithdrawRepository.GetById(id);
 
-            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == atmWithdrawModel.AccountId);
+            var accountModel = _bankAccountRepository.GetById(atmWithdrawModel.AccountId);
             accountModel.CurrentBalance += atmWithdrawModel.InitialAmount;
-            _db.Entry(accountModel).State = EntityState.Modified;
+            _bankAccountRepository.Update(accountModel);
 
-            HistoricMovementHelper.SaveCreditMovement(_db, atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+            _historicMovementRepository.SaveCreditMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
 
-            _db.AtmWithdrawModels.Remove(atmWithdrawModel);
-
-            _db.SaveChanges();
+            _atmWithdrawRepository.Delete(atmWithdrawModel);
         }
 
         public void ChangeDebitStatus(int id, bool debitStatus)
         {
-            AtmWithdrawModel atmWithdrawModel = _db.AtmWithdrawModels.SingleOrDefault(x => x.Id == id);
+            AtmWithdrawModel atmWithdrawModel = _atmWithdrawRepository.GetById(id);
             atmWithdrawModel.HasBeenAlreadyDebited = debitStatus;
-            _db.Entry(atmWithdrawModel).State = EntityState.Modified;
-            _db.SaveChanges();
-        }
-
-        public void Dispose()
-        {
-            _db.Dispose();
+            _atmWithdrawRepository.Update(atmWithdrawModel);
         }
     }
 }

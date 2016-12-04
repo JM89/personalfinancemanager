@@ -19,9 +19,9 @@ namespace PersonalFinanceManager.Services
 {
     public class BankService : IBankService
     {
-        private IBankRepository _bankRepository;
-        private IBankAccountRepository _bankAccountRepository;
-        private IBankBranchRepository _bankBranchRepository;
+        private readonly IBankRepository _bankRepository;
+        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IBankBranchRepository _bankBranchRepository;
 
         public BankService(IBankRepository bankRepository, IBankAccountRepository bankAccountRepository, IBankBranchRepository bankBranchRepository)
         {

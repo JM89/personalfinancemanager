@@ -10,23 +10,26 @@ using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
     public class CurrencyService : ICurrencyService
     {
-        private ApplicationDbContext _db;
+        private readonly ICurrencyRepository _currencyRepository;
+        private readonly IBankAccountRepository _bankAccountRepository;
 
-        public CurrencyService(ApplicationDbContext db)
+        public CurrencyService(ICurrencyRepository currencyRepository, IBankAccountRepository bankAccountRepository)
         {
-            this._db = db;
+            this._currencyRepository = currencyRepository;
+            this._bankAccountRepository = bankAccountRepository;
         }
 
         public IList<CurrencyListModel> GetCurrencies()
         {
-            var currencies = _db.CurrencyModels.ToList();
+            var currencies = _currencyRepository.GetList().ToList();
 
-            var accounts = _db.AccountModels;
+            var accounts = _bankAccountRepository.GetList();
 
             var currenciesModel = currencies.Select(x => Mapper.Map<CurrencyListModel>(x)).ToList();
 
@@ -40,7 +43,7 @@ namespace PersonalFinanceManager.Services
 
         public CurrencyEditModel GetById(int id)
         {
-            var currency = _db.CurrencyModels.SingleOrDefault(x => x.Id == id);
+            var currency = _currencyRepository.GetById(id);
 
             if (currency == null)
             {
@@ -53,27 +56,21 @@ namespace PersonalFinanceManager.Services
         public void CreateCurrency(CurrencyEditModel currencyEditModel)
         {
             var currencyModel = Mapper.Map<CurrencyModel>(currencyEditModel);
-
-            _db.CurrencyModels.Add(currencyModel);
-            _db.SaveChanges();
+            _currencyRepository.Create(currencyModel);
         }
 
         public void EditCurrency(CurrencyEditModel currencyEditModel)
         {
-            var currencyModel = _db.CurrencyModels.SingleOrDefault(x => x.Id == currencyEditModel.Id);
+            var currencyModel = _currencyRepository.GetById(currencyEditModel.Id); 
             currencyModel.Name = currencyEditModel.Name;
             currencyModel.Symbol = currencyEditModel.Symbol;
-
-            _db.Entry(currencyModel).State = EntityState.Modified;
-
-            _db.SaveChanges();
+            _currencyRepository.Update(currencyModel);
         }
 
         public void DeleteCurrency(int id)
         {
-            CurrencyModel currencyModel = _db.CurrencyModels.Find(id);
-            _db.CurrencyModels.Remove(currencyModel);
-            _db.SaveChanges();
+            var currencyModel = _currencyRepository.GetById(id);
+            _currencyRepository.Delete(currencyModel);
         }
     }
 }

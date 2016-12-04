@@ -1,4 +1,4 @@
-﻿using PersonalFinanceManager.DataAccess;
+﻿using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 using PersonalFinanceManager.Entities;
 using PersonalFinanceManager.Entities.Enumerations;
 using System;
@@ -7,16 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.Services.ExpenditureStrategy
+namespace PersonalFinanceManager.DataAccess.Repositories
 {
-    public static class HistoricMovementHelper
+    public class HistoricMovementRepository : BaseRepository<HistoricMovementModel>, IHistoricMovementRepository
     {
-        public static void SaveDebitMovement(ApplicationDbContext dbContext, int targetId, decimal cost, TargetOptions targetOption, MovementType movementType)
+        public HistoricMovementRepository(ApplicationDbContext db) : base(db)
+        {
+
+        }
+
+        public void SaveDebitMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType)
         {
             var historicMovement = new HistoricMovementModel()
             {
                 Cost = -cost,
-                Date = DateTime.Now, 
+                Date = DateTime.Now,
                 MovementType = (int)movementType
             };
 
@@ -29,10 +34,10 @@ namespace PersonalFinanceManager.Services.ExpenditureStrategy
                 historicMovement.AtmWithdrawId = targetId;
             }
 
-            dbContext.HistoricMovementModels.Add(historicMovement);
+            Create(historicMovement);
         }
 
-        public static void SaveCreditMovement(ApplicationDbContext dbContext, int targetId, decimal cost, TargetOptions targetOption, MovementType movementType)
+        public void SaveCreditMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType)
         {
 
             var historicMovement = new HistoricMovementModel()
@@ -51,7 +56,7 @@ namespace PersonalFinanceManager.Services.ExpenditureStrategy
                 historicMovement.AtmWithdrawId = targetId;
             }
 
-            dbContext.HistoricMovementModels.Add(historicMovement);
+            Create(historicMovement);
         }
     }
 }

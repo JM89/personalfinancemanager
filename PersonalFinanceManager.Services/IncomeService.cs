@@ -12,33 +12,38 @@ using System.Diagnostics;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Entities.Enumerations;
-using PersonalFinanceManager.Services.Extensions;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
+using PersonalFinanceManager.Services.Helpers;
 
 namespace PersonalFinanceManager.Services
 {
-    public class IncomeService: IDisposable, IIncomeService
+    public class IncomeService: IIncomeService
     {
-        private ApplicationDbContext _db;
+        private readonly IIncomeRepository _incomeRepository;
+        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IHistoricMovementRepository _historicMovementRepository;
 
-        public IncomeService(ApplicationDbContext db)
+        public IncomeService(IIncomeRepository incomeRepository, IBankAccountRepository bankAccountRepository,
+            IHistoricMovementRepository historicMovementRepository)
         {
-            this._db = db;
+            this._incomeRepository = incomeRepository;
+            this._bankAccountRepository = bankAccountRepository;
+            this._historicMovementRepository = historicMovementRepository;
         }
-
+        
         public void CreateIncome(IncomeEditModel incomeEditModel)
         {
             var incomeModel = Mapper.Map<IncomeModel>(incomeEditModel);
-            _db.IncomeModels.Add(incomeModel);
-            _db.SaveChanges();
+            _incomeRepository.Create(incomeModel);
 
-            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == incomeModel.AccountId);
-            accountModel.Credit(_db, incomeModel.Cost, MovementType.Income);
+            var accountModel = _bankAccountRepository.GetById(incomeModel.AccountId);
+            MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, accountModel, incomeModel.Cost, MovementType.Income);
         }
 
         public IList<IncomeListModel> GetIncomes(int accountId)
         {
-            var incomes = _db.IncomeModels.Include(u => u.Account.Currency).Where(x => x.AccountId == accountId).ToList();
+            var incomes = _incomeRepository.GetList().Include(u => u.Account.Currency).Where(x => x.AccountId == accountId).ToList();
 
             var incomesModel = incomes.Select(x => Mapper.Map<IncomeListModel>(x));
             
@@ -47,7 +52,7 @@ namespace PersonalFinanceManager.Services
 
         public IncomeEditModel GetById(int id)
         {
-            var income = _db.IncomeModels.SingleOrDefault(x => x.Id == id);
+            var income = _incomeRepository.GetById(id);
 
             if (income == null)
             {
@@ -59,7 +64,7 @@ namespace PersonalFinanceManager.Services
 
         public void EditIncome(IncomeEditModel incomeEditModel)
         {
-            var income = _db.IncomeModels.Single(x => x.Id == incomeEditModel.Id);
+            var income = _incomeRepository.GetById(incomeEditModel.Id);
 
             var oldCost = income.Cost;
 
@@ -67,32 +72,23 @@ namespace PersonalFinanceManager.Services
             income.Cost = incomeEditModel.Cost;
             income.AccountId = incomeEditModel.AccountId;
             income.DateIncome = incomeEditModel.DateIncome;
-
-            _db.Entry(income).State = EntityState.Modified;
-
-            _db.SaveChanges();
+            _incomeRepository.Update(income);
 
             if (oldCost != income.Cost)
             {
-                var account = _db.AccountModels.SingleOrDefault(x => x.Id == income.AccountId);
-                account.Credit(_db, oldCost, MovementType.Income);
-                account.Debit(_db, income.Cost, MovementType.Income);
+                var account = _bankAccountRepository.GetById(income.AccountId);
+                MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, account, oldCost, MovementType.Income);
+                MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, account, income.Cost, MovementType.Income);
             }
         }
 
         public void DeleteIncome(int id)
         {
-            IncomeModel incomeModel = _db.IncomeModels.Find(id);
-            _db.IncomeModels.Remove(incomeModel);
-            _db.SaveChanges();
+            var incomeModel = _incomeRepository.GetById(id);
+            _incomeRepository.Delete(incomeModel);
 
-            var accountModel = _db.AccountModels.SingleOrDefault(x => x.Id == incomeModel.AccountId);
-            accountModel.Debit(_db, incomeModel.Cost, MovementType.Income);
-        }
-
-        public void Dispose()
-        {
-            _db.Dispose();
+            var accountModel = _bankAccountRepository.GetById(incomeModel.AccountId);
+            MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, accountModel, incomeModel.Cost, MovementType.Income);
         }
     }
 }

@@ -11,23 +11,22 @@ using AutoMapper;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.Interfaces;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
     public class PaymentMethodService : IPaymentMethodService
     {
-        private ApplicationDbContext _db;
+        private readonly IPaymentMethodRepository _paymentMethodRepository;
 
-        public PaymentMethodService(ApplicationDbContext db)
+        public PaymentMethodService(IPaymentMethodRepository paymentMethodRepository)
         {
-            this._db = db;
+            this._paymentMethodRepository = paymentMethodRepository;
         }
-       
+
         public IList<PaymentMethodListModel> GetPaymentMethods()
         {
-            var expenditures = _db.ExpenditureModels;
-
-            var paymentMethods = _db.PaymentMethodModels.ToList();
+            var paymentMethods = _paymentMethodRepository.GetList().ToList();
 
             var paymentMethodsModel = paymentMethods.Select(x => Mapper.Map<PaymentMethodListModel>(x)).ToList();
 

@@ -1,4 +1,5 @@
 ﻿using PersonalFinanceManager.DataAccess;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 using PersonalFinanceManager.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,20 @@ namespace PersonalFinanceManager.Services.ExpenditureStrategy
 {
     public abstract class ExpenditureStrategy
     {
-        protected ApplicationDbContext _dbContext;
         protected ExpenditureModel _expenditureModel;
 
-        protected ExpenditureStrategy(ApplicationDbContext dbContext, ExpenditureModel expenditureModel)
+        protected IBankAccountRepository _bankAccountRepository;
+        protected IAtmWithdrawRepository _atmWithdrawRepository;
+        protected IIncomeRepository _incomeRepository;
+        protected IHistoricMovementRepository _historicMovementRepository;
+
+        protected ExpenditureStrategy(IBankAccountRepository bankAccountRepository, IAtmWithdrawRepository atmWithdrawRepository,
+             IIncomeRepository incomeRepository, IHistoricMovementRepository historicMovementRepository, ExpenditureModel expenditureModel)
         {
-            _dbContext = dbContext;
+            _bankAccountRepository = bankAccountRepository;
+            _atmWithdrawRepository = atmWithdrawRepository;
+            _historicMovementRepository = historicMovementRepository;
+            _incomeRepository = incomeRepository;
             _expenditureModel = expenditureModel;
         }
 
