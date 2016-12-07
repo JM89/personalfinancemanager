@@ -217,6 +217,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ExternalApi\ConversionRateApi.cs" />
+    <Compile Include="Helpers\ExternalApi\ConversionRateResult.cs" />
     <Compile Include="Helpers\FileUpload.cs" />
     <Compile Include="Helpers\Filters\UnitOrWorkAttribute.cs" />
     <Compile Include="Helpers\MvcHtmlExtensions.cs" />

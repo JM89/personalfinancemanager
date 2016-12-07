@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using PersonalFinanceManager.Helpers;
+using PersonalFinanceManager.Helpers.ExternalApi;
 using PersonalFinanceManager.Models.Helpers.Chart;
 using PersonalFinanceManager.Models.Home;
 using PersonalFinanceManager.Services;
@@ -19,13 +20,16 @@ namespace PersonalFinanceManager.Controllers
         private readonly IPaymentMethodService _paymentMethodService;
         private readonly IBankAccountService _bankAccountService;
         private readonly IUserProfileService _userProfileService;
+        private readonly ICurrencyService _currencyService;
 
-        public HomeController(IExpenditureService expenditureService, IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService, IUserProfileService userProfileService)
+        public HomeController(IExpenditureService expenditureService, IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService, 
+            IUserProfileService userProfileService, ICurrencyService currencyService)
         {
             this._expenditureService = expenditureService;
             this._paymentMethodService = paymentMethodService;
             this._bankAccountService = bankAccountService;
             this._userProfileService = userProfileService;
+            this._currencyService = currencyService;
         }
 
         public ActionResult Index()
@@ -34,7 +38,7 @@ namespace PersonalFinanceManager.Controllers
             {
                 return Redirect("/Account/Login");
             }
-            
+
             var model = new HomePageModel();
 
             var debitMvts = this._expenditureService.GetExpenditures(new ExpenditureSearch());
@@ -75,12 +79,27 @@ namespace PersonalFinanceManager.Controllers
             {
                 var fullAccountDetails = _bankAccountService.GetById(account.Id);
                 model.FavoriteAccountCurrencySymbol = fullAccountDetails.CurrencySymbol;
-                model.FavoriteConversionRate = new ConversionRateModel()
+
+                var currencies = _currencyService.GetCurrencies().Where(x => x.Id != fullAccountDetails.CurrencyId).ToList();
+                if (currencies.Any())
                 {
-                    BaseCurrencySymbol = "€",
-                    CurrencySymbol = fullAccountDetails.CurrencySymbol,
-                    CurrencyConversionRate = 1.17M
-                };
+                    var rdn = new Random();
+                    var randomCurrency = currencies[rdn.Next(0, currencies.Count())];
+
+                    var conversionRate = ConversionRateApi.GetRate(fullAccountDetails.CurrencyName, randomCurrency.Name);
+
+                    if (conversionRate.Valid)
+                    {
+                        model.FavoriteConversionRate = new ConversionRateModel()
+                        {
+                            BaseCurrencySymbol = randomCurrency.Symbol,
+                            CurrencySymbol = fullAccountDetails.CurrencySymbol,
+                            CurrencyConversionRate = conversionRate.ConversionRate.ConversionRate
+                        };
+
+                    }
+                }
+
                 model.FavoriteBankDetails = new Models.Bank.BankEditModel()
                 {
                     IconPath = fullAccountDetails.BankIconPath,
