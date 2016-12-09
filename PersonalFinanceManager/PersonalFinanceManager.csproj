@@ -199,6 +199,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\Startup.Ninject.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\SavingController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BudgetPlanController.cs" />
     <Compile Include="Controllers\AtmWithdrawController.cs" />
@@ -275,6 +276,7 @@
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
     <Content Include="Scripts\custom\Bank.js" />
+    <Content Include="Scripts\custom\Saving.js" />
     <Content Include="Scripts\custom\HomePage.js" />
     <Content Include="Scripts\custom\Shared.js" />
     <Content Include="Scripts\custom\SplitByTypeDashboard.js" />
@@ -379,6 +381,10 @@
     <Content Include="Views\UserProfile\Edit.cshtml" />
     <Content Include="Views\UserProfile\View.cshtml" />
     <Content Include="Views\Dashboard\SplitByTypeDashboard.cshtml" />
+    <Content Include="Views\Saving\Create.cshtml" />
+    <Content Include="Views\Saving\Delete.cshtml" />
+    <Content Include="Views\Saving\Edit.cshtml" />
+    <Content Include="Views\Saving\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

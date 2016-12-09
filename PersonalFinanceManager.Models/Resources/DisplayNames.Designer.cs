@@ -61,6 +61,51 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bank.
+        /// </summary>
+        internal static string AccountBank {
+            get {
+                return ResourceManager.GetString("AccountBank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency.
+        /// </summary>
+        internal static string AccountCurrency {
+            get {
+                return ResourceManager.GetString("AccountCurrency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Balance.
+        /// </summary>
+        internal static string AccountCurrentBalance {
+            get {
+                return ResourceManager.GetString("AccountCurrentBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initial Balance.
+        /// </summary>
+        internal static string AccountInitialBalance {
+            get {
+                return ResourceManager.GetString("AccountInitialBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving account?.
+        /// </summary>
+        internal static string AccountIsSavingAccount {
+            get {
+                return ResourceManager.GetString("AccountIsSavingAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current Amount.
         /// </summary>
         internal static string AtmWithdrawCurrentAmount {
@@ -579,6 +624,42 @@ namespace PersonalFinanceManager.Models.Resources {
         internal static string PeriodicOutcomeTypeExpenditure {
             get {
                 return ResourceManager.GetString("PeriodicOutcomeTypeExpenditure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount.
+        /// </summary>
+        internal static string SavingAmount {
+            get {
+                return ResourceManager.GetString("SavingAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        internal static string SavingDateSaving {
+            get {
+                return ResourceManager.GetString("SavingDateSaving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string SavingDescription {
+            get {
+                return ResourceManager.GetString("SavingDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving Account.
+        /// </summary>
+        internal static string SavingTargetInternalAccount {
+            get {
+                return ResourceManager.GetString("SavingTargetInternalAccount", resourceCulture);
             }
         }
         

@@ -91,12 +91,9 @@ namespace PersonalFinanceManager.Services
 
         public void EditBankAccount(AccountEditModel accountEditModel, string userId)
         {
-            var accountModel = _bankAccountRepository.GetById(accountEditModel.Id);
-
-            accountModel.Name = accountEditModel.Name;
-            accountModel.CurrencyId = accountEditModel.CurrencyId;
-            accountModel.BankId = accountEditModel.BankId;
-
+            var accountModel = _bankAccountRepository.GetList().AsNoTracking().SingleOrDefault(x => x.Id == accountEditModel.Id);
+            accountModel = Mapper.Map<AccountModel>(accountEditModel);
+            accountModel.User_Id = userId;
             _bankAccountRepository.Update(accountModel);
         }
 

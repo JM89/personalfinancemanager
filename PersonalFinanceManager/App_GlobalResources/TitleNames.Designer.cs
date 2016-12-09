@@ -547,6 +547,51 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a saving.
+        /// </summary>
+        internal static string SavingCreate {
+            get {
+                return ResourceManager.GetString("SavingCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete a saving.
+        /// </summary>
+        internal static string SavingDelete {
+            get {
+                return ResourceManager.GetString("SavingDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit a saving.
+        /// </summary>
+        internal static string SavingEdit {
+            get {
+                return ResourceManager.GetString("SavingEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of saving.
+        /// </summary>
+        internal static string SavingList {
+            get {
+                return ResourceManager.GetString("SavingList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage savings.
+        /// </summary>
+        internal static string SavingPages {
+            get {
+                return ResourceManager.GetString("SavingPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create user profile.
         /// </summary>
         internal static string UserProfileCreate {

@@ -1,4 +1,5 @@
 ﻿using PersonalFinanceManager.Models.Helpers;
+using PersonalFinanceManager.Models.Resources;
 using PersonalFinanceManager.Models.Shared;
 using System;
 using System.Collections.Generic;
@@ -15,17 +16,17 @@ namespace PersonalFinanceManager.Models.Account
 
         public string Name { get; set; }
 
-        [DisplayName("Bank")]
+        [LocalizedDisplayName("AccountBank")]
         public string BankName { get; set; }
 
         public string BankIconPath { get; set; }
 
-        [DisplayName("Currency")]
+        [LocalizedDisplayName("AccountCurrency")]
         public string CurrencyName { get; set; }
 
         public string CurrencySymbol { get; set; }
 
-        [DisplayName("Initial Balance")]
+        [LocalizedDisplayName("AccountInitialBalance")]
         public decimal InitialBalance { get; set; }
 
         public string DisplayedInitialBalance
@@ -36,7 +37,7 @@ namespace PersonalFinanceManager.Models.Account
             }
         }
 
-        [DisplayName("Current Balance")]
+        [LocalizedDisplayName("AccountCurrentBalance")]
         public decimal CurrentBalance { get; set; }
 
         public string DisplayedCurrentBalance
@@ -62,5 +63,8 @@ namespace PersonalFinanceManager.Models.Account
         }
         
         public bool IsFavorite { get; set; }
+
+        [LocalizedDisplayName("AccountIsSavingAccount")]
+        public bool IsSavingAccount { get; set; }
     }
 }

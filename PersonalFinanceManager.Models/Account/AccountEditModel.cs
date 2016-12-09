@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PersonalFinanceManager.Models.Resources;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -16,11 +17,11 @@ namespace PersonalFinanceManager.Models.Account
         public string Name { get; set; }
 
         [Required]
-        [DisplayName("Bank")]
+        [LocalizedDisplayName("AccountBank")]
         public int BankId { get; set; }
 
         [Required]
-        [DisplayName("Currency")]
+        [LocalizedDisplayName("AccountCurrency")]
         public int CurrencyId { get; set; }
 
         public string CurrencyName { get; set; }
@@ -28,10 +29,13 @@ namespace PersonalFinanceManager.Models.Account
         public string CurrencySymbol { get; set; }
 
         [Required]
-        [DisplayName("Initial Balance")]
+        [LocalizedDisplayName("AccountInitialBalance")]
         public decimal InitialBalance { get; set; }
 
         public decimal CurrentBalance { get; set; }
+
+        [LocalizedDisplayName("AccountIsSavingAccount")]
+        public bool IsSavingAccount { get; set; }
 
         public IList<SelectListItem> AvailableCurrencies { get; set; }
 

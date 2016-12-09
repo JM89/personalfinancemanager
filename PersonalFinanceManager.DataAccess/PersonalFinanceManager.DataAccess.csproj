@@ -58,10 +58,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="Migrations\201612080730137_saving.cs" />
+    <Compile Include="Migrations\201612080730137_saving.Designer.cs">
+      <DependentUpon>201612080730137_saving.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\SavingRepository.cs" />
     <Compile Include="Repositories\BudgetByExpenditureTypeRepository.cs" />
     <Compile Include="Repositories\HistoricMovementRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ISavingRepository.cs" />
     <Compile Include="Repositories\Interfaces\IBudgetByExpenditureTypeRepository.cs" />
     <Compile Include="Repositories\Interfaces\IHistoricMovementRepository.cs" />
     <Compile Include="Repositories\Interfaces\IPaymentMethodRepository.cs" />
@@ -100,6 +106,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201612080730137_saving.resx">
+      <DependentUpon>201612080730137_saving.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

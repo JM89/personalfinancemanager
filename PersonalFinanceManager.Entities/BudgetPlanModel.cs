@@ -21,6 +21,6 @@ namespace PersonalFinanceManager.Entities
 
         public IList<ChallengeModel> ToDos { get; set; }
 
-        public IList<SavingsPlanModel> Savings { get; set; }
+        //public IList<SavingsPlanModel> Savings { get; set; }
     }
 }

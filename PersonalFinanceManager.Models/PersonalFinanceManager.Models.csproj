@@ -101,6 +101,9 @@
     <Compile Include="Dashboard\SplitByTypeModel.cs" />
     <Compile Include="Dashboard\SplitByTypeDashboardModel.cs" />
     <Compile Include="Dashboard\SplitByTypeOverTimeValueModel.cs" />
+    <Compile Include="Helpers\DateTimeFormatHelper.cs" />
+    <Compile Include="Saving\SavingEditModel.cs" />
+    <Compile Include="Saving\SavingListModel.cs" />
     <Compile Include="Helpers\Chart\ChartValue.cs" />
     <Compile Include="Helpers\Chart\ChartData.cs" />
     <Compile Include="Helpers\Chart\ChartDataset.cs" />
@@ -114,7 +117,6 @@
     <Compile Include="ExpenditureType\ExpenditureTypeListModel.cs" />
     <Compile Include="Expenditure\ExpenditureEditModel.cs" />
     <Compile Include="Expenditure\ExpenditureListModel.cs" />
-    <Compile Include="Expenditure\ExpenditurePerTypeModel.cs" />
     <Compile Include="Helpers\DecimalFormatHelper.cs" />
     <Compile Include="Home\ConversionRateModel.cs" />
     <Compile Include="Home\HomePageModel.cs" />

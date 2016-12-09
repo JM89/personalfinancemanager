@@ -21,30 +21,12 @@ namespace PersonalFinanceManager.Entities
 
         public string User_Id { get; set; }
 
-        [DisplayName("Initial Balance")]
         public decimal InitialBalance { get; set; }
         
-        [NotMapped]
-        public string DisplayedInitialBalance
-        {
-            get
-            {
-                return this.Currency.Symbol + this.InitialBalance;
-            }
-        }
-
-        [DisplayName("Current Balance")]
         public decimal CurrentBalance { get; set; }
 
-        [NotMapped]
-        public string DisplayedCurrentBalance
-        {
-            get
-            {
-                return this.Currency.Symbol + this.CurrentBalance;
-            }
-        }
-
         public bool IsFavorite { get; set; }
+
+        public bool IsSavingAccount { get; set; }
     }
 }

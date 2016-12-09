@@ -279,6 +279,21 @@
   <data name="PeriodicOutcomePages" xml:space="preserve">
     <value>Manage outcomes</value>
   </data>
+  <data name="SavingCreate" xml:space="preserve">
+    <value>Create a saving</value>
+  </data>
+  <data name="SavingDelete" xml:space="preserve">
+    <value>Delete a saving</value>
+  </data>
+  <data name="SavingEdit" xml:space="preserve">
+    <value>Edit a saving</value>
+  </data>
+  <data name="SavingList" xml:space="preserve">
+    <value>List of saving</value>
+  </data>
+  <data name="SavingPages" xml:space="preserve">
+    <value>Manage savings</value>
+  </data>
   <data name="UserProfileCreate" xml:space="preserve">
     <value>Create user profile</value>
   </data>

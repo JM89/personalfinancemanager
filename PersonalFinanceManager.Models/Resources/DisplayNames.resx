@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountBank" xml:space="preserve">
+    <value>Bank</value>
+  </data>
+  <data name="AccountCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="AccountCurrentBalance" xml:space="preserve">
+    <value>Current Balance</value>
+  </data>
+  <data name="AccountInitialBalance" xml:space="preserve">
+    <value>Initial Balance</value>
+  </data>
+  <data name="AccountIsSavingAccount" xml:space="preserve">
+    <value>Saving account?</value>
+  </data>
   <data name="AtmWithdrawCurrentAmount" xml:space="preserve">
     <value>Current Amount</value>
   </data>
@@ -290,6 +305,18 @@
   </data>
   <data name="PeriodicOutcomeTypeExpenditure" xml:space="preserve">
     <value>Expenditure Type</value>
+  </data>
+  <data name="SavingAmount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="SavingDateSaving" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="SavingDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="SavingTargetInternalAccount" xml:space="preserve">
+    <value>Saving Account</value>
   </data>
   <data name="UserProfileFirstName" xml:space="preserve">
     <value>First Name</value>

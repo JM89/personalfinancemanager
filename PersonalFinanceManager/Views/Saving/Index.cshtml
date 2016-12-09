@@ -1,0 +1,84 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Saving.SavingListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = "Manage savings";
+    ViewBag.GridTitle = "List of savings";
+}
+
+@section BreadCrumbSection
+{
+    <li>
+        @ViewBag.AccountName
+    </li>
+    <li>
+        Mouvements
+    </li>
+    <li class="active">
+        <strong>@ViewBag.GridTitle</strong>
+    </li>
+}
+
+@section AccountDetails
+{
+    <div class="alert alert-info" role="alert">
+        <table>
+            <tr>
+                <td><strong>@Html.DisplayName("Current Amount:")</strong></td>
+                <td>@ViewBag.CurrentAmount</td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section AddButtonSection
+{
+    <a href="/Saving/Create" title="add" class="btn_create"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable2">
+        <colgroup>
+            <col width="10%" />
+            <col width="10%" />
+            <col width="15%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateSaving)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedDateSaving)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.DisplayedAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td align="right">
+                        <a href="/Saving/Edit/@item.Id" title="edit"><i class="fa fa-pencil-square-o"></i></a> |
+                        <a href="/Saving/Delete/@item.Id" title="delete"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
