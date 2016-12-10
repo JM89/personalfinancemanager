@@ -27,3 +27,9 @@ ERROR 2016-12-10 10:44:00,169 29178ms BaseController         OnException        
 My great exception
 ERROR 2016-12-10 10:44:00,298 29308ms BaseController         OnException        - 
 My great exception
+ERROR 2016-12-10 10:47:40,643  2370ms BaseController         OnException        - 
+My great exception
+ERROR 2016-12-10 10:48:03,679  2397ms BaseController         OnException        - 
+My great exception
+ERROR 2016-12-10 10:48:56,853  2326ms BaseController         OnException        - 
+My great exception

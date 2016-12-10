@@ -34,8 +34,6 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult Index()
         {
-            throw new Exception("My great exception");
-
             if (!User.Identity.IsAuthenticated)
             {
                 return Redirect("/Account/Login");
