@@ -1,0 +1,29 @@
+ERROR 2016-12-09 08:06:35,880  9050ms BaseController         OnException        - An exception occured:
+My great exception
+ERROR 2016-12-10 10:27:11,520 94844690ms BaseController         OnException        - An exception occured:
+My great exception
+ERROR 2016-12-10 10:28:09,346  4169ms BaseController         OnException        - An exception occured:
+My great exception
+ERROR 2016-12-10 10:28:10,107  4930ms BaseController         OnException        - An exception occured:
+My great exception
+ERROR 2016-12-10 10:33:03,435  5700ms BaseController         OnException        - An exception occured:
+My great exception
+ERROR 2016-12-10 10:33:28,933 31198ms BaseController         OnException        - An exception occured:
+My great exception
+ERROR 2016-12-10 10:39:12,749  2275ms BaseController         OnException        - My great exception
+ERROR 2016-12-10 10:42:31,842  2679ms BaseController         OnException        - My great exception
+ERROR 2016-12-10 10:42:37,019  7856ms BaseController         OnException        - My great exception
+ERROR 2016-12-10 10:43:33,395  2405ms BaseController         OnException        - 
+My great exception
+ERROR 2016-12-10 10:43:44,921 13930ms BaseController         OnException        - 
+My great exception
+ERROR 2016-12-10 10:43:59,631 28640ms BaseController         OnException        - 
+My great exception
+ERROR 2016-12-10 10:43:59,790 28800ms BaseController         OnException        - 
+My great exception
+ERROR 2016-12-10 10:43:59,986 28995ms BaseController         OnException        - 
+My great exception
+ERROR 2016-12-10 10:44:00,169 29178ms BaseController         OnException        - 
+My great exception
+ERROR 2016-12-10 10:44:00,298 29308ms BaseController         OnException        - 
+My great exception

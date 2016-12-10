@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using log4net.Config;
+using Microsoft.Owin;
 using Owin;
 using PersonalFinanceManager.App_Start;
 using System.Web.Mvc;
@@ -10,6 +11,8 @@ namespace PersonalFinanceManager
     {
         public void Configuration(IAppBuilder app)
         {
+            XmlConfigurator.Configure();
+
             ConfigureAuth(app);
             ConfigureNinject(app);
 

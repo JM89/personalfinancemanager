@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using log4net;
+using Microsoft.AspNet.Identity;
 using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Models.Account;
 using PersonalFinanceManager.Services;
@@ -14,6 +15,8 @@ namespace PersonalFinanceManager.Controllers
 {
     public class BaseController : Controller
     {
+        private ILog log = LogManager.GetLogger(typeof(BaseController));
+
         private readonly IBankAccountService _bankAccountService;
 
         public BaseController(IBankAccountService bankAccountService)
@@ -44,6 +47,10 @@ namespace PersonalFinanceManager.Controllers
                     ViewData = controller.ViewData,
                     TempData = controller.TempData
                 };
+            }
+            else
+            {
+                log.Error($"\n{ex.Message}");
             }
         }
 

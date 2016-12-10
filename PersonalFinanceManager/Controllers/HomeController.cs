@@ -14,7 +14,7 @@ using System.Web.Mvc;
 
 namespace PersonalFinanceManager.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly IExpenditureService _expenditureService;
         private readonly IPaymentMethodService _paymentMethodService;
@@ -23,7 +23,7 @@ namespace PersonalFinanceManager.Controllers
         private readonly ICurrencyService _currencyService;
 
         public HomeController(IExpenditureService expenditureService, IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService, 
-            IUserProfileService userProfileService, ICurrencyService currencyService)
+            IUserProfileService userProfileService, ICurrencyService currencyService): base(bankAccountService)
         {
             this._expenditureService = expenditureService;
             this._paymentMethodService = paymentMethodService;
@@ -34,6 +34,8 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult Index()
         {
+            throw new Exception("My great exception");
+
             if (!User.Identity.IsAuthenticated)
             {
                 return Redirect("/Account/Login");
