@@ -9,42 +9,42 @@ namespace PersonalFinanceManager.Utils.Automapper
 {
     public class EntityToModelMapping : Profile
     {
-        protected override void Configure()
+        public EntityToModelMapping()
         {
-            Mapper.CreateMap<Entities.ExpenditureModel, Models.Expenditure.ExpenditureListModel>();
-            Mapper.CreateMap<Entities.ExpenditureModel, Models.Expenditure.ExpenditureEditModel>();
+            CreateMap<Entities.ExpenditureModel, Models.Expenditure.ExpenditureListModel>();
+            CreateMap<Entities.ExpenditureModel, Models.Expenditure.ExpenditureEditModel>();
 
-            Mapper.CreateMap<Entities.PaymentMethodModel, Models.PaymentMethod.PaymentMethodListModel>();
+            CreateMap<Entities.PaymentMethodModel, Models.PaymentMethod.PaymentMethodListModel>();
 
-            Mapper.CreateMap<Entities.AtmWithdrawModel, Models.AtmWithdraw.AtmWithdrawEditModel>();
-            Mapper.CreateMap<Entities.AtmWithdrawModel, Models.AtmWithdraw.AtmWithdrawListModel>();
+            CreateMap<Entities.AtmWithdrawModel, Models.AtmWithdraw.AtmWithdrawEditModel>();
+            CreateMap<Entities.AtmWithdrawModel, Models.AtmWithdraw.AtmWithdrawListModel>();
 
-            Mapper.CreateMap<Entities.ExpenditureTypeModel, Models.ExpenditureType.ExpenditureTypeListModel>();
-            Mapper.CreateMap<Entities.ExpenditureTypeModel, Models.ExpenditureType.ExpenditureTypeEditModel>();
+            CreateMap<Entities.ExpenditureTypeModel, Models.ExpenditureType.ExpenditureTypeListModel>();
+            CreateMap<Entities.ExpenditureTypeModel, Models.ExpenditureType.ExpenditureTypeEditModel>();
 
-            Mapper.CreateMap<Entities.CountryModel, Models.Country.CountryListModel>();
-            Mapper.CreateMap<Entities.CountryModel, Models.Country.CountryEditModel>();
+            CreateMap<Entities.CountryModel, Models.Country.CountryListModel>();
+            CreateMap<Entities.CountryModel, Models.Country.CountryEditModel>();
 
-            Mapper.CreateMap<Entities.IncomeModel, Models.Income.IncomeListModel>();
-            Mapper.CreateMap<Entities.IncomeModel, Models.Income.IncomeEditModel>();
+            CreateMap<Entities.IncomeModel, Models.Income.IncomeListModel>();
+            CreateMap<Entities.IncomeModel, Models.Income.IncomeEditModel>();
 
-            Mapper.CreateMap<Entities.BankModel, Models.Bank.BankListModel>();
-            Mapper.CreateMap<Entities.BankModel, Models.Bank.BankEditModel>();
-            Mapper.CreateMap<Entities.BankBrandModel, Models.Bank.BankBrandEditModel>();
+            CreateMap<Entities.BankModel, Models.Bank.BankListModel>();
+            CreateMap<Entities.BankModel, Models.Bank.BankEditModel>();
+            CreateMap<Entities.BankBrandModel, Models.Bank.BankBrandEditModel>();
 
-            Mapper.CreateMap<Entities.CurrencyModel, Models.Currency.CurrencyListModel>();
-            Mapper.CreateMap<Entities.CurrencyModel, Models.Currency.CurrencyEditModel>();
+            CreateMap<Entities.CurrencyModel, Models.Currency.CurrencyListModel>();
+            CreateMap<Entities.CurrencyModel, Models.Currency.CurrencyEditModel>();
 
-            Mapper.CreateMap<Entities.AccountModel, Models.Account.AccountListModel>();
-            Mapper.CreateMap<Entities.AccountModel, Models.Account.AccountEditModel>();
+            CreateMap<Entities.AccountModel, Models.Account.AccountListModel>();
+            CreateMap<Entities.AccountModel, Models.Account.AccountEditModel>();
 
-            Mapper.CreateMap<Entities.BudgetPlanModel, Models.BudgetPlan.BudgetPlanListModel>();
-            Mapper.CreateMap<Entities.BudgetPlanModel, Models.BudgetPlan.BudgetPlanEditModel>();
+            CreateMap<Entities.BudgetPlanModel, Models.BudgetPlan.BudgetPlanListModel>();
+            CreateMap<Entities.BudgetPlanModel, Models.BudgetPlan.BudgetPlanEditModel>();
 
-            Mapper.CreateMap<Entities.UserProfileModel, Models.UserProfile.UserProfileEditModel>();
+            CreateMap<Entities.UserProfileModel, Models.UserProfile.UserProfileEditModel>();
 
-            Mapper.CreateMap<Entities.SavingModel, Models.Saving.SavingListModel>();
-            Mapper.CreateMap<Entities.SavingModel, Models.Saving.SavingEditModel>();
+            CreateMap<Entities.SavingModel, Models.Saving.SavingListModel>();
+            CreateMap<Entities.SavingModel, Models.Saving.SavingEditModel>();
         }
     }
 }
