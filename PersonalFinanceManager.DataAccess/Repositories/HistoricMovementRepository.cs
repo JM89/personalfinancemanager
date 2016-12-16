@@ -21,8 +21,7 @@ namespace PersonalFinanceManager.DataAccess.Repositories
             var historicMovement = new HistoricMovementModel()
             {
                 Cost = -cost,
-                Date = DateTime.Now,
-                MovementType = (int)movementType
+                Date = DateTime.Now
             };
 
             if (targetOption == TargetOptions.Account)
@@ -43,8 +42,7 @@ namespace PersonalFinanceManager.DataAccess.Repositories
             var historicMovement = new HistoricMovementModel()
             {
                 Cost = cost,
-                Date = DateTime.Now,
-                MovementType = (int)movementType
+                Date = DateTime.Now
             };
 
             if (targetOption == TargetOptions.Account)

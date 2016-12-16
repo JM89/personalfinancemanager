@@ -41,20 +41,10 @@ namespace PersonalFinanceManager.UnitTests
                                 mockHistoricMovementRepository.Object, 
                                 mockIncomeRepository.Object);
 
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<ModelToEntityMapping>();
-                cfg.AddProfile<EntityToModelMapping>();
-            });
+            TestHelper.ConfigureAutomapper();
 
-            savingDbSet = new Mock<DbSet<SavingModel>>();
             var data = new List<SavingModel> { new SavingModel() { Id = 1 } };
-            var dataSet = data.AsQueryable();
-            savingDbSet.As<IQueryable<SavingModel>>().Setup(m => m.Provider).Returns(dataSet.Provider);
-            savingDbSet.As<IQueryable<SavingModel>>().Setup(m => m.Expression).Returns(dataSet.Expression);
-            savingDbSet.As<IQueryable<SavingModel>>().Setup(m => m.ElementType).Returns(dataSet.ElementType);
-            savingDbSet.As<IQueryable<SavingModel>>().Setup(m => m.GetEnumerator()).Returns(dataSet.GetEnumerator());
-            savingDbSet.Setup(m => m.Local).Returns(new ObservableCollection<SavingModel>(data));
+            savingDbSet = TestHelper.GetDbSet(data);
         }
 
         [TestMethod]
