@@ -61,6 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MovementStrategy\CommonMovementStrategy.cs" />
+    <Compile Include="MovementStrategy\ContextMovementStrategy.cs" />
+    <Compile Include="MovementStrategy\AtmWithdrawMovementStrategy.cs" />
+    <Compile Include="MovementStrategy\MovementStrategy.cs" />
+    <Compile Include="MovementStrategy\InternalTransferMovementStrategy.cs" />
+    <Compile Include="MovementStrategy\Movement.cs" />
     <Compile Include="SavingService.cs" />
     <Compile Include="BankAccountService.cs" />
     <Compile Include="BudgetPlanService.cs" />

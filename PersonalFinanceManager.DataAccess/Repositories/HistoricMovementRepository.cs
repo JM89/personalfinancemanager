@@ -16,45 +16,45 @@ namespace PersonalFinanceManager.DataAccess.Repositories
 
         }
 
-        public void SaveDebitMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType)
-        {
-            var historicMovement = new HistoricMovementModel()
-            {
-                Cost = -cost,
-                Date = DateTime.Now
-            };
+        //public void SaveDebitMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType)
+        //{
+        //    var historicMovement = new HistoricMovementModel()
+        //    {
+        //        Cost = -cost,
+        //        Date = DateTime.Now
+        //    };
 
-            if (targetOption == TargetOptions.Account)
-            {
-                historicMovement.AccountId = targetId;
-            }
-            else
-            {
-                historicMovement.AtmWithdrawId = targetId;
-            }
+        //    if (targetOption == TargetOptions.Account)
+        //    {
+        //        historicMovement.AccountId = targetId;
+        //    }
+        //    else
+        //    {
+        //        historicMovement.AtmWithdrawId = targetId;
+        //    }
 
-            Create(historicMovement);
-        }
+        //    Create(historicMovement);
+        //}
 
-        public void SaveCreditMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType)
-        {
+        //public void SaveCreditMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType)
+        //{
 
-            var historicMovement = new HistoricMovementModel()
-            {
-                Cost = cost,
-                Date = DateTime.Now
-            };
+        //    var historicMovement = new HistoricMovementModel()
+        //    {
+        //        Cost = cost,
+        //        Date = DateTime.Now
+        //    };
 
-            if (targetOption == TargetOptions.Account)
-            {
-                historicMovement.AccountId = targetId;
-            }
-            else
-            {
-                historicMovement.AtmWithdrawId = targetId;
-            }
+        //    if (targetOption == TargetOptions.Account)
+        //    {
+        //        historicMovement.AccountId = targetId;
+        //    }
+        //    else
+        //    {
+        //        historicMovement.AtmWithdrawId = targetId;
+        //    }
 
-            Create(historicMovement);
-        }
+        //    Create(historicMovement);
+        //}
     }
 }

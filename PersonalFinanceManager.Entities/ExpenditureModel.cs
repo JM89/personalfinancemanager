@@ -48,6 +48,8 @@ namespace PersonalFinanceManager.Entities
 
         [ForeignKey("TargetInternalAccountId")]
         public AccountModel TargetInternalAccount { get; set; }
+
+        public int? GeneratedIncomeId { get; set; }
     }
    
 }

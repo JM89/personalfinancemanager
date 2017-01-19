@@ -11,7 +11,7 @@ namespace PersonalFinanceManager.DataAccess.Repositories.Interfaces
     public interface IBaseRepository<TEntity> 
         where TEntity : PersistedEntity
     {
-        TEntity GetById(int id);
+        TEntity GetById(int id, bool noTracking = false);
 
         DbSet<TEntity> GetList();
 

@@ -10,8 +10,8 @@ namespace PersonalFinanceManager.DataAccess.Repositories.Interfaces
 {
     public interface IHistoricMovementRepository : IBaseRepository<HistoricMovementModel>
     {
-        void SaveDebitMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType);
+        //void SaveDebitMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType);
 
-        void SaveCreditMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType);
+        //void SaveCreditMovement(int targetId, decimal cost, TargetOptions targetOption, MovementType movementType);
     }
 }

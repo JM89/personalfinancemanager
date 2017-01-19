@@ -62,6 +62,8 @@ namespace PersonalFinanceManager.Models.Expenditure
         public IList<SelectListItem> AvailableAtmWithdraws { get; set; }
 
         public IList<SelectListItem> AvailableInternalAccounts { get; set; }
+
+        public int? GeneratedIncomeId { get; set; }
     }
 
 }

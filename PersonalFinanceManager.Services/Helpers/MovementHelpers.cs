@@ -2,45 +2,65 @@
 using PersonalFinanceManager.Entities;
 using PersonalFinanceManager.Entities.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Helpers
 {
     public static class MovementHelpers
     {
-        public static void DebitAccount(IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository,
-            AccountModel account, decimal cost, MovementType mouvementType)
+        public static void Debit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount)
         {
-            account.CurrentBalance -= cost;
-            bankAccountRepository.Update(account);
-            historicMovementRepository.SaveDebitMovement(account.Id, cost, TargetOptions.Account, mouvementType);
+            var historicMovement = new HistoricMovementModel();
+            historicMovement.Date = DateTime.Now;
+            historicMovement.Cost = -movementAmount;
+            historicMovement.SourceId = sourceId;
+            historicMovement.SourceType = sourceObjectType;
+            historicMovement.SourceOldAmount = sourceAmount;
+            historicMovement.SourceNewAmount = sourceAmount - movementAmount;
+            _historicMovementRepository.Create(historicMovement);
         }
 
-        public static void CreditAccount(IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository, 
-            AccountModel account, decimal cost, MovementType mouvementType)
+        public static void Credit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, ObjectType sourceObjectType, int sourceId, decimal sourceAmount)
         {
-            account.CurrentBalance += cost;
-            bankAccountRepository.Update(account);
-            historicMovementRepository.SaveCreditMovement(account.Id, cost, TargetOptions.Account, mouvementType);
+            var historicMovement = new HistoricMovementModel();
+            historicMovement.Date = DateTime.Now;
+            historicMovement.Cost = movementAmount;
+            historicMovement.SourceId = sourceId;
+            historicMovement.SourceType = sourceObjectType;
+            historicMovement.SourceOldAmount = sourceAmount;
+            historicMovement.SourceNewAmount = sourceAmount + movementAmount;
+            _historicMovementRepository.Create(historicMovement);
         }
 
-        public static void DebitAtmWithdraw(IAtmWithdrawRepository atmWithdrawRepository, IHistoricMovementRepository historicMovementRepository,
-            AtmWithdrawModel atmWithdraw, decimal cost)
+        public static void Debit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount, int destinationId, ObjectType destinationObjectType, decimal destinationAmount)
         {
-            atmWithdraw.CurrentAmount -= cost;
-            atmWithdrawRepository.Update(atmWithdraw);
-            historicMovementRepository.SaveDebitMovement(atmWithdraw.Id, cost, TargetOptions.Atm, MovementType.Expenditure);
+            var historicMovement = new HistoricMovementModel();
+            historicMovement.Date = DateTime.Now;
+            historicMovement.Cost = -movementAmount;
+            historicMovement.SourceId = sourceId;
+            historicMovement.SourceType = sourceObjectType;
+            historicMovement.SourceOldAmount = sourceAmount;
+            historicMovement.SourceNewAmount = sourceAmount - movementAmount;
+            historicMovement.DestinationId = destinationId;
+            historicMovement.DestinationType = destinationObjectType;
+            historicMovement.DestinationOldAmount = destinationAmount;
+            historicMovement.DestinationNewAmount = destinationAmount + movementAmount;
+            _historicMovementRepository.Create(historicMovement);
         }
 
-        public static void CreditAtmWithdraw(IAtmWithdrawRepository atmWithdrawRepository, IHistoricMovementRepository historicMovementRepository,
-            AtmWithdrawModel atmWithdraw, decimal cost)
+        public static void Credit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount, int destinationId, ObjectType destinationObjectType, decimal destinationAmount)
         {
-            atmWithdraw.CurrentAmount += cost;
-            atmWithdrawRepository.Update(atmWithdraw);
-            historicMovementRepository.SaveCreditMovement(atmWithdraw.Id, cost, TargetOptions.Atm, MovementType.Income);
+            var historicMovement = new HistoricMovementModel();
+            historicMovement.Date = DateTime.Now;
+            historicMovement.Cost = movementAmount;
+            historicMovement.SourceId = sourceId;
+            historicMovement.SourceType = sourceObjectType;
+            historicMovement.SourceOldAmount = sourceAmount;
+            historicMovement.SourceNewAmount = sourceAmount + movementAmount;
+            historicMovement.DestinationId = destinationId;
+            historicMovement.DestinationType = destinationObjectType;
+            historicMovement.DestinationOldAmount = destinationAmount;
+            historicMovement.DestinationNewAmount = destinationAmount - movementAmount;
+            _historicMovementRepository.Create(historicMovement);
         }
     }
 }

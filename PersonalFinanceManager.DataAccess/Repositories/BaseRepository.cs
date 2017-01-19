@@ -3,6 +3,9 @@ using PersonalFinanceManager.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,8 +27,12 @@ namespace PersonalFinanceManager.DataAccess.Repositories
             return _db.Set(typeof(TEntity)).Cast<TEntity>();
         }
 
-        public TEntity GetById(int id)
+        public TEntity GetById(int id, bool noTracking = false)
         {
+            if (noTracking)
+            {
+                return GetList().AsNoTracking().Single(x => x.Id == id);
+            }
             return GetList().Find(id);
         }
 
@@ -38,8 +45,25 @@ namespace PersonalFinanceManager.DataAccess.Repositories
 
         public TEntity Update(TEntity entity)
         {
-            _db.Entry(entity).State = EntityState.Modified;
-            _db.SaveChanges();
+            try
+            {
+                _db.Entry(entity).State = EntityState.Modified;
+                _db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException is OptimisticConcurrencyException)
+                {
+                    var ctx = ((IObjectContextAdapter)_db).ObjectContext;
+                    ctx.Refresh(RefreshMode.ClientWins, entity);
+                    ctx.SaveChanges();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             return entity;
         }
 

@@ -41,9 +41,10 @@
     <table class="stripe" id="mytable2">
         <colgroup>
             <col width="10%" />
-            <col width="10%" />
-            <col width="15%" />
-            <col width="15%" />
+            <col width="7%" />
+            <col width="30%" />
+            <col width="30%" />
+            <col width="23%" />
         </colgroup>
         <thead>
             <tr>
@@ -56,27 +57,38 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TargetInternalAccountName)
+                </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DisplayedDateSaving)
-                    </td>
-                    <td align="right">
-                        @Html.DisplayFor(modelItem => item.DisplayedAmount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td align="right">
-                        <a href="/Saving/Edit/@item.Id" title="edit"><i class="fa fa-pencil-square-o"></i></a> |
-                        <a href="/Saving/Delete/@item.Id" title="delete"><i class="fa fa-trash-o"></i></a>
-                    </td>
-                </tr>
+
+            @{
+                var i = 0;
+                foreach (var item in Model)
+                {
+                    ++i;
+                    <tr id="row-@i">
+                        <td class="tdDateSaving">
+                            @Html.DisplayFor(modelItem => item.DisplayedDateSaving)
+                        </td>
+                        <td align="right" class="tdAmount">
+                            @Html.DisplayFor(modelItem => item.DisplayedAmount)
+                        </td>
+                        <td class="tdDescription">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td class="tdTargetInternalAccount">
+                            @Html.HiddenFor(modelItem => item.TargetInternalAccountId)
+                            @Html.DisplayFor(modelItem => item.TargetInternalAccountName)
+                        </td>
+                        <td align="right" class="tdActions">
+                            @CustomHelpers.ListButtons(@item.Id, true, "Saving", "")
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>

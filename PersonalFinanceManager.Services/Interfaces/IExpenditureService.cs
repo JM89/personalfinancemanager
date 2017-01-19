@@ -1,14 +1,5 @@
-﻿using PersonalFinanceManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data.Entity;
-using PersonalFinanceManager.Entities;
-using AutoMapper;
+﻿using System.Collections.Generic;
 using PersonalFinanceManager.Models.Expenditure;
-using PersonalFinanceManager.DataAccess;
-using PersonalFinanceManager.Entities.Enumerations;
-using PersonalFinanceManager.Services.ExpenditureStrategy;
 using PersonalFinanceManager.Services.Core;
 using PersonalFinanceManager.Services.RequestObjects;
 

@@ -1,17 +1,5 @@
-﻿using PersonalFinanceManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data.Entity;
-using System.Web;
-using PersonalFinanceManager.Entities;
-using AutoMapper;
+﻿using System.Collections.Generic;
 using PersonalFinanceManager.Models.Income;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
-using PersonalFinanceManager.DataAccess;
-using PersonalFinanceManager.Services.ExpenditureStrategy;
-using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.Core;
 
 namespace PersonalFinanceManager.Services.Interfaces

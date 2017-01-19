@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Entities.Enumerations
 {
-    public enum MovementType
+    public enum ObjectType
     {
-        Income, Expenditure, AtmWithdraw
+        Account, AtmWithdraw
     }
 }

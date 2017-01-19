@@ -1,19 +1,9 @@
-﻿using PersonalFinanceManager.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Data.Entity;
 using PersonalFinanceManager.Entities;
 using AutoMapper;
-using PersonalFinanceManager.Models.Expenditure;
-using System.Data.Entity.Validation;
-using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Models.AtmWithdraw;
-using System.Diagnostics;
-using System.Data.Entity.Infrastructure;
-using PersonalFinanceManager.Services.ExpenditureStrategy;
-using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
@@ -66,7 +56,7 @@ namespace PersonalFinanceManager.Services
             accountModel.CurrentBalance -= atmWithdrawModel.InitialAmount;
             _bankAccountRepository.Update(accountModel);
 
-            _historicMovementRepository.SaveDebitMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+            //_historicMovementRepository.SaveDebitMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
         }
 
         public AtmWithdrawEditModel GetById(int id)
@@ -100,8 +90,8 @@ namespace PersonalFinanceManager.Services
                 accountModel.CurrentBalance -= atmWithdrawModel.InitialAmount;
                 _bankAccountRepository.Update(accountModel);
 
-                _historicMovementRepository.SaveCreditMovement(atmWithdrawModel.AccountId, oldCost, TargetOptions.Account, MovementType.AtmWithdraw);
-                _historicMovementRepository.SaveDebitMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+                //_historicMovementRepository.SaveCreditMovement(atmWithdrawModel.AccountId, oldCost, TargetOptions.Account, MovementType.AtmWithdraw);
+                //_historicMovementRepository.SaveDebitMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
             }
         }
 
@@ -121,7 +111,7 @@ namespace PersonalFinanceManager.Services
             accountModel.CurrentBalance += atmWithdrawModel.InitialAmount;
             _bankAccountRepository.Update(accountModel);
 
-            _historicMovementRepository.SaveCreditMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+            //_historicMovementRepository.SaveCreditMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
 
             _atmWithdrawRepository.Delete(atmWithdrawModel);
         }

@@ -1,20 +1,11 @@
-﻿using PersonalFinanceManager.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
-using System.Web;
 using PersonalFinanceManager.Entities;
 using AutoMapper;
 using PersonalFinanceManager.Models.Income;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
-using PersonalFinanceManager.DataAccess;
-using PersonalFinanceManager.Services.ExpenditureStrategy;
-using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
-using PersonalFinanceManager.Services.Helpers;
 
 namespace PersonalFinanceManager.Services
 {
@@ -38,7 +29,7 @@ namespace PersonalFinanceManager.Services
             _incomeRepository.Create(incomeModel);
 
             var accountModel = _bankAccountRepository.GetById(incomeModel.AccountId);
-            MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, accountModel, incomeModel.Cost, MovementType.Income);
+            //MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, accountModel, incomeModel.Cost, MovementType.Income);
         }
 
         public IList<IncomeListModel> GetIncomes(int accountId)
@@ -77,8 +68,8 @@ namespace PersonalFinanceManager.Services
             if (oldCost != income.Cost)
             {
                 var account = _bankAccountRepository.GetById(income.AccountId);
-                MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, account, oldCost, MovementType.Income);
-                MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, account, income.Cost, MovementType.Income);
+                //MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, account, oldCost, MovementType.Income);
+                //MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, account, income.Cost, MovementType.Income);
             }
         }
 
@@ -88,7 +79,7 @@ namespace PersonalFinanceManager.Services
             _incomeRepository.Delete(incomeModel);
 
             var accountModel = _bankAccountRepository.GetById(incomeModel.AccountId);
-            MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, accountModel, incomeModel.Cost, MovementType.Income);
+            //MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, accountModel, incomeModel.Cost, MovementType.Income);
         }
     }
 }

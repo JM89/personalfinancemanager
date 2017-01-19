@@ -33,3 +33,71 @@ ERROR 2016-12-10 10:48:03,679  2397ms BaseController         OnException        
 My great exception
 ERROR 2016-12-10 10:48:56,853  2326ms BaseController         OnException        - 
 My great exception
+ERROR 2017-01-07 14:26:57,130 1595100ms BaseController         OnException        - 
+An error occurred while updating the entries. See the inner exception for details.
+ERROR 2017-01-07 14:32:44,057 42841ms BaseController         OnException        - 
+Object reference not set to an instance of an object.
+ERROR 2017-01-07 14:33:48,160 106944ms BaseController         OnException        - 
+Object reference not set to an instance of an object.
+ERROR 2017-01-07 14:37:56,772 170539ms BaseController         OnException        - 
+The object cannot be deleted because it was not found in the ObjectStateManager.
+ERROR 2017-01-12 08:14:36,456 3942796ms BaseController         OnException        - 
+c:\Users\Jess\Desktop\Projects\PersonalFinanceManager\Source\Github\personalfinancemanager\PersonalFinanceManager\Views\Saving\Index.cshtml(83): error CS1525: Invalid expression term ';'
+ERROR 2017-01-13 06:53:51,196 21999ms BaseController         OnException        - 
+The object cannot be deleted because it was not found in the ObjectStateManager.
+ERROR 2017-01-13 06:55:14,807 105609ms BaseController         OnException        - 
+The object cannot be deleted because it was not found in the ObjectStateManager.
+ERROR 2017-01-13 06:55:50,180 140982ms BaseController         OnException        - 
+The object cannot be deleted because it was not found in the ObjectStateManager.
+ERROR 2017-01-13 07:03:12,861 44800ms BaseController         OnException        - 
+The object cannot be deleted because it was not found in the ObjectStateManager.
+ERROR 2017-01-15 19:15:00,064 679406ms BaseController         OnException        - 
+Store update, insert, or delete statement affected an unexpected number of rows (0). Entities may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=472540 for information on understanding and handling optimistic concurrency exceptions.
+ERROR 2017-01-15 19:15:11,945 691287ms BaseController         OnException        - 
+An error occurred while updating the entries. See the inner exception for details.
+ERROR 2017-01-15 19:18:25,007 884350ms BaseController         OnException        - 
+An error occurred while updating the entries. See the inner exception for details.
+ERROR 2017-01-17 07:38:16,760 45591ms BaseController         OnException        - 
+An error occurred while updating the entries. See the inner exception for details.
+ERROR 2017-01-17 07:38:21,093 49924ms BaseController         OnException        - 
+An error occurred while updating the entries. See the inner exception for details.
+ERROR 2017-01-17 07:40:24,875 173705ms BaseController         OnException        - 
+An error occurred while updating the entries. See the inner exception for details.
+ERROR 2017-01-17 07:47:26,549 595380ms BaseController         OnException        - 
+Store update, insert, or delete statement affected an unexpected number of rows (0). Entities may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=472540 for information on understanding and handling optimistic concurrency exceptions.
+ERROR 2017-01-17 07:49:49,852 738683ms BaseController         OnException        - 
+Object reference not set to an instance of an object.
+ERROR 2017-01-17 07:49:54,491 743321ms BaseController         OnException        - 
+Store update, insert, or delete statement affected an unexpected number of rows (0). Entities may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=472540 for information on understanding and handling optimistic concurrency exceptions.
+ERROR 2017-01-17 07:49:58,272 747102ms BaseController         OnException        - 
+Store update, insert, or delete statement affected an unexpected number of rows (0). Entities may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=472540 for information on understanding and handling optimistic concurrency exceptions.
+ERROR 2017-01-17 07:50:30,627 20149ms BaseController         OnException        - 
+Store update, insert, or delete statement affected an unexpected number of rows (0). Entities may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=472540 for information on understanding and handling optimistic concurrency exceptions.
+ERROR 2017-01-17 07:56:44,773 97856ms BaseController         OnException        - 
+Store update, insert, or delete statement affected an unexpected number of rows (0). Entities may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=472540 for information on understanding and handling optimistic concurrency exceptions.
+ERROR 2017-01-17 08:00:29,867 12062ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-17 08:01:04,462 46657ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-17 08:01:17,382 59578ms BaseController         OnException        - 
+Attaching an entity of type 'PersonalFinanceManager.Entities.SavingModel' failed because another entity of the same type already has the same primary key value. This can happen when using the 'Attach' method or setting the state of an entity to 'Unchanged' or 'Modified' if any entities in the graph have conflicting key values. This may be because some entities are new and have not yet received database-generated key values. In this case use the 'Add' method or the 'Added' entity state to track the graph and then set the state of non-new entities to 'Unchanged' or 'Modified' as appropriate.
+ERROR 2017-01-17 08:12:59,494 16610ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-17 08:13:03,907 21023ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-17 08:14:29,908 30682ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-17 08:14:33,990 34765ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-18 07:03:25,309 49455ms BaseController         OnException        - 
+Store update, insert, or delete statement affected an unexpected number of rows (0). Entities may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=472540 for information on understanding and handling optimistic concurrency exceptions.
+ERROR 2017-01-18 07:17:15,440 41737ms BaseController         OnException        - 
+Store update, insert, or delete statement affected an unexpected number of rows (0). Entities may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=472540 for information on understanding and handling optimistic concurrency exceptions.
+ERROR 2017-01-18 07:18:40,309 48159ms BaseController         OnException        - 
+Store update, insert, or delete statement affected an unexpected number of rows (0). Entities may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=472540 for information on understanding and handling optimistic concurrency exceptions.
+ERROR 2017-01-18 07:28:05,535 44613ms BaseController         OnException        - 
+The following objects have not been refreshed because they were not found in the store: 
+'EntitySet=SavingModels;Id=15'.
+ERROR 2017-01-18 07:39:09,481 46735ms BaseController         OnException        - 
+The following objects have not been refreshed because they were not found in the store: 
+'EntitySet=SavingModels;Id=15'.

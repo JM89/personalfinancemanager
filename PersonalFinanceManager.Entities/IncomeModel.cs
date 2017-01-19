@@ -22,25 +22,7 @@ namespace PersonalFinanceManager.Entities
         [Required]
         public string Description { get; set; }
 
-        //[Required]
-        //public int FrequencyId { get; set; }
-
-        //// By month, by year
-        //[ForeignKey("FrequencyId")]
-        //public FrequencyModel Frequency { get; set; }
-
         [Required]
         public DateTime DateIncome { get; set; }
-
-        //[Required]
-        //public DateTime StartDate { get; set; }
-
-        //[Required]
-        //public DateTime? LastRunDate { get; set; }
-
-        //public DateTime? EndDate { get; set; }
-
-        //[DisplayName("Enabled")]
-        //public bool IsEnabled { get; set; }
     }
 }

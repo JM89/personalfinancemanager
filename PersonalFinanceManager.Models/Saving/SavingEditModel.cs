@@ -24,6 +24,9 @@ namespace PersonalFinanceManager.Models.Saving
 
         [LocalizedDisplayName("SavingTargetInternalAccount")]
         public int? TargetInternalAccountId { get; set; }
+        
+        [LocalizedDisplayName("SavingTargetInternalAccountName")]
+        public string TargetInternalAccountName { get; set; }
 
         [LocalizedDisplayName("SavingDateSaving")]
         public string DisplayedDateSaving => DateTimeFormatHelper.GetDisplayDateValue(this.DateSaving);
@@ -38,6 +41,7 @@ namespace PersonalFinanceManager.Models.Saving
         }
 
         public IList<SelectListItem> AvailableInternalAccounts { get; set; }
-    }
 
+        public int? GeneratedIncomeId { get; set; }
+    }
 }

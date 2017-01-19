@@ -41,7 +41,11 @@
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <input type="hidden" value="@ViewBag.AccountId" />
+            @*<input type="hidden" value="@ViewBag.AccountId" id="AccountId" name="AccountId" />*@
+
+            <input type="hidden" value="@Model.Id" id="Id" name="Id" />
+
+            <input type="hidden" value="@Model.GeneratedIncomeId" id="GeneratedIncomeId" name="GeneratedIncomeId" />
 
             <div class="form-group">
                 @Html.LabelFor(model => model.DateSaving, htmlAttributes: new { @class = "control-label col-lg-2" })

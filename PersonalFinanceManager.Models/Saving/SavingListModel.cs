@@ -41,5 +41,10 @@ namespace PersonalFinanceManager.Models.Saving
                 return "Saving " + DisplayedDateSaving;
             }
         }
+
+        public int TargetInternalAccountId { get; set; }
+
+        [LocalizedDisplayName("SavingTargetInternalAccount")]
+        public string TargetInternalAccountName { get; set; }
     }
 }
