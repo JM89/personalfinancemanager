@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.ServicesForTests.Interfaces
 {
-    public interface IAtmWithdrawService
+    public interface IExpenditureService
     {
-        int CountAtmWithdraws();
+        int CountExpenditures();
 
-        decimal GetAtmWithdrawInitialAmount(int id);
-
-        decimal GetAtmWithdrawCurrentAmount(int id);
+        decimal GetExpenditureCost(int id);
     }
 }

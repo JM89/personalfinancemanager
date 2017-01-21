@@ -129,6 +129,9 @@
   <data name="CurrencyConfirmationDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this currency?</value>
   </data>
+  <data name="ExpenditureConfirmationDeletion" xml:space="preserve">
+    <value>Are you sure you want to delete this expenditure?</value>
+  </data>
   <data name="ExpenditureTypeConfirmationDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this expenditure type?</value>
   </data>
@@ -140,5 +143,8 @@
   </data>
   <data name="PeriodicOutcomeConfirmationDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this periodic outcome?</value>
+  </data>
+  <data name="SavingConfirmationDeletion" xml:space="preserve">
+    <value>Are you sure you want to delete this saving?</value>
   </data>
 </root>

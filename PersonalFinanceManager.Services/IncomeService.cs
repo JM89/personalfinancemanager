@@ -31,7 +31,7 @@ namespace PersonalFinanceManager.Services
             _incomeRepository.Create(incomeModel);
 
             var account = _bankAccountRepository.GetById(incomeModel.AccountId);
-            MovementHelpers.Credit(_historicMovementRepository, incomeModel.Cost, ObjectType.Account, account.Id, account.CurrentBalance);
+            MovementHelpers.Credit(_historicMovementRepository, incomeModel.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
 
             account.CurrentBalance += incomeEditModel.Cost;
             _bankAccountRepository.Update(account);
@@ -73,9 +73,9 @@ namespace PersonalFinanceManager.Services
             if (oldCost != income.Cost)
             {
                 var account = _bankAccountRepository.GetById(income.AccountId);
-                MovementHelpers.Debit(_historicMovementRepository, oldCost, ObjectType.Account, account.Id, account.CurrentBalance);
+                MovementHelpers.Debit(_historicMovementRepository, oldCost, account.Id, ObjectType.Account, account.CurrentBalance);
                 account.CurrentBalance -= oldCost;
-                MovementHelpers.Credit(_historicMovementRepository, income.Cost, ObjectType.Account, account.Id, account.CurrentBalance);
+                MovementHelpers.Credit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
                 account.CurrentBalance += income.Cost;
                 _bankAccountRepository.Update(account);
             }
@@ -86,7 +86,7 @@ namespace PersonalFinanceManager.Services
             var incomeModel = _incomeRepository.GetById(id);
 
             var account = _bankAccountRepository.GetById(incomeModel.AccountId);
-            MovementHelpers.Debit(_historicMovementRepository, incomeModel.Cost, ObjectType.Account, account.Id, account.CurrentBalance);
+            MovementHelpers.Debit(_historicMovementRepository, incomeModel.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
             account.CurrentBalance -= incomeModel.Cost;
             _bankAccountRepository.Update(account);
 

@@ -1,29 +1,24 @@
-﻿using PersonalFinanceManager.DataAccess;
-using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
-using PersonalFinanceManager.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.Services.MovementStrategy
 {
     public abstract class MovementStrategy
     {
-        protected readonly IBankAccountRepository _bankAccountRepository;
-        protected readonly IHistoricMovementRepository _historicMovementRepository;
-        protected readonly IIncomeRepository _incomeRepository;
+        protected readonly IBankAccountRepository BankAccountRepository;
+        protected readonly IHistoricMovementRepository HistoricMovementRepository;
+        protected readonly IIncomeRepository IncomeRepository;
+        protected readonly IAtmWithdrawRepository AtmWithdrawRepository;
 
-        protected Movement _currentMovement;
+        protected Movement CurrentMovement;
 
-        protected MovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository, IIncomeRepository incomeRepository)
+        protected MovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository)
         { 
-            _currentMovement = movement;
+            CurrentMovement = movement;
 
-            this._bankAccountRepository = bankAccountRepository;
-            this._historicMovementRepository = historicMovementRepository;
-            this._incomeRepository = incomeRepository;
+            this.BankAccountRepository = bankAccountRepository;
+            this.HistoricMovementRepository = historicMovementRepository;
+            this.IncomeRepository = incomeRepository;
+            this.AtmWithdrawRepository = atmWithdrawRepository;
         }
 
         public abstract void Debit();

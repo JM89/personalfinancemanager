@@ -7,60 +7,68 @@ namespace PersonalFinanceManager.Services.Helpers
 {
     public static class MovementHelpers
     {
-        public static void Debit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, ObjectType sourceObjectType, int sourceId, decimal sourceAmount)
+        public static void Debit(IHistoricMovementRepository historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount)
         {
-            var historicMovement = new HistoricMovementModel();
-            historicMovement.Date = DateTime.Now;
-            historicMovement.Cost = -movementAmount;
-            historicMovement.SourceId = sourceId;
-            historicMovement.SourceType = sourceObjectType;
-            historicMovement.SourceOldAmount = sourceAmount;
-            historicMovement.SourceNewAmount = sourceAmount - movementAmount;
-            _historicMovementRepository.Create(historicMovement);
+            var historicMovement = new HistoricMovementModel
+            {
+                Date = DateTime.Now,
+                Cost = -movementAmount,
+                SourceId = sourceId,
+                SourceType = sourceObjectType,
+                SourceOldAmount = sourceAmount,
+                SourceNewAmount = sourceAmount - movementAmount
+            };
+            historicMovementRepository.Create(historicMovement);
         }
 
-        public static void Credit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, ObjectType sourceObjectType, int sourceId, decimal sourceAmount)
+        public static void Credit(IHistoricMovementRepository historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount)
         {
-            var historicMovement = new HistoricMovementModel();
-            historicMovement.Date = DateTime.Now;
-            historicMovement.Cost = movementAmount;
-            historicMovement.SourceId = sourceId;
-            historicMovement.SourceType = sourceObjectType;
-            historicMovement.SourceOldAmount = sourceAmount;
-            historicMovement.SourceNewAmount = sourceAmount + movementAmount;
-            _historicMovementRepository.Create(historicMovement);
+            var historicMovement = new HistoricMovementModel
+            {
+                Date = DateTime.Now,
+                Cost = movementAmount,
+                SourceId = sourceId,
+                SourceType = sourceObjectType,
+                SourceOldAmount = sourceAmount,
+                SourceNewAmount = sourceAmount + movementAmount
+            };
+            historicMovementRepository.Create(historicMovement);
         }
 
-        public static void Debit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount, int destinationId, ObjectType destinationObjectType, decimal destinationAmount)
+        public static void Debit(IHistoricMovementRepository historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount, int destinationId, ObjectType destinationObjectType, decimal destinationAmount)
         {
-            var historicMovement = new HistoricMovementModel();
-            historicMovement.Date = DateTime.Now;
-            historicMovement.Cost = -movementAmount;
-            historicMovement.SourceId = sourceId;
-            historicMovement.SourceType = sourceObjectType;
-            historicMovement.SourceOldAmount = sourceAmount;
-            historicMovement.SourceNewAmount = sourceAmount - movementAmount;
-            historicMovement.DestinationId = destinationId;
-            historicMovement.DestinationType = destinationObjectType;
-            historicMovement.DestinationOldAmount = destinationAmount;
-            historicMovement.DestinationNewAmount = destinationAmount + movementAmount;
-            _historicMovementRepository.Create(historicMovement);
+            var historicMovement = new HistoricMovementModel
+            {
+                Date = DateTime.Now,
+                Cost = -movementAmount,
+                SourceId = sourceId,
+                SourceType = sourceObjectType,
+                SourceOldAmount = sourceAmount,
+                SourceNewAmount = sourceAmount - movementAmount,
+                DestinationId = destinationId,
+                DestinationType = destinationObjectType,
+                DestinationOldAmount = destinationAmount,
+                DestinationNewAmount = destinationAmount + movementAmount
+            };
+            historicMovementRepository.Create(historicMovement);
         }
 
-        public static void Credit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount, int destinationId, ObjectType destinationObjectType, decimal destinationAmount)
+        public static void Credit(IHistoricMovementRepository historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount, int destinationId, ObjectType destinationObjectType, decimal destinationAmount)
         {
-            var historicMovement = new HistoricMovementModel();
-            historicMovement.Date = DateTime.Now;
-            historicMovement.Cost = movementAmount;
-            historicMovement.SourceId = sourceId;
-            historicMovement.SourceType = sourceObjectType;
-            historicMovement.SourceOldAmount = sourceAmount;
-            historicMovement.SourceNewAmount = sourceAmount + movementAmount;
-            historicMovement.DestinationId = destinationId;
-            historicMovement.DestinationType = destinationObjectType;
-            historicMovement.DestinationOldAmount = destinationAmount;
-            historicMovement.DestinationNewAmount = destinationAmount - movementAmount;
-            _historicMovementRepository.Create(historicMovement);
+            var historicMovement = new HistoricMovementModel
+            {
+                Date = DateTime.Now,
+                Cost = movementAmount,
+                SourceId = sourceId,
+                SourceType = sourceObjectType,
+                SourceOldAmount = sourceAmount,
+                SourceNewAmount = sourceAmount + movementAmount,
+                DestinationId = destinationId,
+                DestinationType = destinationObjectType,
+                DestinationOldAmount = destinationAmount,
+                DestinationNewAmount = destinationAmount - movementAmount
+            };
+            historicMovementRepository.Create(historicMovement);
         }
     }
 }

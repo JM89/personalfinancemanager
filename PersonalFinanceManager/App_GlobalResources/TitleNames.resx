@@ -213,6 +213,21 @@
   <data name="CurrencyPages" xml:space="preserve">
     <value>Manage currencies</value>
   </data>
+  <data name="ExpenditureCreate" xml:space="preserve">
+    <value>Create an expenditure</value>
+  </data>
+  <data name="ExpenditureDelete" xml:space="preserve">
+    <value>Delete an expenditure</value>
+  </data>
+  <data name="ExpenditureEdit" xml:space="preserve">
+    <value>Edit an expenditure</value>
+  </data>
+  <data name="ExpenditureList" xml:space="preserve">
+    <value>List of expenditures</value>
+  </data>
+  <data name="ExpenditurePages" xml:space="preserve">
+    <value>Manage expenditures</value>
+  </data>
   <data name="ExpenditureSplitDashboardPages" xml:space="preserve">
     <value>Expenditure Split Dashboard</value>
   </data>

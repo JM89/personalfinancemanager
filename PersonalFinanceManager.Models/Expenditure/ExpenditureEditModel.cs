@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using PersonalFinanceManager.Models.Helpers;
 
 namespace PersonalFinanceManager.Models.Expenditure
 {
@@ -40,21 +41,13 @@ namespace PersonalFinanceManager.Models.Expenditure
         public int? TargetInternalAccountId { get; set; }
 
         [LocalizedDisplayName("ExpenditureDateExpenditure")]
-        public string DisplayedDateExpenditure
-        {
-            get
-            {
-                return this.DateExpenditure.ToString("dd/MM/yyyy");
-            }
-        }
+        public string DisplayedDateExpenditure => DateTimeFormatHelper.GetDisplayDateValue(this.DateExpenditure);
 
         [LocalizedDisplayName("ExpenditureHasBeenAlreadyDebited")]
         public bool HasBeenAlreadyDebited { get; set; }
 
         public bool PaymentMethodHasBeenAlreadyDebitedOption { get; set; }
-
-        //public IList<SelectListItem> AvailableAccounts { get; set; }
-        
+       
         public IList<SelectListItem> AvailableExpenditureTypes { get; set; }
         
         public IList<PaymentMethodListModel> AvailablePaymentMethods { get; set; }

@@ -62,8 +62,8 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             var costValue = _firstRow.FindElement(By.ClassName("tdInitialAmount"));
             _costAtmWithdraw = Convert.ToDecimal(costValue.Text.Substring(1));
 
-            var deleteConfirmBtn = _firstRow.FindElement(By.ClassName("btn_edit"));
-            deleteConfirmBtn.Click();
+            var editBtn = _firstRow.FindElement(By.ClassName("btn_edit"));
+            editBtn.Click();
             
             var atmWithdrawIdHid = _ctx.WebDriver.FindElement(By.Id("Id"));
             _atmWithdrawId = Convert.ToInt32(atmWithdrawIdHid.GetAttribute("value"));
@@ -74,7 +74,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         {
             var initialAmountTxt = _ctx.WebDriver.FindElement(By.Id("InitialAmount"));
             initialAmountTxt.Clear();
-            initialAmountTxt.SendKeys((_countAtmWithdraws + 100).ToString());
+            initialAmountTxt.SendKeys((_costAtmWithdraw + 100).ToString());
         }
 
         [When(@"I click on the Save button")]
@@ -93,8 +93,8 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             var newCountAtmWithdraws = _atmWithdrawService.CountAtmWithdraws();
             Assert.AreEqual(newCountAtmWithdraws, _countAtmWithdraws);
 
-            _newCostAtmWithdraw = _atmWithdrawService.GetAtmWithdrawCost(_atmWithdrawId);
-            Assert.AreEqual(_countAtmWithdraws + 100, _newCostAtmWithdraw);
+            _newCostAtmWithdraw = _atmWithdrawService.GetAtmWithdrawInitialAmount(_atmWithdrawId);
+            Assert.AreEqual(_costAtmWithdraw + 100, _newCostAtmWithdraw);
         }
 
         [Then(@"the source account is updated")]

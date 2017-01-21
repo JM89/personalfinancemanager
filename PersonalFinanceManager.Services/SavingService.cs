@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 using PersonalFinanceManager.Entities;
@@ -16,14 +17,16 @@ namespace PersonalFinanceManager.Services
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IHistoricMovementRepository _historicMovementRepository;
         private readonly IIncomeRepository _incomeRepository;
+        private readonly IAtmWithdrawRepository _atmWithdrawRepository;
 
         public SavingService(ISavingRepository savingRepository, IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository,
-             IIncomeRepository incomeRepository)
+             IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository)
         {
             this._savingRepository = savingRepository;
             this._bankAccountRepository = bankAccountRepository;
             this._historicMovementRepository = historicMovementRepository;
             this._incomeRepository = incomeRepository;
+            this._atmWithdrawRepository = atmWithdrawRepository;
         }
 
         public void CreateSaving(SavingEditModel savingEditModel)
@@ -32,8 +35,11 @@ namespace PersonalFinanceManager.Services
 
             var movement = new Movement(savingEditModel);
 
-            var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository);
+            var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository);
             strategy.Debit();
+
+            if (!movement.TargetIncomeId.HasValue)
+                throw new Exception("Target Income ID should not be null.");
 
             savingModel.GeneratedIncomeId = movement.TargetIncomeId.Value;
 
@@ -47,7 +53,7 @@ namespace PersonalFinanceManager.Services
 
             _savingRepository.Delete(savingModel);
 
-            var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(savingEditModel), _bankAccountRepository, _historicMovementRepository, _incomeRepository);
+            var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(savingEditModel), _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository);
             strategy.Credit();
         }
 
@@ -62,10 +68,13 @@ namespace PersonalFinanceManager.Services
             savingModel.GeneratedIncomeId = (int?)null;
             _savingRepository.Update(savingModel);
 
-            var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _historicMovementRepository, _incomeRepository);
+            var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository);
             var newMovement = new Movement(savingEditModel);
 
             strategy.UpdateDebit(newMovement);
+
+            if (!newMovement.TargetIncomeId.HasValue)
+                throw new Exception("Target Income ID should not be null.");
 
             // Update the GenerateIncomeId.
             savingModel.GeneratedIncomeId = newMovement.TargetIncomeId.Value;

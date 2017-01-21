@@ -22,7 +22,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class TitleNames {
+    public class TitleNames {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PersonalFinanceManager.App_GlobalResources.TitleNames", typeof(TitleNames).Assembly);
@@ -51,7 +51,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create an account.
         /// </summary>
-        internal static string AccountCreate {
+        public static string AccountCreate {
             get {
                 return ResourceManager.GetString("AccountCreate", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete an account.
         /// </summary>
-        internal static string AccountDelete {
+        public static string AccountDelete {
             get {
                 return ResourceManager.GetString("AccountDelete", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit an account.
         /// </summary>
-        internal static string AccountEdit {
+        public static string AccountEdit {
             get {
                 return ResourceManager.GetString("AccountEdit", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of accounts.
         /// </summary>
-        internal static string AccountList {
+        public static string AccountList {
             get {
                 return ResourceManager.GetString("AccountList", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage accounts.
         /// </summary>
-        internal static string AccountPages {
+        public static string AccountPages {
             get {
                 return ResourceManager.GetString("AccountPages", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create an ATM withdraw.
         /// </summary>
-        internal static string AtmWithdrawCreate {
+        public static string AtmWithdrawCreate {
             get {
                 return ResourceManager.GetString("AtmWithdrawCreate", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete an ATM withdraw.
         /// </summary>
-        internal static string AtmWithdrawDelete {
+        public static string AtmWithdrawDelete {
             get {
                 return ResourceManager.GetString("AtmWithdrawDelete", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit an ATM withdraw.
         /// </summary>
-        internal static string AtmWithdrawEdit {
+        public static string AtmWithdrawEdit {
             get {
                 return ResourceManager.GetString("AtmWithdrawEdit", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of ATM withdraws.
         /// </summary>
-        internal static string AtmWithdrawList {
+        public static string AtmWithdrawList {
             get {
                 return ResourceManager.GetString("AtmWithdrawList", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage ATM withdraws.
         /// </summary>
-        internal static string AtmWithdrawPages {
+        public static string AtmWithdrawPages {
             get {
                 return ResourceManager.GetString("AtmWithdrawPages", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create a bank.
         /// </summary>
-        internal static string BankCreate {
+        public static string BankCreate {
             get {
                 return ResourceManager.GetString("BankCreate", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete a bank.
         /// </summary>
-        internal static string BankDelete {
+        public static string BankDelete {
             get {
                 return ResourceManager.GetString("BankDelete", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit a bank.
         /// </summary>
-        internal static string BankEdit {
+        public static string BankEdit {
             get {
                 return ResourceManager.GetString("BankEdit", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of banks.
         /// </summary>
-        internal static string BankList {
+        public static string BankList {
             get {
                 return ResourceManager.GetString("BankList", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage banks.
         /// </summary>
-        internal static string BankPages {
+        public static string BankPages {
             get {
                 return ResourceManager.GetString("BankPages", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create a budget plan.
         /// </summary>
-        internal static string BudgetPlanCreate {
+        public static string BudgetPlanCreate {
             get {
                 return ResourceManager.GetString("BudgetPlanCreate", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Budget Planned Dashboard.
         /// </summary>
-        internal static string BudgetPlanDashboardPages {
+        public static string BudgetPlanDashboardPages {
             get {
                 return ResourceManager.GetString("BudgetPlanDashboardPages", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete a budget plan.
         /// </summary>
-        internal static string BudgetPlanDelete {
+        public static string BudgetPlanDelete {
             get {
                 return ResourceManager.GetString("BudgetPlanDelete", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit a budget plan.
         /// </summary>
-        internal static string BudgetPlanEdit {
+        public static string BudgetPlanEdit {
             get {
                 return ResourceManager.GetString("BudgetPlanEdit", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of budget plans.
         /// </summary>
-        internal static string BudgetPlanList {
+        public static string BudgetPlanList {
             get {
                 return ResourceManager.GetString("BudgetPlanList", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage budget plans.
         /// </summary>
-        internal static string BudgetPlanPages {
+        public static string BudgetPlanPages {
             get {
                 return ResourceManager.GetString("BudgetPlanPages", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to View a budget plan.
         /// </summary>
-        internal static string BudgetPlanView {
+        public static string BudgetPlanView {
             get {
                 return ResourceManager.GetString("BudgetPlanView", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create a country.
         /// </summary>
-        internal static string CountryCreate {
+        public static string CountryCreate {
             get {
                 return ResourceManager.GetString("CountryCreate", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete a country.
         /// </summary>
-        internal static string CountryDelete {
+        public static string CountryDelete {
             get {
                 return ResourceManager.GetString("CountryDelete", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit a country.
         /// </summary>
-        internal static string CountryEdit {
+        public static string CountryEdit {
             get {
                 return ResourceManager.GetString("CountryEdit", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of countries.
         /// </summary>
-        internal static string CountryList {
+        public static string CountryList {
             get {
                 return ResourceManager.GetString("CountryList", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage countries.
         /// </summary>
-        internal static string CountryPages {
+        public static string CountryPages {
             get {
                 return ResourceManager.GetString("CountryPages", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create a currency.
         /// </summary>
-        internal static string CurrencyCreate {
+        public static string CurrencyCreate {
             get {
                 return ResourceManager.GetString("CurrencyCreate", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete a currency.
         /// </summary>
-        internal static string CurrencyDelete {
+        public static string CurrencyDelete {
             get {
                 return ResourceManager.GetString("CurrencyDelete", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit a currency.
         /// </summary>
-        internal static string CurrencyEdit {
+        public static string CurrencyEdit {
             get {
                 return ResourceManager.GetString("CurrencyEdit", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of currencies.
         /// </summary>
-        internal static string CurrencyList {
+        public static string CurrencyList {
             get {
                 return ResourceManager.GetString("CurrencyList", resourceCulture);
             }
@@ -342,16 +342,61 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage currencies.
         /// </summary>
-        internal static string CurrencyPages {
+        public static string CurrencyPages {
             get {
                 return ResourceManager.GetString("CurrencyPages", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create an expenditure.
+        /// </summary>
+        public static string ExpenditureCreate {
+            get {
+                return ResourceManager.GetString("ExpenditureCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete an expenditure.
+        /// </summary>
+        public static string ExpenditureDelete {
+            get {
+                return ResourceManager.GetString("ExpenditureDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit an expenditure.
+        /// </summary>
+        public static string ExpenditureEdit {
+            get {
+                return ResourceManager.GetString("ExpenditureEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of expenditures.
+        /// </summary>
+        public static string ExpenditureList {
+            get {
+                return ResourceManager.GetString("ExpenditureList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage expenditures.
+        /// </summary>
+        public static string ExpenditurePages {
+            get {
+                return ResourceManager.GetString("ExpenditurePages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expenditure Split Dashboard.
         /// </summary>
-        internal static string ExpenditureSplitDashboardPages {
+        public static string ExpenditureSplitDashboardPages {
             get {
                 return ResourceManager.GetString("ExpenditureSplitDashboardPages", resourceCulture);
             }
@@ -360,7 +405,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create an expenditure type.
         /// </summary>
-        internal static string ExpenditureTypeCreate {
+        public static string ExpenditureTypeCreate {
             get {
                 return ResourceManager.GetString("ExpenditureTypeCreate", resourceCulture);
             }
@@ -369,7 +414,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete an expenditure type.
         /// </summary>
-        internal static string ExpenditureTypeDelete {
+        public static string ExpenditureTypeDelete {
             get {
                 return ResourceManager.GetString("ExpenditureTypeDelete", resourceCulture);
             }
@@ -378,7 +423,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit an expenditure type.
         /// </summary>
-        internal static string ExpenditureTypeEdit {
+        public static string ExpenditureTypeEdit {
             get {
                 return ResourceManager.GetString("ExpenditureTypeEdit", resourceCulture);
             }
@@ -387,7 +432,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of expenditure types.
         /// </summary>
-        internal static string ExpenditureTypeList {
+        public static string ExpenditureTypeList {
             get {
                 return ResourceManager.GetString("ExpenditureTypeList", resourceCulture);
             }
@@ -396,7 +441,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage expenditure types.
         /// </summary>
-        internal static string ExpenditureTypePages {
+        public static string ExpenditureTypePages {
             get {
                 return ResourceManager.GetString("ExpenditureTypePages", resourceCulture);
             }
@@ -405,7 +450,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create an income.
         /// </summary>
-        internal static string IncomeCreate {
+        public static string IncomeCreate {
             get {
                 return ResourceManager.GetString("IncomeCreate", resourceCulture);
             }
@@ -414,7 +459,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete an income.
         /// </summary>
-        internal static string IncomeDelete {
+        public static string IncomeDelete {
             get {
                 return ResourceManager.GetString("IncomeDelete", resourceCulture);
             }
@@ -423,7 +468,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit an income.
         /// </summary>
-        internal static string IncomeEdit {
+        public static string IncomeEdit {
             get {
                 return ResourceManager.GetString("IncomeEdit", resourceCulture);
             }
@@ -432,7 +477,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of incomes.
         /// </summary>
-        internal static string IncomeList {
+        public static string IncomeList {
             get {
                 return ResourceManager.GetString("IncomeList", resourceCulture);
             }
@@ -441,7 +486,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage incomes.
         /// </summary>
-        internal static string IncomePages {
+        public static string IncomePages {
             get {
                 return ResourceManager.GetString("IncomePages", resourceCulture);
             }
@@ -450,7 +495,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Log in.
         /// </summary>
-        internal static string LoginPages {
+        public static string LoginPages {
             get {
                 return ResourceManager.GetString("LoginPages", resourceCulture);
             }
@@ -459,7 +504,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create a payment method.
         /// </summary>
-        internal static string PaymentMethodCreate {
+        public static string PaymentMethodCreate {
             get {
                 return ResourceManager.GetString("PaymentMethodCreate", resourceCulture);
             }
@@ -468,7 +513,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete a payment method.
         /// </summary>
-        internal static string PaymentMethodDelete {
+        public static string PaymentMethodDelete {
             get {
                 return ResourceManager.GetString("PaymentMethodDelete", resourceCulture);
             }
@@ -477,7 +522,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit a payment method.
         /// </summary>
-        internal static string PaymentMethodEdit {
+        public static string PaymentMethodEdit {
             get {
                 return ResourceManager.GetString("PaymentMethodEdit", resourceCulture);
             }
@@ -486,7 +531,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of payment methods.
         /// </summary>
-        internal static string PaymentMethodList {
+        public static string PaymentMethodList {
             get {
                 return ResourceManager.GetString("PaymentMethodList", resourceCulture);
             }
@@ -495,7 +540,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage payment methods.
         /// </summary>
-        internal static string PaymentMethodPages {
+        public static string PaymentMethodPages {
             get {
                 return ResourceManager.GetString("PaymentMethodPages", resourceCulture);
             }
@@ -504,7 +549,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create an outcome.
         /// </summary>
-        internal static string PeriodicOutcomeCreate {
+        public static string PeriodicOutcomeCreate {
             get {
                 return ResourceManager.GetString("PeriodicOutcomeCreate", resourceCulture);
             }
@@ -513,7 +558,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete an outcome.
         /// </summary>
-        internal static string PeriodicOutcomeDelete {
+        public static string PeriodicOutcomeDelete {
             get {
                 return ResourceManager.GetString("PeriodicOutcomeDelete", resourceCulture);
             }
@@ -522,7 +567,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit an outcome.
         /// </summary>
-        internal static string PeriodicOutcomeEdit {
+        public static string PeriodicOutcomeEdit {
             get {
                 return ResourceManager.GetString("PeriodicOutcomeEdit", resourceCulture);
             }
@@ -531,7 +576,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of outcomes.
         /// </summary>
-        internal static string PeriodicOutcomeList {
+        public static string PeriodicOutcomeList {
             get {
                 return ResourceManager.GetString("PeriodicOutcomeList", resourceCulture);
             }
@@ -540,7 +585,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage outcomes.
         /// </summary>
-        internal static string PeriodicOutcomePages {
+        public static string PeriodicOutcomePages {
             get {
                 return ResourceManager.GetString("PeriodicOutcomePages", resourceCulture);
             }
@@ -549,7 +594,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create a saving.
         /// </summary>
-        internal static string SavingCreate {
+        public static string SavingCreate {
             get {
                 return ResourceManager.GetString("SavingCreate", resourceCulture);
             }
@@ -558,7 +603,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Delete a saving.
         /// </summary>
-        internal static string SavingDelete {
+        public static string SavingDelete {
             get {
                 return ResourceManager.GetString("SavingDelete", resourceCulture);
             }
@@ -567,7 +612,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit a saving.
         /// </summary>
-        internal static string SavingEdit {
+        public static string SavingEdit {
             get {
                 return ResourceManager.GetString("SavingEdit", resourceCulture);
             }
@@ -576,7 +621,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to List of saving.
         /// </summary>
-        internal static string SavingList {
+        public static string SavingList {
             get {
                 return ResourceManager.GetString("SavingList", resourceCulture);
             }
@@ -585,7 +630,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage savings.
         /// </summary>
-        internal static string SavingPages {
+        public static string SavingPages {
             get {
                 return ResourceManager.GetString("SavingPages", resourceCulture);
             }
@@ -594,7 +639,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Create user profile.
         /// </summary>
-        internal static string UserProfileCreate {
+        public static string UserProfileCreate {
             get {
                 return ResourceManager.GetString("UserProfileCreate", resourceCulture);
             }
@@ -603,7 +648,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Edit user profile.
         /// </summary>
-        internal static string UserProfileEdit {
+        public static string UserProfileEdit {
             get {
                 return ResourceManager.GetString("UserProfileEdit", resourceCulture);
             }
@@ -612,7 +657,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Manage user profile.
         /// </summary>
-        internal static string UserProfilePages {
+        public static string UserProfilePages {
             get {
                 return ResourceManager.GetString("UserProfilePages", resourceCulture);
             }
@@ -621,7 +666,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to View user profile.
         /// </summary>
-        internal static string UserProfileView {
+        public static string UserProfileView {
             get {
                 return ResourceManager.GetString("UserProfileView", resourceCulture);
             }

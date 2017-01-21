@@ -62,8 +62,8 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             var costValue = _firstRow.FindElement(By.ClassName("tdCost"));
             _costIncome = Convert.ToDecimal(costValue.Text.Substring(1));
 
-            var editConfirmBtn = _firstRow.FindElement(By.ClassName("btn_edit"));
-            editConfirmBtn.Click();
+            var editBtn = _firstRow.FindElement(By.ClassName("btn_edit"));
+            editBtn.Click();
 
             var incomeIdHid = _ctx.WebDriver.FindElement(By.Id("Id"));
             _incomeId = Convert.ToInt32(incomeIdHid.GetAttribute("value"));

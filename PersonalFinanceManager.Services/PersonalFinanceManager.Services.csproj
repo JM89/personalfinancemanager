@@ -63,7 +63,7 @@
   <ItemGroup>
     <Compile Include="MovementStrategy\CommonMovementStrategy.cs" />
     <Compile Include="MovementStrategy\ContextMovementStrategy.cs" />
-    <Compile Include="MovementStrategy\AtmWithdrawMovementStrategy.cs" />
+    <Compile Include="MovementStrategy\CashMovementStrategy.cs" />
     <Compile Include="MovementStrategy\MovementStrategy.cs" />
     <Compile Include="MovementStrategy\InternalTransferMovementStrategy.cs" />
     <Compile Include="MovementStrategy\Movement.cs" />

@@ -1,34 +1,27 @@
-﻿using PersonalFinanceManager.DataAccess;
-using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
-using PersonalFinanceManager.Entities;
+﻿using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 using PersonalFinanceManager.Entities.Enumerations;
-using PersonalFinanceManager.Services.MovementStrategy;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.MovementStrategy
 {
     public static class ContextMovementStrategy
     {
-        public static MovementStrategy GetMovementStrategy(Movement movement, IBankAccountRepository _bankAccountRepository, IHistoricMovementRepository _historicMovementRepository, IIncomeRepository _incomeRepository)
+        public static MovementStrategy GetMovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository)
         {
             MovementStrategy strategy = null;
 
             switch (movement.PaymentMethod)
             {
                 case PaymentMethod.Cash:
-                    strategy = new AtmWithdrawMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository);
+                    strategy = new CashMovementStrategy(movement, bankAccountRepository, historicMovementRepository, incomeRepository, atmWithdrawRepository);
                     break;
                 case PaymentMethod.InternalTransfer:
-                    strategy = new InternalTransferMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository);
+                    strategy = new InternalTransferMovementStrategy(movement, bankAccountRepository, historicMovementRepository, incomeRepository, atmWithdrawRepository);
                     break;
                 case PaymentMethod.CB:
                 case PaymentMethod.DirectDebit:
                 case PaymentMethod.Transfer:
-                    strategy = new CommonMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository);
+                    strategy = new CommonMovementStrategy(movement, bankAccountRepository, historicMovementRepository, incomeRepository, atmWithdrawRepository);
                     break;
                 default:
                     throw new ArgumentException("Unknown PaymentMethod");

@@ -48,6 +48,8 @@
     <Compile Include="Interfaces\IIncomeService.cs" />
     <Compile Include="Interfaces\IHistoricMovementService.cs" />
     <Compile Include="HistoricMovementService.cs" />
+    <Compile Include="Interfaces\IExpenditureService.cs" />
+    <Compile Include="ExpenditureService.cs" />
     <Compile Include="SavingService.cs" />
     <Compile Include="BankAccountService.cs" />
     <Compile Include="Interfaces\ISavingService.cs" />

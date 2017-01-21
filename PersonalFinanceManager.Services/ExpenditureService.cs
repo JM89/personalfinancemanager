@@ -8,16 +8,17 @@ using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Services.RequestObjects;
 using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 using PersonalFinanceManager.Services.MovementStrategy;
+using System;
 
 namespace PersonalFinanceManager.Services
 {
     public class ExpenditureService : IExpenditureService
     {
         private readonly IExpenditureRepository _expenditureRepository;
-        protected IBankAccountRepository _bankAccountRepository;
-        protected IAtmWithdrawRepository _atmWithdrawRepository;
-        protected IIncomeRepository _incomeRepository;
-        protected IHistoricMovementRepository _historicMovementRepository;
+        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IAtmWithdrawRepository _atmWithdrawRepository;
+        private readonly IIncomeRepository _incomeRepository;
+        private readonly IHistoricMovementRepository _historicMovementRepository;
 
         public ExpenditureService(IExpenditureRepository expenditureRepository, IBankAccountRepository bankAccountRepository, IAtmWithdrawRepository atmWithdrawRepository, IIncomeRepository incomeRepository,
             IHistoricMovementRepository historicMovementRepository)
@@ -32,32 +33,43 @@ namespace PersonalFinanceManager.Services
         public void CreateExpenditure(ExpenditureEditModel expenditureEditModel)
         {
             var expenditureModel = Mapper.Map<ExpenditureModel>(expenditureEditModel);
-            _expenditureRepository.Create(expenditureModel);
 
-            var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(expenditureEditModel), _bankAccountRepository, _historicMovementRepository, _incomeRepository);
+            var movement = new Movement(expenditureEditModel);
+
+            var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository);
             strategy.Debit();
+
+            if (movement.TargetIncomeId.HasValue)
+                expenditureModel.GeneratedIncomeId = movement.TargetIncomeId.Value;
+
+            _expenditureRepository.Create(expenditureModel);
         }
         
         public void EditExpenditure(ExpenditureEditModel expenditureEditModel)
         {
-            var expenditureModel = _expenditureRepository.GetList().AsNoTracking().SingleOrDefault(x => x.Id == expenditureEditModel.Id);
-            var currentSavingEditModel = Mapper.Map<ExpenditureEditModel>(expenditureModel);
+            var expenditureModel = _expenditureRepository.GetById(expenditureEditModel.Id, true);
 
-            var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(currentSavingEditModel), _bankAccountRepository, _historicMovementRepository, _incomeRepository);
+            var oldMovement = new Movement(Mapper.Map<ExpenditureEditModel>(expenditureModel));
 
-            expenditureModel.DateExpenditure = expenditureEditModel.DateExpenditure;
-            expenditureModel.Description = expenditureEditModel.Description;
-            expenditureModel.AccountId = expenditureEditModel.AccountId;
-            expenditureModel.PaymentMethodId = expenditureEditModel.PaymentMethodId;
-            expenditureModel.TypeExpenditureId = expenditureEditModel.TypeExpenditureId;
-            expenditureModel.Cost = expenditureEditModel.Cost;
-            expenditureModel.HasBeenAlreadyDebited = expenditureEditModel.HasBeenAlreadyDebited;
-            expenditureModel.AtmWithdrawId = expenditureEditModel.AtmWithdrawId;
-            expenditureModel.TargetInternalAccountId = expenditureEditModel.TargetInternalAccountId;
+            expenditureModel = Mapper.Map<ExpenditureModel>(expenditureEditModel);
+            if (expenditureModel.GeneratedIncomeId.HasValue)
+            {
+                expenditureModel.GeneratedIncomeId = (int?)null;
+                _expenditureRepository.Update(expenditureModel);
+            }
+
+            var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository);
+            var newMovement = new Movement(expenditureEditModel);
+
+            strategy.UpdateDebit(newMovement);
+
+            if (newMovement.TargetIncomeId.HasValue)
+            {
+                // Update the GenerateIncomeId.
+                expenditureModel.GeneratedIncomeId = newMovement.TargetIncomeId.Value;
+            }
 
             _expenditureRepository.Update(expenditureModel);
-            
-            strategy.UpdateDebit(new Movement(expenditureEditModel));
         }
 
         public void DeleteExpenditure(int id)
@@ -65,10 +77,10 @@ namespace PersonalFinanceManager.Services
             var expenditureModel = _expenditureRepository.GetById(id);
             var expenditureEditModel = Mapper.Map<ExpenditureEditModel>(expenditureModel);
 
-            var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(expenditureEditModel), _bankAccountRepository, _historicMovementRepository, _incomeRepository);
-            strategy.Credit();
-
             _expenditureRepository.Delete(expenditureModel);
+
+            var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(expenditureEditModel), _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository);
+            strategy.Credit();
         }
 
         public ExpenditureEditModel GetById(int id)

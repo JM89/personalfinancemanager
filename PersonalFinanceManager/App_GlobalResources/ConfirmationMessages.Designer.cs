@@ -22,7 +22,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ConfirmationMessages {
+    public class ConfirmationMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PersonalFinanceManager.App_GlobalResources.ConfirmationMessages", typeof(ConfirmationMessages).Assembly);
@@ -51,7 +51,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this ATM withdraw?.
         /// </summary>
-        internal static string AtmWithdrawConfirmationDeletion {
+        public static string AtmWithdrawConfirmationDeletion {
             get {
                 return ResourceManager.GetString("AtmWithdrawConfirmationDeletion", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this bank?.
         /// </summary>
-        internal static string BankConfirmationDeletion {
+        public static string BankConfirmationDeletion {
             get {
                 return ResourceManager.GetString("BankConfirmationDeletion", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this country?.
         /// </summary>
-        internal static string CountryConfirmationDeletion {
+        public static string CountryConfirmationDeletion {
             get {
                 return ResourceManager.GetString("CountryConfirmationDeletion", resourceCulture);
             }
@@ -90,16 +90,25 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this currency?.
         /// </summary>
-        internal static string CurrencyConfirmationDeletion {
+        public static string CurrencyConfirmationDeletion {
             get {
                 return ResourceManager.GetString("CurrencyConfirmationDeletion", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this expenditure?.
+        /// </summary>
+        public static string ExpenditureConfirmationDeletion {
+            get {
+                return ResourceManager.GetString("ExpenditureConfirmationDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this expenditure type?.
         /// </summary>
-        internal static string ExpenditureTypeConfirmationDeletion {
+        public static string ExpenditureTypeConfirmationDeletion {
             get {
                 return ResourceManager.GetString("ExpenditureTypeConfirmationDeletion", resourceCulture);
             }
@@ -108,7 +117,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this income?.
         /// </summary>
-        internal static string IncomeConfirmationDeletion {
+        public static string IncomeConfirmationDeletion {
             get {
                 return ResourceManager.GetString("IncomeConfirmationDeletion", resourceCulture);
             }
@@ -117,7 +126,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this payment method?.
         /// </summary>
-        internal static string PaymentMethodConfirmationDeletion {
+        public static string PaymentMethodConfirmationDeletion {
             get {
                 return ResourceManager.GetString("PaymentMethodConfirmationDeletion", resourceCulture);
             }
@@ -126,9 +135,18 @@ namespace PersonalFinanceManager.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this periodic outcome?.
         /// </summary>
-        internal static string PeriodicOutcomeConfirmationDeletion {
+        public static string PeriodicOutcomeConfirmationDeletion {
             get {
                 return ResourceManager.GetString("PeriodicOutcomeConfirmationDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this saving?.
+        /// </summary>
+        public static string SavingConfirmationDeletion {
+            get {
+                return ResourceManager.GetString("SavingConfirmationDeletion", resourceCulture);
             }
         }
     }

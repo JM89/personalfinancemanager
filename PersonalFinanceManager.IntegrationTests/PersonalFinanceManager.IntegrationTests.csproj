@@ -66,6 +66,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scenarios\CreateInternalTransferExpenditures.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateInternalTransferExpenditures.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Scenarios\DeleteInternalTransferExpenditures.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeleteInternalTransferExpenditures.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Scenarios\EditInternalTransferExpendituresSteps.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditInternalTransferExpendituresSteps.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Scenarios\PreActions\CreateInternalTransferExpenditures.cs" />
+    <Compile Include="Scenarios\Steps\CreateInternalTransferExpendituresSteps.cs" />
+    <Compile Include="Scenarios\Steps\DeleteInternalTransferExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\EditAtmWithdrawsSteps.cs" />
     <Compile Include="Scenarios\DeleteAtmWithdraws.feature.cs">
       <AutoGen>True</AutoGen>
@@ -121,6 +139,7 @@
     </Compile>
     <Compile Include="Scenarios\Steps\CreateSavingsSteps.cs" />
     <Compile Include="Scenarios\Steps\EditIncomesSteps.cs" />
+    <Compile Include="Scenarios\Steps\EditInternalTransferExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\EditSavingsSteps.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +153,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CreateIncomes.feature.cs</LastGenOutput>
     </None>
+    <None Include="Scenarios\CreateInternalTransferExpenditures.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CreateInternalTransferExpenditures.feature.cs</LastGenOutput>
+    </None>
     <None Include="Scenarios\DeleteAtmWithdraws.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DeleteAtmWithdraws.feature.cs</LastGenOutput>
@@ -141,6 +164,10 @@
     <None Include="Scenarios\DeleteIncomes.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DeleteIncomes.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Scenarios\DeleteInternalTransferExpenditures.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>DeleteInternalTransferExpenditures.feature.cs</LastGenOutput>
     </None>
     <None Include="Scenarios\DeleteSavings.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -157,6 +184,10 @@
     <None Include="Scenarios\EditIncomes.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>EditIncomes.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Scenarios\EditInternalTransferExpendituresSteps.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>EditInternalTransferExpendituresSteps.feature.cs</LastGenOutput>
     </None>
     <None Include="Scenarios\EditSavings.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

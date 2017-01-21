@@ -2,8 +2,8 @@
 
 @{
     Layout = "~/Views/Shared/_LayoutEditor.cshtml";
-    ViewBag.PageTitle = "Manage expenditures";
-    ViewBag.FormTitle = "Edit expenditure";
+    ViewBag.PageTitle = Resources.TitleNames.ExpenditurePages;
+    ViewBag.FormTitle = Resources.TitleNames.ExpenditureCreate;
 }
 
 @section BreadCrumbSection
@@ -42,6 +42,8 @@
         <div class="form-horizontal">
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            
+            @Html.HiddenFor(model => model.Id)
 
             <input type="hidden" value="@ViewBag.AccountId" />
                          

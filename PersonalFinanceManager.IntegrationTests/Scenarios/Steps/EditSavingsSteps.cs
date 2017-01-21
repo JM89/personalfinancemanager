@@ -74,8 +74,8 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             _oldTargetAccountId = Convert.ToInt32(targetAccountHid.GetAttribute("value"));
             _oldTargetAccountAmount = _bankAccountService.GetAccountAmount(_oldTargetAccountId);
 
-            var editConfirmBtn = _firstRow.FindElement(By.ClassName("btn_edit"));
-            editConfirmBtn.Click();
+            var editBtn = _firstRow.FindElement(By.ClassName("btn_edit"));
+            editBtn.Click();
 
             var savingIdHid = _ctx.WebDriver.FindElement(By.Id("Id"));
             _savingId = Convert.ToInt32(savingIdHid.GetAttribute("value"));
