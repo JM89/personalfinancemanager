@@ -49,5 +49,10 @@ namespace PersonalFinanceManager.IntegrationTests.Infrastructure
                 throw new Exception("Account has no option. At least 1 expected.");
             return Convert.ToInt32(firstAccount.GetAttribute("value"));
         }
+
+        public void StopTest()
+        {
+            this.WebDriver.Quit();
+        }
     }
 }

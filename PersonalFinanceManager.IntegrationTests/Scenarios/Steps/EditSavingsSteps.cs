@@ -114,7 +114,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
                 savingAccounts.Add(new Tuple<int, int, bool>(ind, value, value == selectedValueOption));
             }
 
-            var firstNotSelectedIndex = savingAccounts.Where(x => !x.Item3).First();
+            var firstNotSelectedIndex = savingAccounts.First(x => !x.Item3);
 
             accountDdl.SelectByIndex(firstNotSelectedIndex.Item1);
 
@@ -194,6 +194,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             var newCountMovements = _historicMovementService.CountMovements();
 
             Assert.AreEqual(newCountMovements, _countMovements + 2);
+        }
+
+        [AfterScenario]
+        public void TestTearDown()
+        {
+            _ctx.StopTest();
         }
     }
 }

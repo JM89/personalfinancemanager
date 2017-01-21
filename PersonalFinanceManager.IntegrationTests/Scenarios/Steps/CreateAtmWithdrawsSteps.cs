@@ -94,5 +94,11 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
 
             Assert.AreEqual(newCountMovements, _countMovements + 1);
         }
+
+        [AfterScenario]
+        public void TestTearDown()
+        {
+            _ctx.StopTest();
+        }
     }
 }
