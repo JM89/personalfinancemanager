@@ -2,7 +2,7 @@
 	Create savings
 
 @createsaving
-Scenario: Create Successfully Savings
+Scenario: Create Savings
 	Given I have accessed the Saving List page
 	And I have clicked on the Create button
 	When I enter Amount 

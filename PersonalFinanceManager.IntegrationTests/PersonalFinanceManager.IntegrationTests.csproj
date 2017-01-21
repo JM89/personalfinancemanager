@@ -66,11 +66,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scenarios\DeleteIncomes.feature.cs">
+      <DependentUpon>DeleteIncomes.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Scenarios\EditIncomes.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditIncomes.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Scenarios\Steps\CreateIncomesSteps.cs" />
+    <Compile Include="Scenarios\CreateIncomes.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateIncomes.feature</DependentUpon>
+    </Compile>
     <Compile Include="Scenarios\EditSavings.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EditSavings.feature</DependentUpon>
     </Compile>
+    <Compile Include="Scenarios\Steps\DeleteIncomeSteps.cs" />
     <Compile Include="Scenarios\Steps\DeleteSavingsSteps.cs" />
     <Compile Include="Infrastructure\TestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,11 +102,20 @@
       <DependentUpon>CreateSavings.feature</DependentUpon>
     </Compile>
     <Compile Include="Scenarios\Steps\CreateSavingsSteps.cs" />
+    <Compile Include="Scenarios\Steps\EditIncomesSteps.cs" />
     <Compile Include="Scenarios\Steps\EditSavingsSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Scenarios\CreateIncomes.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CreateIncomes.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Scenarios\DeleteIncomes.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>DeleteIncomes.feature.cs</LastGenOutput>
+    </None>
     <None Include="Scenarios\DeleteSavings.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DeleteSavings.feature.cs</LastGenOutput>
@@ -97,6 +123,10 @@
     <None Include="Scenarios\CreateSavings.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CreateSavings.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Scenarios\EditIncomes.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>EditIncomes.feature.cs</LastGenOutput>
     </None>
     <None Include="Scenarios\EditSavings.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

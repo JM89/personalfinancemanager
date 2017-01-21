@@ -65,30 +65,26 @@
         </thead>
         <tbody>
 
-            @{
-                var i = 0;
-                foreach (var item in Model)
-                {
-                    ++i;
-                    <tr id="row-@i">
-                        <td class="tdDateSaving">
-                            @Html.DisplayFor(modelItem => item.DisplayedDateSaving)
-                        </td>
-                        <td align="right" class="tdAmount">
-                            @Html.DisplayFor(modelItem => item.DisplayedAmount)
-                        </td>
-                        <td class="tdDescription">
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td class="tdTargetInternalAccount">
-                            @Html.HiddenFor(modelItem => item.TargetInternalAccountId)
-                            @Html.DisplayFor(modelItem => item.TargetInternalAccountName)
-                        </td>
-                        <td align="right" class="tdActions">
-                            @CustomHelpers.ListButtons(@item.Id, true, "Saving", "")
-                        </td>
-                    </tr>
-                }
+            @foreach (var item in Model)
+            {
+                <tr class="trSaving">
+                    <td class="tdDateSaving">
+                        @Html.DisplayFor(modelItem => item.DisplayedDateSaving)
+                    </td>
+                    <td align="right" class="tdAmount">
+                        @Html.DisplayFor(modelItem => item.DisplayedAmount)
+                    </td>
+                    <td class="tdDescription">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td class="tdTargetInternalAccount">
+                        @Html.HiddenFor(modelItem => item.TargetInternalAccountId)
+                        @Html.DisplayFor(modelItem => item.TargetInternalAccountName)
+                    </td>
+                    <td align="right" class="tdActions">
+                        @CustomHelpers.ListButtons(@item.Id, true, "Saving", "")
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

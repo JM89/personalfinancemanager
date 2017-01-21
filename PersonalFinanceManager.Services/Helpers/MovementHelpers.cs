@@ -7,7 +7,7 @@ namespace PersonalFinanceManager.Services.Helpers
 {
     public static class MovementHelpers
     {
-        public static void Debit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, int sourceId, ObjectType sourceObjectType, decimal sourceAmount)
+        public static void Debit(IHistoricMovementRepository _historicMovementRepository, decimal movementAmount, ObjectType sourceObjectType, int sourceId, decimal sourceAmount)
         {
             var historicMovement = new HistoricMovementModel();
             historicMovement.Date = DateTime.Now;

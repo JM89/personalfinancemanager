@@ -64,11 +64,11 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Delete Successfully Savings")]
+        [NUnit.Framework.DescriptionAttribute("Delete Savings")]
         [NUnit.Framework.CategoryAttribute("deletesaving")]
-        public virtual void DeleteSuccessfullySavings()
+        public virtual void DeleteSavings()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete Successfully Savings", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete Savings", new string[] {
                         "deletesaving"});
 #line 5
 this.ScenarioSetup(scenarioInfo);

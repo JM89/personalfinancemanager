@@ -53,11 +53,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Given(@"I have at least one saving in the list")]
         public void GivenIHaveAtLeastOneSavingInTheList()
         {
-            FirstRow = ctx.WebDriver.FindElement(By.Id("row-1"));
-            if (FirstRow == null)
+            var savings = ctx.WebDriver.FindElements(By.ClassName("trSaving"));
+            if (savings.Count < 1)
             {
                 throw new Exception("There is no saving to delete");
             }
+            FirstRow = savings[0];
         }
         
         [When(@"I click on delete for the first saving")]
@@ -78,7 +79,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         public void WhenIConfirmTheDeletion()
         {
             var deleteSavingPage = ctx.WebDriver.FindElement(By.TagName("h5"));
-            if (deleteSavingPage.Text != "Delete saving")
+            if (deleteSavingPage.Text != "Delete a saving")
             {
                 throw new Exception("The confirmation of deletion should be there.");
             }

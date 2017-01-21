@@ -9,7 +9,6 @@
 @section BreadCrumbSection
 {
     <li>
-        @*Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId"></a>*@
         @ViewBag.AccountName
     </li>
     <li>
@@ -63,20 +62,18 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-
-                    <td>
+                <tr class="trIncome">
+                    <td class="tdDateIncome">
                         @Html.DisplayFor(modelItem => item.DisplayedDateIncome)
                     </td>
-                    <td>
+                    <td class="tdCost">
                         @Html.DisplayFor(modelItem => item.DisplayedCost)
                     </td>
-                    <td>
+                    <td class="tdDescription">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td align="right">
-                        <a href="/Income/Edit/@item.Id" title="@Resources.ButtonNames.EditTooltip"><i class="fa fa-pencil-square-o"></i></a>
-                        <a href="/Income/Delete/@item.Id" title="@Resources.ButtonNames.DeleteTooltip"><i class="fa fa-trash-o"></i></a>
+                    <td align="right" class="tdActions">
+                        @CustomHelpers.ListButtons(@item.Id, true, "Income", "")
                     </td>
                 </tr>
             }

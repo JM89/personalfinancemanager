@@ -56,11 +56,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Given(@"I have at least one saving in the list")]
         public void GivenIHaveAtLeastOneSavingInTheList()
         {
-            FirstRow = ctx.WebDriver.FindElement(By.Id("row-1"));
-            if (FirstRow == null)
+            var savings = ctx.WebDriver.FindElements(By.ClassName("trSaving"));
+            if (savings.Count < 1)
             {
                 throw new Exception("There is no saving to delete");
             }
+            FirstRow = savings[0];
         }
         
         [When(@"I click on edit for the first saving")]

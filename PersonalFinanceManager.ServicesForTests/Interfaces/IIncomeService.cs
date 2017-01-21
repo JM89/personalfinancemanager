@@ -9,5 +9,7 @@ namespace PersonalFinanceManager.ServicesForTests
     public interface IIncomeService
     {
         int CountIncomes();
+
+        decimal GetIncomeCost(int id);
     }
 }

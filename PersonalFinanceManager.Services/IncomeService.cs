@@ -6,6 +6,8 @@ using AutoMapper;
 using PersonalFinanceManager.Models.Income;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
+using PersonalFinanceManager.Services.Helpers;
+using PersonalFinanceManager.Entities.Enumerations;
 
 namespace PersonalFinanceManager.Services
 {
@@ -28,8 +30,11 @@ namespace PersonalFinanceManager.Services
             var incomeModel = Mapper.Map<IncomeModel>(incomeEditModel);
             _incomeRepository.Create(incomeModel);
 
-            var accountModel = _bankAccountRepository.GetById(incomeModel.AccountId);
-            //MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, accountModel, incomeModel.Cost, MovementType.Income);
+            var account = _bankAccountRepository.GetById(incomeModel.AccountId);
+            MovementHelpers.Credit(_historicMovementRepository, incomeModel.Cost, ObjectType.Account, account.Id, account.CurrentBalance);
+
+            account.CurrentBalance += incomeEditModel.Cost;
+            _bankAccountRepository.Update(account);
         }
 
         public IList<IncomeListModel> GetIncomes(int accountId)
@@ -68,18 +73,24 @@ namespace PersonalFinanceManager.Services
             if (oldCost != income.Cost)
             {
                 var account = _bankAccountRepository.GetById(income.AccountId);
-                //MovementHelpers.CreditAccount(_bankAccountRepository, _historicMovementRepository, account, oldCost, MovementType.Income);
-                //MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, account, income.Cost, MovementType.Income);
+                MovementHelpers.Debit(_historicMovementRepository, oldCost, ObjectType.Account, account.Id, account.CurrentBalance);
+                account.CurrentBalance -= oldCost;
+                MovementHelpers.Credit(_historicMovementRepository, income.Cost, ObjectType.Account, account.Id, account.CurrentBalance);
+                account.CurrentBalance += income.Cost;
+                _bankAccountRepository.Update(account);
             }
         }
 
         public void DeleteIncome(int id)
         {
             var incomeModel = _incomeRepository.GetById(id);
-            _incomeRepository.Delete(incomeModel);
 
-            var accountModel = _bankAccountRepository.GetById(incomeModel.AccountId);
-            //MovementHelpers.DebitAccount(_bankAccountRepository, _historicMovementRepository, accountModel, incomeModel.Cost, MovementType.Income);
+            var account = _bankAccountRepository.GetById(incomeModel.AccountId);
+            MovementHelpers.Debit(_historicMovementRepository, incomeModel.Cost, ObjectType.Account, account.Id, account.CurrentBalance);
+            account.CurrentBalance -= incomeModel.Cost;
+            _bankAccountRepository.Update(account);
+
+            _incomeRepository.Delete(incomeModel);
         }
     }
 }

@@ -18,5 +18,14 @@ namespace PersonalFinanceManager.ServicesForTests
                 return incomeRepository.GetList().ToList().Count();
             }
         }
+
+        public decimal GetIncomeCost(int id)
+        {
+            using (var dbContext = new DataAccess.ApplicationDbContext())
+            {
+                var incomeRepository = new IncomeRepository(dbContext);
+                return incomeRepository.GetById(id).Cost;
+            }
+        }
     }
 }

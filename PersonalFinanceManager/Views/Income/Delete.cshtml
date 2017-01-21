@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/_LayoutConfirmDeletion.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.IncomePages;
-    ViewBag.FormTitle = Resources.TitleNames.IncomeDelete;
+    ViewBag.DetailsTitle = Resources.TitleNames.IncomeDelete;
     ViewBag.ConfirmationMessage = Resources.ConfirmationMessages.IncomeConfirmationDeletion;
 }
 
@@ -11,7 +11,6 @@
 @section BreadCrumbSection
 {
     <li>
-        @*Bank Account <a href="/BankAccount/Details/@ViewBag.AccountId"></a>*@
         @ViewBag.AccountName
     </li>
     <li>
