@@ -6,6 +6,8 @@ using AutoMapper;
 using PersonalFinanceManager.Models.AtmWithdraw;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
+using PersonalFinanceManager.Services.Helpers;
+using PersonalFinanceManager.Entities.Enumerations;
 
 namespace PersonalFinanceManager.Services
 {
@@ -34,7 +36,7 @@ namespace PersonalFinanceManager.Services
 
             var expenditures = _expenditureRepository.GetList();
 
-            var mappedAtmWithdraws = atmWithdraws.Select(x => Mapper.Map<AtmWithdrawListModel>(x)).ToList();
+            var mappedAtmWithdraws = atmWithdraws.Select(Mapper.Map<AtmWithdrawListModel>).ToList();
 
             mappedAtmWithdraws.ForEach(atmWithdraw =>
             {
@@ -52,11 +54,11 @@ namespace PersonalFinanceManager.Services
             atmWithdrawModel.IsClosed = false;
             _atmWithdrawRepository.Create(atmWithdrawModel);
 
-            var accountModel = _bankAccountRepository.GetById(atmWithdrawModel.AccountId);
-            accountModel.CurrentBalance -= atmWithdrawModel.InitialAmount;
-            _bankAccountRepository.Update(accountModel);
+            var account = _bankAccountRepository.GetById(atmWithdrawModel.AccountId);
+            MovementHelpers.Debit(_historicMovementRepository, atmWithdrawModel.InitialAmount, ObjectType.Account, account.Id, account.CurrentBalance);
 
-            //_historicMovementRepository.SaveDebitMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+            account.CurrentBalance -= atmWithdrawModel.InitialAmount;
+            _bankAccountRepository.Update(account);
         }
 
         public AtmWithdrawEditModel GetById(int id)
@@ -76,6 +78,7 @@ namespace PersonalFinanceManager.Services
             var atmWithdrawModel = _atmWithdrawRepository.GetById(atmWithdrawEditModel.Id);
 
             var oldCost = atmWithdrawModel.InitialAmount;
+
             atmWithdrawModel.InitialAmount = atmWithdrawEditModel.InitialAmount;
             atmWithdrawModel.CurrentAmount = atmWithdrawEditModel.InitialAmount;
             atmWithdrawModel.DateExpenditure = atmWithdrawEditModel.DateExpenditure;
@@ -85,13 +88,12 @@ namespace PersonalFinanceManager.Services
             
             if (oldCost != atmWithdrawModel.InitialAmount)
             {
-                var accountModel = _bankAccountRepository.GetById(atmWithdrawModel.AccountId);
-                accountModel.CurrentBalance += oldCost;
-                accountModel.CurrentBalance -= atmWithdrawModel.InitialAmount;
-                _bankAccountRepository.Update(accountModel);
-
-                //_historicMovementRepository.SaveCreditMovement(atmWithdrawModel.AccountId, oldCost, TargetOptions.Account, MovementType.AtmWithdraw);
-                //_historicMovementRepository.SaveDebitMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+                var account = _bankAccountRepository.GetById(atmWithdrawModel.AccountId);
+                MovementHelpers.Credit(_historicMovementRepository, oldCost, ObjectType.Account, account.Id, account.CurrentBalance);
+                account.CurrentBalance += oldCost;
+                MovementHelpers.Debit(_historicMovementRepository, atmWithdrawModel.InitialAmount, ObjectType.Account, account.Id, account.CurrentBalance);
+                account.CurrentBalance -= atmWithdrawModel.InitialAmount;
+                _bankAccountRepository.Update(account);
             }
         }
 
@@ -107,11 +109,10 @@ namespace PersonalFinanceManager.Services
         {
             var atmWithdrawModel = _atmWithdrawRepository.GetById(id);
 
-            var accountModel = _bankAccountRepository.GetById(atmWithdrawModel.AccountId);
-            accountModel.CurrentBalance += atmWithdrawModel.InitialAmount;
-            _bankAccountRepository.Update(accountModel);
-
-            //_historicMovementRepository.SaveCreditMovement(atmWithdrawModel.AccountId, atmWithdrawModel.InitialAmount, TargetOptions.Account, MovementType.AtmWithdraw);
+            var account = _bankAccountRepository.GetById(atmWithdrawModel.AccountId);
+            MovementHelpers.Debit(_historicMovementRepository, atmWithdrawModel.InitialAmount, ObjectType.Account, account.Id, account.CurrentBalance);
+            account.CurrentBalance += atmWithdrawModel.InitialAmount;
+            _bankAccountRepository.Update(account);
 
             _atmWithdrawRepository.Delete(atmWithdrawModel);
         }

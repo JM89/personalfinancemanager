@@ -4,6 +4,7 @@ using PersonalFinanceManager.IntegrationTests.Infrastructure;
 using PersonalFinanceManager.ServicesForTests;
 using System;
 using System.Threading;
+using PersonalFinanceManager.ServicesForTests.Interfaces;
 using TechTalk.SpecFlow;
 
 namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
@@ -11,18 +12,15 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
     [Binding, Scope(Feature = "EditIncomes")]
     public class EditIncomesSteps
     {
-        public IntegrationTestContext ctx = new IntegrationTestContext();
+        private readonly IntegrationTestContext _ctx = new IntegrationTestContext();
 
-        public int SourceAccountId, IncomeId;
-        public int CountIncomes, CountMovements;
-        public decimal SourceAccountAmount;
-        public decimal CostIncome, NewCostIncome;
+        private int _sourceAccountId, _incomeId, _countIncomes, _countMovements;
+        private decimal _sourceAccountAmount, _costIncome, _newCostIncome;
+        private IWebElement _firstRow;
 
-        public IWebElement FirstRow;
-
-        public IBankAccountService _bankAccountService;
-        public IIncomeService _incomeService;
-        public IHistoricMovementService _historicMovementService;
+        private readonly IBankAccountService _bankAccountService;
+        private readonly IIncomeService _incomeService;
+        private readonly IHistoricMovementService _historicMovementService;
 
         public EditIncomesSteps()
         {
@@ -34,55 +32,55 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Given(@"I have accessed the Income List page")]
         public void GivenIHaveAccessedTheIncomeListPage()
         {
-            ctx.GotToUrl("/Income/Index");
+            _ctx.GotToUrl("/Income/Index");
 
-            // Get Source Account Amount Before Creating Savings
-            SourceAccountId = ctx.SelectedSourceAccountId();
-            SourceAccountAmount = _bankAccountService.GetAccountAmount(SourceAccountId);
+            // Get Source Account Amount Before Creating Incomes
+            _sourceAccountId = _ctx.SelectedSourceAccountId();
+            _sourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
 
-            // Get Number Of Incomes Before Creating Savings
-            CountIncomes = _incomeService.CountIncomes();
+            // Get Number Of Incomes Before Creating Incomes
+            _countIncomes = _incomeService.CountIncomes();
 
-            // Get Number Of Movements Before Creating Savings
-            CountMovements = _historicMovementService.CountMovements();
+            // Get Number Of Movements Before Creating Incomes
+            _countMovements = _historicMovementService.CountMovements();
         }
 
         [Given(@"I have at least one income in the list")]
         public void GivenIHaveAtLeastOneIncomeInTheList()
         {
-            var incomes = ctx.WebDriver.FindElements(By.ClassName("trIncome"));
+            var incomes = _ctx.WebDriver.FindElements(By.ClassName("trIncome"));
             if (incomes.Count < 1)
             {
                 throw new Exception("There is no income to delete");
             }
-            FirstRow = incomes[0];
+            _firstRow = incomes[0];
         }
         
         [When(@"I click on edit for the first income")]
         public void WhenIClickOnEditForTheFirstIncome()
         {
-            var costValue = FirstRow.FindElement(By.ClassName("tdCost"));
-            CostIncome = Convert.ToDecimal(costValue.Text.Substring(1));
+            var costValue = _firstRow.FindElement(By.ClassName("tdCost"));
+            _costIncome = Convert.ToDecimal(costValue.Text.Substring(1));
 
-            var editConfirmBtn = FirstRow.FindElement(By.ClassName("btn_edit"));
+            var editConfirmBtn = _firstRow.FindElement(By.ClassName("btn_edit"));
             editConfirmBtn.Click();
 
-            var incomeIdHid = ctx.WebDriver.FindElement(By.Id("Id"));
-            IncomeId = Convert.ToInt32(incomeIdHid.GetAttribute("value"));
+            var incomeIdHid = _ctx.WebDriver.FindElement(By.Id("Id"));
+            _incomeId = Convert.ToInt32(incomeIdHid.GetAttribute("value"));
         }
         
         [When(@"I edit the Cost")]
         public void WhenIEditTheCost()
         {
-            var costTxt = ctx.WebDriver.FindElement(By.Id("Cost"));
+            var costTxt = _ctx.WebDriver.FindElement(By.Id("Cost"));
             costTxt.Clear();
-            costTxt.SendKeys((CostIncome + 100).ToString());
+            costTxt.SendKeys((_costIncome + 100).ToString());
         }
 
         [When(@"I click on the Save button")]
         public void WhenIClickOnTheSaveButton()
         {
-            var saveBtn = ctx.WebDriver.FindElement(By.ClassName("btn_save"));
+            var saveBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_save"));
             saveBtn.Click();
 
             Thread.Sleep(2000);
@@ -93,19 +91,19 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         {
             // Get Number Of Incomes After
             var newCountIncomes = _incomeService.CountIncomes();
-            Assert.AreEqual(newCountIncomes, CountIncomes);
+            Assert.AreEqual(newCountIncomes, _countIncomes);
 
-            NewCostIncome = _incomeService.GetIncomeCost(IncomeId);
-            Assert.AreEqual(CostIncome + 100, NewCostIncome);
+            _newCostIncome = _incomeService.GetIncomeCost(_incomeId);
+            Assert.AreEqual(_costIncome + 100, _newCostIncome);
         }
 
         [Then(@"the source account is updated")]
         public void ThenTheSourceAccountIsUpdated()
         {
             // Get Source Account Amount After
-            var newSourceAccountAmount = _bankAccountService.GetAccountAmount(SourceAccountId);
+            var newSourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
 
-            var expectedSourceAmount = SourceAccountAmount - CostIncome + NewCostIncome;
+            var expectedSourceAmount = _sourceAccountAmount - _costIncome + _newCostIncome;
 
             Assert.AreEqual(expectedSourceAmount, newSourceAccountAmount);
         }
@@ -116,7 +114,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             // Get Number Of Movements After
             var newCountMovements = _historicMovementService.CountMovements();
 
-            Assert.AreEqual(newCountMovements, CountMovements + 2);
+            Assert.AreEqual(newCountMovements, _countMovements + 2);
         }
     }
 }

@@ -71,23 +71,23 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
+                <tr class="trAtmWithdraw">
+                    <td class="tdDateExpenditure">
                         @Html.DisplayFor(modelItem => item.DisplayedDateExpenditure)
                     </td>
-                    <td>
+                    <td class="tdDescription">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td>
+                    <td class="tdInitialAmount">
                         @Html.DisplayFor(modelItem => item.DisplayedInitialAmount)
                     </td>
-                    <td>
+                    <td class="tdCurrentAmount">
                         @Html.DisplayFor(modelItem => item.DisplayedCurrentAmount)
                     </td>
-                    <td>
+                    <td class="tdHasAlreadyBeenDebited">
                         @Html.DisplayFor(modelItem => item.HasBeenAlreadyDebited)
                     </td>
-                    <td align="right">
+                    <td align="right" class="tdActions">
 
                         @if (!item.IsClosed)
                         {

@@ -21,11 +21,11 @@
 
     if (@canBeEdited)
     {
-            <a href="/@controllerName/Edit/@id" title="@Resources.ButtonNames.EditTooltip"><i class="fa fa-pencil-square-o"></i></a>
+            <a href="/@controllerName/Edit/@id" title="@Resources.ButtonNames.EditTooltip" class="btn_edit"><i class="fa fa-pencil-square-o"></i></a>
     }
     else
     {
-            <i class="fa fa-pencil-square-o" style="color: darkgrey;" title="@tooltipEditButton"></i>
+            <i class="fa fa-pencil-square-o" style="color: darkgrey;" title="@tooltipEditButton" class="btn_edit"></i>
     }
 }
 
@@ -35,11 +35,11 @@
 
     if (@canBeDeleted)
     {
-       <a href="/@controllerName/Delete/@id" title="@Resources.ButtonNames.DeleteTooltip"><i class="fa fa-trash-o"></i></a>
+       <a href="/@controllerName/Delete/@id" title="@Resources.ButtonNames.DeleteTooltip" class="btn_delete"><i class="fa fa-trash-o"></i></a>
     }
     else
     {
-       <i class="fa fa-trash-o" style="color: darkgrey;" title="@tooltipDeleteButton"></i>
+       <i class="fa fa-trash-o" style="color: darkgrey;" title="@tooltipDeleteButton" class="btn_delete"></i>
     }
 }
 

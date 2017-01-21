@@ -1,12 +1,11 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 using PersonalFinanceManager.IntegrationTests.Infrastructure;
 using PersonalFinanceManager.ServicesForTests;
 using System;
-using System.Linq;
+using System.Threading;
+using PersonalFinanceManager.ServicesForTests.Interfaces;
 using TechTalk.SpecFlow;
 
 namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
@@ -14,15 +13,15 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
     [Binding, Scope(Feature = "CreateSavings")]
     public class CreateSavingsSteps
     {
-        public IntegrationTestContext ctx = new IntegrationTestContext();
-        public int CountSavings, CountMovements, CountIncomes;
-        public int SourceAccountId, TargetAccountId;
-        public decimal SourceAccountAmount, TargetAccountAmount;
+        private readonly IntegrationTestContext _ctx = new IntegrationTestContext();
 
-        public IBankAccountService _bankAccountService;
-        public ISavingService _savingService;
-        public IIncomeService _incomeService;
-        public IHistoricMovementService _historicMovementService;
+        private int _countSavings, _countMovements, _countIncomes, _sourceAccountId, _targetAccountId;
+        private decimal _sourceAccountAmount, _targetAccountAmount;
+
+        private readonly IBankAccountService _bankAccountService;
+        private readonly ISavingService _savingService;
+        private readonly IIncomeService _incomeService;
+        private readonly IHistoricMovementService _historicMovementService;
 
         public CreateSavingsSteps()
         {
@@ -35,33 +34,33 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Given(@"I have accessed the Saving List page")]
         public void GivenIHaveAccessedTheSavingListPage()
         {
-            ctx.GotToUrl("/Saving/Index");
+            _ctx.GotToUrl("/Saving/Index");
 
             // Get Source Account Amount Before Creating Savings
-            SourceAccountId = ctx.SelectedSourceAccountId();
-            SourceAccountAmount = _bankAccountService.GetAccountAmount(SourceAccountId);
+            _sourceAccountId = _ctx.SelectedSourceAccountId();
+            _sourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
 
             // Get Number Of Savings Before Creating Savings
-            CountSavings = _savingService.CountSavings();
+            _countSavings = _savingService.CountSavings();
 
             // Get Number Of Incomes Before Creating Savings
-            CountIncomes = _incomeService.CountIncomes();
+            _countIncomes = _incomeService.CountIncomes();
 
             // Get Number Of Movements Before Creating Savings
-            CountMovements = _historicMovementService.CountMovements();
+            _countMovements = _historicMovementService.CountMovements();
         }
         
         [Given(@"I have clicked on the Create button")]
         public void GivenIHaveClickedOnTheCreateButton()
         {
-            var createBtn = ctx.WebDriver.FindElement(By.ClassName("btn_create"));
+            var createBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_create"));
             createBtn.Click();
         }
         
         [When(@"I enter Amount")]
         public void WhenIEnterAmount()
         {
-            var amountTxt = ctx.WebDriver.FindElement(By.Id("Amount"));
+            var amountTxt = _ctx.WebDriver.FindElement(By.Id("Amount"));
             amountTxt.Clear();
             amountTxt.SendKeys("100.00");
         }
@@ -69,21 +68,23 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [When(@"I select the first Saving Account")]
         public void WhenISelectTheFirstSavingAccount()
         {
-            var accountDdl = new SelectElement(ctx.WebDriver.FindElement(By.Id("TargetInternalAccountId")));
+            var accountDdl = new SelectElement(_ctx.WebDriver.FindElement(By.Id("TargetInternalAccountId")));
             if (accountDdl.Options.Count < 2)
                 throw new Exception("TargetInternalAccountId has no option. At least 1 expected.");
             accountDdl.SelectByIndex(1);
 
             // Get Target Account Amount Before Creating Savings
-            TargetAccountId = Convert.ToInt32(accountDdl.Options[1].GetAttribute("value"));
-            TargetAccountAmount = _bankAccountService.GetAccountAmount(TargetAccountId);
+            _targetAccountId = Convert.ToInt32(accountDdl.Options[1].GetAttribute("value"));
+            _targetAccountAmount = _bankAccountService.GetAccountAmount(_targetAccountId);
         }
 
         [When(@"I click on the Save button")]
         public void WhenIClickOnTheSaveButton()
         {
-            var saveBtn = ctx.WebDriver.FindElement(By.ClassName("btn_save"));
+            var saveBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_save"));
             saveBtn.Click();
+
+            Thread.Sleep(2000);
         }
         
         [Then(@"the Saving Has Been Created")]
@@ -92,25 +93,25 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             // Get Number Of Savings After
             var newCountSavings = _savingService.CountSavings();
 
-            Assert.AreEqual(newCountSavings, CountSavings + 1);
+            Assert.AreEqual(newCountSavings, _countSavings + 1);
         }
 
         [Then(@"the source account is updated")]
         public void ThenTheSourceAccountIsUpdated()
         {
             // Get Source Account Amount After
-            var newSourceAccountAmount = _bankAccountService.GetAccountAmount(SourceAccountId);
+            var newSourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
 
-            Assert.AreEqual(newSourceAccountAmount, SourceAccountAmount - 100);
+            Assert.AreEqual(newSourceAccountAmount, _sourceAccountAmount - 100);
         }
 
         [Then(@"the target account is updated")]
         public void ThenTheTargetAccountIsUpdated()
         {
             // Get Target Account Amount After
-            var newTargetAccountAmount = _bankAccountService.GetAccountAmount(TargetAccountId);
+            var newTargetAccountAmount = _bankAccountService.GetAccountAmount(_targetAccountId);
 
-            Assert.AreEqual(newTargetAccountAmount, TargetAccountAmount + 100);
+            Assert.AreEqual(newTargetAccountAmount, _targetAccountAmount + 100);
         }
 
         [Then(@"an income has been created")]
@@ -119,7 +120,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             // Get Number Of Incomes After
             var newCountIncomes = _incomeService.CountIncomes();
 
-            Assert.AreEqual(newCountIncomes, CountIncomes + 1);
+            Assert.AreEqual(newCountIncomes, _countIncomes + 1);
         }
 
         [Then(@"a mouvement entry has been saved")]
@@ -128,7 +129,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             // Get Number Of Movements After
             var newCountMovements = _historicMovementService.CountMovements();
 
-            Assert.AreEqual(newCountMovements, CountMovements + 1);
+            Assert.AreEqual(newCountMovements, _countMovements + 1);
         }
     }
 }

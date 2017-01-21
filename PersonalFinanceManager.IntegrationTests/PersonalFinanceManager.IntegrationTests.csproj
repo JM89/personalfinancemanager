@@ -66,6 +66,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scenarios\Steps\EditAtmWithdrawsSteps.cs" />
+    <Compile Include="Scenarios\DeleteAtmWithdraws.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeleteAtmWithdraws.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Scenarios\EditAtmWithdraws.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditAtmWithdraws.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Scenarios\Steps\CreateAtmWithdrawsSteps.cs" />
+    <Compile Include="Scenarios\CreateAtmWithdraws.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateAtmWithdraws.feature</DependentUpon>
+    </Compile>
     <Compile Include="Scenarios\DeleteIncomes.feature.cs">
       <DependentUpon>DeleteIncomes.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -87,6 +104,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EditSavings.feature</DependentUpon>
     </Compile>
+    <Compile Include="Scenarios\Steps\DeleteAtmWithdrawsSteps.cs" />
     <Compile Include="Scenarios\Steps\DeleteIncomeSteps.cs" />
     <Compile Include="Scenarios\Steps\DeleteSavingsSteps.cs" />
     <Compile Include="Infrastructure\TestContext.cs" />
@@ -108,9 +126,17 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Scenarios\CreateAtmWithdraws.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CreateAtmWithdraws.feature.cs</LastGenOutput>
+    </None>
     <None Include="Scenarios\CreateIncomes.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CreateIncomes.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Scenarios\DeleteAtmWithdraws.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>DeleteAtmWithdraws.feature.cs</LastGenOutput>
     </None>
     <None Include="Scenarios\DeleteIncomes.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -123,6 +149,10 @@
     <None Include="Scenarios\CreateSavings.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CreateSavings.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Scenarios\EditAtmWithdraws.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>EditAtmWithdraws.feature.cs</LastGenOutput>
     </None>
     <None Include="Scenarios\EditIncomes.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

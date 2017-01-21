@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.ServicesForTests.Interfaces
 {
-    public interface IIncomeService
+    public interface IAtmWithdrawService
     {
-        int CountIncomes();
+        int CountAtmWithdraws();
 
-        decimal GetIncomeCost(int id);
+        decimal GetAtmWithdrawCost(int id);
     }
 }

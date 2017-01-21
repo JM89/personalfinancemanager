@@ -42,7 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtmWithdrawService.cs" />
     <Compile Include="IncomeService.cs" />
+    <Compile Include="Interfaces\IAtmWithdrawService.cs" />
     <Compile Include="Interfaces\IIncomeService.cs" />
     <Compile Include="Interfaces\IHistoricMovementService.cs" />
     <Compile Include="HistoricMovementService.cs" />

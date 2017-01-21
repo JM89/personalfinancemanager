@@ -1,7 +1,7 @@
 ﻿Feature: EditIncomes
 	Edit incomes
 
-@editsaving
+@editincomes
 Scenario: Edit the cost of an income
 	Given I have accessed the Income List page
 	And I have at least one income in the list
