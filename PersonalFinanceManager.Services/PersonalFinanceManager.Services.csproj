@@ -81,11 +81,6 @@
     <Compile Include="CurrencyService.cs" />
     <Compile Include="AtmWithdrawService.cs" />
     <Compile Include="ExpenditureService.cs" />
-    <Compile Include="ExpenditureStrategy\AtmWithdrawExpenditureStrategy.cs" />
-    <Compile Include="ExpenditureStrategy\CommonExpenditureStrategy.cs" />
-    <Compile Include="ExpenditureStrategy\InternalTransferExpenditureStrategy.cs" />
-    <Compile Include="ExpenditureStrategy\ContextExpenditureStrategy.cs" />
-    <Compile Include="ExpenditureStrategy\ExpenditureStrategy.cs" />
     <Compile Include="ExpenditureTypeService.cs" />
     <Compile Include="IncomeService.cs" />
     <Compile Include="Core\IBaseService.cs" />

@@ -25,7 +25,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
         }
 
-        public void Debit(AtmWithdrawModel atmWithdraw, Movement movement)
+        private void Debit(AtmWithdrawModel atmWithdraw, Movement movement)
         {
             MovementHelpers.Debit(HistoricMovementRepository, movement.Amount, atmWithdraw.Id, ObjectType.AtmWithdraw, atmWithdraw.CurrentAmount);
 
@@ -46,7 +46,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
         }
 
-        public void Credit(AtmWithdrawModel atmWithdraw, Movement movement)
+        private void Credit(AtmWithdrawModel atmWithdraw, Movement movement)
         {
             MovementHelpers.Credit(HistoricMovementRepository, movement.Amount, atmWithdraw.Id, ObjectType.AtmWithdraw, atmWithdraw.CurrentAmount);
 
@@ -56,7 +56,39 @@ namespace PersonalFinanceManager.Services.MovementStrategy
         
         public override void UpdateDebit(Movement newMovement)
         {
-            
+            if (CurrentMovement.AtmWithdrawId.HasValue)
+            {
+                var atmWithdraw = AtmWithdrawRepository.GetById(CurrentMovement.AtmWithdrawId.Value);
+
+                if (CurrentMovement.PaymentMethod != newMovement.PaymentMethod)
+                {
+                    Credit(atmWithdraw, CurrentMovement);
+
+                    var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository, HistoricMovementRepository, IncomeRepository, AtmWithdrawRepository);
+                    strategy.Debit();
+                }
+                else
+                {
+                    if (!newMovement.AtmWithdrawId.HasValue)
+                        throw new Exception("New Target account can't be null.");
+
+                    if (CurrentMovement.AtmWithdrawId.Value != newMovement.AtmWithdrawId.Value)
+                    {
+                        var newAtmWithdraw = AtmWithdrawRepository.GetById(newMovement.AtmWithdrawId.Value);
+                        Credit(atmWithdraw, CurrentMovement);
+                        Debit(newAtmWithdraw, newMovement);
+                    }
+                    else if (CurrentMovement.Amount != newMovement.Amount)
+                    {
+                        Credit(atmWithdraw, CurrentMovement);
+                        Debit(atmWithdraw, newMovement);
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Current Source account & Target ATM can't be null.");
+            }
         }
     }
 }

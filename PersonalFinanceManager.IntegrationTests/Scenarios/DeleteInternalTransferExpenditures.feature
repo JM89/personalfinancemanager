@@ -1,7 +1,7 @@
 ﻿Feature: DeleteInternalTransferExpenditures
 	Delete expenditures with payment method Internal Transfer
 
-@deletesaving
+@deleteinternaltransferexpenditure
 Scenario: Delete Internal Transfer expenditures
 	Given I have accessed the Expenditures List page
 	And I have at least one expenditure with this payment method in the list

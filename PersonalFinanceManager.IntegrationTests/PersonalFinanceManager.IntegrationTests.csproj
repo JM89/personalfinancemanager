@@ -66,6 +66,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scenarios\CreateCashExpenditures.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateCashExpenditures.feature</DependentUpon>
+    </Compile>
     <Compile Include="Scenarios\CreateCommonExpenditures.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -75,6 +80,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateInternalTransferExpenditures.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Scenarios\DeleteCashExpenditures.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeleteCashExpenditures.feature</DependentUpon>
     </Compile>
     <Compile Include="Scenarios\DeleteCommonExpenditures.feature.cs">
       <AutoGen>True</AutoGen>
@@ -86,6 +96,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DeleteInternalTransferExpenditures.feature</DependentUpon>
     </Compile>
+    <Compile Include="Scenarios\EditCashExpenditures.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditCashExpenditures.feature</DependentUpon>
+    </Compile>
     <Compile Include="Scenarios\EditCommonExpenditures.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -96,10 +111,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EditInternalTransferExpenditures.feature</DependentUpon>
     </Compile>
+    <Compile Include="Scenarios\PreActions\CreateCashExpenditures.cs" />
     <Compile Include="Scenarios\PreActions\CreateCommonExpenditures.cs" />
     <Compile Include="Scenarios\PreActions\CreateInternalTransferExpenditures.cs" />
+    <Compile Include="Scenarios\Steps\CreateCashExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\CreateCommonExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\CreateInternalTransferExpendituresSteps.cs" />
+    <Compile Include="Scenarios\Steps\DeleteCashExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\DeleteCommonExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\DeleteInternalTransferExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\EditAtmWithdrawsSteps.cs" />
@@ -156,6 +174,7 @@
       <DependentUpon>CreateSavings.feature</DependentUpon>
     </Compile>
     <Compile Include="Scenarios\Steps\CreateSavingsSteps.cs" />
+    <Compile Include="Scenarios\Steps\EditCashExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\EditCommonExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\EditIncomesSteps.cs" />
     <Compile Include="Scenarios\Steps\EditInternalTransferExpendituresSteps.cs" />
@@ -167,6 +186,10 @@
     <None Include="Scenarios\CreateAtmWithdraws.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CreateAtmWithdraws.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Scenarios\CreateCashExpenditures.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CreateCashExpenditures.feature.cs</LastGenOutput>
     </None>
     <None Include="Scenarios\CreateCommonExpenditures.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -183,6 +206,10 @@
     <None Include="Scenarios\DeleteAtmWithdraws.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DeleteAtmWithdraws.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Scenarios\DeleteCashExpenditures.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>DeleteCashExpenditures.feature.cs</LastGenOutput>
     </None>
     <None Include="Scenarios\DeleteCommonExpenditures.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -207,6 +234,10 @@
     <None Include="Scenarios\EditAtmWithdraws.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>EditAtmWithdraws.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Scenarios\EditCashExpenditures.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>EditCashExpenditures.feature.cs</LastGenOutput>
     </None>
     <None Include="Scenarios\EditCommonExpenditures.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

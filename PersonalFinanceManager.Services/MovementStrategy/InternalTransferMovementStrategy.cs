@@ -26,7 +26,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
         }
 
-        public void Debit(AccountModel account, AccountModel internalAccount, Movement movement)
+        private void Debit(AccountModel account, AccountModel internalAccount, Movement movement)
         {
             MovementHelpers.Debit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance, internalAccount.Id, ObjectType.Account, internalAccount.CurrentBalance);
 
@@ -65,7 +65,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
         }
 
-        public void Credit(AccountModel account, AccountModel internalAccount, Movement movement)
+        private void Credit(AccountModel account, AccountModel internalAccount, Movement movement)
         {
             MovementHelpers.Credit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance, internalAccount.Id, ObjectType.Account, internalAccount.CurrentBalance);
 
@@ -84,10 +84,10 @@ namespace PersonalFinanceManager.Services.MovementStrategy
 
         public override void UpdateDebit(Movement newMovement)
         {
-            if (newMovement.SourceAccountId.HasValue && newMovement.TargetAccountId.HasValue && CurrentMovement.TargetAccountId.HasValue)
+            if (CurrentMovement.SourceAccountId.HasValue && CurrentMovement.TargetAccountId.HasValue)
             {
-                var account = BankAccountRepository.GetById(newMovement.SourceAccountId.Value);
-                var internalAccount = BankAccountRepository.GetById(newMovement.TargetAccountId.Value);
+                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value);
+                var internalAccount = BankAccountRepository.GetById(CurrentMovement.TargetAccountId.Value);
 
                 if (CurrentMovement.PaymentMethod != newMovement.PaymentMethod)
                 {
@@ -96,21 +96,27 @@ namespace PersonalFinanceManager.Services.MovementStrategy
                     var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository, HistoricMovementRepository, IncomeRepository, AtmWithdrawRepository);
                     strategy.Debit();
                 }
-                else if (CurrentMovement.TargetAccountId.Value != newMovement.TargetAccountId.Value)
+                else
                 {
-                    var oldInternalAccount = BankAccountRepository.GetById(CurrentMovement.TargetAccountId.Value);
-                    Credit(account, oldInternalAccount, CurrentMovement);
-                    Debit(account, internalAccount, newMovement);
-                }
-                else if (CurrentMovement.Amount != newMovement.Amount)
-                {
-                    Credit(account, internalAccount, CurrentMovement);
-                    Debit(account, internalAccount, newMovement);
+                    if (!newMovement.TargetAccountId.HasValue)
+                        throw new Exception("New Target account can't be null.");
+
+                    if (CurrentMovement.TargetAccountId.Value != newMovement.TargetAccountId.Value)
+                    {
+                        var newInternalAccount = BankAccountRepository.GetById(newMovement.TargetAccountId.Value);
+                        Credit(account, internalAccount, CurrentMovement);
+                        Debit(account, newInternalAccount, newMovement);
+                    }
+                    else if (CurrentMovement.Amount != newMovement.Amount)
+                    {
+                        Credit(account, internalAccount, CurrentMovement);
+                        Debit(account, internalAccount, newMovement);
+                    }
                 }
             }
             else
             {
-                throw new Exception("Current/New movement / Source account / Target Account can't be null.");
+                throw new Exception("Current Source account & Target Account can't be null.");
             }
         }
     }

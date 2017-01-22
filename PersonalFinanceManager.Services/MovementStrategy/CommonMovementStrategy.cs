@@ -25,7 +25,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
         }
 
-        public void Debit(AccountModel account, Movement movement)
+        private void Debit(AccountModel account, Movement movement)
         {
             MovementHelpers.Debit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance);
 
@@ -46,7 +46,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
         }
 
-        public void Credit(AccountModel account, Movement movement)
+        private void Credit(AccountModel account, Movement movement)
         {
             MovementHelpers.Credit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance);
 

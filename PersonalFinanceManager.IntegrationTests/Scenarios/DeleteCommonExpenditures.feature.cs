@@ -65,11 +65,11 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Delete Common expenditures")]
-        [NUnit.Framework.CategoryAttribute("deletesaving")]
+        [NUnit.Framework.CategoryAttribute("deletecommonexpenditures")]
         public virtual void DeleteCommonExpenditures()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete Common expenditures", new string[] {
-                        "deletesaving"});
+                        "deletecommonexpenditures"});
 #line 5
 this.ScenarioSetup(scenarioInfo);
 #line 6

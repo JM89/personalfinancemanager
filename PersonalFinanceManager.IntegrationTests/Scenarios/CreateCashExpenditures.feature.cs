@@ -18,20 +18,20 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("DeleteInternalTransferExpenditures")]
-    public partial class DeleteInternalTransferExpendituresFeature
+    [NUnit.Framework.DescriptionAttribute("CreateCashExpenditures")]
+    public partial class CreateCashExpendituresFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "DeleteInternalTransferExpenditures.feature"
+#line 1 "CreateCashExpenditures.feature"
 #line hidden
         
         [NUnit.Framework.TestFixtureSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "DeleteInternalTransferExpenditures", "\tDelete expenditures with payment method Internal Transfer", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "CreateCashExpenditures", "\tCreate expenditures with payment method Cash", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -64,31 +64,37 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Delete Internal Transfer expenditures")]
-        [NUnit.Framework.CategoryAttribute("deleteinternaltransferexpenditure")]
-        public virtual void DeleteInternalTransferExpenditures()
+        [NUnit.Framework.DescriptionAttribute("Create Cash expenditures")]
+        [NUnit.Framework.CategoryAttribute("createcashexpenditure")]
+        public virtual void CreateCashExpenditures()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete Internal Transfer expenditures", new string[] {
-                        "deleteinternaltransferexpenditure"});
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create Cash expenditures", new string[] {
+                        "createcashexpenditure"});
 #line 5
 this.ScenarioSetup(scenarioInfo);
 #line 6
  testRunner.Given("I have accessed the Expenditures List page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 7
- testRunner.And("I have at least one expenditure with this payment method in the list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I have clicked on the Create button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 8
- testRunner.When("I click on delete for this expenditure", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I enter Description", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 9
- testRunner.And("I confirm the deletion", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I enter a Cost", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.Then("the expenditure has been removed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("I select the first expenditure type", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 11
- testRunner.Then("the source account is updated", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("I select the Cash payment type", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
- testRunner.Then("the target account is updated", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("I select an ATM withdraw", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
- testRunner.Then("an income has been removed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("I click on the Save button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 14
+ testRunner.Then("the Expenditure Has Been Created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 15
+ testRunner.Then("the source account is unchanged", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 16
+ testRunner.Then("the target atm withdraw is updated", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 17
  testRunner.Then("a mouvement entry has been saved", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
