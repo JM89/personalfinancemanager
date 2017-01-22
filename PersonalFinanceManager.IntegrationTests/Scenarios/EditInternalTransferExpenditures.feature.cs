@@ -24,7 +24,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "EditInternalTransferExpendituresSteps.feature"
+#line 1 "EditInternalTransferExpenditures.feature"
 #line hidden
         
         [NUnit.Framework.TestFixtureSetUpAttribute()]

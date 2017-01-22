@@ -56,7 +56,28 @@ namespace PersonalFinanceManager.Services.MovementStrategy
 
         public override void UpdateDebit(Movement newMovement)
         {
-            
+            if (newMovement.SourceAccountId.HasValue)
+            {
+                var account = BankAccountRepository.GetById(newMovement.SourceAccountId.Value);
+                if (CurrentMovement.PaymentMethod != newMovement.PaymentMethod)
+                {
+                    Credit(account, CurrentMovement);
+
+                    var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository,
+                        HistoricMovementRepository, IncomeRepository, AtmWithdrawRepository);
+
+                    strategy.Debit();
+                }
+                else if (CurrentMovement.Amount != newMovement.Amount)
+                {
+                    Credit(account, CurrentMovement);
+                    Debit(account, newMovement);
+                }
+            }
+            else
+            {
+                throw new Exception("Current Source account can't be null.");
+            }
         }
     }
 }

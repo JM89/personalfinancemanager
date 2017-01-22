@@ -112,8 +112,6 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             {
                 throw new Exception("Current/New movement / Source account / Target Account can't be null.");
             }
-
-            
         }
     }
 }
