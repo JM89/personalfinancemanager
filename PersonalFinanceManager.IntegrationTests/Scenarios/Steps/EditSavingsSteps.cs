@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using PersonalFinanceManager.IntegrationTests.Scenarios.PreActions;
 using PersonalFinanceManager.ServicesForTests.Interfaces;
 using TechTalk.SpecFlow;
 
@@ -32,6 +33,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             _savingService = new SavingService();
             _incomeService = new IncomeService();
             _historicMovementService = new HistoricMovementService();
+        }
+
+        [BeforeScenario]
+        public void PrepareForTest()
+        {
+            CreateSavings.Execute(_ctx);
         }
 
         [Given(@"I have accessed the Saving List page")]

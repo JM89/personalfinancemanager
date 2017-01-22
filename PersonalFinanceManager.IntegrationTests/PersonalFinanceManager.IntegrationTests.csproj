@@ -111,6 +111,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EditInternalTransferExpenditures.feature</DependentUpon>
     </Compile>
+    <Compile Include="Scenarios\PreActions\CreateSavings.cs" />
+    <Compile Include="Scenarios\PreActions\CreateIncomes.cs" />
+    <Compile Include="Scenarios\PreActions\CreateAtmWithdraws.cs" />
     <Compile Include="Scenarios\PreActions\CreateCashExpenditures.cs" />
     <Compile Include="Scenarios\PreActions\CreateCommonExpenditures.cs" />
     <Compile Include="Scenarios\PreActions\CreateInternalTransferExpenditures.cs" />

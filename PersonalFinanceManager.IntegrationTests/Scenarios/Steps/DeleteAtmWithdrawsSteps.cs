@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using PersonalFinanceManager.IntegrationTests.Scenarios.PreActions;
 using PersonalFinanceManager.ServicesForTests;
 using PersonalFinanceManager.ServicesForTests.Interfaces;
 using TechTalk.SpecFlow;
@@ -27,6 +28,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             _bankAccountService = new BankAccountService();
             _atmWithdrawService = new AtmWithdrawService();
             _historicMovementService = new HistoricMovementService();
+        }
+
+        [BeforeScenario]
+        public void PrepareForTest()
+        {
+            CreateAtmWithdraws.Execute(_ctx);
         }
 
         [Given(@"I have accessed the ATM Withdraw List page")]

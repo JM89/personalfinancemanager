@@ -4,6 +4,7 @@ using PersonalFinanceManager.IntegrationTests.Infrastructure;
 using PersonalFinanceManager.ServicesForTests;
 using System;
 using System.Threading;
+using PersonalFinanceManager.IntegrationTests.Scenarios.PreActions;
 using PersonalFinanceManager.ServicesForTests.Interfaces;
 using TechTalk.SpecFlow;
 
@@ -27,6 +28,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             _bankAccountService = new BankAccountService();
             _incomeService = new IncomeService();
             _historicMovementService = new HistoricMovementService();
+        }
+
+        [BeforeScenario]
+        public void PrepareForTest()
+        {
+            CreateIncomes.Execute(_ctx);
         }
 
         [Given(@"I have accessed the Income List page")]
