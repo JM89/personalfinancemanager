@@ -186,12 +186,16 @@ namespace PersonalFinanceManager.Controllers
 
                 decimal previousMonthValue = 0;
                 decimal averageMonthValue = 0;
-                var expendituresPerType = expenditures.Where(x => x.TypeExpenditureId == expenditureType.Id);
+                var expendituresPerType = expenditures.Where(x => x.TypeExpenditureId == expenditureType.Id).ToList();
                 if (expendituresPerType.Any())
                 {
-                    previousMonthValue = expendituresPerType.Where(x => x.DateExpenditure >= firstDayLastMonth &&
-                                                                        x.DateExpenditure <= lastDayLastMonth)
-                                                            .Average(x => x.Cost);
+                    var previousMonthExpenditures =
+                        expendituresPerType.Where(x => x.DateExpenditure >= firstDayLastMonth &&
+                                                       x.DateExpenditure <= lastDayLastMonth).ToList();
+                    if (previousMonthExpenditures.Any())
+                    {
+                        previousMonthValue = previousMonthExpenditures.Average(x => x.Cost);
+                    }
 
                     averageMonthValue = expendituresPerType.Sum(x => x.Cost) / nbMonthsSinceFirstExpenditures;
                 }
@@ -244,7 +248,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _budgetPlanService.StartBudgetPlan(id.Value);
+            _budgetPlanService.StartBudgetPlan(id.Value, CurrentAccount);
 
             return RedirectToAction("View", new { id=id });
         }

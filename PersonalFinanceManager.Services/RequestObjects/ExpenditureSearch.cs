@@ -15,5 +15,7 @@ namespace PersonalFinanceManager.Services.RequestObjects
         public DateTime? EndDate { get; set; }
 
         public int? ExpenditureTypeId { get; set; }
+
+        public bool? ShowOnDashboard { get; set; }
     }
 }

@@ -105,3 +105,17 @@ ERROR 2017-01-22 18:42:44,321 1126608ms BaseController         OnException      
 Current movement / Source account / Target Account can't be null.
 ERROR 2017-01-22 18:44:45,897 1248185ms BaseController         OnException        - 
 Current movement / Source account / Target Account can't be null.
+ERROR 2017-01-23 07:51:45,749  2800ms BaseController         OnException        - 
+There is already an object named 'SavingModels' in the database.
+ERROR 2017-01-23 07:54:21,973 129341ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-23 07:54:34,722 142090ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-23 07:55:53,258 220626ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-23 07:56:01,181 228549ms BaseController         OnException        - 
+Sequence contains no elements
+ERROR 2017-01-23 20:36:05,352 43865439ms BaseController         OnException        - 
+The following sections have been defined but have not been rendered for the layout page "~/Views/Shared/_LayoutList.cshtml": "ScriptsSection".
+ERROR 2017-01-23 20:36:05,507 43865595ms BaseController         OnException        - 
+The following sections have been defined but have not been rendered for the layout page "~/Views/Shared/_LayoutList.cshtml": "ScriptsSection".

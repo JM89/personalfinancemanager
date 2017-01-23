@@ -157,18 +157,22 @@ namespace PersonalFinanceManager.Services
             //}
         }
 
-        public void StartBudgetPlan(int value)
+        public void StartBudgetPlan(int value, int accountId)
         {
             var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => x.Id != value && !x.EndDate.HasValue);
-            if (currentBudgetPlan != null)
+            var accountBudgetPlanExp = _budgetByExpenditureTypeRepository.GetList().Any(x => x.AccountId == accountId && x.BudgetPlanId == currentBudgetPlan.Id);
+            if (currentBudgetPlan != null && accountBudgetPlanExp)
             {
                 currentBudgetPlan.EndDate = DateTime.Now;
+                _budgetPlanRepository.Update(currentBudgetPlan);
             }
 
             var budgetPlan = _budgetPlanRepository.GetById(value);
             var nextMonth = DateTime.Now.AddMonths(1);
             var firstOfNextMonth = new DateTime(nextMonth.Year,nextMonth.Month, 1);
             budgetPlan.StartDate = firstOfNextMonth;
+
+            _budgetPlanRepository.Update(budgetPlan);
         }
 
         public void StopBudgetPlan(int value)

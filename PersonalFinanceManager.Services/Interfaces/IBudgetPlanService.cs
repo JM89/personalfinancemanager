@@ -27,7 +27,7 @@ namespace PersonalFinanceManager.Services.Interfaces
 
         void EditBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId);
 
-        void StartBudgetPlan(int value);
+        void StartBudgetPlan(int value, int accountId);
 
         void StopBudgetPlan(int value);
     }

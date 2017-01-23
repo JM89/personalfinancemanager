@@ -54,7 +54,7 @@ function updateRadarChart(model)
         ]
     }
     $.each(model.SplitByTypes, function (index, type) {
-        if (nbItem != 5)
+        if (nbItem < 5)
         {
             data.labels.push(type.ExpenditureTypeName);
             data.datasets[0].data.push(type.CurrentMonthCost);

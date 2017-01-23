@@ -12,5 +12,7 @@ namespace PersonalFinanceManager.Entities
         public string Name { get; set; }
 
         public string CssClass { get; set; }
+
+        public bool HasBeenAlreadyDebitedOption { get; set; }
     }
 }

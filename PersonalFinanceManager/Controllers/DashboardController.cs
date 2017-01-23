@@ -28,7 +28,7 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult SplitByTypeDashboard()
         {
-            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId = CurrentAccount });
+            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId = CurrentAccount, ShowOnDashboard = true });
             var account = _bankAccountService.GetById(CurrentAccount);
 
             if (!expenditures.Any())
@@ -53,7 +53,6 @@ namespace PersonalFinanceManager.Controllers
                 AccountName = account.Name
             };
 
-            var expendituresByTypeModel = new List<SplitByTypeModel>();
             foreach (var expenditureType in expenditureTypes)
             {
                 var splitByTypeModel = new SplitByTypeModel()
@@ -64,14 +63,16 @@ namespace PersonalFinanceManager.Controllers
                     CurrencySymbol = account.CurrencySymbol
                 };
 
-                var expendituresByType = expenditures.Where(x => x.TypeExpenditureId == expenditureType.Id);
+                var expendituresByType = expenditures.Where(x => x.TypeExpenditureId == expenditureType.Id).ToList();
 
                 if (expendituresByType.Any())
                 {
-                    splitByTypeModel.PreviousMonthCost = expendituresByType.Where(x => previousMonthInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost);
-                    splitByTypeModel.CurrentMonthCost = expendituresByType.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost);
-
+                    var previous = expendituresByType.Where(x => previousMonthInterval.IsBetween(x.DateExpenditure)).ToList();
+                    splitByTypeModel.PreviousMonthCost = previous.Any() ? previous.Sum(x => x.Cost) : 0;
                     splitByTypeDashboard.PreviousMonthTotalCost += splitByTypeModel.PreviousMonthCost;
+
+                    var current = expendituresByType.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).ToList();
+                    splitByTypeModel.CurrentMonthCost = current.Any() ? current.Sum(x => x.Cost) : 0;
                     splitByTypeDashboard.CurrentMonthTotalCost += splitByTypeModel.CurrentMonthCost;
                 }
 
@@ -102,6 +103,7 @@ namespace PersonalFinanceManager.Controllers
                 AccountId = CurrentAccount,
                 StartDate = oneYearInterval.StartDate,
                 EndDate = oneYearInterval.EndDate,
+                ShowOnDashboard = true,
                 ExpenditureTypeId = expenditureTypeId });
 
             var expenditureType = _expenditureTypeService.GetById(expenditureTypeId);

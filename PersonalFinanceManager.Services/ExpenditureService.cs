@@ -112,12 +112,14 @@ namespace PersonalFinanceManager.Services
                     (!search.AccountId.HasValue || (search.AccountId.HasValue && x.AccountId == search.AccountId.Value))
                     && (!search.StartDate.HasValue || (search.StartDate.HasValue && x.DateExpenditure >= search.StartDate))
                     && (!search.EndDate.HasValue || (search.EndDate.HasValue && x.DateExpenditure < search.EndDate))
+                    && (!search.ShowOnDashboard.HasValue || (x.TypeExpenditure.ShowOnDashboard == search.ShowOnDashboard))
                     && (!search.ExpenditureTypeId.HasValue || (search.ExpenditureTypeId.HasValue && x.TypeExpenditureId == search.ExpenditureTypeId.Value)))
                 .Include(u => u.Account.Currency)
                 .Include(u => u.TypeExpenditure)
                 .Include(u => u.PaymentMethod).ToList();
 
             var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
+            
 
             return mappedExpenditures.ToList();
         }
