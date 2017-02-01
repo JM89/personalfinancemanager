@@ -279,6 +279,21 @@
   <data name="PaymentMethodPages" xml:space="preserve">
     <value>Manage payment methods</value>
   </data>
+  <data name="PensionCreate" xml:space="preserve">
+    <value>Create a pension</value>
+  </data>
+  <data name="PensionDelete" xml:space="preserve">
+    <value>Delete a pension</value>
+  </data>
+  <data name="PensionEdit" xml:space="preserve">
+    <value>Edit a pension</value>
+  </data>
+  <data name="PensionList" xml:space="preserve">
+    <value>List of pensions</value>
+  </data>
+  <data name="PensionPages" xml:space="preserve">
+    <value>Manage pensions</value>
+  </data>
   <data name="PeriodicOutcomeCreate" xml:space="preserve">
     <value>Create an outcome</value>
   </data>
@@ -293,6 +308,21 @@
   </data>
   <data name="PeriodicOutcomePages" xml:space="preserve">
     <value>Manage outcomes</value>
+  </data>
+  <data name="SalaryCreate" xml:space="preserve">
+    <value>Create a salary</value>
+  </data>
+  <data name="SalaryDelete" xml:space="preserve">
+    <value>Delete a salary</value>
+  </data>
+  <data name="SalaryEdit" xml:space="preserve">
+    <value>Edit a salary</value>
+  </data>
+  <data name="SalaryList" xml:space="preserve">
+    <value>List of salaries</value>
+  </data>
+  <data name="SalaryPages" xml:space="preserve">
+    <value>Manage salaries</value>
   </data>
   <data name="SavingCreate" xml:space="preserve">
     <value>Create a saving</value>

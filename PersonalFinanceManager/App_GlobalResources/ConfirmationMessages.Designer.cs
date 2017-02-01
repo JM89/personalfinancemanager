@@ -133,11 +133,29 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this pension?.
+        /// </summary>
+        public static string PensionConfirmationDeletion {
+            get {
+                return ResourceManager.GetString("PensionConfirmationDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this periodic outcome?.
         /// </summary>
         public static string PeriodicOutcomeConfirmationDeletion {
             get {
                 return ResourceManager.GetString("PeriodicOutcomeConfirmationDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this salary?.
+        /// </summary>
+        public static string SalaryConfirmationDeletion {
+            get {
+                return ResourceManager.GetString("SalaryConfirmationDeletion", resourceCulture);
             }
         }
         

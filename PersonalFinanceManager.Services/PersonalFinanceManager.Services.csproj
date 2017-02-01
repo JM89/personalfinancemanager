@@ -61,6 +61,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\ISalaryService.cs" />
+    <Compile Include="Interfaces\IPensionService.cs" />
+    <Compile Include="PensionService.cs" />
+    <Compile Include="SalaryService.cs" />
     <Compile Include="MovementStrategy\CommonMovementStrategy.cs" />
     <Compile Include="MovementStrategy\ContextMovementStrategy.cs" />
     <Compile Include="MovementStrategy\CashMovementStrategy.cs" />

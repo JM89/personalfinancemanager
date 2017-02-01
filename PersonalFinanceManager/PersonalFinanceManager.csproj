@@ -203,6 +203,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\Startup.Ninject.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\PensionController.cs" />
+    <Compile Include="Controllers\SalaryController.cs" />
     <Compile Include="Controllers\SavingController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BudgetPlanController.cs" />
@@ -280,6 +282,8 @@
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
     <Content Include="Scripts\custom\Bank.js" />
+    <Content Include="Scripts\custom\Salary.js" />
+    <Content Include="Scripts\custom\Pension.js" />
     <Content Include="Scripts\custom\Saving.js" />
     <Content Include="Scripts\custom\HomePage.js" />
     <Content Include="Scripts\custom\Shared.js" />
@@ -389,6 +393,14 @@
     <Content Include="Views\Saving\Delete.cshtml" />
     <Content Include="Views\Saving\Edit.cshtml" />
     <Content Include="Views\Saving\Index.cshtml" />
+    <Content Include="Views\Pension\Index.cshtml" />
+    <Content Include="Views\Pension\Create.cshtml" />
+    <Content Include="Views\Pension\Edit.cshtml" />
+    <Content Include="Views\Pension\Delete.cshtml" />
+    <Content Include="Views\Salary\Create.cshtml" />
+    <Content Include="Views\Salary\Delete.cshtml" />
+    <Content Include="Views\Salary\Edit.cshtml" />
+    <Content Include="Views\Salary\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

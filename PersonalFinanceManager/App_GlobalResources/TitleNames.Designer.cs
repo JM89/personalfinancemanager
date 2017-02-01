@@ -547,6 +547,51 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a pension.
+        /// </summary>
+        public static string PensionCreate {
+            get {
+                return ResourceManager.GetString("PensionCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete a pension.
+        /// </summary>
+        public static string PensionDelete {
+            get {
+                return ResourceManager.GetString("PensionDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit a pension.
+        /// </summary>
+        public static string PensionEdit {
+            get {
+                return ResourceManager.GetString("PensionEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of pensions.
+        /// </summary>
+        public static string PensionList {
+            get {
+                return ResourceManager.GetString("PensionList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage pensions.
+        /// </summary>
+        public static string PensionPages {
+            get {
+                return ResourceManager.GetString("PensionPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create an outcome.
         /// </summary>
         public static string PeriodicOutcomeCreate {
@@ -588,6 +633,51 @@ namespace PersonalFinanceManager.App_GlobalResources {
         public static string PeriodicOutcomePages {
             get {
                 return ResourceManager.GetString("PeriodicOutcomePages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a salary.
+        /// </summary>
+        public static string SalaryCreate {
+            get {
+                return ResourceManager.GetString("SalaryCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete a salary.
+        /// </summary>
+        public static string SalaryDelete {
+            get {
+                return ResourceManager.GetString("SalaryDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit a salary.
+        /// </summary>
+        public static string SalaryEdit {
+            get {
+                return ResourceManager.GetString("SalaryEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of salaries.
+        /// </summary>
+        public static string SalaryList {
+            get {
+                return ResourceManager.GetString("SalaryList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage salaries.
+        /// </summary>
+        public static string SalaryPages {
+            get {
+                return ResourceManager.GetString("SalaryPages", resourceCulture);
             }
         }
         

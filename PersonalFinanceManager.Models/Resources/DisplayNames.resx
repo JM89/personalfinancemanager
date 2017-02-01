@@ -282,6 +282,36 @@
   <data name="PaymentMethodName" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="PensionCompanyContributionPercentage" xml:space="preserve">
+    <value>Company Contribution (%)</value>
+  </data>
+  <data name="PensionContributionPercentage" xml:space="preserve">
+    <value>Personal Contribution (%)</value>
+  </data>
+  <data name="PensionCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="PensionCurrentPot" xml:space="preserve">
+    <value>Current Pot</value>
+  </data>
+  <data name="PensionDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="PensionEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="PensionId" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="PensionInterest" xml:space="preserve">
+    <value>Optional Interest (%)</value>
+  </data>
+  <data name="PensionStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="PensionWebsite" xml:space="preserve">
+    <value>Website</value>
+  </data>
   <data name="PeriodicOutcomeAccount" xml:space="preserve">
     <value>Account</value>
   </data>
@@ -305,6 +335,33 @@
   </data>
   <data name="PeriodicOutcomeTypeExpenditure" xml:space="preserve">
     <value>Expenditure Type</value>
+  </data>
+  <data name="SalaryCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="SalaryDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="SalaryEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="SalaryMonthlyGrossPay" xml:space="preserve">
+    <value>Monthly Gross Pay</value>
+  </data>
+  <data name="SalaryMonthlyNetPay" xml:space="preserve">
+    <value>Monthly Net Pay</value>
+  </data>
+  <data name="SalaryStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="SalaryTaxCode" xml:space="preserve">
+    <value>Tax Code</value>
+  </data>
+  <data name="SalaryTaxPercentage" xml:space="preserve">
+    <value>Tax (%)</value>
+  </data>
+  <data name="SalaryYearlySalary" xml:space="preserve">
+    <value>Yearly Salary</value>
   </data>
   <data name="SavingAmount" xml:space="preserve">
     <value>Amount</value>

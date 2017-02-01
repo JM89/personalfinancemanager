@@ -556,6 +556,96 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company Contribution (%).
+        /// </summary>
+        internal static string PensionCompanyContributionPercentage {
+            get {
+                return ResourceManager.GetString("PensionCompanyContributionPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personal Contribution (%).
+        /// </summary>
+        internal static string PensionContributionPercentage {
+            get {
+                return ResourceManager.GetString("PensionContributionPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency.
+        /// </summary>
+        internal static string PensionCurrency {
+            get {
+                return ResourceManager.GetString("PensionCurrency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Pot.
+        /// </summary>
+        internal static string PensionCurrentPot {
+            get {
+                return ResourceManager.GetString("PensionCurrentPot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string PensionDescription {
+            get {
+                return ResourceManager.GetString("PensionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End Date.
+        /// </summary>
+        internal static string PensionEndDate {
+            get {
+                return ResourceManager.GetString("PensionEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID.
+        /// </summary>
+        internal static string PensionId {
+            get {
+                return ResourceManager.GetString("PensionId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optional Interest (%).
+        /// </summary>
+        internal static string PensionInterest {
+            get {
+                return ResourceManager.GetString("PensionInterest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Date.
+        /// </summary>
+        internal static string PensionStartDate {
+            get {
+                return ResourceManager.GetString("PensionStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website.
+        /// </summary>
+        internal static string PensionWebsite {
+            get {
+                return ResourceManager.GetString("PensionWebsite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account.
         /// </summary>
         internal static string PeriodicOutcomeAccount {
@@ -624,6 +714,87 @@ namespace PersonalFinanceManager.Models.Resources {
         internal static string PeriodicOutcomeTypeExpenditure {
             get {
                 return ResourceManager.GetString("PeriodicOutcomeTypeExpenditure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency.
+        /// </summary>
+        internal static string SalaryCurrency {
+            get {
+                return ResourceManager.GetString("SalaryCurrency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string SalaryDescription {
+            get {
+                return ResourceManager.GetString("SalaryDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End Date.
+        /// </summary>
+        internal static string SalaryEndDate {
+            get {
+                return ResourceManager.GetString("SalaryEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monthly Gross Pay.
+        /// </summary>
+        internal static string SalaryMonthlyGrossPay {
+            get {
+                return ResourceManager.GetString("SalaryMonthlyGrossPay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monthly Net Pay.
+        /// </summary>
+        internal static string SalaryMonthlyNetPay {
+            get {
+                return ResourceManager.GetString("SalaryMonthlyNetPay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Date.
+        /// </summary>
+        internal static string SalaryStartDate {
+            get {
+                return ResourceManager.GetString("SalaryStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tax Code.
+        /// </summary>
+        internal static string SalaryTaxCode {
+            get {
+                return ResourceManager.GetString("SalaryTaxCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tax (%).
+        /// </summary>
+        internal static string SalaryTaxPercentage {
+            get {
+                return ResourceManager.GetString("SalaryTaxPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yearly Salary.
+        /// </summary>
+        internal static string SalaryYearlySalary {
+            get {
+                return ResourceManager.GetString("SalaryYearlySalary", resourceCulture);
             }
         }
         

@@ -1,0 +1,84 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Salary.SalaryListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.SalaryPages;
+    ViewBag.GridTitle = Resources.TitleNames.SalaryList;
+}
+
+@section BreadCrumbSection
+{
+
+}
+
+@section AddButtonSection
+{
+    <a href="/Salary/Create" title="add" class="btn_create"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable2">
+        <colgroup>
+            <col width="15%" />
+            <col width="15%" />
+            <col width="20%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="5%" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.YearlySalary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.MonthlyGrossPay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.MonthlyNetPay)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="trSalary">
+                    <td class="tdStartDate">
+                        @Html.DisplayFor(modelItem => item.DisplayedStartDate)
+                    </td>
+                    <td class="tdEndDate">
+                        @Html.DisplayFor(modelItem => item.DisplayedEndDate)
+                    </td>
+                    <td class="tdDescription">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td class="tdYearlySalary">
+                        @Html.DisplayFor(modelItem => item.DisplayedYearlySalary)
+                    </td>
+                    <td class="tdYearlySalary">
+                        @Html.DisplayFor(modelItem => item.DisplayedMonthlyGrossPay)
+                    </td>
+                    <td class="tdYearlySalary">
+                        @Html.DisplayFor(modelItem => item.DisplayedMonthlyNetPay)
+                    </td>
+                    <td align="right" class="tdActions">
+                        @CustomHelpers.ListButtons(@item.Id, true, "Salary", "")
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}

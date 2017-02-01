@@ -45,6 +45,12 @@ namespace PersonalFinanceManager.Utils.Automapper
 
             CreateMap<Entities.SavingModel, Models.Saving.SavingListModel>();
             CreateMap<Entities.SavingModel, Models.Saving.SavingEditModel>();
+
+            CreateMap<Entities.SalaryModel, Models.Salary.SalaryListModel>();
+            CreateMap<Entities.SalaryModel, Models.Salary.SalaryEditModel>();
+
+            CreateMap<Entities.PensionModel, Models.Pension.PensionListModel>();
+            CreateMap<Entities.PensionModel, Models.Pension.PensionEditModel>();
         }
     }
 }

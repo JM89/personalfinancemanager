@@ -36,5 +36,8 @@ namespace PersonalFinanceManager.DataAccess
         public System.Data.Entity.DbSet<Entities.BankBrandModel> BankBranchModels { get; set; }
         public System.Data.Entity.DbSet<Entities.UserProfileModel> UserProfileModels { get; set; }
         public System.Data.Entity.DbSet<Entities.SavingModel> SavingModels { get; set; }
+        public System.Data.Entity.DbSet<Entities.SalaryModel> SalaryModels { get; set; }
+        public System.Data.Entity.DbSet<Entities.SalaryDeductionModel> SalaryDeductionModels { get; set; }
+        public System.Data.Entity.DbSet<Entities.PensionModel> PensionModels { get; set; }
     }
 }

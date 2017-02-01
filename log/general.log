@@ -119,3 +119,17 @@ ERROR 2017-01-23 20:36:05,352 43865439ms BaseController         OnException     
 The following sections have been defined but have not been rendered for the layout page "~/Views/Shared/_LayoutList.cshtml": "ScriptsSection".
 ERROR 2017-01-23 20:36:05,507 43865595ms BaseController         OnException        - 
 The following sections have been defined but have not been rendered for the layout page "~/Views/Shared/_LayoutList.cshtml": "ScriptsSection".
+ERROR 2017-01-28 13:39:56,534 14594ms BaseController         OnException        - 
+LINQ to Entities does not recognize the method 'PersonalFinanceManager.Models.Pension.PensionListModel Map[PensionListModel](System.Object)' method, and this method cannot be translated into a store expression.
+ERROR 2017-01-28 13:40:38,346 56406ms BaseController         OnException        - 
+LINQ to Entities does not recognize the method 'PersonalFinanceManager.Models.Pension.PensionListModel Map[PensionListModel](System.Object)' method, and this method cannot be translated into a store expression.
+ERROR 2017-01-28 13:55:35,940 29274ms BaseController         OnException        - 
+Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+ERROR 2017-01-28 13:56:29,877 83210ms BaseController         OnException        - 
+Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+ERROR 2017-01-28 13:59:16,556  3280ms BaseController         OnException        - 
+The ALTER TABLE statement conflicted with the FOREIGN KEY constraint "FK_dbo.PensionModels_dbo.CurrencyModels_CurrencyId". The conflict occurred in database "TestDB2", table "dbo.CurrencyModels", column 'Id'.
+ERROR 2017-01-28 14:20:59,049 32921ms BaseController         OnException        - 
+Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+ERROR 2017-01-28 14:21:18,429 52301ms BaseController         OnException        - 
+Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.

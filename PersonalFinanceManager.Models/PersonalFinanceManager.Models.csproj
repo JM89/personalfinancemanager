@@ -102,6 +102,10 @@
     <Compile Include="Dashboard\SplitByTypeDashboardModel.cs" />
     <Compile Include="Dashboard\SplitByTypeOverTimeValueModel.cs" />
     <Compile Include="Helpers\DateTimeFormatHelper.cs" />
+    <Compile Include="Pension\PensionEditModel.cs" />
+    <Compile Include="Pension\PensionListModel.cs" />
+    <Compile Include="Salary\SalaryEditModel.cs" />
+    <Compile Include="Salary\SalaryListModel.cs" />
     <Compile Include="Saving\SavingEditModel.cs" />
     <Compile Include="Saving\SavingListModel.cs" />
     <Compile Include="Helpers\Chart\ChartValue.cs" />
