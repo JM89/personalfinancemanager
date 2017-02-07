@@ -104,6 +104,7 @@
     <Compile Include="Helpers\DateTimeFormatHelper.cs" />
     <Compile Include="Pension\PensionEditModel.cs" />
     <Compile Include="Pension\PensionListModel.cs" />
+    <Compile Include="Salary\SalaryDeductionEditModel.cs" />
     <Compile Include="Salary\SalaryEditModel.cs" />
     <Compile Include="Salary\SalaryListModel.cs" />
     <Compile Include="Saving\SavingEditModel.cs" />

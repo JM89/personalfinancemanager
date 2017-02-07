@@ -52,5 +52,8 @@ namespace PersonalFinanceManager.Models.Salary
         public string DisplayedStartDate => DateTimeFormatHelper.GetDisplayDateValue(StartDate);
 
         public string DisplayedEndDate => DateTimeFormatHelper.GetDisplayDateValue(EndDate);
+
+        [LocalizedDisplayName("SalaryDeductions")]
+        public IList<SalaryDeductionEditModel> SalaryDeductions { get; set; }
     }
 }

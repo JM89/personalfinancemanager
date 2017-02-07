@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -36,13 +37,13 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Create()
         {
-            var salaryModel = new SalaryEditModel { StartDate = DateTime.Now };
+            var salaryModel = new SalaryEditModel { StartDate = DateTime.Now, SalaryDeductions = new List<SalaryDeductionEditModel>() };
             PopulateDropDownLists(salaryModel);
             return View(salaryModel);
         }
 
         /// <summary>
-        /// Create a new pension.
+        /// Create a new salary.
         /// </summary>
         /// <returns></returns>
         [HttpPost]

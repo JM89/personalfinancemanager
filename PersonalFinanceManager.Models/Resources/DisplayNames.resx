@@ -339,6 +339,9 @@
   <data name="SalaryCurrency" xml:space="preserve">
     <value>Currency</value>
   </data>
+  <data name="SalaryDeductions" xml:space="preserve">
+    <value>Salary Deductions</value>
+  </data>
   <data name="SalaryDescription" xml:space="preserve">
     <value>Description</value>
   </data>

@@ -727,6 +727,15 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Salary Deductions.
+        /// </summary>
+        internal static string SalaryDeductions {
+            get {
+                return ResourceManager.GetString("SalaryDeductions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         internal static string SalaryDescription {

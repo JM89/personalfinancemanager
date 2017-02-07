@@ -47,6 +47,7 @@ namespace PersonalFinanceManager.Utils.Automapper
             CreateMap<Models.Pension.PensionEditModel, Entities.PensionModel>();
 
             CreateMap<Models.Salary.SalaryEditModel, Entities.SalaryModel>();
+            CreateMap<Models.Salary.SalaryDeductionEditModel, Entities.SalaryDeductionModel>();
         }
     }
 }
