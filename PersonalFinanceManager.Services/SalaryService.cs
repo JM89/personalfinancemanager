@@ -43,6 +43,22 @@ namespace PersonalFinanceManager.Services
             }
         }
 
+        public void CopySalary(int sourceId)
+        {
+            var sourceSalary = _salaryRepository.GetById(sourceId, true);
+            var copySalary = Mapper.Map<SalaryModel>(sourceSalary);
+            copySalary.Description = "Copy " + copySalary.Description;
+            copySalary = _salaryRepository.Create(copySalary);
+
+            var sourceSalaryDeductions = _salaryDeductionRepository.GetList().AsNoTracking().Where(x => x.SalaryId == sourceId).ToList();
+            foreach (var sourceSalaryDeduction in sourceSalaryDeductions)
+            {
+                var copySalaryDeduction = Mapper.Map<SalaryDeductionModel>(sourceSalaryDeduction);
+                copySalaryDeduction.SalaryId = copySalary.Id;
+                _salaryDeductionRepository.Create(copySalaryDeduction);
+            }
+        }
+
         public SalaryEditModel GetById(int id)
         {
             var salary = _salaryRepository.GetList().Include(u => u.Currency).SingleOrDefault(x => x.Id == id);

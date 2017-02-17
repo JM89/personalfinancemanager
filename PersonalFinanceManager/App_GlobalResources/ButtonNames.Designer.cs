@@ -106,6 +106,15 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        internal static string CopyButton {
+            get {
+                return ResourceManager.GetString("CopyButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Debit.
         /// </summary>
         internal static string DebitButton {

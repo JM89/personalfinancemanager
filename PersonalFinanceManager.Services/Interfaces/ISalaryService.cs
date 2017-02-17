@@ -16,5 +16,7 @@ namespace PersonalFinanceManager.Services.Interfaces
         void EditSalary(SalaryEditModel salaryEditModel);
 
         void DeleteSalary(int id);
+
+        void CopySalary(int sourceId);
     }
 }

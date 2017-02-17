@@ -132,6 +132,9 @@
   <data name="CloseATMButton" xml:space="preserve">
     <value>Close an ATM withdraw</value>
   </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>Copy</value>
+  </data>
   <data name="DebitButton" xml:space="preserve">
     <value>Debit</value>
   </data>

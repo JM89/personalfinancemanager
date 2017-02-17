@@ -20,13 +20,13 @@
 {
     <table class="stripe" id="mytable2">
         <colgroup>
-            <col width="15%" />
-            <col width="15%" />
-            <col width="20%" />
-            <col width="15%" />
-            <col width="15%" />
-            <col width="15%" />
-            <col width="5%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
         </colgroup>
         <thead>
         <tr>
@@ -74,6 +74,8 @@
                         @Html.DisplayFor(modelItem => item.DisplayedMonthlyNetPay)
                     </td>
                     <td align="right" class="tdActions">
+                        <a href="/Salary/Copy?sourceId=@item.Id" title="@Resources.ButtonNames.CopyButton" class="btn_copy"><i class="fa fa-clone"></i></a>
+                        @Html.Raw("|")
                         @CustomHelpers.ListButtons(@item.Id, true, "Salary", "")
                     </td>
                 </tr>

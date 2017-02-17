@@ -148,5 +148,19 @@ namespace PersonalFinanceManager.Controllers
         {
             salaryModel.AvailableCurrencies = _currencyService.GetCurrencies().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
         }
+
+        /// <summary>
+        /// Duplicate the salary.
+        /// </summary>
+        /// <param name="sourceId"></param>
+        /// <returns></returns>
+        public ActionResult Copy(int sourceId)
+        {
+            _salaryService.CopySalary(sourceId);
+
+            var accountId = CurrentAccount;
+
+            return RedirectToAction("Index", new { accountId });
+        }
     }
 }
