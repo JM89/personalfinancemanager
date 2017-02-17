@@ -20,7 +20,7 @@ namespace PersonalFinanceManager.Services
 
         public IList<PensionListModel> GetPensions(string userId)
         {
-            var pensions = _pensionRepository.GetList().Include(u => u.Currency).Where(x => x.UserId == userId).ToList();
+            var pensions = _pensionRepository.GetList().Include(u => u.Currency).Include(u => u.Country).Where(x => x.UserId == userId).ToList();
 
             var pensionsModel = pensions.Select(Mapper.Map<PensionListModel>);
 

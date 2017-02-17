@@ -25,5 +25,8 @@ namespace PersonalFinanceManager.Models.Pension
 
         [LocalizedDisplayName("PensionCurrentPot")]
         public decimal CurrentPot { get; set; }
+
+        [LocalizedDisplayName("PensionCountry")]
+        public string CountryName { get; set; }
     }
 }

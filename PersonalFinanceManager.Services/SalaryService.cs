@@ -23,7 +23,7 @@ namespace PersonalFinanceManager.Services
 
         public IList<SalaryListModel> GetSalaries(string userId)
         {
-            var salaries = _salaryRepository.GetList().Include(u => u.Currency).Where(x => x.UserId == userId).ToList();
+            var salaries = _salaryRepository.GetList().Include(u => u.Currency).Include(u => u.Country).Where(x => x.UserId == userId).ToList();
 
             var salariesModel = salaries.Select(Mapper.Map<SalaryListModel>);
 

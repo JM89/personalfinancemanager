@@ -12,11 +12,13 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IPensionService _pensionService;
         private readonly ICurrencyService _currencyService;
+        private readonly ICountryService _countryService;
 
-        public PensionController(IPensionService pensionService, ICurrencyService currencyService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public PensionController(IPensionService pensionService, ICurrencyService currencyService, ICountryService countryService, IBankAccountService bankAccountService) : base(bankAccountService)
         {
             this._pensionService = pensionService;
             this._currencyService = currencyService;
+            this._countryService = countryService;
         }
 
         /// <summary>
@@ -150,6 +152,7 @@ namespace PersonalFinanceManager.Controllers
         private void PopulateDropDownLists(PensionEditModel pensionModel)
         {
             pensionModel.AvailableCurrencies = _currencyService.GetCurrencies().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            pensionModel.AvailableCountries = _countryService.GetCountries().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
         }
     }
 }

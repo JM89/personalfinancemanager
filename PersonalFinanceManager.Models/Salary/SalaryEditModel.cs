@@ -55,5 +55,11 @@ namespace PersonalFinanceManager.Models.Salary
 
         [LocalizedDisplayName("SalaryDeductions")]
         public IList<SalaryDeductionEditModel> SalaryDeductions { get; set; }
+        
+        [Required]
+        [LocalizedDisplayName("SalaryCountry")]
+        public int CountryId { get; set; }
+
+        public IList<SelectListItem> AvailableCountries { get; set; }
     }
 }

@@ -13,11 +13,13 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly ISalaryService _salaryService;
         private readonly ICurrencyService _currencyService;
+        private readonly ICountryService _countryService;
 
-        public SalaryController(ISalaryService salaryService, ICurrencyService currencyService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public SalaryController(ISalaryService salaryService, ICurrencyService currencyService, ICountryService countryService, IBankAccountService bankAccountService) : base(bankAccountService)
         {
             this._salaryService = salaryService;
             this._currencyService = currencyService;
+            this._countryService = countryService;
         }
 
         /// <summary>
@@ -147,6 +149,7 @@ namespace PersonalFinanceManager.Controllers
         private void PopulateDropDownLists(SalaryEditModel salaryModel)
         {
             salaryModel.AvailableCurrencies = _currencyService.GetCurrencies().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            salaryModel.AvailableCountries = _countryService.GetCountries().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
         }
 
         /// <summary>

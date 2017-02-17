@@ -55,5 +55,11 @@ namespace PersonalFinanceManager.Models.Pension
         public int CurrencyId { get; set; }
 
         public IList<SelectListItem> AvailableCurrencies { get; set; }
+
+        [Required]
+        [LocalizedDisplayName("PensionCountry")]
+        public int CountryId { get; set; }
+
+        public IList<SelectListItem> AvailableCountries { get; set; }
     }
 }

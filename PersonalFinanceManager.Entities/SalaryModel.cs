@@ -39,5 +39,11 @@ namespace PersonalFinanceManager.Entities
 
         [ForeignKey("CurrencyId")]
         public CurrencyModel Currency { get; set; }
+
+        [Required]
+        public int CountryId { get; set; }
+
+        [ForeignKey("CountryId")]
+        public CountryModel Country { get; set; }
     }
 }

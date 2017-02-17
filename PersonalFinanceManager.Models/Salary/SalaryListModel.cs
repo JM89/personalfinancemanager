@@ -31,6 +31,9 @@ namespace PersonalFinanceManager.Models.Salary
         [LocalizedDisplayName("SalaryCurrency")]
         public string CurrencySymbol { get; set; }
 
+        [LocalizedDisplayName("SalaryCountry")]
+        public string CountryName { get; set; }
+
         public string DisplayedStartDate => DateTimeFormatHelper.GetDisplayDateValue(StartDate);
 
         public string DisplayedEndDate => DateTimeFormatHelper.GetDisplayDateValue(EndDate);

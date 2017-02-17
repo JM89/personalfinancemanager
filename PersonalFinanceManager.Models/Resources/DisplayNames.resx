@@ -288,6 +288,9 @@
   <data name="PensionContributionPercentage" xml:space="preserve">
     <value>Personal Contribution (%)</value>
   </data>
+  <data name="PensionCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
   <data name="PensionCurrency" xml:space="preserve">
     <value>Currency</value>
   </data>
@@ -335,6 +338,9 @@
   </data>
   <data name="PeriodicOutcomeTypeExpenditure" xml:space="preserve">
     <value>Expenditure Type</value>
+  </data>
+  <data name="SalaryCountry" xml:space="preserve">
+    <value>Country</value>
   </data>
   <data name="SalaryCurrency" xml:space="preserve">
     <value>Currency</value>

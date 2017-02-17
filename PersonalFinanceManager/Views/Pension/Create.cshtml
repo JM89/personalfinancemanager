@@ -27,29 +27,13 @@
             
             @Html.FieldEditor(model => model.Website)
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-lg-2" })
-                <div class="col-lg-10">
-                    @Html.TextBoxFor(model => model.StartDate, new { @Value = Model.DisplayedStartDate, @class = "form-control"})
-                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            
-            <div class="form-group">
-                @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-lg-2" })
-                <div class="col-lg-10">
-                    @Html.TextBoxFor(model => model.EndDate, new { @Value = Model.DisplayedEndDate, @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            
-            <div class="form-group">
-                @Html.LabelFor(model => model.CurrencyId, htmlAttributes: new { @class = "control-label col-lg-2" })
-                <div class="col-lg-10">
-                    @Html.DropDownListFor(model => model.CurrencyId, @Model.AvailableCurrencies, "", htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.CurrencyId, "", new { @class = "text-danger" })
-                </div>
-            </div>
+            @Html.DateFieldEditor(model => model.StartDate)
+
+            @Html.DateFieldEditor(model => model.EndDate)
+
+            @Html.ListEditor(model => model.CurrencyId, @Model.AvailableCurrencies)
+
+            @Html.ListEditor(model => model.CountryId, @Model.AvailableCountries)
 
             @Html.FieldEditor(model => model.ContributionPercentage)
             
@@ -59,12 +43,7 @@
             
             @Html.FieldEditor(model => model.Interest)
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="@Resources.ButtonNames.AddSaveButton" class="btn btn-primary btn_save" />
-                    @Html.ActionLink(Resources.ButtonNames.CancelButton, "Index", null, htmlAttributes: new { @class = "btn btn-default" })
-                </div>
-            </div>
+            @CustomHelpers.FormFooterButtons("Pension")
 
         </div>
     }
@@ -78,18 +57,8 @@
     <script src="~/Scripts/custom/Pension.js"></script>
     
     <script type="text/javascript">
-
-        $(function () {
-
-            $("#StartDate").datepicker({ dateFormat: "dd/mm/yy" });
-
-            $("#EndDate").datepicker({ dateFormat: "dd/mm/yy" });
-
-            $.validator.methods.date = function (value, element) {
-                Globalize.culture("en-UK");
-                return this.optional(element) || Globalize.parseDate(value) !== null;
-            }
-        });
-
+            $(function () {
+                initializeForm();
+            });
     </script>
 }

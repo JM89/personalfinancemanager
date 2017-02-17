@@ -574,6 +574,15 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        internal static string PensionCountry {
+            get {
+                return ResourceManager.GetString("PensionCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Currency.
         /// </summary>
         internal static string PensionCurrency {
@@ -714,6 +723,15 @@ namespace PersonalFinanceManager.Models.Resources {
         internal static string PeriodicOutcomeTypeExpenditure {
             get {
                 return ResourceManager.GetString("PeriodicOutcomeTypeExpenditure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        internal static string SalaryCountry {
+            get {
+                return ResourceManager.GetString("SalaryCountry", resourceCulture);
             }
         }
         

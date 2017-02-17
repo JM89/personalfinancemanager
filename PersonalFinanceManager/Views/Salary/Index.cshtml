@@ -20,13 +20,14 @@
 {
     <table class="stripe" id="mytable2">
         <colgroup>
+            <col style="width:8%" />
+            <col style="width:8%" />
             <col style="width:15%" />
             <col style="width:15%" />
-            <col style="width:15%" />
-            <col style="width:15%" />
-            <col style="width:15%" />
-            <col style="width:15%" />
-            <col style="width:15%" />
+            <col style="width:12%" />
+            <col style="width:12%" />
+            <col style="width:12%" />
+            <col style="width:5%" />
         </colgroup>
         <thead>
         <tr>
@@ -38,6 +39,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(modelItem => modelItem.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.CountryName)
             </th>
             <th>
                 @Html.DisplayNameFor(modelItem => modelItem.YearlySalary)
@@ -63,6 +67,9 @@
                     </td>
                     <td class="tdDescription">
                         @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td class="tdCountry">
+                        @Html.DisplayFor(modelItem => item.CountryName)
                     </td>
                     <td class="tdYearlySalary">
                         @Html.DisplayFor(modelItem => item.DisplayedYearlySalary)
