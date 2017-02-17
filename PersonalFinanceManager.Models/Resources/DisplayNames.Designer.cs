@@ -844,6 +844,87 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        internal static string TaxCountry {
+            get {
+                return ResourceManager.GetString("TaxCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency.
+        /// </summary>
+        internal static string TaxCurrency {
+            get {
+                return ResourceManager.GetString("TaxCurrency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string TaxDescription {
+            get {
+                return ResourceManager.GetString("TaxDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End Date.
+        /// </summary>
+        internal static string TaxEndDate {
+            get {
+                return ResourceManager.GetString("TaxEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frequence.
+        /// </summary>
+        internal static string TaxFrequence {
+            get {
+                return ResourceManager.GetString("TaxFrequence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frequence Option.
+        /// </summary>
+        internal static string TaxFrequenceOption {
+            get {
+                return ResourceManager.GetString("TaxFrequenceOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID.
+        /// </summary>
+        internal static string TaxId {
+            get {
+                return ResourceManager.GetString("TaxId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Date.
+        /// </summary>
+        internal static string TaxStartDate {
+            get {
+                return ResourceManager.GetString("TaxStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tax Type.
+        /// </summary>
+        internal static string TaxType {
+            get {
+                return ResourceManager.GetString("TaxType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First Name.
         /// </summary>
         internal static string UserProfileFirstName {

@@ -64,6 +64,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerations\FrequenceOption.cs" />
+    <Compile Include="Enumerations\TaxType.cs" />
+    <Compile Include="TaxModel.cs" />
+    <Compile Include="FrequenceOptionModel.cs" />
+    <Compile Include="TaxTypeModel.cs" />
     <Compile Include="PensionModel.cs" />
     <Compile Include="SavingModel.cs" />
     <Compile Include="PersistedEntity.cs" />

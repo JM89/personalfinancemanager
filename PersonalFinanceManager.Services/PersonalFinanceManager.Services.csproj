@@ -61,8 +61,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IFrequenceOptionService.cs" />
+    <Compile Include="Interfaces\ITaxTypeService.cs" />
+    <Compile Include="Interfaces\ITaxService.cs" />
     <Compile Include="Interfaces\ISalaryService.cs" />
     <Compile Include="Interfaces\IPensionService.cs" />
+    <Compile Include="FrequenceOptionService.cs" />
+    <Compile Include="TaxTypeService.cs" />
+    <Compile Include="TaxService.cs" />
     <Compile Include="PensionService.cs" />
     <Compile Include="SalaryService.cs" />
     <Compile Include="MovementStrategy\CommonMovementStrategy.cs" />

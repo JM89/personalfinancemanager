@@ -1,0 +1,57 @@
+﻿@model PersonalFinanceManager.Models.Tax.TaxEditModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutConfirmDeletion.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.TaxPages;
+    ViewBag.FormTitle = Resources.TitleNames.TaxDelete;
+    ViewBag.DetailsTitle = Resources.TitleNames.TaxDelete;
+    ViewBag.ConfirmationMessage = Resources.ConfirmationMessages.TaxConfirmationDeletion;
+}
+
+
+@section BreadCrumbSection
+{
+}
+
+@section DetailsSection
+{
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DisplayedStartDate)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DisplayedEndDate)
+        </dd>
+    </dl>
+}
+
+@section DeletionButtonSection
+{
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="@Resources.ButtonNames.DeleteButton" class="btn btn-primary btn_delete" /> 
+            @Html.ActionLink(@Resources.ButtonNames.CancelButton, "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+    }
+}
+

@@ -203,6 +203,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\Startup.Ninject.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\TaxTypeController.cs" />
+    <Compile Include="Controllers\TaxController.cs" />
     <Compile Include="Controllers\PensionController.cs" />
     <Compile Include="Controllers\SalaryController.cs" />
     <Compile Include="Controllers\SavingController.cs" />
@@ -288,6 +290,7 @@
     <Content Include="Scripts\custom\HomePage.js" />
     <Content Include="Scripts\custom\Shared.js" />
     <Content Include="Scripts\custom\SplitByTypeDashboard.js" />
+    <Content Include="Scripts\custom\Tax.js" />
     <Content Include="Scripts\custom\Utils.js" />
     <Content Include="Scripts\custom\BudgetPlan.js" />
     <Content Include="Scripts\custom\Expenditure.js" />
@@ -401,6 +404,11 @@
     <Content Include="Views\Salary\Delete.cshtml" />
     <Content Include="Views\Salary\Edit.cshtml" />
     <Content Include="Views\Salary\Index.cshtml" />
+    <Content Include="Views\TaxType\Index.cshtml" />
+    <Content Include="Views\Tax\Create.cshtml" />
+    <Content Include="Views\Tax\Delete.cshtml" />
+    <Content Include="Views\Tax\Edit.cshtml" />
+    <Content Include="Views\Tax\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

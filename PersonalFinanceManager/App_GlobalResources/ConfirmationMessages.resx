@@ -153,4 +153,7 @@
   <data name="SavingConfirmationDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this saving?</value>
   </data>
+  <data name="TaxConfirmationDeletion" xml:space="preserve">
+    <value>Are you sure you want to delete this tax?</value>
+  </data>
 </root>

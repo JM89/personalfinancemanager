@@ -63,3 +63,13 @@ else
 }
 
 }
+
+@helper FormFooterButtons(string controllerName)
+{
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="@Resources.ButtonNames.AddSaveButton" class="btn btn-primary btn_save" />
+            <a class="btn btn-default" href="/@controllerName/Index">@Resources.ButtonNames.CancelButton</a>
+        </div>
+    </div>
+}

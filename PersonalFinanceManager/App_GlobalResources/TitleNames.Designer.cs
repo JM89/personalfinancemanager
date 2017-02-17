@@ -727,6 +727,69 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a tax.
+        /// </summary>
+        public static string TaxCreate {
+            get {
+                return ResourceManager.GetString("TaxCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete a tax.
+        /// </summary>
+        public static string TaxDelete {
+            get {
+                return ResourceManager.GetString("TaxDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit a tax.
+        /// </summary>
+        public static string TaxEdit {
+            get {
+                return ResourceManager.GetString("TaxEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of taxes.
+        /// </summary>
+        public static string TaxList {
+            get {
+                return ResourceManager.GetString("TaxList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage taxes.
+        /// </summary>
+        public static string TaxPages {
+            get {
+                return ResourceManager.GetString("TaxPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of taxe types.
+        /// </summary>
+        public static string TaxTypeList {
+            get {
+                return ResourceManager.GetString("TaxTypeList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage taxe types.
+        /// </summary>
+        public static string TaxTypePages {
+            get {
+                return ResourceManager.GetString("TaxTypePages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create user profile.
         /// </summary>
         public static string UserProfileCreate {

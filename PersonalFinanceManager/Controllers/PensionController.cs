@@ -66,7 +66,7 @@ namespace PersonalFinanceManager.Controllers
         /// <summary>
         ///  Initialize the Edit form.
         /// </summary>
-        /// <param name="id">Income id</param>
+        /// <param name="id">Pension id</param>
         /// <returns></returns>
         public ActionResult Edit(int? id)
         {
@@ -111,7 +111,7 @@ namespace PersonalFinanceManager.Controllers
         /// <summary>
         /// Show the details of the pension you are about to delete.
         /// </summary>
-        /// <param name="id">Income id</param>
+        /// <param name="id">Pension id</param>
         /// <returns></returns>
         public ActionResult Delete(int? id)
         {
@@ -132,7 +132,7 @@ namespace PersonalFinanceManager.Controllers
         /// <summary>
         /// Delete the pension after confirmation.
         /// </summary>
-        /// <param name="id">Income id</param>
+        /// <param name="id">Pension id</param>
         /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

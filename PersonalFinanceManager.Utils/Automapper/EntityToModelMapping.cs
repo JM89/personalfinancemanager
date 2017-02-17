@@ -52,6 +52,12 @@ namespace PersonalFinanceManager.Utils.Automapper
 
             CreateMap<Entities.PensionModel, Models.Pension.PensionListModel>();
             CreateMap<Entities.PensionModel, Models.Pension.PensionEditModel>();
+
+            CreateMap<Entities.TaxModel, Models.Tax.TaxListModel>();
+            CreateMap<Entities.TaxModel, Models.Tax.TaxEditModel>();
+
+            CreateMap<Entities.TaxTypeModel, Models.TaxType.TaxTypeListModel>();
+            CreateMap<Entities.FrequenceOptionModel, Models.FrequenceOption.FrequenceOptionListModel>();
         }
     }
 }

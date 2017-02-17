@@ -1,0 +1,84 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Tax.TaxListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.TaxPages;
+    ViewBag.GridTitle = Resources.TitleNames.TaxList;
+}
+
+@section BreadCrumbSection
+{
+
+}
+
+@section AddButtonSection
+{
+    <a href="/Tax/Create" title="add" class="btn_create"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable2">
+        <colgroup>
+            <col style="width: 10%" />
+            <col style="width: 10%" />
+            <col style="width: 30%" />
+            <col style="width: 10%" />
+            <col style="width: 20%" />
+            <col style="width: 10%" />
+            <col style="width: 10%" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.CountryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.FrequenceDescription)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="trPension">
+                    <td class="tdStartDate">
+                        @Html.DisplayFor(modelItem => item.DisplayedStartDate)
+                    </td>
+                    <td class="tdEndDate">
+                        @Html.DisplayFor(modelItem => item.DisplayedEndDate)
+                    </td>
+                    <td class="tdDescription">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td class="tdAmount">
+                        @Html.DisplayFor(modelItem => item.DisplayedAmount)
+                    </td>
+                    <td class="tdCountry">
+                        @Html.DisplayFor(modelItem => item.CountryName)
+                    </td>
+                    <td class="tdFrequence">
+                        @Html.DisplayFor(modelItem => item.FrequenceDescription)
+                    </td>
+                    <td align="right" class="tdActions">
+                        @CustomHelpers.ListButtons(@item.Id, true, "Tax", "")
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}

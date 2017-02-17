@@ -13,7 +13,7 @@ namespace PersonalFinanceManager.Services.Interfaces
 
         PensionEditModel GetById(int id);
 
-        void EditPension(PensionEditModel incomeEditModel);
+        void EditPension(PensionEditModel pensionEditModel);
 
         void DeletePension(int id);
     }

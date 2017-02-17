@@ -167,5 +167,14 @@ namespace PersonalFinanceManager.App_GlobalResources {
                 return ResourceManager.GetString("SavingConfirmationDeletion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this tax?.
+        /// </summary>
+        public static string TaxConfirmationDeletion {
+            get {
+                return ResourceManager.GetString("TaxConfirmationDeletion", resourceCulture);
+            }
+        }
     }
 }

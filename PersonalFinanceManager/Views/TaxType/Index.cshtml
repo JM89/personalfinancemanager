@@ -1,0 +1,45 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.TaxType.TaxTypeListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.TaxTypePages;
+    ViewBag.GridTitle = Resources.TitleNames.TaxTypeList;
+}
+
+@section AddButtonSection
+{
+    
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable">
+        <colgroup>
+            <col style="width: 10%"/>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+            </tr>
+        }
+        </tbody>
+
+    </table>
+}

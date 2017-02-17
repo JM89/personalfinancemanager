@@ -378,6 +378,33 @@
   <data name="SavingTargetInternalAccount" xml:space="preserve">
     <value>Saving Account</value>
   </data>
+  <data name="TaxCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="TaxCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="TaxDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="TaxEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="TaxFrequence" xml:space="preserve">
+    <value>Frequence</value>
+  </data>
+  <data name="TaxFrequenceOption" xml:space="preserve">
+    <value>Frequence Option</value>
+  </data>
+  <data name="TaxId" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="TaxStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="TaxType" xml:space="preserve">
+    <value>Tax Type</value>
+  </data>
   <data name="UserProfileFirstName" xml:space="preserve">
     <value>First Name</value>
   </data>

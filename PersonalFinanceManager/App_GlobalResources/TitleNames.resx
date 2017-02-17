@@ -339,6 +339,27 @@
   <data name="SavingPages" xml:space="preserve">
     <value>Manage savings</value>
   </data>
+  <data name="TaxCreate" xml:space="preserve">
+    <value>Create a tax</value>
+  </data>
+  <data name="TaxDelete" xml:space="preserve">
+    <value>Delete a tax</value>
+  </data>
+  <data name="TaxEdit" xml:space="preserve">
+    <value>Edit a tax</value>
+  </data>
+  <data name="TaxList" xml:space="preserve">
+    <value>List of taxes</value>
+  </data>
+  <data name="TaxPages" xml:space="preserve">
+    <value>Manage taxes</value>
+  </data>
+  <data name="TaxTypeList" xml:space="preserve">
+    <value>List of taxe types</value>
+  </data>
+  <data name="TaxTypePages" xml:space="preserve">
+    <value>Manage taxe types</value>
+  </data>
   <data name="UserProfileCreate" xml:space="preserve">
     <value>Create user profile</value>
   </data>
