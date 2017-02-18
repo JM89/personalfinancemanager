@@ -1,11 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using PersonalFinanceManager.Models.Helpers;
 using PersonalFinanceManager.Models.Resources;
+using PersonalFinanceManager.Models.Shared;
 
 namespace PersonalFinanceManager.Models.Tax
 {
-    public class TaxListModel
+    public class TaxListModel : ICanBeDeleted
     {
         [LocalizedDisplayName("TaxId")]
         public int Id { get; set; }
@@ -41,5 +41,12 @@ namespace PersonalFinanceManager.Models.Tax
 
         [LocalizedDisplayName("TaxFrequence")]
         public string FrequenceDescription { get; set; }
+
+        public bool CanBeDeleted { get; set; }
+
+        public string TooltipResourceName {
+            get { return "TaxCantBeDeleted"; }
+            set { }
+        }
     }
 }

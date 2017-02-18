@@ -14,10 +14,12 @@ namespace PersonalFinanceManager.Services
     public class TaxService : ITaxService
     {
         private readonly ITaxRepository _taxRepository;
+        private readonly ISalaryRepository _salaryRepository;
 
-        public TaxService(ITaxRepository taxRepository)
+        public TaxService(ITaxRepository taxRepository, ISalaryRepository salaryRepository)
         {
             this._taxRepository = taxRepository;
+            this._salaryRepository = salaryRepository;
         }
 
         public void CreateTax(TaxEditModel taxEditModel)
@@ -72,6 +74,10 @@ namespace PersonalFinanceManager.Services
                         taxModel.FrequenceDescription = $"Every {tax.Frequence} months";
                         break;
                 }
+
+                var hasSalary = _salaryRepository.GetList().Any(x => x.TaxId == tax.Id);
+
+                taxModel.CanBeDeleted = !hasSalary;
 
                 taxesModel.Add(taxModel);
             }

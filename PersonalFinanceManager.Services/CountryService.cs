@@ -17,23 +17,34 @@ namespace PersonalFinanceManager.Services
     public class CountryService : ICountryService
     {
         private readonly ICountryRepository _countryRepository;
+        private readonly ISalaryRepository _salaryRepository;
+        private readonly IPensionRepository _pensionRepository;
+        private readonly ITaxRepository _taxRepository;
         private readonly IBankRepository _bankRepository;
 
-        public CountryService(ICountryRepository countryRepository, IBankRepository bankRepository)
+        public CountryService(ICountryRepository countryRepository, IPensionRepository pensionRepository, ITaxRepository taxRepository, ISalaryRepository salaryRepository, IBankRepository bankRepository)
         {
             this._countryRepository = countryRepository;
             this._bankRepository = bankRepository;
+            this._salaryRepository = salaryRepository;
+            this._pensionRepository = pensionRepository;
+            this._taxRepository = taxRepository;
         }
 
         public IList<CountryListModel> GetCountries()
         {
             var countries = _countryRepository.GetList().ToList();
 
-            var countriesModel = countries.Select(x => Mapper.Map<CountryListModel>(x)).ToList();
+            var countriesModel = countries.Select(Mapper.Map<CountryListModel>).ToList();
 
             countriesModel.ForEach(country =>
             {
-                country.CanBeDeleted = !_bankRepository.GetList().Any(x => x.CountryId == country.Id);
+                var hasBank = _bankRepository.GetList().Any(x => x.CountryId == country.Id);
+                var hasSalary = _salaryRepository.GetList().Any(x => x.CountryId == country.Id);
+                var hasPension = _pensionRepository.GetList().Any(x => x.CountryId == country.Id);
+                var hasTax = _taxRepository.GetList().Any(x => x.CountryId == country.Id);
+                
+                country.CanBeDeleted = !hasBank && !hasSalary && !hasPension && !hasTax;
             });
 
             return countriesModel;

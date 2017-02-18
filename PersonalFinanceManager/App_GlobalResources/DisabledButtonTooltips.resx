@@ -130,15 +130,18 @@
     <value>The bank is used by at least one account. Please delete the accounts first. </value>
   </data>
   <data name="CountryCantBeDeleted" xml:space="preserve">
-    <value>The country is used by at least one bank. Please delete the banks first. </value>
+    <value>The country is used by at least one bank/salary/pension/tax. Please delete the banks/salaries/pensions/taxes first. </value>
   </data>
   <data name="CurrencyCantBeDeleted" xml:space="preserve">
-    <value>The account is used by at least one account. Please delete the accounts first.</value>
+    <value>The account is used by at least one account/salary/pension/tax. Please delete the accounts/salaries/pensions/taxes first.</value>
   </data>
   <data name="ExpenditureTypeCantBeDeleted" xml:space="preserve">
     <value>The expenditure type is used by at least one expenditure. Please delete the expenditures first.</value>
   </data>
   <data name="PaymentMethodCantBeDeleted" xml:space="preserve">
     <value>The payment method is used by at least one expenditure. Please delete the expenditures first.</value>
+  </data>
+  <data name="TaxCantBeDeleted" xml:space="preserve">
+    <value>The tax is used by at least one salary. Please delete the salaries first.</value>
   </data>
 </root>
