@@ -13,6 +13,9 @@ namespace PersonalFinanceManager.Models.Tax
         [LocalizedDisplayName("TaxDescription")]
         public string Description { get; set; }
 
+        [LocalizedDisplayName("TaxCode")]
+        public string Code { get; set; }
+
         [LocalizedDisplayName("TaxStartDate")]
         public DateTime StartDate { get; set; }
 

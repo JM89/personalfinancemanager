@@ -35,12 +35,6 @@ namespace PersonalFinanceManager.Models.Salary
         [LocalizedDisplayName("SalaryMonthlyNetPay")]
         public decimal MonthlyNetPay { get; set; }
 
-        [LocalizedDisplayName("SalaryTaxCode")]
-        public string TaxCode { get; set; }
-
-        [LocalizedDisplayName("SalaryTaxPercentage")]
-        public decimal TaxPercentage { get; set; }
-
         public string UserId { get; set; }
 
         [Required]
@@ -61,5 +55,11 @@ namespace PersonalFinanceManager.Models.Salary
         public int CountryId { get; set; }
 
         public IList<SelectListItem> AvailableCountries { get; set; }
+
+        [Required]
+        [LocalizedDisplayName("SalaryTax")]
+        public int TaxId { get; set; }
+
+        public IList<SelectListItem> AvailableTaxes { get; set; }
     }
 }

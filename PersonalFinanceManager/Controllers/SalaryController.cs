@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Models.Salary;
 using PersonalFinanceManager.Services.Interfaces;
 
@@ -14,12 +15,14 @@ namespace PersonalFinanceManager.Controllers
         private readonly ISalaryService _salaryService;
         private readonly ICurrencyService _currencyService;
         private readonly ICountryService _countryService;
+        private readonly ITaxService _taxService;
 
-        public SalaryController(ISalaryService salaryService, ICurrencyService currencyService, ICountryService countryService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public SalaryController(ISalaryService salaryService, ICurrencyService currencyService, ICountryService countryService, ITaxService taxService, IBankAccountService bankAccountService) : base(bankAccountService)
         {
             this._salaryService = salaryService;
             this._currencyService = currencyService;
             this._countryService = countryService;
+            this._taxService = taxService;
         }
 
         /// <summary>
@@ -150,6 +153,7 @@ namespace PersonalFinanceManager.Controllers
         {
             salaryModel.AvailableCurrencies = _currencyService.GetCurrencies().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
             salaryModel.AvailableCountries = _countryService.GetCountries().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            salaryModel.AvailableTaxes = _taxService.GetTaxesByType(CurrentUser, TaxType.IncomeTax).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Code }).ToList();
         }
 
         /// <summary>

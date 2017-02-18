@@ -799,20 +799,11 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tax Code.
+        ///   Looks up a localized string similar to Tax.
         /// </summary>
-        internal static string SalaryTaxCode {
+        internal static string SalaryTax {
             get {
-                return ResourceManager.GetString("SalaryTaxCode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tax (%).
-        /// </summary>
-        internal static string SalaryTaxPercentage {
-            get {
-                return ResourceManager.GetString("SalaryTaxPercentage", resourceCulture);
+                return ResourceManager.GetString("SalaryTax", resourceCulture);
             }
         }
         
@@ -858,6 +849,15 @@ namespace PersonalFinanceManager.Models.Resources {
         internal static string SavingTargetInternalAccount {
             get {
                 return ResourceManager.GetString("SavingTargetInternalAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code / Reference.
+        /// </summary>
+        internal static string TaxCode {
+            get {
+                return ResourceManager.GetString("TaxCode", resourceCulture);
             }
         }
         

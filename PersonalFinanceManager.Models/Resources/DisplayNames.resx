@@ -363,11 +363,8 @@
   <data name="SalaryStartDate" xml:space="preserve">
     <value>Start Date</value>
   </data>
-  <data name="SalaryTaxCode" xml:space="preserve">
-    <value>Tax Code</value>
-  </data>
-  <data name="SalaryTaxPercentage" xml:space="preserve">
-    <value>Tax (%)</value>
+  <data name="SalaryTax" xml:space="preserve">
+    <value>Tax</value>
   </data>
   <data name="SalaryYearlySalary" xml:space="preserve">
     <value>Yearly Salary</value>
@@ -383,6 +380,9 @@
   </data>
   <data name="SavingTargetInternalAccount" xml:space="preserve">
     <value>Saving Account</value>
+  </data>
+  <data name="TaxCode" xml:space="preserve">
+    <value>Code / Reference</value>
   </data>
   <data name="TaxCountry" xml:space="preserve">
     <value>Country</value>

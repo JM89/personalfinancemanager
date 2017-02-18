@@ -27,9 +27,11 @@ namespace PersonalFinanceManager.Entities
         [Required]
         public decimal MonthlyNetPay { get; set; }
 
-        public string TaxCode { get; set; }
+        [Required]
+        public int TaxId { get; set; }
 
-        public decimal TaxPercentage { get; set; }
+        [ForeignKey("TaxId")]
+        public TaxModel Tax { get; set; }
 
         [Required]
         public string UserId { get; set; }

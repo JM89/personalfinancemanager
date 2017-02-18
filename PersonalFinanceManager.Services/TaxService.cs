@@ -7,6 +7,7 @@ using System.Linq;
 using System.Data.Entity;
 using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Models.Tax;
+using System;
 
 namespace PersonalFinanceManager.Services
 {
@@ -76,6 +77,13 @@ namespace PersonalFinanceManager.Services
             }
 
             return taxesModel.ToList();
+        }
+
+        public IList<TaxListModel> GetTaxesByType(string currentUser, TaxType incomeTax)
+        {
+            var incomeTaxTypeId = (int) incomeTax;
+            var taxes = _taxRepository.GetList().Where(x => x.TaxTypeId == incomeTaxTypeId).ToList();
+            return taxes.Select(Mapper.Map<TaxListModel>).ToList();
         }
     }
 }

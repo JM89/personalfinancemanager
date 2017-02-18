@@ -38,10 +38,8 @@
             
             @Html.FieldEditor(model => model.MonthlyNetPay)
             
-            @Html.FieldEditor(model => model.TaxCode)
-            
-            @Html.FieldEditor(model => model.TaxPercentage)
-            
+            @Html.ListEditor(model => model.TaxId, @Model.AvailableTaxes)
+           
             <hr />
 
             <div class="form-group">

@@ -9,6 +9,8 @@ namespace PersonalFinanceManager.Entities
         [Required]
         public string Description { get; set; }
 
+        public string Code { get; set; }
+
         [Required]
         public DateTime StartDate { get; set; }
 
