@@ -772,7 +772,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List of taxe types.
+        ///   Looks up a localized string similar to List of tax types.
         /// </summary>
         public static string TaxTypeList {
             get {
@@ -781,7 +781,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage taxe types.
+        ///   Looks up a localized string similar to Manage tax types.
         /// </summary>
         public static string TaxTypePages {
             get {

@@ -355,10 +355,10 @@
     <value>Manage taxes</value>
   </data>
   <data name="TaxTypeList" xml:space="preserve">
-    <value>List of taxe types</value>
+    <value>List of tax types</value>
   </data>
   <data name="TaxTypePages" xml:space="preserve">
-    <value>Manage taxe types</value>
+    <value>Manage tax types</value>
   </data>
   <data name="UserProfileCreate" xml:space="preserve">
     <value>Create user profile</value>
