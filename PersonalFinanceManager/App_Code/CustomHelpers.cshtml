@@ -73,3 +73,20 @@ else
         </div>
     </div>
 }
+
+@helper DisplayAmountDifference(decimal amount, string displayedAmount)
+{
+    <br />
+if (@amount < 0)
+{
+  <label style="font-size: x-small; color:green">(@displayedAmount <i class="fa fa-caret-down" aria-hidden="true"></i>)</label>
+}
+else if (@amount > 0)
+{
+  <label style="font-size: x-small; color:red">(@displayedAmount <i class="fa fa-caret-up" aria-hidden="true"></i>)</label>
+}
+else
+{
+    <label style="font-size: x-small;"></label>
+}
+}

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using PersonalFinanceManager.Models.Expenditure;
 using PersonalFinanceManager.Helpers;
+using PersonalFinanceManager.Models.BudgetPlan;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Services.RequestObjects;
 using PersonalFinanceManager.Models.Dashboard;
@@ -28,135 +29,99 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult SplitByTypeDashboard()
         {
-            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId = CurrentAccount, ShowOnDashboard = true });
             var account = _bankAccountService.GetById(CurrentAccount);
+            var categories = _expenditureTypeService.GetExpenditureTypes().ToList().GroupBy(x => x.Id).ToDictionary(x => x.Key, y => y.Single());
 
-            if (!expenditures.Any())
-            {
-                return View("SplitByTypeDashboard", new SplitByTypeDashboardModel() { DisplayDashboard = false, AccountName = account.Name });
-            }
+            var today = DateTime.Now;
+            var over12MonthsInterval = new Interval(today, DateTimeUnitEnums.Years, 1);
+            var currentMonthInterval = new Interval(today, today);
+            var previousInterval = new Interval(today, DateTimeUnitEnums.Months, 1);
 
-            var currentMonthInterval = new Interval(DateTime.Now.AddMonths(1), DateTimeUnitEnums.Months, 1);
-            var previousMonthInterval = new Interval(DateTime.Now, DateTimeUnitEnums.Months, 1);
-            var expenditureTypesOrder = expenditures.GroupBy(x => x.TypeExpenditureId).ToDictionary(x => x.Key, y => y.Sum(z => z.Cost));
-            var expenditureTypes = _expenditureTypeService.GetExpenditureTypes().Join(expenditureTypesOrder, x => x.Id, y => y.Key, (x, y) => new { x.Id, x.Name, x.GraphColor, y.Value }).OrderByDescending(x => x.Value);
-            var budgetPlan = _budgetPlanService.GetCurrent(CurrentAccount);
+            var over12MonthsNames = over12MonthsInterval.GetIntervalsByMonth();
+            var currentMonthName = currentMonthInterval.GetSingleMonthName();
 
-            var splitByTypeDashboard = new SplitByTypeDashboardModel()
-            {
-                DisplayDashboard = expenditures.Any(),
-                CurrencySymbol = account.CurrencySymbol,
-                CurrentMonthName = currentMonthInterval.GetSingleMonthName(),
-                PreviousMonthName = previousMonthInterval.GetSingleMonthName(),
-                FirstMovementDate = DateTimeHelper.GetStringFormat(expenditures.OrderBy(x => x.DateExpenditure).First().DateExpenditure),
-                BudgetPlanName = budgetPlan != null ? budgetPlan.Name : string.Empty,
-                AccountName = account.Name
-            };
-
-            foreach (var expenditureType in expenditureTypes)
-            {
-                var splitByTypeModel = new SplitByTypeModel()
-                {
-                    ExpenditureTypeId = expenditureType.Id,
-                    ExpenditureTypeName = expenditureType.Name,
-                    GraphColor = expenditureType.GraphColor,
-                    CurrencySymbol = account.CurrencySymbol
-                };
-
-                var expendituresByType = expenditures.Where(x => x.TypeExpenditureId == expenditureType.Id).ToList();
-
-                if (expendituresByType.Any())
-                {
-                    var previous = expendituresByType.Where(x => previousMonthInterval.IsBetween(x.DateExpenditure)).ToList();
-                    splitByTypeModel.PreviousMonthCost = previous.Any() ? previous.Sum(x => x.Cost) : 0;
-                    splitByTypeDashboard.PreviousMonthTotalCost += splitByTypeModel.PreviousMonthCost;
-
-                    var current = expendituresByType.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).ToList();
-                    splitByTypeModel.CurrentMonthCost = current.Any() ? current.Sum(x => x.Cost) : 0;
-                    splitByTypeDashboard.CurrentMonthTotalCost += splitByTypeModel.CurrentMonthCost;
-                }
-
-                if (budgetPlan != null)
-                {
-                    var budgetPlanExpType = budgetPlan.ExpenditureTypes.SingleOrDefault(x => x.ExpenditureType.Id == expenditureType.Id);
-                    if (budgetPlanExpType != null)
-                    {
-                        splitByTypeModel.ExpectedCost = budgetPlanExpType.ExpectedValue;
-                        splitByTypeDashboard.ExpectedTotalCost += splitByTypeModel.ExpectedCost.Value;
-                    }
-                }
-
-                splitByTypeDashboard.SplitByTypes.Add(splitByTypeModel);
-            }
-
-            return View("SplitByTypeDashboard", splitByTypeDashboard);
-        }
-
-        public JsonResult GetSplitByTypeOverLast12Months(int expenditureTypeId)
-        {
-            var oneYearInterval = new Interval(DateTime.Now.AddMonths(1), DateTimeUnitEnums.Months, 12);
-            var intervalsByMonth = oneYearInterval.GetIntervalsByMonth();
-
-            var account = _bankAccountService.GetById(CurrentAccount);
-
-            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() {
+            // Retrieve both current month expenses and over 12 months expenses
+            var expenses = _expenditureService.GetExpenditures(new ExpenditureSearch() {
                 AccountId = CurrentAccount,
-                StartDate = oneYearInterval.StartDate,
-                EndDate = oneYearInterval.EndDate,
                 ShowOnDashboard = true,
-                ExpenditureTypeId = expenditureTypeId });
+                StartDate = over12MonthsInterval.StartDate,
+                EndDate = currentMonthInterval.EndDate
+            });
 
-            var expenditureType = _expenditureTypeService.GetById(expenditureTypeId);
+            // Reset the start date to the first movement (First day of the same month)
+            over12MonthsInterval.StartDate = DateTimeHelper.GetFirstDayOfMonth(expenses.OrderBy(x => x.DateExpenditure).First().DateExpenditure);
 
-            var splitOverTime = new SplitByTypeOverTimeModel()
+            // Get Total Expenses By Month Over 12 Months + Current Month
+            var totalExpenses = new Dictionary<string, decimal>();
+            foreach (var month in over12MonthsNames)
             {
-                ExpenditureTypeName = expenditureType.Name,
-                GraphColor = expenditureType.GraphColor,
+                var interval = month.Value;
+                var expByMonth = expenses.Where(x => interval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost);
+                totalExpenses.Add(month.Key, expByMonth);
+            }
+            totalExpenses.Add(currentMonthName, expenses.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost));
+
+            // Count the number of months in the interval
+            var nbMonthInterval = over12MonthsInterval.Count(DateTimeUnitEnums.Months);
+
+            // Get current budget plan if it exists
+            var budgetPlan = _budgetPlanService.GetCurrent(CurrentAccount);
+            var budgetPlanByCategory = 
+                budgetPlan?.ExpenditureTypes.GroupBy(x => x.ExpenditureType.Id).ToDictionary(x => x.Key, y => y.Single().ExpectedValue) 
+                ?? categories.ToDictionary(x => x.Key, y => (decimal)0.00);
+
+            var expensesByCategories = expenses.GroupBy(x => x.TypeExpenditureId);           
+            var expensesByCategoryModel = new List<ExpenseSummaryByCategoryModel>();
+            foreach (var exp in expensesByCategories)
+            {
+                var category = categories[exp.Key];
+                var expensesCurrentMonth = exp.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).ToList();
+                var expensesPreviousMonth = exp.Where(x => previousInterval.IsBetween(x.DateExpenditure)).ToList();
+                var expensesOver12Months = exp.Where(x => over12MonthsInterval.IsBetween(x.DateExpenditure)).ToList();
+
+                // ReSharper disable once UseObjectOrCollectionInitializer
+                var model = new ExpenseSummaryByCategoryModel();
+                model.CurrencySymbol = account.CurrencySymbol;
+                model.CategoryId = category.Id;
+                model.CategoryName = category.Name;
+                model.CategoryColor = category.GraphColor;
+                model.CostCurrentMonth = expensesCurrentMonth.Sum(x => x.Cost);
+                model.CostPreviousMonth = expensesPreviousMonth.Sum(x => x.Cost);
+                model.CostPlannedMonthly = budgetPlanByCategory[exp.Key];
+                model.CostOver12Month = expensesOver12Months.Sum(x => x.Cost);
+                model.AverageCostOver12Months = model.CostOver12Month / nbMonthInterval;
+
+                // Retrieve the expenses per months (details and summary)
+                foreach (var month in over12MonthsNames)
+                {
+                    var interval = month.Value;
+                    var expByMonth = exp.Where(x => interval.IsBetween(x.DateExpenditure)).ToList();
+
+                    model.Expenses.Add(month.Key, expByMonth);
+                    model.ExpensesByMonth.Add(month.Key, new ExpenseSummaryByCategoryAndByMonthModel(expByMonth.Sum(x => x.Cost), totalExpenses[month.Key]));
+                }
+                model.Expenses.Add(currentMonthName, expensesCurrentMonth);
+                model.ExpensesByMonth.Add(currentMonthName, new ExpenseSummaryByCategoryAndByMonthModel(expensesCurrentMonth.Sum(x => x.Cost), totalExpenses[currentMonthName]));
+
+                expensesByCategoryModel.Add(model);
+            }
+
+            var totalExpensesOver12Months = expenses.Where(x => over12MonthsInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost);
+
+            var expenditureSummaryModel = new ExpenseSummaryModel()
+            {
+                ExpensesByCategory = expensesByCategoryModel.OrderByDescending(x => x.CostCurrentMonth).ToList(), 
+                LabelCurrentMonth = DateTimeHelper.GetMonthNameAndYear(today),
+                LabelPreviousMonth = DateTimeHelper.GetMonthNameAndYear(today.AddMonths(-1)), 
+                BudgetPlanName = budgetPlan != null ? budgetPlan.Name : string.Empty,
+                AccountName = account.Name,
+                DisplayDashboard = true,
                 CurrencySymbol = account.CurrencySymbol,
-                AverageCost = ComputeAverage(expenditures),
-                DifferenceCurrentPreviousCost = ComputeDifferenceCurrentPreviousCost(expenditures),
-                Values = new List<SplitByTypeOverTimeValueModel>()
+                HasBudget = budgetPlan != null,
+                TotalExpensesOver12Months = totalExpensesOver12Months
             };
 
-            foreach (var intervalByMonth in intervalsByMonth)
-            {
-                var expendituresInInterval = expenditures.Where(x => intervalByMonth.Value.IsBetween(x.DateExpenditure));
-                splitOverTime.Values.Add(new SplitByTypeOverTimeValueModel() {
-                    MonthName = intervalByMonth.Key,
-                    Value = expendituresInInterval.Sum(x => x.Cost) });
-            }
-
-            return Json(splitOverTime, JsonRequestBehavior.AllowGet);
-        }
-
-        private decimal ComputeDifferenceCurrentPreviousCost(IList<ExpenditureListModel> expenditures)
-        {
-            var currentMonthInterval = new Interval(DateTime.Now.AddMonths(1), DateTimeUnitEnums.Months, 1);
-            var currentMonthSum = expenditures.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost);
-            var previousMonthInterval = new Interval(DateTime.Now, DateTimeUnitEnums.Months, 1);
-            var previousMonthSum = expenditures.Where(x => previousMonthInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost);
-            return currentMonthSum - previousMonthSum;
-        }
-
-        private decimal ComputeAverage(IList<ExpenditureListModel> expenditures)
-        {
-            var previousMonth = DateTime.Now.AddMonths(-1);
-
-            var first = expenditures.OrderBy(x => x.DateExpenditure).FirstOrDefault();
-
-            if (first != null)
-            {
-                var interval = new Interval(first.DateExpenditure, previousMonth);
-
-                var nbMonths = interval.Count(DateTimeUnitEnums.Months);
-
-                if (nbMonths > 0)
-                {
-                    return expenditures.Where(x => interval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost) / nbMonths;
-                }
-            }
-
-            return 0;
+            return View("SplitByTypeDashboard", expenditureSummaryModel);
         }
     }
 }

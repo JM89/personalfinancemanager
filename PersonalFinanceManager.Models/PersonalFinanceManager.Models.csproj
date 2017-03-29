@@ -97,6 +97,9 @@
     <Compile Include="BudgetPlan\BudgetPlanEditModel.cs" />
     <Compile Include="BudgetPlan\BudgetPlanExpenditureType.cs" />
     <Compile Include="BudgetPlan\BudgetPlanListModel.cs" />
+    <Compile Include="Dashboard\ExpenseSummaryByCategoryAndByMonthModel.cs" />
+    <Compile Include="Dashboard\ExpenseSummaryModel.cs" />
+    <Compile Include="Dashboard\ExpenseSummaryByCategoryModel.cs" />
     <Compile Include="Dashboard\SplitByTypeOverTimeModel.cs" />
     <Compile Include="Dashboard\SplitByTypeModel.cs" />
     <Compile Include="Dashboard\SplitByTypeDashboardModel.cs" />

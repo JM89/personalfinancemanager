@@ -249,6 +249,21 @@
   <data name="ExpenditureTypeShowOnDashboard" xml:space="preserve">
     <value>Show On Dashboard</value>
   </data>
+  <data name="ExpenseSummaryByCategoryCategoryName" xml:space="preserve">
+    <value>Expenditure Type</value>
+  </data>
+  <data name="ExpenseSummaryByCategoryCostCurrentMonth" xml:space="preserve">
+    <value>Actual</value>
+  </data>
+  <data name="ExpenseSummaryByCategoryCostOver12Month" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="ExpenseSummaryByCategoryCostPlannedMonthly" xml:space="preserve">
+    <value>Expected</value>
+  </data>
+  <data name="ExpenseSummaryByCategoryCostPreviousMonth" xml:space="preserve">
+    <value>Previous</value>
+  </data>
   <data name="IncomeAccount" xml:space="preserve">
     <value>Account</value>
   </data>

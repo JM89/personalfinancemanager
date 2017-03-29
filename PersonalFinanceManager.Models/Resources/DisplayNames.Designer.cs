@@ -457,6 +457,51 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expenditure Type.
+        /// </summary>
+        internal static string ExpenseSummaryByCategoryCategoryName {
+            get {
+                return ResourceManager.GetString("ExpenseSummaryByCategoryCategoryName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actual.
+        /// </summary>
+        internal static string ExpenseSummaryByCategoryCostCurrentMonth {
+            get {
+                return ResourceManager.GetString("ExpenseSummaryByCategoryCostCurrentMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average.
+        /// </summary>
+        internal static string ExpenseSummaryByCategoryCostOver12Month {
+            get {
+                return ResourceManager.GetString("ExpenseSummaryByCategoryCostOver12Month", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expected.
+        /// </summary>
+        internal static string ExpenseSummaryByCategoryCostPlannedMonthly {
+            get {
+                return ResourceManager.GetString("ExpenseSummaryByCategoryCostPlannedMonthly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous.
+        /// </summary>
+        internal static string ExpenseSummaryByCategoryCostPreviousMonth {
+            get {
+                return ResourceManager.GetString("ExpenseSummaryByCategoryCostPreviousMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account.
         /// </summary>
         internal static string IncomeAccount {

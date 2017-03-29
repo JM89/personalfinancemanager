@@ -1,127 +1,95 @@
-﻿function updatePieChart(chartId, model, totalSum, propertyName, name, description) {
-
-    $("#" + chartId + "-title").text(name);
-    $("#" + chartId + "-desc").text(description);
+﻿function updatePieChartExpensesOver12Months(expenses, totalSum, currencySymbol) {
+    $("#expensesOver12months-title").text("Over 12 Months");
 
     var data = [];
-
-    $.each(model.SplitByTypes, function (index, type) {
+    $.each(expenses, function (index, exp) {
         data.push({
-            label: type.ExpenditureTypeName,
-            value: type[propertyName],
-            color: "#" + type.GraphColor
+                label: exp.CategoryName,
+                value: exp.CostOver12Month,
+                color: "#" + exp.CategoryColor
+            });
         });
-    });
 
     var options = {
         tooltipFontSize: 10,
-        tooltipTemplate: " <%if (label) {%><%= label %>: <%}%> <%= parseFloat(Math.round((value / " + totalSum + ") * 100)).toFixed(0) %>% (" + model.CurrencySymbol + "<%= parseFloat(value).toFixed(2) %>)"
+        tooltipTemplate: " <%if (label) {%><%= label %>: <%}%> <%= parseFloat(Math.round((value / " + totalSum + ") * 100)).toFixed(0) %>% (" + currencySymbol + "<%= parseFloat(value).toFixed(2) %>)"
     }
 
-    var ctx = document.getElementById(chartId).getContext("2d");
-    var chart = new Chart(ctx).Pie(data, options);
+    var canvas = document.getElementById("expensesOver12months-canvas"); 
+    var ctx = canvas.getContext('2d');
+    var pieChart = new Chart(ctx).Pie(data, options);
+
+    canvas.onclick = function () {
+        if (pieChart.activeElements[0]) {
+            var categoryNames = $("#categoryNames").data('categorynames');
+            var selectedCategoryName = pieChart.activeElements[0].label;
+            var table = $('#split-table').DataTable();
+            table.page.jumpToData(selectedCategoryName, 1);
+            var categoryId = categoryNames[selectedCategoryName];
+            var category = $("#row-" + categoryId).data("category");
+            if (category) {
+                $("#selectedCategoryId").val(category.CategoryId);
+                showExpenditureTypeOverTime(category);
+            }
+        }
+    };
 }
 
-function updateRadarChart(model)
-{
-    var chartId = "top5";
+function showExpenditureTypeOverTime(category) {
 
-    $("#" + chartId + "-title").text("Top 5");
-    $("#" + chartId + "-desc").text(model.CurrentMonthName);
+    $("tr[id^='row-']").css('font-weight', 'normal');
+    $("tr[id^='row-']").css('color', 'lightgrey');
+    $("tr[id='row-" + category.CategoryId + "']").css('font-weight', 'bolder');
+    $("tr[id='row-" + category.CategoryId + "']").css('color', 'black');
 
-    var colorExpected = "rgba(128, 128, 128, 0.5)";
-    var colorActual = "rgba(38, 94, 217, 0.5)";
-
-    var nbItem = 0;
+    $("#typeOverTimeDiv").hide();
+    $("#detailExpensesContainer").hide();
+    cleanGraph("typeOverTime", 600, 300);
 
     var data = {
         labels: [],
         datasets: [
+            //{
+            //    fillColor: getRGBA("D3D3D3", 0.5),
+            //    strokeColor: getRGBA("D3D3D3", 0.8),
+            //    highlightFill: getRGBA("D3D3D3", 0.75),
+            //    highlightStroke: getRGBA("D3D3D3", 1),
+            //    data: []
+            //},
             {
-                pointColor: colorActual,
-                pointStrokeColor: colorActual,
-                fillColor: colorActual,
-                fillStrokeColor: colorActual,
-                data: []
-            },
-            {
-                pointColor: colorExpected,
-                pointStrokeColor: colorExpected,
-                fillColor: colorExpected,
-                fillStrokeColor: colorExpected,
+                fillColor: getRGBA(category.CategoryColor, 0.5),
+                strokeColor: getRGBA(category.CategoryColor, 0.8),
+                highlightFill: getRGBA(category.CategoryColor, 0.75),
+                highlightStroke: getRGBA(category.CategoryColor, 1),
                 data: []
             }
         ]
-    }
-    $.each(model.SplitByTypes, function (index, type) {
-        if (nbItem < 5)
-        {
-            data.labels.push(type.ExpenditureTypeName);
-            data.datasets[0].data.push(type.CurrentMonthCost);
-            if (type.ExpectedCost)
-            {
-                data.datasets[1].data.push(type.ExpectedCost);
-            }
-        }
-        nbItem++;
+    };
+
+    $.each(category.ExpensesByMonth, function (index, value) {
+        data.labels.push(index);
+        //data.datasets[0].data.push(value.TotalExpenses);
+        data.datasets[0].data.push(value.CategoryExpenses);
     });
 
-    var ctx = document.getElementById(chartId).getContext("2d");
-    var chart = new Chart(ctx).Radar(data);
-}
+    $("#typeOverTimeDiv").show();
 
-function showExpenditureTypeOverTime(expenditureTypeId) {
+    var canvas = document.getElementById("typeOverTime");
+    var ctx = canvas.getContext("2d");
+    var typeOverTimeChart = new Chart(ctx).Bar(data);
 
-    var url = "/Dashboard/GetSplitByTypeOverLast12Months?expenditureTypeId=" + expenditureTypeId;
+    canvas.onclick = function (evt) {
+        if (typeOverTimeChart.activeElements[0]) {
+            var month = typeOverTimeChart.activeElements[0].label;
+            var categoryId = $("#selectedCategoryId").val();
+            var category = $("#row-" + categoryId).data("category");
+            showDetailExpenses(category, month);
+        }
+    };
 
-    $("tr[id^='row-']").css('font-weight', 'normal');
-    $("tr[id^='row-']").css('color', 'lightgrey');
-    $("tr[id='row-" + expenditureTypeId + "']").css('font-weight', 'bolder');
-    $("tr[id='row-" + expenditureTypeId + "']").css('color', 'black');
+    scrollToAnchor("typeOverTimeAnchor");
 
-    $.get(url)
-        .done(function (result) {
-
-            $("#typeOverTimeDiv").hide();
-            cleanGraph("typeOverTime", 800, 300);
-
-            var data = {
-                labels: [],
-                datasets: [
-                    {
-                        fillColor: getRGBA(result.GraphColor, 0.5),
-                        strokeColor: getRGBA(result.GraphColor, 0.8),
-                        highlightFill: getRGBA(result.GraphColor, 0.75),
-                        highlightStroke: getRGBA(result.GraphColor, 1),
-                        data: []
-                    }
-                ]
-            };
-
-            $.each(result.Values, function (index, value) {
-                data.labels.push(value.MonthName);
-                data.datasets[0].data.push(value.Value);
-            });
-
-            $("#typeOverTimeDiv").show();
-
-            var ctx = document.getElementById("typeOverTime").getContext("2d");
-            var typeOverTimeChart = new Chart(ctx).Bar(data);
-
-            scrollToAnchor("typeOverTimeAnchor");
-
-            $("#typeOverTime-title").text("Expenditures for '" + result.ExpenditureTypeName + "' over last 12 months");
-
-            $("#typeOverTime-average").text(result.DisplayAverageCost);
-            $("#typeOverTime-average").css("color", getRGBA(result.GraphColor, 1));
-
-            $("#typeOverTime-differencecurrentpreviouscost").text(result.DisplayDifferenceCurrentPreviousCost);
-            $("#typeOverTime-differencecurrentpreviouscost").css("color", getRGBA(result.GraphColor, 1));
-           
-        })
-        .fail(function (error) {
-            console.error("Something is wrong");
-        });
+    $("#typeOverTime-title").text("Expenses for '" + category.CategoryName + "' over last 12 months");
 }
 
 function cleanGraph(canvasName, width, height) {
@@ -132,4 +100,42 @@ function cleanGraph(canvasName, width, height) {
 function scrollToAnchor(aid) {
     var aTag = $("a[name='" + aid + "']");
     $('html,body').animate({ scrollTop: aTag.offset().top }, 'slow');
+}
+
+function showDetailExpenses(category, month) {
+
+    if ($.fn.DataTable.isDataTable('#detailExpensesMonthly-table')) {
+        var table = $('#detailExpensesMonthly-table').DataTable();
+        table.destroy();
+    }
+    $("#detailExpensesMonthly-table tbody").empty();
+
+    $.each(category.Expenses[month], function (index, exp) {
+        var rowTemplate = $("#rowTemplate").html();
+        var row = rowTemplate.replace("${DisplayedDateExpenditure}", exp.DisplayedDateExpenditure);
+        row = row.replace("${DisplayedCost}", exp.DisplayedCost);
+        row = row.replace("${Description}", exp.Description);
+        $("#detailExpensesMonthly-table tbody").append(row);
+    });
+
+    $('#detailExpensesMonthly-table').DataTable({
+        "iDisplayLength": 6,
+        "bLengthChange": false,
+        "bFilter": false
+    });
+
+    var title = "Details for '" + category.CategoryName + "' for '" + month + "'";
+    $("#detailExpensesMonthly-title").text(title);
+    $("#detailExpensesContainer").show();
+}
+
+function closeTypeOverTimeDiv() {
+    $("#typeOverTimeDiv").hide();
+    $("tr[id^='row-']").css('font-weight', 'normal');
+    $("tr[id^='row-']").css('color', 'black');
+    $("#detailExpensesContainer").hide();
+}
+
+function closeDetailExpensesContainer() {
+    $("#detailExpensesContainer").hide();
 }

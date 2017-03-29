@@ -21,5 +21,17 @@ namespace PersonalFinanceManager.Models.Helpers
             }
             return string.Empty;
         }
+
+        public static string GetSignedCurrency(decimal value, string currency)
+        {
+            var absoluteValue = value;
+            var sign = "+";
+            if (value < 0)
+            { 
+                absoluteValue = Math.Abs(value);
+                sign = "-";
+            }
+            return sign + GetDisplayDecimalValue(absoluteValue, currency);
+        }
     }
 }
