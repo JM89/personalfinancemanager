@@ -1,11 +1,11 @@
-﻿using PersonalFinanceManager.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using PersonalFinanceManager.Utils.Utils;
 
-namespace PersonalFinanceManager.Helpers
+namespace PersonalFinanceManager.Utils.Helpers
 {
     public class Interval
     {
@@ -47,7 +47,7 @@ namespace PersonalFinanceManager.Helpers
             while (iterator <= EndDate)
             {
                 var nextMonth = iterator.AddMonths(1);
-                names.Add(DateTimeHelper.GetMonthNameAndYear(iterator), new Interval(iterator, nextMonth.AddDays(-1)));
+                names.Add(DateTimeFormatHelper.GetMonthNameAndYear(iterator), new Interval(iterator, nextMonth.AddDays(-1)));
                 iterator = nextMonth;
             }
             return names;
@@ -74,7 +74,7 @@ namespace PersonalFinanceManager.Helpers
 
         public string GetSingleMonthName()
         {
-            return DateTimeHelper.GetMonthNameAndYear(StartDate);
+            return DateTimeFormatHelper.GetMonthNameAndYear(StartDate);
         }
 
         public bool IsBetween(DateTime date)

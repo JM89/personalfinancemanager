@@ -1,5 +1,83 @@
-﻿function updatePieChartExpensesOver12Months(expenses, totalSum, currencySymbol) {
-    $("#expensesOver12months-title").text("Over 12 Months");
+﻿function updateLineChartActualVsExpectedExpensesOver12Months(detailedExpensesOver12Months) {
+    $("#actualVsExpectedExpensesOver12months-title").text("Actual Vs Expected Expenses - Over 12 Months");
+
+    var data = {
+        labels: [],
+        datasets: [
+            {
+                label: "Expected",
+                fillColor: 'rgba(220, 220, 220,0.5)',
+                strokeColor: "rgba(220, 220, 220,0.7)",
+                pointColor: "rgba(220, 220, 220,1)",
+                pointStrokeColor: "#fff",
+                data: []
+            },
+            {
+                label: "Actual",
+                fillColor: 'rgba(248, 172, 89, 0.5)',
+                strokeColor: "rgba(248, 172, 89, 0.7)",
+                pointColor: "rgba(248, 172, 89, 1)",
+                pointStrokeColor: "#fff",
+                data: []
+            }
+        ]
+    };
+
+    $.each(detailedExpensesOver12Months, function (index, value) {
+        data.labels.push(index);
+        data.datasets[0].data.push(value.ExpenseExpectedValue);
+        data.datasets[1].data.push(value.ExpenseValue);
+    });
+
+    var canvas = document.getElementById("actualVsExpectedExpensesOver12months-canvas");
+    var ctx = canvas.getContext("2d");
+    var chart = new Chart(ctx).Line(data);
+}
+
+function updateBarChartIncomesOutcomesOver6Months(detailedMovementsOver6Months) {
+    $("#incomesOutcomesOver6months-title").text("Incomes Vs Outcomes Vs Savings - Over 6 Months");
+
+    var data = {
+        labels: [],
+        datasets: [
+            {
+                fillColor: "rgba(26, 179, 148, 0.5)",
+                strokeColor: "rgba(26, 179, 148, 0.8)",
+                highlightFill: "rgba(26, 179, 148, 0.75)",
+                highlightStroke: "rgba(26, 179, 148, 1)",
+                data: []
+            },
+            {
+                fillColor: "rgba(248, 172, 89, 0.5)",
+                strokeColor: "rgba(248, 172, 89, 0.8)",
+                highlightFill: "rgba(248, 172, 89, 0.75)",
+                highlightStroke: "rgba(248, 172, 89, 1)",
+                data: []
+            },
+            {
+                fillColor: "rgba(237, 85, 101, 0.5)",
+                strokeColor: "rgba(237, 85, 101, 0.8)",
+                highlightFill: "rgba(237, 85, 101, 0.75)",
+                highlightStroke: "rgba(237, 85, 101, 1)",
+                data: []
+            }
+        ]
+    };
+
+    $.each(detailedMovementsOver6Months, function (index, value) {
+        data.labels.push(index);
+        data.datasets[0].data.push(value.IncomeValue);
+        data.datasets[1].data.push(value.ExpenseValue);
+        data.datasets[2].data.push(value.SavingValue);
+    });
+
+    var canvas = document.getElementById("incomesOutcomesOver6months-canvas");
+    var ctx = canvas.getContext("2d");
+    var chart = new Chart(ctx).Bar(data);
+}
+
+function updatePieChartExpensesOver12Months(expenses, totalSum, currencySymbol) {
+    $("#expensesOver12months-title").text("Expenses By Category - Over 12 Months");
 
     var data = [];
     $.each(expenses, function (index, exp) {

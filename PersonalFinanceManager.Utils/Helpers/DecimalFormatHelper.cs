@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.Models.Helpers
+namespace PersonalFinanceManager.Utils.Helpers
 {
     public static class DecimalFormatHelper
     {

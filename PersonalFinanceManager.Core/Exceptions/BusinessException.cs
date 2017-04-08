@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.Utils.Exceptions
+namespace PersonalFinanceManager.Core.Exceptions
 {
     public class BusinessException: Exception
     {

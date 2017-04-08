@@ -1,9 +1,9 @@
-﻿using PersonalFinanceManager.Utils.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using PersonalFinanceManager.Core.Exceptions;
 
 namespace PersonalFinanceManager.Helpers
 {

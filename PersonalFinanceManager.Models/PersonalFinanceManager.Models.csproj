@@ -98,14 +98,13 @@
     <Compile Include="BudgetPlan\BudgetPlanExpenditureType.cs" />
     <Compile Include="BudgetPlan\BudgetPlanListModel.cs" />
     <Compile Include="Dashboard\ExpenseSummaryByCategoryAndByMonthModel.cs" />
+    <Compile Include="Dashboard\ExpenseSummaryByMonthModel.cs" />
     <Compile Include="Dashboard\ExpenseSummaryModel.cs" />
     <Compile Include="Dashboard\ExpenseSummaryByCategoryModel.cs" />
-    <Compile Include="Dashboard\SplitByTypeOverTimeModel.cs" />
-    <Compile Include="Dashboard\SplitByTypeModel.cs" />
-    <Compile Include="Dashboard\SplitByTypeDashboardModel.cs" />
-    <Compile Include="Dashboard\SplitByTypeOverTimeValueModel.cs" />
-    <Compile Include="Helpers\DateTimeFormatHelper.cs" />
     <Compile Include="FrequenceOption\FrequenceOptionListModel.cs" />
+    <Compile Include="Helpers\Chart\ChartData.cs" />
+    <Compile Include="Helpers\Chart\ChartDataset.cs" />
+    <Compile Include="Helpers\Chart\ChartValue.cs" />
     <Compile Include="TaxType\TaxTypeListModel.cs" />
     <Compile Include="Tax\TaxEditModel.cs" />
     <Compile Include="Tax\TaxListModel.cs" />
@@ -116,9 +115,6 @@
     <Compile Include="Salary\SalaryListModel.cs" />
     <Compile Include="Saving\SavingEditModel.cs" />
     <Compile Include="Saving\SavingListModel.cs" />
-    <Compile Include="Helpers\Chart\ChartValue.cs" />
-    <Compile Include="Helpers\Chart\ChartData.cs" />
-    <Compile Include="Helpers\Chart\ChartDataset.cs" />
     <Compile Include="Country\CountryEditModel.cs" />
     <Compile Include="Country\CountryListModel.cs" />
     <Compile Include="Bank\BankListModel.cs" />
@@ -129,7 +125,6 @@
     <Compile Include="ExpenditureType\ExpenditureTypeListModel.cs" />
     <Compile Include="Expenditure\ExpenditureEditModel.cs" />
     <Compile Include="Expenditure\ExpenditureListModel.cs" />
-    <Compile Include="Helpers\DecimalFormatHelper.cs" />
     <Compile Include="Home\ConversionRateModel.cs" />
     <Compile Include="Home\HomePageModel.cs" />
     <Compile Include="Home\NumberOfMvtPerPaymentMethodModel.cs" />
@@ -156,6 +151,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DisplayNames.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PersonalFinanceManager.Utils\PersonalFinanceManager.Utils.csproj">
+      <Project>{acc1968a-1d7f-4662-acb9-1490088c93bc}</Project>
+      <Name>PersonalFinanceManager.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

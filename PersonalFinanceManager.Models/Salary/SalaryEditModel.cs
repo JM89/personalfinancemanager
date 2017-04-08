@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
 using PersonalFinanceManager.Models.Helpers;
 using PersonalFinanceManager.Models.Resources;
+using PersonalFinanceManager.Utils.Utils;
 
 namespace PersonalFinanceManager.Models.Salary
 {

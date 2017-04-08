@@ -10,7 +10,7 @@ using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using System.IO;
 using PersonalFinanceManager.DataAccess;
-using PersonalFinanceManager.Utils.Exceptions;
+using PersonalFinanceManager.Core.Exceptions;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Services.Core;
 using PersonalFinanceManager.DataAccess.Repositories.Interfaces;

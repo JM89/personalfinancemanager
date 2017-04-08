@@ -2,6 +2,8 @@
 using PersonalFinanceManager.Models.Helpers;
 using PersonalFinanceManager.Models.Resources;
 using PersonalFinanceManager.Models.Shared;
+using PersonalFinanceManager.Utils.Helpers;
+using PersonalFinanceManager.Utils.Utils;
 
 namespace PersonalFinanceManager.Models.Tax
 {

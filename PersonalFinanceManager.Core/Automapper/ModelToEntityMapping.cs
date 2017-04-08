@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.Utils.Automapper
+namespace PersonalFinanceManager.Core.Automapper
 {
     public class ModelToEntityMapping : Profile
     {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PersonalFinanceManager.Utils.Exceptions {
+namespace PersonalFinanceManager.Core.Exceptions {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace PersonalFinanceManager.Utils.Exceptions {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PersonalFinanceManager.Utils.Exceptions.BusinessExceptionMessage", typeof(BusinessExceptionMessage).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PersonalFinanceManager.Core.Exceptions.BusinessExceptionMessage", typeof(BusinessExceptionMessage).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

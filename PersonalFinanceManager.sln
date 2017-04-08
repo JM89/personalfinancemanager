@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 14.0.23107.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalFinanceManager", "PersonalFinanceManager\PersonalFinanceManager.csproj", "{057DD433-376F-4502-A222-919AA170579B}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalFinanceManager.Services", "PersonalFinanceManager.Services\PersonalFinanceManager.Services.csproj", "{C4710950-3074-4CB2-BAB9-1866183F399F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalFinanceManager.DataAccess", "PersonalFinanceManager.DataAccess\PersonalFinanceManager.DataAccess.csproj", "{9312252F-173C-4563-B24E-AAD56C696784}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalFinanceManager.Core", "PersonalFinanceManager.Core\PersonalFinanceManager.Core.csproj", "{CC71140C-A248-41AC-AAD9-593BB10F7CEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{9312252F-173C-4563-B24E-AAD56C696784}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9312252F-173C-4563-B24E-AAD56C696784}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9312252F-173C-4563-B24E-AAD56C696784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC71140C-A248-41AC-AAD9-593BB10F7CEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC71140C-A248-41AC-AAD9-593BB10F7CEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC71140C-A248-41AC-AAD9-593BB10F7CEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC71140C-A248-41AC-AAD9-593BB10F7CEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

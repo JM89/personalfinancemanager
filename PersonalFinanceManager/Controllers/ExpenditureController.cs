@@ -24,15 +24,17 @@ namespace PersonalFinanceManager.Controllers
         private readonly IBankAccountService _bankAccountService;
         private readonly IPaymentMethodService _paymentMethodService;
         private readonly IAtmWithdrawService _atmWithdrawService;
+        private readonly IBudgetPlanService _budgetPlanService;
 
         public ExpenditureController(IExpenditureService expenditureService, IExpenditureTypeService expenditureTypeService, IBankAccountService bankAccountService,
-            IPaymentMethodService paymentMethodService, IAtmWithdrawService atmWithdrawService) : base(bankAccountService)
+            IPaymentMethodService paymentMethodService, IAtmWithdrawService atmWithdrawService, IBudgetPlanService budgetPlanService) : base(bankAccountService)
         {
             this._bankAccountService = bankAccountService;
             this._expenditureService = expenditureService;
             this._expenditureTypeService = expenditureTypeService;
             this._paymentMethodService = paymentMethodService;
             this._atmWithdrawService = atmWithdrawService;
+            this._budgetPlanService = budgetPlanService;
         }
 
         // GET: ExpenditureModels

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PersonalFinanceManager.Utils.Helpers;
 
 namespace PersonalFinanceManager.Models.Account
 {
@@ -33,6 +34,9 @@ namespace PersonalFinanceManager.Models.Account
         public decimal InitialBalance { get; set; }
 
         public decimal CurrentBalance { get; set; }
+
+        public string DisplayCurrentBalance
+            => DecimalFormatHelper.GetDisplayDecimalValue(CurrentBalance, CurrencySymbol);
 
         [LocalizedDisplayName("AccountIsSavingAccount")]
         public bool IsSavingAccount { get; set; }

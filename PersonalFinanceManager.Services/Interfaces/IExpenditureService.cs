@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using PersonalFinanceManager.Models.BudgetPlan;
+using PersonalFinanceManager.Models.Dashboard;
 using PersonalFinanceManager.Models.Expenditure;
 using PersonalFinanceManager.Services.Core;
 using PersonalFinanceManager.Services.RequestObjects;
@@ -18,5 +20,7 @@ namespace PersonalFinanceManager.Services.Interfaces
         void ChangeDebitStatus(int id, bool debitStatus);
 
         IList<ExpenditureListModel> GetExpenditures(ExpenditureSearch search);
+
+        ExpenseSummaryModel GetExpenseSummaryByCategory(int accountId, BudgetPlanEditModel budgetPlan);
     }
 }

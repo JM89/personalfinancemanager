@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.Models.Helpers
+namespace PersonalFinanceManager.Utils.Utils
 {
     public static class DateTimeFormatHelper
     {
@@ -20,6 +21,16 @@ namespace PersonalFinanceManager.Models.Helpers
                 return GetDisplayDateValue(date.Value);
             }
             return string.Empty;
+        }
+
+        public static string GetMonthNameAndYear(DateTime date)
+        {
+            return CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(date.Month) + " " + date.ToString("yy");
+        }
+
+        public static DateTime GetFirstDayOfMonth(DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, 1);
         }
     }
 }

@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.Bank;
 using System.IO;
-using PersonalFinanceManager.Utils.Exceptions;
 using PersonalFinanceManager.Helpers;
 using System.Collections.Generic;
 using PersonalFinanceManager.Utils;

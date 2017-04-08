@@ -4,12 +4,12 @@ using PersonalFinanceManager.DataAccess;
 using PersonalFinanceManager.Models.Account;
 using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Services.Interfaces;
-using PersonalFinanceManager.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PersonalFinanceManager.Core.Exceptions;
 
 namespace PersonalFinanceManager.Controllers
 {

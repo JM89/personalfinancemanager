@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ACC1968A-1D7F-4662-ACB9-1490088C93BC}</ProjectGuid>
+    <ProjectGuid>{CC71140C-A248-41AC-AAD9-593BB10F7CEB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PersonalFinanceManager.Utils</RootNamespace>
-    <AssemblyName>PersonalFinanceManager.Utils</AssemblyName>
+    <RootNamespace>PersonalFinanceManager.Core</RootNamespace>
+    <AssemblyName>PersonalFinanceManager.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,8 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,18 +44,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config.cs" />
-    <Compile Include="Helpers\DateTimeFormatHelper.cs" />
-    <Compile Include="Helpers\DateTimeUnitEnums.cs" />
-    <Compile Include="Helpers\DecimalFormatHelper.cs" />
-    <Compile Include="Helpers\Interval.cs" />
+    <Compile Include="Automapper\EntityToEntityMapping.cs" />
+    <Compile Include="Automapper\EntityToModelMapping.cs" />
+    <Compile Include="Automapper\ModelToEntityMapping.cs" />
+    <Compile Include="Exceptions\BusinessException.cs" />
+    <Compile Include="Exceptions\BusinessExceptionMessage.Designer.cs">
+      <DependentUpon>BusinessExceptionMessage.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Exceptions\BusinessExceptionMessage.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BusinessExceptionMessage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PersonalFinanceManager.Entities\PersonalFinanceManager.Entities.csproj">
+      <Project>{92d1d39b-f7f1-4208-9da0-6cce314b12a6}</Project>
+      <Name>PersonalFinanceManager.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PersonalFinanceManager.Models\PersonalFinanceManager.Models.csproj">
+      <Project>{8ce35126-bb04-4d14-b968-62d99c6ad2ff}</Project>
+      <Name>PersonalFinanceManager.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

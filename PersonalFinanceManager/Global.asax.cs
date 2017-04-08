@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using PersonalFinanceManager.DataAccess;
-using PersonalFinanceManager.Utils.Automapper;
 using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using PersonalFinanceManager.Core.Automapper;
 
 namespace PersonalFinanceManager
 {

@@ -11,12 +11,9 @@ namespace PersonalFinanceManager.Models.Dashboard
     {
         public decimal CategoryExpenses { get; set; }
 
-        public decimal TotalExpenses { get; set; }
-
-        public ExpenseSummaryByCategoryAndByMonthModel(decimal categoryExpenses, decimal totalExpenses)
+        public ExpenseSummaryByCategoryAndByMonthModel(decimal categoryExpenses)
         {
             this.CategoryExpenses = categoryExpenses;
-            this.TotalExpenses = totalExpenses;
         }
     }
 }

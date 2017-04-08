@@ -203,6 +203,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\Startup.Ninject.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\TaxTypeController.cs" />
     <Compile Include="Controllers\TaxController.cs" />
     <Compile Include="Controllers\PensionController.cs" />
@@ -217,7 +218,6 @@
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BankAccountController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\ExpenditureController.cs" />
     <Compile Include="Controllers\ExpenditureTypeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -231,9 +231,6 @@
     <Compile Include="Helpers\FileUpload.cs" />
     <Compile Include="Helpers\Filters\UnitOrWorkAttribute.cs" />
     <Compile Include="Helpers\MvcHtmlExtensions.cs" />
-    <Compile Include="Helpers\DateTimeUnitEnums.cs" />
-    <Compile Include="Helpers\DateTimeHelper.cs" />
-    <Compile Include="Helpers\Interval.cs" />
     <Compile Include="Helpers\JsonError.cs" />
     <Compile Include="Helpers\ModelStateJsonConvertor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -270,12 +267,14 @@
     <Content Include="Resources\bluearrow.png" />
     <Content Include="Resources\dashboard-addExpenditures.png" />
     <Content Include="Resources\dashboard-planBudget.png" />
+    <Content Include="Resources\dashboard-savings.png" />
     <Content Include="Resources\dashboard-visualizeExpenditures.png" />
     <Content Include="Resources\greenarrow.png" />
     <Content Include="Resources\pfm_logo.png" />
     <Content Include="Resources\redarrow.png" />
     <Content Include="Resources\theme\SmartExpend.png" />
     <Content Include="Resources\theme\SmartExpend_Min.png" />
+    <Content Include="Resources\wallet.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="App_Code\CustomHelpers.cshtml" />
@@ -392,7 +391,7 @@
     <Content Include="Views\UserProfile\Create.cshtml" />
     <Content Include="Views\UserProfile\Edit.cshtml" />
     <Content Include="Views\UserProfile\View.cshtml" />
-    <Content Include="Views\Dashboard\SplitByTypeDashboard.cshtml" />
+    <Content Include="Views\Dashboard\MovementDashboard.cshtml" />
     <Content Include="Views\Saving\Create.cshtml" />
     <Content Include="Views\Saving\Delete.cshtml" />
     <Content Include="Views\Saving\Edit.cshtml" />
@@ -428,6 +427,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PersonalFinanceManager.Core\PersonalFinanceManager.Core.csproj">
+      <Project>{cc71140c-a248-41ac-aad9-593bb10f7ceb}</Project>
+      <Name>PersonalFinanceManager.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PersonalFinanceManager.DataAccess\PersonalFinanceManager.DataAccess.csproj">
       <Project>{9312252f-173c-4563-b24e-aad56c696784}</Project>
       <Name>PersonalFinanceManager.DataAccess</Name>
