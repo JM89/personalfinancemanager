@@ -32,31 +32,17 @@ namespace PersonalFinanceManager.Models.BudgetPlan
 
         public decimal ExpenditurePreviousMonthValue { get; set; }
 
-        public string DisplayedExpenditurePreviousMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.ExpenditurePreviousMonthValue, this.CurrencySymbol);
-
         public decimal? ExpenditureCurrentBudgetPlanValue { get; set; }
-
-        public string DisplayedExpenditureCurrentBudgetPlanValue => DecimalFormatHelper.GetDisplayDecimalValue(this.ExpenditureCurrentBudgetPlanValue, this.CurrencySymbol);
 
         public decimal ExpenditureAverageMonthValue { get; set; }
 
-        public string DisplayedExpenditureAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.ExpenditureAverageMonthValue, this.CurrencySymbol);
-
         public decimal IncomePreviousMonthValue { get; set; }
-
-        public string DisplayedIncomePreviousMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.IncomePreviousMonthValue, this.CurrencySymbol);
 
         public decimal IncomeAverageMonthValue { get; set; }
 
-        public string DisplayedIncomeAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.IncomeAverageMonthValue, this.CurrencySymbol);
+        public decimal TotalPreviousMonthValue => this.IncomePreviousMonthValue - this.ExpenditurePreviousMonthValue;
 
-        public decimal TotalPreviousMonthValue { get; set; }
-
-        public string DisplayedTotalPreviousMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.TotalPreviousMonthValue, this.CurrencySymbol);
-
-        public decimal TotalAverageMonthValue { get; set; }
-
-        public string DisplayedTotalAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.TotalAverageMonthValue, this.CurrencySymbol);
+        public decimal TotalAverageMonthValue => this.IncomeAverageMonthValue - this.ExpenditureAverageMonthValue;
 
         public bool HasCurrentBudgetPlan { get; set; }
 
@@ -69,5 +55,19 @@ namespace PersonalFinanceManager.Models.BudgetPlan
 
         [LocalizedDisplayName("BudgetPlanEndDate")]
         public string DisplayedEndDate => DateTimeFormatHelper.GetDisplayDateValue(this.EndDate);
+        
+        public string DisplayedExpenditureCurrentBudgetPlanValue => DecimalFormatHelper.GetDisplayDecimalValue(this.ExpenditureCurrentBudgetPlanValue, this.CurrencySymbol);
+
+        public string DisplayedExpenditurePreviousMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.ExpenditurePreviousMonthValue, this.CurrencySymbol);
+
+        public string DisplayedExpenditureAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.ExpenditureAverageMonthValue, this.CurrencySymbol);
+
+        public string DisplayedIncomePreviousMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.IncomePreviousMonthValue, this.CurrencySymbol);
+
+        public string DisplayedIncomeAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.IncomeAverageMonthValue, this.CurrencySymbol);
+
+        public string DisplayedTotalPreviousMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.TotalPreviousMonthValue, this.CurrencySymbol);
+
+        public string DisplayedTotalAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.TotalAverageMonthValue, this.CurrencySymbol);
     }
 }

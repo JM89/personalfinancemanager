@@ -30,5 +30,7 @@ namespace PersonalFinanceManager.Services.Interfaces
         void StartBudgetPlan(int value, int accountId);
 
         void StopBudgetPlan(int value);
+
+        BudgetPlanEditModel BuildBudgetPlan(int accountId, int? budgetPlanId = null);
     }
 }

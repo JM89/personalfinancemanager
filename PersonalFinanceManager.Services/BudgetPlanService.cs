@@ -14,6 +14,8 @@ using PersonalFinanceManager.Models.Dashboard;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Services.RequestObjects;
 using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
+using PersonalFinanceManager.Entities.SearchParameters;
+using PersonalFinanceManager.Utils.Helpers;
 
 namespace PersonalFinanceManager.Services
 {
@@ -21,11 +23,20 @@ namespace PersonalFinanceManager.Services
     {
         private readonly IBudgetPlanRepository _budgetPlanRepository;
         private readonly IBudgetByExpenditureTypeRepository _budgetByExpenditureTypeRepository;
+        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IExpenditureRepository _expenditureRepository;
+        private readonly IExpenditureTypeRepository _expenditureTypeRepository;
+        private readonly IIncomeRepository _incomeRepository;
 
-        public BudgetPlanService(IBudgetPlanRepository budgetPlanRepository, IBudgetByExpenditureTypeRepository budgetByExpenditureTypeRepository)
+        public BudgetPlanService(IBudgetPlanRepository budgetPlanRepository, IBudgetByExpenditureTypeRepository budgetByExpenditureTypeRepository, IBankAccountRepository bankAccountRepository,
+            IExpenditureRepository expenditureRepository, IExpenditureTypeRepository expenditureTypeRepository, IIncomeRepository incomeRepository)
         {
             this._budgetPlanRepository = budgetPlanRepository;
             this._budgetByExpenditureTypeRepository = budgetByExpenditureTypeRepository;
+            this._bankAccountRepository = bankAccountRepository;
+            this._expenditureRepository = expenditureRepository;
+            this._expenditureTypeRepository = expenditureTypeRepository;
+            this._incomeRepository = incomeRepository;
         }
 
         /// <summary>
@@ -122,9 +133,6 @@ namespace PersonalFinanceManager.Services
                   .Include(x => x.ExpenditureType)
                   .Where(x => x.BudgetPlanId == budgetPlanEditModel.Id);
 
-            //var existingIds = existingBudgetPlanExpenditures.Select(x => x.ExpenditureType.Id).ToList();
-
-            var plannedExpenditures = new List<BudgetByExpenditureTypeModel>();
             foreach (var budgetExpenditureType in budgetPlanEditModel.ExpenditureTypes)
             {
                 var existingBudgetExpenditureType = existingBudgetPlanExpenditures.SingleOrDefault(x => x.ExpenditureType.Id == budgetExpenditureType.ExpenditureType.Id);
@@ -145,21 +153,15 @@ namespace PersonalFinanceManager.Services
                 {
                     // Update
                     existingBudgetExpenditureType.Budget = budgetExpenditureType.ExpectedValue;
+                    _budgetByExpenditureTypeRepository.Update(existingBudgetExpenditureType);
                 }
-                //existingIds.Remove(budgetExpenditureType.ExpenditureType.Id);
             }
-
-            // Disable the Deletion of expenditures if used in budget
-            //foreach (var deletedExpenditureId in existingIds)
-            //{
-            //    var budgetExpenditureTypeToRemove = db.BudgetByExpenditureTypeModels.Single(x => x.BudgetPlanId == budgetPlanEditModel.Id && x.ExpenditureTypeId == deletedExpenditureId);
-            //    db.BudgetByExpenditureTypeModels.Remove(budgetExpenditureTypeToRemove);
-            //}
         }
 
         public void StartBudgetPlan(int value, int accountId)
         {
-            var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => x.Id != value && !x.EndDate.HasValue);
+            var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList().Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+            var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && x.StartDate.HasValue && !x.EndDate.HasValue);
             var accountBudgetPlanExp = _budgetByExpenditureTypeRepository.GetList().Any(x => x.AccountId == accountId && x.BudgetPlanId == currentBudgetPlan.Id);
             if (currentBudgetPlan != null && accountBudgetPlanExp)
             {
@@ -180,6 +182,137 @@ namespace PersonalFinanceManager.Services
             var budgetPlan = _budgetPlanRepository.GetById(value);
             budgetPlan.EndDate = DateTime.Now;
             _budgetPlanRepository.Update(budgetPlan);
+        }
+
+        public BudgetPlanEditModel BuildBudgetPlan(int accountId, int? budgetPlanId = null)
+        {
+            var currencySymbol = _bankAccountRepository.GetById(accountId, x => x.Currency).Currency.Symbol;
+
+            var today = DateTime.Now;
+            var over12MonthsInterval = new Interval(today, DateTimeUnitEnums.Years, 1);
+            var previousInterval = new Interval(today, DateTimeUnitEnums.Months, 1);
+            var firstOfNextMonth = DateTimeFormatHelper.GetFirstDayOfMonth(today.AddMonths(1));
+
+            // Retrieve the categories
+            var categories = _expenditureTypeRepository.GetList2().GroupBy(x => x.Id).ToDictionary(x => x.Key, y => y.Single());
+
+            // Retrieve the expenses over the last 12 months (excluding current month) 
+            var expensesOver12Months = _expenditureRepository.GetByParameters(new ExpenditureGetListSearchParameters()
+            {
+                AccountId = accountId,
+                StartDate = over12MonthsInterval.StartDate,
+                EndDate = over12MonthsInterval.EndDate
+            });
+
+            // Group by category the expenses over the last 12 months
+            var expensesOver12MonthsByCategory = expensesOver12Months.GroupBy(x => x.TypeExpenditureId).ToDictionary(x => x.Key, y => y.ToList());
+
+            over12MonthsInterval.StartDate = DateTimeFormatHelper.GetFirstDayOfMonth(
+              expensesOver12Months.Any() ?
+              expensesOver12Months.OrderBy(x => x.DateExpenditure).First().DateExpenditure :
+              today);
+
+            var nbMonthInterval = over12MonthsInterval.Count(DateTimeUnitEnums.Months);
+            if (nbMonthInterval == 0)
+                nbMonthInterval = 1; // No expenses -> no division by zero
+
+            // Retrieve the expenses last months and group by category
+            var lastMonthExpenses = expensesOver12Months.Where(x => previousInterval.IsBetween(x.DateExpenditure)).ToList();
+            var lastMonthExpensesByCategory = lastMonthExpenses.GroupBy(x => x.TypeExpenditureId).ToDictionary(x => x.Key, y => y.ToList());
+
+            // Get the current Budget Plan for the account. If none, returns a default of cost of 0.00
+            var currentBudgetPlan = GetCurrent(accountId);
+            var currentBudgetPlanByCategory = currentBudgetPlan?.ExpenditureTypes
+                                                    .GroupBy(x => x.ExpenditureType.Id)
+                                                    .ToDictionary(x => x.Key, y => y.Single().ExpectedValue);
+
+            // Get the existing Budget Plan for the provided ID. If none, returns a default of cost of 0.00
+            var existingBudgetPlan = budgetPlanId.HasValue ? GetById(budgetPlanId.Value) : null;
+            var existingBudgetPlanByCategory = existingBudgetPlan?.ExpenditureTypes.GroupBy(x => x.ExpenditureType.Id).ToDictionary(x => x.Key, y => y.Single().ExpectedValue);
+
+            BudgetPlanEditModel budgetPlan = null;
+
+            if (existingBudgetPlan != null)
+            {
+                budgetPlan = new BudgetPlanEditModel()
+                {
+                    Id = existingBudgetPlan.Id,
+                    Name = existingBudgetPlan.Name,
+                    ExpenditureTypes = new List<BudgetPlanExpenditureType>(),
+                    CurrencySymbol = currencySymbol,
+                    StartDate = existingBudgetPlan.StartDate,
+                    EndDate = existingBudgetPlan.EndDate,
+                    PlannedStartDate = firstOfNextMonth,
+                    HasCurrentBudgetPlan = currentBudgetPlan != null,
+                    BudgetPlanName = currentBudgetPlan?.Name
+                };
+            }
+            else
+            {
+                budgetPlan = new BudgetPlanEditModel()
+                {
+                    ExpenditureTypes = new List<BudgetPlanExpenditureType>(),
+                    CurrencySymbol = currencySymbol,
+                    HasCurrentBudgetPlan = currentBudgetPlan != null,
+                    BudgetPlanName = currentBudgetPlan?.Name
+                };
+            }
+
+            foreach (var category in categories)
+            {
+                var expectedValue = 0.00M; var currentBudgetPlanValue = 0.00M;
+
+                if (currentBudgetPlan != null)
+                {
+                    currentBudgetPlanValue = currentBudgetPlanByCategory.ContainsKey(category.Key)
+                                                ? currentBudgetPlanByCategory[category.Key]
+                                                : 0.00M;
+                }
+
+                if (existingBudgetPlan != null)
+                {
+                    expectedValue = existingBudgetPlanByCategory.ContainsKey(category.Key)
+                                        ? existingBudgetPlanByCategory[category.Key]
+                                        : 0.00M;
+                }
+                else if (currentBudgetPlan != null)
+                {
+                    expectedValue = currentBudgetPlanValue;
+                }
+
+                var previousMonthValue = lastMonthExpensesByCategory.ContainsKey(category.Key)
+                                            ? lastMonthExpensesByCategory[category.Key].Sum(x => x.Cost)
+                                            : 0.00M;
+
+                var averageMonthValue = expensesOver12MonthsByCategory.ContainsKey(category.Key)
+                                            ? expensesOver12MonthsByCategory[category.Key].Sum(x => x.Cost)
+                                            : 0.00M;
+
+                var categoryModel = Mapper.Map<ExpenditureTypeListModel>(category.Value);
+
+                var budgetPlanByCategory = new BudgetPlanExpenditureType
+                {
+                    CurrencySymbol = budgetPlan.CurrencySymbol,
+                    ExpenditureType = categoryModel,
+                    ExpectedValue = expectedValue,
+                    PreviousMonthValue = previousMonthValue,
+                    CurrentBudgetPlanValue = currentBudgetPlanValue,
+                    AverageMonthValue = averageMonthValue / nbMonthInterval
+                };
+
+                budgetPlan.ExpenditureTypes.Add(budgetPlanByCategory);
+            }
+
+            budgetPlan.ExpenditurePreviousMonthValue = lastMonthExpenses.Sum(x => x.Cost);
+            budgetPlan.ExpenditureAverageMonthValue = expensesOver12Months.Sum(x => x.Cost) / nbMonthInterval;
+            budgetPlan.ExpenditureCurrentBudgetPlanValue = currentBudgetPlan?.ExpenditureTypes.Sum(x => x.ExpectedValue);
+
+            var incomes = _incomeRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
+
+            budgetPlan.IncomePreviousMonthValue = incomes.Where(x => previousInterval.IsBetween(x.DateIncome)).Sum(x => x.Cost);
+            budgetPlan.IncomeAverageMonthValue = incomes.Where(x => over12MonthsInterval.IsBetween(x.DateIncome)).Sum(x => x.Cost) / nbMonthInterval;
+
+            return budgetPlan;
         }
     }
 }
