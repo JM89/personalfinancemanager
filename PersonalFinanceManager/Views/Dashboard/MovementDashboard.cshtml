@@ -88,7 +88,7 @@
     </div>
 
 
-    @if (@Model.DisplayDashboard)
+    @if (@Model.DisplayDashboard && @Model.HasCategories)
     {
         <div class="row wrapper wrapper-content">
             <div class="col-lg-6">
@@ -98,8 +98,11 @@
                     </div>
                     <div class="ibox-content">
                         <div align="center">
-                            <svg width="20" height="10"><rect width="20" height="10" style="fill: #dcdcdc; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Expected 
-                            &nbsp;&nbsp;
+                            @if (@Model.HasCurrentBudgetPlan)
+                            {
+                                <svg width="20" height="10"><rect width="20" height="10" style="fill: #dcdcdc; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> @Model.BudgetPlanName
+                                @Html.Raw("&nbsp; &nbsp;");
+                            }
                             <svg width="20" height="10"><rect width="20" height="10" style="fill: #f8ac59; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Actual
                         </div>
                         <canvas id="actualVsExpectedExpensesOver12months-canvas"></canvas>
@@ -219,9 +222,12 @@
                                         <th style="text-align: right;">
                                             @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostCurrentMonth)
                                         </th>
-                                        <th style="text-align: right;">
-                                            @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostPlannedMonthly)
-                                        </th>
+                                        @if (@Model.HasCurrentBudgetPlan)
+                                        {
+                                            <th style="text-align: right;">
+                                                @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostPlannedMonthly)
+                                            </th>
+                                        }
                                         <th style="text-align: right;">
                                             @Model.LabelPreviousMonth
                                         </th>
@@ -247,10 +253,13 @@
                                                 <br/>
                                                 <label style="font-size: x-small;"></label>
                                             </td>
-                                            <td align="right">
-                                                @Html.DisplayFor(modelItem => item.DisplayedCostPlannedMonthly)
-                                                @CustomHelpers.DisplayAmountDifference(@item.DiffCostPlannedMonthly, @item.DisplayedDiffCostPlannedMonthly)
-                                            </td>
+                                            @if (@Model.HasCurrentBudgetPlan)
+                                            {
+                                                <td align="right">
+                                                    @Html.DisplayFor(modelItem => item.DisplayedCostPlannedMonthly)
+                                                    @CustomHelpers.DisplayAmountDifference(@item.DiffCostPlannedMonthly, @item.DisplayedDiffCostPlannedMonthly)
+                                                </td>
+                                            }                                           
                                             <td align="right">
                                                 @Html.DisplayFor(modelItem => item.DisplayedCostPreviousMonth)
                                                 @CustomHelpers.DisplayAmountDifference(@item.DiffCostPreviousMonth, @item.DisplayedDiffCostPreviousMonth)
@@ -380,7 +389,7 @@ else
                     showExpenditureTypeOverTime(category);
                 });
 
-                updateLineChartActualVsExpectedExpensesOver12Months(model.DetailedExpensesOver12Months);
+                updateLineChartActualVsExpectedExpensesOver12Months(model.DetailedExpensesOver12Months, model.HasCurrentBudgetPlan);
                 updateBarChartIncomesOutcomesOver6Months(model.DetailedMovementsOver6Months);
                 updatePieChartExpensesOver12Months(model.ExpensesByCategory, model.TotalExpensesOver12Months, model.CurrencySymbol);
 

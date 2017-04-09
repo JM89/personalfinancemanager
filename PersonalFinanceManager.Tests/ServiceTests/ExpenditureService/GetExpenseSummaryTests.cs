@@ -15,6 +15,7 @@ namespace PersonalFinanceManager.Tests.ServiceTests.ExpenditureService
     public class GetExpenseSummaryTests : BaseTests
     {
         [TestMethod]
+        [TestCategory("GetExpenseSummaryTests")]
         public void WithExpenses_Test()
         {
             // Arrange
@@ -111,6 +112,7 @@ namespace PersonalFinanceManager.Tests.ServiceTests.ExpenditureService
         }
 
         [TestMethod]
+        [TestCategory("GetExpenseSummaryTests")]
         public void WithExpensesIncomesAndSavings_Test()
         {
             // Arrange
@@ -192,6 +194,7 @@ namespace PersonalFinanceManager.Tests.ServiceTests.ExpenditureService
         }
 
         [TestMethod]
+        [TestCategory("GetExpenseSummaryTests")]
         public void WithExpensesForOneCategory_Test()
         {
             // Arrange
@@ -270,6 +273,7 @@ namespace PersonalFinanceManager.Tests.ServiceTests.ExpenditureService
         }
 
         [TestMethod]
+        [TestCategory("GetExpenseSummaryTests")]
         public void WithExpensesAndBudgetPlan_Test()
         {
             // Arrange
@@ -323,7 +327,65 @@ namespace PersonalFinanceManager.Tests.ServiceTests.ExpenditureService
             Assert.AreEqual(100, c2.CostPlannedMonthly);
         }
 
+        /// <summary>
+        /// Happens if a category has been created after the budget plan definition. 
+        /// </summary>
         [TestMethod]
+        [TestCategory("GetExpenseSummaryTests")]
+        public void WithExpensesAndBudgetPlanWithMissingCategory_Test()
+        {
+            // Arrange
+
+            var account = AccountHelper.CreateAccountModel(1);
+            var typeEntities = new List<ExpenditureTypeModel>
+            {
+                ExpenditureTypeHelper.CreateExpenditureTypeModel(1, "Food"),
+                ExpenditureTypeHelper.CreateExpenditureTypeModel(2, "Energy")
+            };
+            var typesModels = new List<ExpenditureTypeListModel>()
+            {
+                ExpenditureTypeHelper.CreateExpenditureTypeListModel(1, "Food")
+            };
+            var i = 1;
+            var now = DateTime.Now;
+            var oneMonthAgo = DateTime.Now.AddMonths(-1);
+            var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+            var expenses = new List<ExpenditureModel>()
+            {
+                ExpenditureHelper.CreateExpenditureModel(i++, now, 100, 1),
+                ExpenditureHelper.CreateExpenditureModel(i++, now, 200, 2),
+                ExpenditureHelper.CreateExpenditureModel(i++, now, 300, 2),
+                ExpenditureHelper.CreateExpenditureModel(i++, oneMonthAgo, 200, 1),
+                ExpenditureHelper.CreateExpenditureModel(i++, oneMonthAgo.AddDays(-1), 100, 2),
+                ExpenditureHelper.CreateExpenditureModel(i++, oneMonthAgo.AddDays(-2), 150, 2),
+                ExpenditureHelper.CreateExpenditureModel(i++, twoMonthsAgo, 300, 2),
+                ExpenditureHelper.CreateExpenditureModel(i++, twoMonthsAgo.AddDays(-2), 100, 1),
+                ExpenditureHelper.CreateExpenditureModel(i, twoMonthsAgo.AddDays(-1), 600, 2)
+            };
+            var incomes = new List<IncomeModel>();
+            var savings = new List<SavingModel>();
+
+            var budgetPlan = BudgetPlanHelper.CreateBudgetPlanEditModel(typesModels);
+
+            var service = SetupExpenditureService(account, typeEntities, expenses, incomes, savings);
+
+            // Act
+
+            var result = service.GetExpenseSummary(1, budgetPlan);
+
+            // Assert
+            Assert.IsTrue(result.HasExpenses);
+            Assert.IsTrue(result.HasCurrentBudgetPlan);
+
+            var c1 = result.ExpensesByCategory.Single(x => x.CategoryId == 1);
+            Assert.AreEqual(100, c1.CostPlannedMonthly);
+
+            var c2 = result.ExpensesByCategory.Single(x => x.CategoryId == 2);
+            Assert.AreEqual(0, c2.CostPlannedMonthly);
+        }
+
+        [TestMethod]
+        [TestCategory("GetExpenseSummaryTests")]
         public void NoCategories_Test()
         {
             // Arrange
@@ -355,6 +417,7 @@ namespace PersonalFinanceManager.Tests.ServiceTests.ExpenditureService
         }
 
         [TestMethod]
+        [TestCategory("GetExpenseSummaryTests")]
         public void NoExpenses_Test()
         {
             // Arrange

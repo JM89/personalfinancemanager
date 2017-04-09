@@ -194,7 +194,7 @@ namespace PersonalFinanceManager.Services
                 model.CategoryColor = category.GraphColor;
                 model.CostCurrentMonth = expensesCurrentMonth.Sum(x => x.Cost);
                 model.CostPreviousMonth = expensesPreviousMonth.Sum(x => x.Cost);
-                model.CostPlannedMonthly = budgetPlanByCategory[exp.Key];
+                model.CostPlannedMonthly = budgetPlanByCategory.ContainsKey(exp.Key) ? budgetPlanByCategory[exp.Key] : 0;
                 model.CostOver12Month = expensesOver12Months.Sum(x => x.Cost);
                 model.AverageCostOver12Months = model.CostOver12Month / nbMonthInterval;
 

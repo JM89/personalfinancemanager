@@ -1,4 +1,4 @@
-﻿function updateLineChartActualVsExpectedExpensesOver12Months(detailedExpensesOver12Months) {
+﻿function updateLineChartActualVsExpectedExpensesOver12Months(detailedExpensesOver12Months, hasCurrentBudgetPlan) {
     $("#actualVsExpectedExpensesOver12months-title").text("Actual Vs Expected Expenses - Over 12 Months");
 
     var data = {
@@ -23,12 +23,15 @@
         ]
     };
 
+   
     $.each(detailedExpensesOver12Months, function (index, value) {
         data.labels.push(index);
-        data.datasets[0].data.push(value.ExpenseExpectedValue);
+        if (hasCurrentBudgetPlan) {
+            data.datasets[0].data.push(value.ExpenseExpectedValue);
+        }
         data.datasets[1].data.push(value.ExpenseValue);
-    });
-
+    }); 
+   
     var canvas = document.getElementById("actualVsExpectedExpensesOver12months-canvas");
     var ctx = canvas.getContext("2d");
     var chart = new Chart(ctx).Line(data);
