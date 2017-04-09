@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
-using PersonalFinanceManager.Utils.Utils;
+using PersonalFinanceManager.Utils.Helpers;
 
 namespace PersonalFinanceManager.Utils.Helpers
 {
@@ -55,7 +55,7 @@ namespace PersonalFinanceManager.Utils.Helpers
 
         public int Count(DateTimeUnitEnums unit)
         {
-            int nb = 0;
+            var nb = 0;
             DateTime iterator = StartDate;
             while (iterator <= EndDate)
             {

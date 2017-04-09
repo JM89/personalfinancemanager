@@ -15,21 +15,21 @@
                 <br />
                 <div class="row">
                     <div class="col-lg-2">
-                        <img src="~/Resources/wallet.jpg" style="width: 70px;"/>
+                        <img src="~/Resources/wallet.jpg" style="width: 70px;" />
                     </div>
                     <div class="col-lg-4">
                         <label style="font-size: 20px;">Debit</label>
-                        <br/>
+                        <br />
                         <a href="/Expenditure/Index">Manage expenses</a>
-                        <br/>
+                        <br />
                         <a href="/AtmWithdraw/Index">Manage ATM withdraws</a>
                     </div>
                     <div class="col-lg-2">
-                        <img src="~/Resources/dashboard-addExpenditures.png" style="width: 75px;"/>
+                        <img src="~/Resources/dashboard-addExpenditures.png" style="width: 75px;" />
                     </div>
                     <div class="col-lg-4">
                         <label style="font-size: 20px;">Credit</label>
-                        <br/>
+                        <br />
                         <a href="/Income/Index">Manage incomes</a>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                 <label style="font-size: 24px;">Accounts</label>
                 <br />
                 <small></small>
-                <br/>
+                <br />
                 <div class="row">
                     <div class="col-lg-2">
                         <img src="@Model.Account.BankIconPath" style="width: 25px;" />
@@ -83,10 +83,10 @@
                         @Model.Account.DisplayCurrentBalance
                     </div>
                 </div>
-        </div>
+            </div>
         </div>
     </div>
-
+</div>
 
     @if (@Model.DisplayDashboard && @Model.HasCategories)
     {

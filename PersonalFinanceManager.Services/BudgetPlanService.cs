@@ -45,7 +45,7 @@ namespace PersonalFinanceManager.Services
         {
             var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList().Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
 
-            var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && !x.EndDate.HasValue);
+            var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && x.StartDate.HasValue && !x.EndDate.HasValue);
             if (currentBudgetPlan != null)
             {
                 return GetById(currentBudgetPlan.Id);

@@ -43,7 +43,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Create()
         {
-            var budgetPlanEditModel = buildBudgetPlan();
+            var budgetPlanEditModel = BuildBudgetPlan();
             return View(budgetPlanEditModel);
         }
 
@@ -75,7 +75,7 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult View(int? id)
         {
-            var budgetPlanEditModel = buildBudgetPlan(id);
+            var budgetPlanEditModel = BuildBudgetPlan(id);
             return View(budgetPlanEditModel);
         }
         
@@ -86,7 +86,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Edit(int? id)
         {
-            var budgetPlanEditModel = buildBudgetPlan(id);
+            var budgetPlanEditModel = BuildBudgetPlan(id);
             return View(budgetPlanEditModel);
         }
 
@@ -116,8 +116,10 @@ namespace PersonalFinanceManager.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        private BudgetPlanEditModel buildBudgetPlan(int? id = null)
+        private BudgetPlanEditModel BuildBudgetPlan(int? id = null)
         {
+            var currentBudgetPlan = _budgetPlanService.GetCurrent(CurrentAccount);
+
             BudgetPlanEditModel existingBudgetPlan = null;
             if (id.HasValue)
             {
@@ -141,7 +143,9 @@ namespace PersonalFinanceManager.Controllers
                     CurrencySymbol = currencySymbol,
                     StartDate = existingBudgetPlan.StartDate,
                     EndDate = existingBudgetPlan.EndDate,
-                    PlannedStartDate = firstOfNextMonth
+                    PlannedStartDate = firstOfNextMonth, 
+                    HasCurrentBudgetPlan = currentBudgetPlan != null,
+                    BudgetPlanName = currentBudgetPlan?.Name
                 };
             }
             else
@@ -149,7 +153,9 @@ namespace PersonalFinanceManager.Controllers
                 budgetPlanEditModel = new BudgetPlanEditModel()
                 {
                     ExpenditureTypes = new List<BudgetPlanExpenditureType>(),
-                    CurrencySymbol = currencySymbol
+                    CurrencySymbol = currencySymbol,
+                    HasCurrentBudgetPlan = currentBudgetPlan != null,
+                    BudgetPlanName = currentBudgetPlan?.Name
                 };
             }
 
@@ -176,6 +182,7 @@ namespace PersonalFinanceManager.Controllers
 
             decimal expenditurePreviousMonthValue = 0;
             decimal expenditureAverageMonthValue = 0;
+            decimal expenditureCurrentBudgetPlanValue = 0;
             foreach (var expenditureType in expenditureTypes)
             {
                 var budgetPlanExpenditureType = new BudgetPlanExpenditureType()
@@ -205,13 +212,30 @@ namespace PersonalFinanceManager.Controllers
                 expenditurePreviousMonthValue += previousMonthValue;
                 expenditureAverageMonthValue += averageMonthValue;
 
-                decimal expectedValue = 0;
+                decimal expectedValue = 0.00M;
                 if (existingBudgetPlan != null)
                 {
                     var existingExpenditureType = existingBudgetPlan.ExpenditureTypes.SingleOrDefault(x => expenditureType.Id == x.ExpenditureType.Id);
                     if (existingExpenditureType != null)
                     {
                         expectedValue =  existingExpenditureType.ExpectedValue;
+                    }
+                }
+
+                if (currentBudgetPlan != null)
+                {
+                    var currentExpenditureType =
+                        currentBudgetPlan.ExpenditureTypes.SingleOrDefault(
+                            x => expenditureType.Id == x.ExpenditureType.Id);
+
+                    if (currentExpenditureType != null)
+                    {
+                        budgetPlanExpenditureType.CurrentBudgetPlanValue = currentExpenditureType.ExpectedValue;
+                        expenditureCurrentBudgetPlanValue += currentExpenditureType.ExpectedValue;
+                        if (existingBudgetPlan == null)
+                        {
+                            expectedValue = currentExpenditureType.ExpectedValue;
+                        }
                     }
                 }
 
@@ -222,6 +246,7 @@ namespace PersonalFinanceManager.Controllers
 
             budgetPlanEditModel.ExpenditurePreviousMonthValue = expenditurePreviousMonthValue;
             budgetPlanEditModel.ExpenditureAverageMonthValue = expenditureAverageMonthValue;
+            budgetPlanEditModel.ExpenditureCurrentBudgetPlanValue = expenditureCurrentBudgetPlanValue;
 
             var incomes = _incomeService.GetIncomes(CurrentAccount);
             decimal incomePreviousMonthValue = 0;

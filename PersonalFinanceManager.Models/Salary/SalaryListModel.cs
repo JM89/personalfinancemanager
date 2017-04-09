@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using PersonalFinanceManager.Models.Helpers;
 using PersonalFinanceManager.Models.Resources;
 using PersonalFinanceManager.Utils.Helpers;
-using PersonalFinanceManager.Utils.Utils;
+using PersonalFinanceManager.Utils.Helpers;
 
 namespace PersonalFinanceManager.Models.Salary
 {

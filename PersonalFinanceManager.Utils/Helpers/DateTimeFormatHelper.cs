@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.Utils.Utils
+namespace PersonalFinanceManager.Utils.Helpers
 {
     public static class DateTimeFormatHelper
     {
@@ -16,11 +16,7 @@ namespace PersonalFinanceManager.Utils.Utils
 
         public static string GetDisplayDateValue(DateTime? date)
         {
-            if (date.HasValue)
-            {
-                return GetDisplayDateValue(date.Value);
-            }
-            return string.Empty;
+            return date.HasValue ? GetDisplayDateValue(date.Value) : string.Empty;
         }
 
         public static string GetMonthNameAndYear(DateTime date)

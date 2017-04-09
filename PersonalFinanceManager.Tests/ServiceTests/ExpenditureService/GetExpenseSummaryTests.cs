@@ -7,7 +7,7 @@ using PersonalFinanceManager.Entities;
 using PersonalFinanceManager.Models.BudgetPlan;
 using PersonalFinanceManager.Models.ExpenditureType;
 using PersonalFinanceManager.Tests.Helpers;
-using PersonalFinanceManager.Utils.Utils;
+using PersonalFinanceManager.Utils.Helpers;
 
 namespace PersonalFinanceManager.Tests.ServiceTests.ExpenditureService
 {

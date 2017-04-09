@@ -21,24 +21,16 @@ namespace PersonalFinanceManager.Models.BudgetPlan
         [LocalizedDisplayName("BudgetPlanPreviousMonthValue")]
         public decimal PreviousMonthValue { get; set; }
 
-        public string DisplayedPreviousMonthValue
-        {
-            get
-            {
-                return DecimalFormatHelper.GetDisplayDecimalValue(this.PreviousMonthValue, this.CurrencySymbol);
-            }
-        }
+        public decimal? CurrentBudgetPlanValue { get; set; }
 
         [LocalizedDisplayName("BudgetPlanAverageMonthValue")]
         public decimal AverageMonthValue { get; set; }
 
-        public string DisplayedAverageMonthValue
-        {
-            get
-            {
-                return DecimalFormatHelper.GetDisplayDecimalValue(this.AverageMonthValue, this.CurrencySymbol);
-            }
-        }
+        public string DisplayedPreviousMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.PreviousMonthValue, this.CurrencySymbol);
+
+        public string DisplayedCurrentBudgetPlanValue => DecimalFormatHelper.GetDisplayDecimalValue(this.CurrentBudgetPlanValue, this.CurrencySymbol);
+
+        public string DisplayedAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.AverageMonthValue, this.CurrencySymbol);
 
         public string CurrencySymbol { get; set; }
     }

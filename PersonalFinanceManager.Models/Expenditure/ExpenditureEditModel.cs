@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using PersonalFinanceManager.Models.Helpers;
-using PersonalFinanceManager.Utils.Utils;
+using PersonalFinanceManager.Utils.Helpers;
 
 namespace PersonalFinanceManager.Models.Expenditure
 {
