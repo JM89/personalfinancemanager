@@ -15,12 +15,12 @@ namespace PersonalFinanceManager.Entities
 
         public DateTime? EndDate { get; set; }
 
-        //public IList<BudgetByExpenditureTypeModel> PlannedExpenditures { get; set; }
-
         public IList<CommentModel> Comments { get; set; }
 
         public IList<ChallengeModel> ToDos { get; set; }
 
-        //public IList<SavingsPlanModel> Savings { get; set; }
+        public decimal ExpectedIncomes { get; set; }
+
+        public decimal ExpectedSavings { get; set; }
     }
 }

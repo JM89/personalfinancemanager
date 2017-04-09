@@ -6,8 +6,9 @@
         }
     });
 
-    var income = parseFloat($('#ReferenceMonthTotalIncome').val());
-    var total = income - sum;
+    var incomes = parseFloat($('#ExpectedIncomes').val());
+    var savings = parseFloat($('#ExpectedSavings').val());
+    var total = incomes - sum - savings;
     $('#TotalExpectedValue').attr("value", sum.toFixed(2));
     $('#Total').attr("value", total.toFixed(2));
     if (total > 200) {

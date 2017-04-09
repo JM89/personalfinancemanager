@@ -142,21 +142,21 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td align="right"><strong>Total Incomes</strong></td>
+                                <td align="right"><strong>@Html.DisplayNameFor(model => model.ExpectedIncomes)</strong></td>
                                 <td align="right" style="border-top:lightgrey dotted 1px">
                                     <input style="text-align:right; width: 150px;"
                                            class="form-control"
-                                           id="ReferenceMonthTotalIncome"
-                                           name="ReferenceMonthTotalIncome"
+                                           id="ExpectedIncomes"
+                                           name="ExpectedIncomes"
                                            type="number"
-                                           value="@Model.IncomePreviousMonthValue"
+                                           value="@Model.ExpectedIncomes"
                                            min="0"
                                            step="0.01">
                                 </td>
                                 @if (@Model.HasCurrentBudgetPlan)
                                 {
                                     <td align="right" style="border-top:lightgrey dotted 1px">
-                                        
+                                        @Html.DisplayFor(model => model.DisplayedIncomeCurrentBudgetPlanValue)
                                     </td>
                                 }
                                 <td align="right" style="border-top:lightgrey dotted 1px">
@@ -164,6 +164,31 @@
                                 </td>
                                 <td align="right" style="border-top:lightgrey dotted 1px">
                                     @Html.DisplayFor(model => model.DisplayedIncomeAverageMonthValue)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right"><strong>@Html.DisplayNameFor(model => model.ExpectedSavings)</strong></td>
+                                <td align="right" style="border-top:lightgrey dotted 1px">
+                                    <input style="text-align:right; width: 150px;"
+                                           class="form-control"
+                                           id="ExpectedSavings"
+                                           name="ExpectedSavings"
+                                           type="number"
+                                           value="@Model.ExpectedSavings"
+                                           min="0"
+                                           step="0.01">
+                                </td>
+                                @if (@Model.HasCurrentBudgetPlan)
+                                {
+                                    <td align="right" style="border-top: lightgrey dotted 1px">
+                                        @Html.DisplayFor(model => model.DisplayedSavingCurrentBudgetPlanValue)
+                                    </td>
+                                }
+                                <td align="right" style="border-top:lightgrey dotted 1px">
+                                    @Html.DisplayFor(model => model.DisplayedSavingPreviousMonthValue)
+                                </td>
+                                <td align="right" style="border-top:lightgrey dotted 1px">
+                                    @Html.DisplayFor(model => model.DisplayedSavingAverageMonthValue)
                                 </td>
                             </tr>
                             <tr>
@@ -181,6 +206,7 @@
                                @if (@Model.HasCurrentBudgetPlan)
                                {
                                    <td align="right" style="border-top: lightgrey dotted 1px">
+                                       @Html.DisplayFor(model => model.DisplayedTotalAverageMonthValue)
                                    </td>
                                }
                                 <td align="right" style="border-top:lightgrey dotted 1px">

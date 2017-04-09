@@ -295,6 +295,24 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incomes.
+        /// </summary>
+        internal static string BudgetPlanExpectedIncomes {
+            get {
+                return ResourceManager.GetString("BudgetPlanExpectedIncomes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Savings.
+        /// </summary>
+        internal static string BudgetPlanExpectedSavings {
+            get {
+                return ResourceManager.GetString("BudgetPlanExpectedSavings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expected Value.
         /// </summary>
         internal static string BudgetPlanExpectedValue {

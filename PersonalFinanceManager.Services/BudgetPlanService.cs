@@ -27,9 +27,11 @@ namespace PersonalFinanceManager.Services
         private readonly IExpenditureRepository _expenditureRepository;
         private readonly IExpenditureTypeRepository _expenditureTypeRepository;
         private readonly IIncomeRepository _incomeRepository;
+        private readonly ISavingRepository _savingRepository;
 
         public BudgetPlanService(IBudgetPlanRepository budgetPlanRepository, IBudgetByExpenditureTypeRepository budgetByExpenditureTypeRepository, IBankAccountRepository bankAccountRepository,
-            IExpenditureRepository expenditureRepository, IExpenditureTypeRepository expenditureTypeRepository, IIncomeRepository incomeRepository)
+            IExpenditureRepository expenditureRepository, IExpenditureTypeRepository expenditureTypeRepository, IIncomeRepository incomeRepository, 
+            ISavingRepository savingRepository)
         {
             this._budgetPlanRepository = budgetPlanRepository;
             this._budgetByExpenditureTypeRepository = budgetByExpenditureTypeRepository;
@@ -37,6 +39,7 @@ namespace PersonalFinanceManager.Services
             this._expenditureRepository = expenditureRepository;
             this._expenditureTypeRepository = expenditureTypeRepository;
             this._incomeRepository = incomeRepository;
+            this._savingRepository = savingRepository;
         }
 
         /// <summary>
@@ -130,6 +133,9 @@ namespace PersonalFinanceManager.Services
         {
             var budgetPlan = _budgetPlanRepository.GetById(budgetPlanEditModel.Id);
             budgetPlan.Name = budgetPlanEditModel.Name;
+            budgetPlan.ExpectedIncomes = budgetPlanEditModel.ExpectedIncomes;
+            budgetPlan.ExpectedSavings = budgetPlanEditModel.ExpectedSavings;
+            _budgetPlanRepository.Update(budgetPlan);
 
             var existingBudgetPlanExpenditures = _budgetByExpenditureTypeRepository.GetList()
                   .Include(x => x.ExpenditureType)
@@ -310,8 +316,19 @@ namespace PersonalFinanceManager.Services
 
             var incomes = _incomeRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
 
+            budgetPlan.IncomeCurrentBudgetPlanValue = currentBudgetPlan?.ExpectedIncomes;
             budgetPlan.IncomePreviousMonthValue = incomes.Where(x => previousInterval.IsBetween(x.DateIncome)).Sum(x => x.Cost);
             budgetPlan.IncomeAverageMonthValue = incomes.Where(x => over12MonthsInterval.IsBetween(x.DateIncome)).Sum(x => x.Cost) / nbMonthInterval;
+
+            budgetPlan.ExpectedIncomes = existingBudgetPlan?.ExpectedIncomes ?? budgetPlan.IncomePreviousMonthValue;
+
+            var savings = _savingRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
+
+            budgetPlan.SavingCurrentBudgetPlanValue = currentBudgetPlan?.ExpectedSavings;
+            budgetPlan.SavingPreviousMonthValue = savings.Where(x => previousInterval.IsBetween(x.DateSaving)).Sum(x => x.Amount);
+            budgetPlan.SavingAverageMonthValue = savings.Where(x => over12MonthsInterval.IsBetween(x.DateSaving)).Sum(x => x.Amount) / nbMonthInterval;
+
+            budgetPlan.ExpectedSavings = existingBudgetPlan?.ExpectedSavings ?? budgetPlan.SavingPreviousMonthValue;
 
             return budgetPlan;
         }

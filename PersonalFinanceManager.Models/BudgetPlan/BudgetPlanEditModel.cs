@@ -36,17 +36,33 @@ namespace PersonalFinanceManager.Models.BudgetPlan
 
         public decimal ExpenditureAverageMonthValue { get; set; }
 
+        public decimal? IncomeCurrentBudgetPlanValue { get; set; }
+
+        public decimal? SavingCurrentBudgetPlanValue { get; set; }
+
         public decimal IncomePreviousMonthValue { get; set; }
 
         public decimal IncomeAverageMonthValue { get; set; }
 
-        public decimal TotalPreviousMonthValue => this.IncomePreviousMonthValue - this.ExpenditurePreviousMonthValue;
+        public decimal SavingPreviousMonthValue { get; set; }
 
-        public decimal TotalAverageMonthValue => this.IncomeAverageMonthValue - this.ExpenditureAverageMonthValue;
+        public decimal SavingAverageMonthValue { get; set; }
+
+        public decimal TotalPreviousMonthValue => this.IncomePreviousMonthValue - this.ExpenditurePreviousMonthValue - this.SavingPreviousMonthValue;
+
+        public decimal TotalAverageMonthValue => this.IncomeAverageMonthValue - this.ExpenditureAverageMonthValue - this.SavingAverageMonthValue;
+
+        public decimal? TotalCurrentBudgetPlanValue => this.IncomeCurrentBudgetPlanValue - this.ExpenditureCurrentBudgetPlanValue - this.SavingCurrentBudgetPlanValue;
 
         public bool HasCurrentBudgetPlan { get; set; }
 
         public string BudgetPlanName { get; set; }
+
+        [LocalizedDisplayName("BudgetPlanExpectedIncomes")]
+        public decimal ExpectedIncomes { get; set; }
+
+        [LocalizedDisplayName("BudgetPlanExpectedSavings")]
+        public decimal ExpectedSavings { get; set; }
 
         public IList<BudgetPlanExpenditureType> ExpenditureTypes { get; set; }
 
@@ -66,8 +82,18 @@ namespace PersonalFinanceManager.Models.BudgetPlan
 
         public string DisplayedIncomeAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.IncomeAverageMonthValue, this.CurrencySymbol);
 
+        public string DisplayedSavingPreviousMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.SavingPreviousMonthValue, this.CurrencySymbol);
+
+        public string DisplayedSavingAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.SavingAverageMonthValue, this.CurrencySymbol);
+
+        public string DisplayedTotalCurrentBudgetPlanValue => DecimalFormatHelper.GetDisplayDecimalValue(this.TotalCurrentBudgetPlanValue, this.CurrencySymbol);
+
         public string DisplayedTotalPreviousMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.TotalPreviousMonthValue, this.CurrencySymbol);
 
         public string DisplayedTotalAverageMonthValue => DecimalFormatHelper.GetDisplayDecimalValue(this.TotalAverageMonthValue, this.CurrencySymbol);
+
+        public string DisplayedSavingCurrentBudgetPlanValue => DecimalFormatHelper.GetDisplayDecimalValue(this.SavingCurrentBudgetPlanValue, this.CurrencySymbol);
+
+        public string DisplayedIncomeCurrentBudgetPlanValue => DecimalFormatHelper.GetDisplayDecimalValue(this.IncomeCurrentBudgetPlanValue, this.CurrencySymbol);
     }
 }

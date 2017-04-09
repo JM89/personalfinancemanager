@@ -195,6 +195,12 @@
   <data name="BudgetPlanEndDate" xml:space="preserve">
     <value>End Date</value>
   </data>
+  <data name="BudgetPlanExpectedIncomes" xml:space="preserve">
+    <value>Incomes</value>
+  </data>
+  <data name="BudgetPlanExpectedSavings" xml:space="preserve">
+    <value>Savings</value>
+  </data>
   <data name="BudgetPlanExpectedValue" xml:space="preserve">
     <value>Expected Value</value>
   </data>
