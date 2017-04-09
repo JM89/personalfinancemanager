@@ -229,7 +229,7 @@
     <value>Description</value>
   </data>
   <data name="ExpenditureHasBeenAlreadyDebited" xml:space="preserve">
-    <value>Already Debited</value>
+    <value>Debited?</value>
   </data>
   <data name="ExpenditurePaymentMethod" xml:space="preserve">
     <value>Payment Method</value>

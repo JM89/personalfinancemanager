@@ -272,6 +272,7 @@ namespace PersonalFinanceManager.Services
                 TotalExpensesOver12Months = totalExpensesOver12Months, 
                 DetailedExpensesOver12Months = detailedExpensesOver12Months,
                 DetailedMovementsOver6Months = detailedMovementsOver6Months,
+                CurrentMonthTotalExpense = expenses.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost),
                 AverageExpenses = expenses.Where(x => over12MonthsInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost) / nbMonthInterval,
                 AverageIncomes = incomes.Where(x =>over12MonthsInterval.IsBetween(x.DateIncome)).Sum(x => x.Cost) / nbMonthInterval,
                 AverageSavings = savings.Where(x => over12MonthsInterval.IsBetween(x.DateSaving)).Sum(x => x.Amount) / nbMonthInterval

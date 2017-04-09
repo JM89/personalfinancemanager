@@ -214,19 +214,19 @@
     <value>Manage currencies</value>
   </data>
   <data name="ExpenditureCreate" xml:space="preserve">
-    <value>Create an expenditure</value>
+    <value>Create an expense</value>
   </data>
   <data name="ExpenditureDelete" xml:space="preserve">
-    <value>Delete an expenditure</value>
+    <value>Delete an expense</value>
   </data>
   <data name="ExpenditureEdit" xml:space="preserve">
-    <value>Edit an expenditure</value>
+    <value>Edit an expense</value>
   </data>
   <data name="ExpenditureList" xml:space="preserve">
-    <value>List of expenditures</value>
+    <value>List of expenses</value>
   </data>
   <data name="ExpenditurePages" xml:space="preserve">
-    <value>Manage expenditures</value>
+    <value>Manage expenses</value>
   </data>
   <data name="ExpenditureSplitDashboardPages" xml:space="preserve">
     <value>Expenditure Split Dashboard</value>

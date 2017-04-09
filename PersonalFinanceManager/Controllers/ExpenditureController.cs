@@ -62,12 +62,14 @@ namespace PersonalFinanceManager.Controllers
         }
 
         // GET: ExpenditureModels/Create
-        public ActionResult Create()
+        public ActionResult Create(DateTime? dateLastExpenditure = null)
         {
             AccountBasicInfo();
 
-            ExpenditureEditModel expenditureModel = new ExpenditureEditModel();
-            expenditureModel.DateExpenditure = DateTime.Today;
+            ExpenditureEditModel expenditureModel = new ExpenditureEditModel
+            {
+                DateExpenditure = dateLastExpenditure ?? DateTime.Today
+            };
             PopulateDropDownLists(expenditureModel);
 
             return View(expenditureModel);
@@ -87,7 +89,7 @@ namespace PersonalFinanceManager.Controllers
 
                 if (stayHere)
                 {
-                    return RedirectToAction("Create", new { accountId });
+                    return RedirectToAction("Create", new { DateLastExpenditure = expenditureModel.DateExpenditure });
                 }
 
                 return RedirectToAction("Index", new { accountId });

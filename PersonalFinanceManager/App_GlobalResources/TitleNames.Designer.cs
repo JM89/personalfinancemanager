@@ -349,7 +349,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create an expenditure.
+        ///   Looks up a localized string similar to Create an expense.
         /// </summary>
         public static string ExpenditureCreate {
             get {
@@ -358,7 +358,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete an expenditure.
+        ///   Looks up a localized string similar to Delete an expense.
         /// </summary>
         public static string ExpenditureDelete {
             get {
@@ -367,7 +367,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit an expenditure.
+        ///   Looks up a localized string similar to Edit an expense.
         /// </summary>
         public static string ExpenditureEdit {
             get {
@@ -376,7 +376,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List of expenditures.
+        ///   Looks up a localized string similar to List of expenses.
         /// </summary>
         public static string ExpenditureList {
             get {
@@ -385,7 +385,7 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage expenditures.
+        ///   Looks up a localized string similar to Manage expenses.
         /// </summary>
         public static string ExpenditurePages {
             get {

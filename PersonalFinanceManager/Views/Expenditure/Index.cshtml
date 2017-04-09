@@ -9,10 +9,7 @@
 @section BreadCrumbSection
 {
     <li>
-        @ViewBag.AccountName
-    </li>
-    <li>
-        Mouvements
+        <a href="/Dashboard/SplitByTypeDashboard">Account Management</a>
     </li>
     <li class="active">
         <strong>@ViewBag.GridTitle</strong>
@@ -40,61 +37,61 @@
 {
     <table class="stripe" id="mytable2">
         <colgroup>
-            <col width="10%" />
-            <col width="10%" />
-            <col width="15%" />
-            <col width="15%" />
-            <col width="25%" />
-
+            <col style="width:2%" />
+            <col style="width:7%" />
+            <col style="width:30%" />
+            <col style="width:40%" />
+            <col style="width:7%" />
+            <col style="width:5%" />
+            <col style="width:7%" />
         </colgroup>
         <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateExpenditure)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Cost)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TypeExpenditureName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PaymentMethodName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HasBeenAlreadyDebited)
-                </th>
-                <th></th>
-            </tr>
+        <tr>
+            <th>
+               
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateExpenditure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeExpenditureName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasBeenAlreadyDebited)
+            </th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr class="trExpenditure">
+                    <td class="tdPaymentMethod">
+                        <i class="@item.PaymentMethodIconClass" title="@item.PaymentMethodName" aria-hidden="true"></i>
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.DisplayedDateExpenditure)
-                    </td>
-                    <td align="right" class="tdCost">
-                        @Html.DisplayFor(modelItem => item.DisplayedCost)
                     </td>
                     <td class="tdTypeExpenditure">
                         @Html.DisplayFor(modelItem => item.TypeExpenditureName)
                     </td>
-                    <td class="tdPaymentMethod">
-                        @Html.DisplayFor(modelItem => item.PaymentMethodName)
-                    </td>
                     <td class="tdDescription">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td>
+                    <td align="right" class="tdCost">
+                        @Html.DisplayFor(modelItem => item.DisplayedCost)
+                    </td>
+                    <td align="center">
                         @if (item.PaymentMethodHasBeenAlreadyDebitedOption)
                         {
                             @Html.DisplayFor(modelItem => item.HasBeenAlreadyDebited)
                         }
-
                     </td>
                     <td align="right">
                         @if (item.PaymentMethodHasBeenAlreadyDebitedOption)
@@ -105,7 +102,7 @@
                                 @Html.Raw("|")
                             }
                         }
-                        
+
                         @CustomHelpers.ListButtons(@item.Id, true, "Expenditure", "")
                     </td>
                 </tr>

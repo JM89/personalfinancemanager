@@ -34,8 +34,9 @@ namespace PersonalFinanceManager.Models.Expenditure
 
         public int PaymentMethodId { get; set; }
 
-        [LocalizedDisplayName("ExpenditurePaymentMethod")]
         public string PaymentMethodName { get; set; }
+
+        public string PaymentMethodIconClass { get; set; }
 
         public bool PaymentMethodHasBeenAlreadyDebitedOption { get; set; }
 

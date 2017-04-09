@@ -394,7 +394,7 @@ namespace PersonalFinanceManager.Models.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Already Debited.
+        ///   Looks up a localized string similar to Debited?.
         /// </summary>
         internal static string ExpenditureHasBeenAlreadyDebited {
             get {

@@ -3,10 +3,16 @@
     var url = "/Home/GetDebitMovementsOverTime";
 
     $.get(url)
-        .done(function (data) {
+        .done(function (result) {
+
+            var values = [];
+            $.each(result.ChartDatasets[0].Values,
+                function(index, val) {
+                    values.push(val.Value);
+                });
 
             var data = {
-                labels: data.Labels,
+                labels: result.Labels,
                 datasets: [
                     {
                         label: "My First dataset",
@@ -14,7 +20,7 @@
                         strokeColor: "rgba(38, 94, 217,0.8)",
                         highlightFill: "rgba(38, 94, 217,0.75)",
                         highlightStroke: "rgba(38, 94, 217,1)",
-                        data: data.ChartDatasets[0].Values
+                        data: values
                     }
                 ]
             };

@@ -23,6 +23,8 @@ namespace PersonalFinanceManager.Models.PaymentMethod
         [LocalizedDisplayName("PaymentMethodWidgetCssClass")]
         public string CssClass { get; set; }
 
+        public string IconClass { get; set; }
+
         public bool HasInternalAccountOption { get; set; }
     }
 }

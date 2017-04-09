@@ -14,23 +14,32 @@
 @section GridSection
 {
     <table class="stripe" id="mytable">
-    <thead>
+        <colgroup>
+            <col style="width: 2%"/>
+        </colgroup>
+        <thead>
         <tr>
+            <th>
+                
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                    <i class="@item.IconClass" aria-hidden="true"></i>
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
             </tr>
         }
-    </tbody>
+        </tbody>
 
-</table>
+    </table>
 }

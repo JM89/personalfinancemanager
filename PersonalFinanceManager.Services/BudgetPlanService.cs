@@ -94,11 +94,12 @@ namespace PersonalFinanceManager.Services
 
             return budgetPlanModel;
         }
-        
+
         /// <summary>
         /// Create a budget plan.
         /// </summary>
         /// <param name="budgetPlanEditModel"></param>
+        /// <param name="accountId"></param>
         public void CreateBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId)
         {
             var budgetPlanModel = Mapper.Map<BudgetPlanModel>(budgetPlanEditModel);
@@ -124,6 +125,7 @@ namespace PersonalFinanceManager.Services
         /// Edit a budget plan.
         /// </summary>
         /// <param name="budgetPlanEditModel"></param>
+        /// <param name="accountId"></param>
         public void EditBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId)
         {
             var budgetPlan = _budgetPlanRepository.GetById(budgetPlanEditModel.Id);
@@ -162,8 +164,7 @@ namespace PersonalFinanceManager.Services
         {
             var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList().Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
             var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && x.StartDate.HasValue && !x.EndDate.HasValue);
-            var accountBudgetPlanExp = _budgetByExpenditureTypeRepository.GetList().Any(x => x.AccountId == accountId && x.BudgetPlanId == currentBudgetPlan.Id);
-            if (currentBudgetPlan != null && accountBudgetPlanExp)
+            if (currentBudgetPlan != null)
             {
                 currentBudgetPlan.EndDate = DateTime.Now;
                 _budgetPlanRepository.Update(currentBudgetPlan);

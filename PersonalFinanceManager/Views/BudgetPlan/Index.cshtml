@@ -6,6 +6,16 @@
     ViewBag.GridTitle = Resources.TitleNames.BudgetPlanList;
 }
 
+@section BreadCrumbSection
+{
+    <li>
+        <a href="/Dashboard/SplitByTypeDashboard">Account Management</a>
+    </li>
+    <li class="active">
+        <strong>@ViewBag.GridTitle</strong>
+    </li>
+}
+
 @section AddButtonSection
 {
     <a href="/BudgetPlan/Create" title="add"><i class="fa fa-plus"></i></a>

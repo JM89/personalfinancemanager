@@ -6,6 +6,16 @@
     ViewBag.FormTitle = Resources.TitleNames.BudgetPlanCreate;
 }
 
+@section BreadCrumbSection
+{
+    <li>
+        <a href="/Dashboard/SplitByTypeDashboard">Account Management</a>
+    </li>
+    <li class="active">
+        <strong>@ViewBag.FormTitle</strong>
+    </li>
+}
+
 @section EditorSection
 {
     @using (Html.BeginForm(null, null, FormMethod.Get, new { name = "budgetPlanForm", id = "budgetPlanForm" }))
