@@ -5,7 +5,6 @@ using PersonalFinanceManager.Entities;
 using AutoMapper;
 using PersonalFinanceManager.Models.Expenditure;
 using PersonalFinanceManager.Services.Interfaces;
-using PersonalFinanceManager.Services.RequestObjects;
 using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 using PersonalFinanceManager.Services.MovementStrategy;
 using System;
@@ -114,34 +113,25 @@ namespace PersonalFinanceManager.Services
             _expenditureRepository.Update(expenditure);
         }
 
-        public IList<ExpenditureListModel> GetExpenditures(ExpenditureSearch search)
+        public IList<ExpenditureListModel> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search)
         {
-            var expenditures = _expenditureRepository.GetList()
-                .Where(x =>
-                    (!search.AccountId.HasValue || (search.AccountId.HasValue && x.AccountId == search.AccountId.Value))
-                    && (!search.StartDate.HasValue || (search.StartDate.HasValue && x.DateExpenditure >= search.StartDate))
-                    && (!search.EndDate.HasValue || (search.EndDate.HasValue && x.DateExpenditure < search.EndDate))
-                    && (!search.ShowOnDashboard.HasValue || (x.TypeExpenditure.ShowOnDashboard == search.ShowOnDashboard))
-                    && (!search.ExpenditureTypeId.HasValue || (search.ExpenditureTypeId.HasValue && x.TypeExpenditureId == search.ExpenditureTypeId.Value)))
-                .Include(u => u.Account.Currency)
-                .Include(u => u.TypeExpenditure)
-                .Include(u => u.PaymentMethod).ToList();
+            var searchParameters = Mapper.Map<Entities.SearchParameters.ExpenditureGetListSearchParameters>(search);
+            
+            var expenditures = _expenditureRepository.GetByParameters(searchParameters);
 
-            var mappedExpenditures = expenditures.Select(x => Mapper.Map<ExpenditureListModel>(x));
+            var mappedExpenditures = expenditures.Select(Mapper.Map<ExpenditureListModel>);
 
             return mappedExpenditures.ToList();
         }
 
-        public ExpenseSummaryModel GetExpenseSummaryByCategory(int accountId, BudgetPlanEditModel budgetPlan)
+        public ExpenseSummaryModel GetExpenseSummary(int accountId, BudgetPlanEditModel budgetPlan)
         {
-            var account = _bankAccountRepository.GetList().Include(x => x.Bank).Include(x => x.Currency).SingleOrDefault(x => x.Id == accountId);
+            var account = _bankAccountRepository.GetById(accountId, x => x.Bank, x => x.Currency);
 
             if (account == null)
             {
                 throw new ArgumentException("Account can't be null.");
             }
-
-            var categories = _expenditureTypeRepository.GetList().ToList().GroupBy(x => x.Id).ToDictionary(x => x.Key, y => y.Single());
 
             var today = DateTime.Now;
             var over12MonthsInterval = new Interval(today, DateTimeUnitEnums.Years, 1);
@@ -149,14 +139,15 @@ namespace PersonalFinanceManager.Services
             var currentMonthInterval = new Interval(today, today);
             var previousInterval = new Interval(today, DateTimeUnitEnums.Months, 1);
 
+            var categories = _expenditureTypeRepository.GetList2().GroupBy(x => x.Id).ToDictionary(x => x.Key, y => y.Single());
+
             var over12MonthsNames = over12MonthsInterval.GetIntervalsByMonth();
             var currentMonthName = currentMonthInterval.GetSingleMonthName();
 
             // Retrieve both current month expenses and over 12 months expenses
-            var expenses = GetExpenditures(new ExpenditureSearch()
+            var expenses = GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters
             {
                 AccountId = accountId,
-                ShowOnDashboard = true,
                 StartDate = over12MonthsInterval.StartDate,
                 EndDate = currentMonthInterval.EndDate
             });
@@ -168,24 +159,32 @@ namespace PersonalFinanceManager.Services
                 x.DateSaving >= over12MonthsInterval.StartDate && x.DateSaving < currentMonthInterval.EndDate).ToList(); 
 
             // Reset the start date to the first movement (First day of the same month)
-            over12MonthsInterval.StartDate = DateTimeFormatHelper.GetFirstDayOfMonth(expenses.OrderBy(x => x.DateExpenditure).First().DateExpenditure);
+            over12MonthsInterval.StartDate = DateTimeFormatHelper.GetFirstDayOfMonth(
+                expenses.Any() ?
+                expenses.OrderBy(x => x.DateExpenditure).First().DateExpenditure :
+                today);
 
             // Count the number of months in the interval
             var nbMonthInterval = over12MonthsInterval.Count(DateTimeUnitEnums.Months);
+            if (nbMonthInterval == 0)
+                nbMonthInterval = 1; // No expenses -> no division by zero
 
             // Get current budget plan if it exists
             var budgetPlanByCategory =
                 budgetPlan?.ExpenditureTypes.GroupBy(x => x.ExpenditureType.Id).ToDictionary(x => x.Key, y => y.Single().ExpectedValue)
                 ?? categories.ToDictionary(x => x.Key, y => (decimal)0.00);
 
-            var expensesByCategories = expenses.GroupBy(x => x.TypeExpenditureId);
+            var expensesByCategories = expenses.Any()
+                ? expenses.GroupBy(x => x.TypeExpenditureId).ToDictionary(x => x.Key, y => y.ToList())
+                : categories.ToDictionary(x => x.Key, y => new List<ExpenditureListModel>());
+
             var expensesByCategoryModel = new List<ExpenseSummaryByCategoryModel>();
             foreach (var exp in expensesByCategories)
             {
                 var category = categories[exp.Key];
-                var expensesCurrentMonth = exp.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).ToList();
-                var expensesPreviousMonth = exp.Where(x => previousInterval.IsBetween(x.DateExpenditure)).ToList();
-                var expensesOver12Months = exp.Where(x => over12MonthsInterval.IsBetween(x.DateExpenditure)).ToList();
+                var expensesCurrentMonth = exp.Value.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).ToList();
+                var expensesPreviousMonth = exp.Value.Where(x => previousInterval.IsBetween(x.DateExpenditure)).ToList();
+                var expensesOver12Months = exp.Value.Where(x => over12MonthsInterval.IsBetween(x.DateExpenditure)).ToList();
 
                 // ReSharper disable once UseObjectOrCollectionInitializer
                 var model = new ExpenseSummaryByCategoryModel();
@@ -203,7 +202,7 @@ namespace PersonalFinanceManager.Services
                 foreach (var month in over12MonthsNames)
                 {
                     var interval = month.Value;
-                    var expByMonth = exp.Where(x => interval.IsBetween(x.DateExpenditure)).ToList();
+                    var expByMonth = exp.Value.Where(x => interval.IsBetween(x.DateExpenditure)).ToList();
 
                     model.Expenses.Add(month.Key, expByMonth);
                     model.ExpensesByMonth.Add(month.Key, new ExpenseSummaryByCategoryAndByMonthModel(expByMonth.Sum(x => x.Cost)));
@@ -267,7 +266,9 @@ namespace PersonalFinanceManager.Services
                 AccountName = account.Name,
                 DisplayDashboard = true,
                 CurrencySymbol = account.Currency.Symbol,
-                HasBudget = budgetPlan != null,
+                HasCurrentBudgetPlan = budgetPlan != null,
+                HasExpenses = expenses.Any(),
+                HasCategories = categories.Any(),
                 TotalExpensesOver12Months = totalExpensesOver12Months, 
                 DetailedExpensesOver12Months = detailedExpensesOver12Months,
                 DetailedMovementsOver6Months = detailedMovementsOver6Months,

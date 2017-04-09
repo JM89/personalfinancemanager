@@ -7,6 +7,8 @@ using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -72,6 +74,32 @@ namespace PersonalFinanceManager.DataAccess.Repositories
             GetList().Remove(entity);
             _db.SaveChanges();
             return true;
+        }
+        
+        public List<TEntity> GetList2(params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var result = _db.Set<TEntity>();
+
+            IQueryable<TEntity> query = null;
+            foreach (var property in includeProperties)
+            {
+                query = query == null ? result.Include(property) : query.Include(property);
+            }
+
+            return query?.ToList() ?? result.ToList();
+        }
+
+        public TEntity GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var result = _db.Set<TEntity>();
+
+            IQueryable<TEntity> query = null;
+            foreach (var property in includeProperties)
+            {
+                query = query == null ? result.Include(property) : query.Include(property);
+            }
+
+            return query?.Single(x => x.Id == id) ?? result.Single(x => x.Id == id); 
         }
     }
 }

@@ -44,7 +44,7 @@ namespace PersonalFinanceManager.Controllers
 
             AccountBasicInfo();
 
-            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId = CurrentAccount })
+            var expenditures = _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { AccountId = CurrentAccount })
                 .OrderByDescending(x => x.DateExpenditure)
                 .ThenByDescending(x => x.Id)
                 .ToList();

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Automapper\EntityToEntityMapping.cs" />
     <Compile Include="Automapper\EntityToModelMapping.cs" />
+    <Compile Include="Automapper\SearchParametersMapping.cs" />
     <Compile Include="Automapper\ModelToEntityMapping.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Exceptions\BusinessExceptionMessage.Designer.cs">

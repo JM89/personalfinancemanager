@@ -84,7 +84,6 @@
     <Compile Include="Interfaces\ISavingService.cs" />
     <Compile Include="Interfaces\IUserProfileService.cs" />
     <Compile Include="RequestObjects\BudgetPlanSearch.cs" />
-    <Compile Include="RequestObjects\ExpenditureSearch.cs" />
     <Compile Include="UserProfileService.cs" />
     <Compile Include="BankService.cs" />
     <Compile Include="CountryService.cs" />

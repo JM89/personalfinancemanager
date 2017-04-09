@@ -28,7 +28,7 @@ namespace PersonalFinanceManager.Controllers
             var budgetPlan = _budgetPlanService.GetCurrent(CurrentAccount);
 
             // Get the expense summary by category
-            var expenditureSummaryModel = _expenditureService.GetExpenseSummaryByCategory(CurrentAccount, budgetPlan);
+            var expenditureSummaryModel = _expenditureService.GetExpenseSummary(CurrentAccount, budgetPlan);
 
             return View("MovementDashboard", expenditureSummaryModel);
         }

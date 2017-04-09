@@ -105,6 +105,7 @@
     <Compile Include="Helpers\Chart\ChartData.cs" />
     <Compile Include="Helpers\Chart\ChartDataset.cs" />
     <Compile Include="Helpers\Chart\ChartValue.cs" />
+    <Compile Include="SearchParameters\ExpenditureGetListSearchParameters.cs" />
     <Compile Include="TaxType\TaxTypeListModel.cs" />
     <Compile Include="Tax\TaxEditModel.cs" />
     <Compile Include="Tax\TaxListModel.cs" />

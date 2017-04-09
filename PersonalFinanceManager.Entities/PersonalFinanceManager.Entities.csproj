@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="Enumerations\FrequenceOption.cs" />
     <Compile Include="Enumerations\TaxType.cs" />
+    <Compile Include="SearchParameters\ExpenditureGetListSearchParameters.cs" />
+    <Compile Include="SearchParameters\ISearchParameters.cs" />
     <Compile Include="TaxModel.cs" />
     <Compile Include="FrequenceOptionModel.cs" />
     <Compile Include="TaxTypeModel.cs" />

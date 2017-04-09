@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.Services.RequestObjects
+namespace PersonalFinanceManager.Entities.SearchParameters
 {
-    public class ExpenditureSearch
+    public class ExpenditureGetListSearchParameters : ISearchParameters
     {
         public int? AccountId { get; set; }
 

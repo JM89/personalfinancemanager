@@ -15,7 +15,11 @@ namespace PersonalFinanceManager.Models.Dashboard
 
         public List<ExpenseSummaryByCategoryModel> ExpensesByCategory { get; set; }
 
-        public bool HasBudget { get; set; }
+        public bool HasCurrentBudgetPlan { get; set; }
+
+        public bool HasExpenses { get; set; }
+
+        public bool HasCategories { get; set; }
 
         public string BudgetPlanName { get; set; }
 

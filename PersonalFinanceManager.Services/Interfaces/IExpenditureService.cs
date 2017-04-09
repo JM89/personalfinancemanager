@@ -19,8 +19,8 @@ namespace PersonalFinanceManager.Services.Interfaces
 
         void ChangeDebitStatus(int id, bool debitStatus);
 
-        IList<ExpenditureListModel> GetExpenditures(ExpenditureSearch search);
+        ExpenseSummaryModel GetExpenseSummary(int accountId, BudgetPlanEditModel budgetPlan);
 
-        ExpenseSummaryModel GetExpenseSummaryByCategory(int accountId, BudgetPlanEditModel budgetPlan);
+        IList<ExpenditureListModel> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search);
     }
 }

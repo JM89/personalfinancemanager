@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,5 +21,9 @@ namespace PersonalFinanceManager.DataAccess.Repositories.Interfaces
         TEntity Update(TEntity entity);
         
         bool Delete(TEntity entity);
+
+        List<TEntity> GetList2(params Expression<Func<TEntity, object>>[] includeProperties);
+
+        TEntity GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

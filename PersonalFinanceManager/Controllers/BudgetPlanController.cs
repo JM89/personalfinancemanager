@@ -159,7 +159,7 @@ namespace PersonalFinanceManager.Controllers
             var firstDayLastMonth = new DateTime(lastMonth.Year, lastMonth.Month, 1);
             var lastDayLastMonth = DateTime.Today.AddMonths(1).AddDays(-1);
 
-            var expenditures = _expenditureService.GetExpenditures(new ExpenditureSearch() { AccountId=CurrentAccount });
+            var expenditures = _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { AccountId=CurrentAccount });
 
             var nbMonthsSinceFirstExpenditures = 1;
             var firstExpenditure = expenditures.OrderBy(x => x.DateExpenditure).FirstOrDefault();
