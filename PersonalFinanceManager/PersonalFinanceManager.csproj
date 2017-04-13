@@ -203,7 +203,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\Startup.Ninject.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\AccountManagementController.cs" />
     <Compile Include="Controllers\TaxTypeController.cs" />
     <Compile Include="Controllers\TaxController.cs" />
     <Compile Include="Controllers\PensionController.cs" />
@@ -289,7 +289,7 @@
     <Content Include="Scripts\custom\Saving.js" />
     <Content Include="Scripts\custom\HomePage.js" />
     <Content Include="Scripts\custom\Shared.js" />
-    <Content Include="Scripts\custom\SplitByTypeDashboard.js" />
+    <Content Include="Scripts\custom\AccountManagement.js" />
     <Content Include="Scripts\custom\Tax.js" />
     <Content Include="Scripts\custom\Utils.js" />
     <Content Include="Scripts\custom\BudgetPlan.js" />
@@ -391,7 +391,7 @@
     <Content Include="Views\UserProfile\Create.cshtml" />
     <Content Include="Views\UserProfile\Edit.cshtml" />
     <Content Include="Views\UserProfile\View.cshtml" />
-    <Content Include="Views\Dashboard\MovementDashboard.cshtml" />
+    <Content Include="Views\AccountManagement\Index.cshtml" />
     <Content Include="Views\Saving\Create.cshtml" />
     <Content Include="Views\Saving\Delete.cshtml" />
     <Content Include="Views\Saving\Edit.cshtml" />

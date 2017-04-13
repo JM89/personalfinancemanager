@@ -160,27 +160,5 @@ namespace PersonalFinanceManager.Controllers
             return View();
         }
 
-        public JsonResult SaveCurrentAccount(int accountId, int indexAccountList)
-        {
-            Session["PreviousAccount"] = Session["CurrentAccount"];
-            Session["CurrentAccount"] = accountId;
-            Session["IndexAccountList"] = indexAccountList;
-
-            if (Session["PreviousAccount"] == null || (int)Session["PreviousAccount"] == (int)Session["CurrentAccount"])
-            {
-                Session["ReloadPage"] = false;
-            }
-            else
-            {
-                Session["ReloadPage"] = true;
-            }
-            
-            return Json(new { Data = new
-                {
-                    accountId = accountId, 
-                    reloadPage = Session["ReloadPage"] 
-                 }
-                }, JsonRequestBehavior.AllowGet);
-        }
     }
 }

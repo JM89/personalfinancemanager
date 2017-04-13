@@ -67,23 +67,19 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-2">
-        <div class="ibox">
-            <div class="ibox-content">
-                <label style="font-size: 24px;">Accounts</label>
-                <br />
-                <small></small>
-                <br />
-                <div class="row">
-                    <div class="col-lg-2">
-                        <img src="@Model.Account.BankIconPath" style="width: 25px;" />
-                    </div>
-                    <div class="col-lg-10" align="right">
-                        <strong>@Model.Account.Name</strong>
-                        @Model.Account.DisplayCurrentBalance
-                    </div>
-                </div>
-            </div>
+    <div class="col-lg-2" style="padding-top:12px;">
+        <select id="availableAccounts"></select>
+        <br />
+        <div class="alert alert-info" role="alert">
+            <table>
+                <tr>
+                    <td colspan="2"><strong>@Model.Account.Name</strong> (@Model.Account.CurrencyName)</td>
+                </tr>
+                <tr>
+                    <td>Balance</td>
+                    <td align="right">@Model.Account.DisplayCurrentBalance</td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>
@@ -359,7 +355,7 @@ else
     <script src="~/Scripts/plugins/chartjs/Chart.min.js"></script>
     <script src="~/Scripts/custom/Utils.js"></script>
     <script src="//cdn.datatables.net/plug-ins/1.10.13/api/page.jumpToData().js"></script>
-    <script src="~/Scripts/custom/SplitByTypeDashboard.js"></script>
+    <script src="~/Scripts/custom/AccountManagement.js"></script>
 
     <script id="rowTemplate" type="text/x-custom-template">
         <tr>
@@ -407,6 +403,8 @@ else
                     "bSort" : false,
                     "order": [[ 2, "desc" ]]
                 });
+
+                getAccountsForCurrentUser();
             }
         });
 

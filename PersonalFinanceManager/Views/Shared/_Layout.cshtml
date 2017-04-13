@@ -42,7 +42,7 @@
                            <a href="/Home/Index"><strong>Home</strong></a>
                         </li>
                         <li class="menuitem" id="movements">
-                            <a href="/Dashboard/SplitByTypeDashboard" id="id_menu_movements">Account Management</a>
+                            <a href="/AccountManagement/Index" id="id_menu_movements">Account Management</a>
                         </li>
                         <li class="menuitem" id="budget">
                             <a data-toggle="dropdown" href="#">Taxes & Allowances</a>
@@ -73,8 +73,8 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>
-                            <select id="availableAccounts">
-                            </select>
+                            @*<select id="availableAccounts">
+                            </select>*@
                         </li>
                     }
 
@@ -125,7 +125,7 @@
                 "bPaginate": false,
                 "bInfo": false
             });
-            getAccountsForCurrentUser();
+            
 
         });
 
