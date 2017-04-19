@@ -13,38 +13,23 @@
     @RenderSection("style", required: false)
 </head>
 <body>
-
     <div class="navbar navbar-inverse">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <br/>
-                <img src="~/Resources/pfm_logo.png" style="width: 150px;border-radius: 5px;" />
-                <br /><br />
-            </div>
-            @Html.Partial("_LoginPartial")
-        </div>
-
         <input type="hidden" id="indexAccountList" value="@Session["IndexAccountList"]"/>
-
         <div class="container">
-
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                  
+                    <li>
+                        <img src="~/Resources/pfm_logo.png" style="width: 155px; border-radius: 5px; margin-top: 5px; margin-bottom: 5px;"/>
+                    </li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="menuitem" id="home">
+                        <li class="menuitem" id="home" style="margin-top: 30px;">
                            <a href="/Home/Index"><strong>Home</strong></a>
                         </li>
-                        <li class="menuitem" id="movements">
+                        <li class="menuitem" id="movements" style="margin-top: 30px;">
                             <a href="/AccountManagement/Index" id="id_menu_movements">Account Management</a>
                         </li>
-                        <li class="menuitem" id="budget">
+                        <li class="menuitem" id="budget" style="margin-top: 30px;">
                             <a data-toggle="dropdown" href="#">Taxes & Allowances</a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
                                 <li><a href="/Salary/Index">Manage Salaries</a></li>
@@ -52,7 +37,7 @@
                                 <li><a href="/Tax/Index">Manage Taxes</a></li>
                             </ul>
                         </li>
-                       <li class="menuitem" id="configuration">
+                        <li class="menuitem" id="configuration" style="margin-top: 30px;">
                             <a data-toggle="dropdown" href="#">Configuration</a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                 <li><a href="/BankAccount/Index">Manage Accounts</a></li>
@@ -67,18 +52,8 @@
                     }
                    
                 </ul>
-
-                <ul class="nav navbar-nav pull-right" id="userBankAccounts">
-                    
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li>
-                            @*<select id="availableAccounts">
-                            </select>*@
-                        </li>
-                    }
-
-                </ul>
+                @Html.Partial("_LoginPartial")
+               
             </div>
         </div>
     </div>

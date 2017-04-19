@@ -58,26 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
-    <Compile Include="Migrations\201612080730137_saving.cs" />
-    <Compile Include="Migrations\201612080730137_saving.Designer.cs">
-      <DependentUpon>201612080730137_saving.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612160649116_historic.cs" />
-    <Compile Include="Migrations\201612160649116_historic.Designer.cs">
-      <DependentUpon>201612160649116_historic.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612160652195_historic2.cs" />
-    <Compile Include="Migrations\201612160652195_historic2.Designer.cs">
-      <DependentUpon>201612160652195_historic2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612160710010_reftoincomeinsaving.cs" />
-    <Compile Include="Migrations\201612160710010_reftoincomeinsaving.Designer.cs">
-      <DependentUpon>201612160710010_reftoincomeinsaving.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701281342277_PensionAndSalaryObject.cs" />
-    <Compile Include="Migrations\201701281342277_PensionAndSalaryObject.Designer.cs">
-      <DependentUpon>201701281342277_PensionAndSalaryObject.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IFrequenceOptionRepository.cs" />
@@ -134,23 +114,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201612080730137_saving.resx">
-      <DependentUpon>201612080730137_saving.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612160649116_historic.resx">
-      <DependentUpon>201612160649116_historic.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612160652195_historic2.resx">
-      <DependentUpon>201612160652195_historic2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612160710010_reftoincomeinsaving.resx">
-      <DependentUpon>201612160710010_reftoincomeinsaving.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701281342277_PensionAndSalaryObject.resx">
-      <DependentUpon>201701281342277_PensionAndSalaryObject.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
