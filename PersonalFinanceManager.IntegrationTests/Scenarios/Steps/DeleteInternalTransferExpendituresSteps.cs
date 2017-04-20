@@ -41,11 +41,11 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Given(@"I have accessed the Expenditures List page")]
         public void GivenIHaveAccessedTheExpendituresListPage()
         {
-            _ctx.GotToUrl("/Expenditure/Index");
-
             // Get Source Account Amount Before Creating Expenditures
             _sourceAccountId = _ctx.SelectedSourceAccountId();
             _sourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
+
+            _ctx.GotToUrl("/Expenditure/Index");
 
             // Get Number Of Savings Before Creating Expenditures
             _countExpenditures = _expenditureService.CountExpenditures();
@@ -68,7 +68,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
 
             _firstRow = expenditures[0];
 
-            var paymentMethod = _firstRow.FindElement(By.ClassName("tdPaymentMethod")).Text;
+            var paymentMethod = _firstRow.FindElement(By.ClassName("tdPaymentMethod")).FindElement(By.Id("item_PaymentMethodName")).GetAttribute("value");
             if (paymentMethod != "Internal Transfer")
             {
                 throw new Exception("There is no expenditure with payment method Internal Transfer to delete");
@@ -89,7 +89,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         public void WhenIConfirmTheDeletion()
         {
             var deleteExpenditurePage = _ctx.WebDriver.FindElement(By.TagName("h5"));
-            if (deleteExpenditurePage.Text != "Delete an expenditure")
+            if (deleteExpenditurePage.Text != "Delete an expense")
             {
                 throw new Exception("The confirmation of deletion should be there.");
             }

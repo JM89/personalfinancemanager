@@ -39,11 +39,11 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Given(@"I have accessed the Income List page")]
         public void GivenIHaveAccessedTheIncomeListPage()
         {
-            _ctx.GotToUrl("/Income/Index");
-
             // Get Source Account Amount Before Creating Incomes
             _sourceAccountId = _ctx.SelectedSourceAccountId();
             _sourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
+
+            _ctx.GotToUrl("/Income/Index");
 
             // Get Number Of Incomes Before Creating Incomes
             _countIncomes = _incomeService.CountIncomes();

@@ -39,11 +39,11 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Given(@"I have accessed the ATM Withdraw List page")]
         public void GivenIHaveAccessedTheAtmWithdrawListPage()
         {
-            _ctx.GotToUrl("/AtmWithdraw/Index");
-
             // Get Source Account Amount Before Creating AtmWithdraws
             _sourceAccountId = _ctx.SelectedSourceAccountId();
             _sourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
+
+            _ctx.GotToUrl("/AtmWithdraw/Index");
 
             // Get Number Of Incomes Before Creating AtmWithdraws
             _countAtmWithdraws = _atmWithdrawService.CountAtmWithdraws();

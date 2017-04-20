@@ -43,6 +43,7 @@ namespace PersonalFinanceManager.IntegrationTests.Infrastructure
 
         public int SelectedSourceAccountId()
         {
+            GotToUrl("/AccountManagement/Index");
             var mainAccountDd = WebDriver.FindElements(By.ClassName("dd-selected-value"));
             var firstAccount = mainAccountDd.FirstOrDefault();
             if (firstAccount == null)

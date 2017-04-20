@@ -33,11 +33,11 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Given(@"I have accessed the Expenditures List page")]
         public void GivenIHaveAccessedTheExpendituresListPage()
         {
-            _ctx.GotToUrl("/Expenditure/Index");
-
             // Get Source Account Amount Before Creating Expenditures
             _sourceAccountId = _ctx.SelectedSourceAccountId();
             _sourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
+
+            _ctx.GotToUrl("/Expenditure/Index");
 
             // Get Number Of Expenditures Before Creating Expenditures
             _countExpenditures = _expenditureService.CountExpenditures();

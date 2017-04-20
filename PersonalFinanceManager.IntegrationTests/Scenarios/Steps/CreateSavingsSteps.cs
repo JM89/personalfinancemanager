@@ -34,11 +34,11 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Given(@"I have accessed the Saving List page")]
         public void GivenIHaveAccessedTheSavingListPage()
         {
-            _ctx.GotToUrl("/Saving/Index");
-
             // Get Source Account Amount Before Creating Savings
             _sourceAccountId = _ctx.SelectedSourceAccountId();
             _sourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
+
+            _ctx.GotToUrl("/Saving/Index");
 
             // Get Number Of Savings Before Creating Savings
             _countSavings = _savingService.CountSavings();
