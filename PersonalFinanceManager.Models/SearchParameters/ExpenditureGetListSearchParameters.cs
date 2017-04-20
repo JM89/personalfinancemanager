@@ -8,6 +8,8 @@ namespace PersonalFinanceManager.Models.SearchParameters
 {
     public class ExpenditureGetListSearchParameters
     {
+        public string UserId { get; set; }
+
         public int? AccountId { get; set; }
 
         public DateTime? StartDate { get; set; }

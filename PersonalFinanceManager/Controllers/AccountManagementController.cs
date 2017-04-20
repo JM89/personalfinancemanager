@@ -24,6 +24,11 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult Index()
         {
+            if (!HasAccount)
+            {
+                return Redirect("/BankAccount/Index");
+            }
+
             // Get current budget plan if it exists
             var budgetPlan = _budgetPlanService.GetCurrent(CurrentAccount);
 

@@ -116,11 +116,15 @@ namespace PersonalFinanceManager.Services
         public IList<ExpenditureListModel> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search)
         {
             var searchParameters = Mapper.Map<Entities.SearchParameters.ExpenditureGetListSearchParameters>(search);
-            
-            var expenditures = _expenditureRepository.GetByParameters(searchParameters);
+            var expenditures = _expenditureRepository.GetByParameters(searchParameters).ToList();
+
+            if (!string.IsNullOrEmpty(search.UserId))
+            {
+                var accounts = _bankAccountRepository.GetList().Where(x => x.User_Id == search.UserId).Select(x => x.Id);
+                expenditures = expenditures.Where(x => accounts.Contains(x.AccountId)).ToList();
+            }
 
             var mappedExpenditures = expenditures.Select(Mapper.Map<ExpenditureListModel>);
-
             return mappedExpenditures.ToList();
         }
 

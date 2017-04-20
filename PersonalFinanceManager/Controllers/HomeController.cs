@@ -42,7 +42,7 @@ namespace PersonalFinanceManager.Controllers
 
             var model = new HomePageModel();
 
-            var debitMvts = this._expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters());
+            var debitMvts = this._expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { UserId = CurrentUser });
 
             if (debitMvts.Count != 0)
             {
@@ -127,7 +127,7 @@ namespace PersonalFinanceManager.Controllers
             var intervalsByMonth = interval.GetIntervalsByMonth();
 
             var dataSetActualExpenditures = new ChartDataset();
-            var expenditures = _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { StartDate=interval.StartDate, EndDate=interval.EndDate });
+            var expenditures = _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { UserId = CurrentUser, StartDate = interval.StartDate, EndDate=interval.EndDate });
             foreach (var intervalByMonth in intervalsByMonth)
             {
                 var expendituresByMonth = expenditures.Where(x => intervalByMonth.Value.IsBetween(x.DateExpenditure));

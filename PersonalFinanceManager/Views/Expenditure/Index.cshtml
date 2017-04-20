@@ -73,7 +73,8 @@
             {
                 <tr class="trExpenditure">
                     <td class="tdPaymentMethod">
-                        <i class="@item.PaymentMethodIconClass" title="@item.PaymentMethodName" aria-hidden="true"></i>
+                        @Html.HiddenFor(modelItem => item.PaymentMethodName)
+                        <i class="@item.PaymentMethodIconClass" aria-hidden="true"></i>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.DisplayedDateExpenditure)

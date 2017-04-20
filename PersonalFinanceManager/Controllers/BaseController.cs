@@ -62,6 +62,8 @@ namespace PersonalFinanceManager.Controllers
             }
         }
 
+        protected bool HasAccount => _bankAccountService.GetAccountsByUser(CurrentUser).Any();
+
         protected int CurrentAccount
         {
             get
