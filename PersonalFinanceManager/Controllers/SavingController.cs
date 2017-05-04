@@ -129,29 +129,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the saving you are about to delete.
-        /// </summary>
-        /// <param name="id">Saving id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            AccountBasicInfo();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var savingEditModel = _savingService.GetById(id.Value);
-
-            if (savingEditModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(savingEditModel);
-        }
-
-        /// <summary>
         /// Delete the ATM withdraw after confirmation.
         /// </summary>
         /// <param name="id">ATM withdraw id</param>
@@ -162,7 +139,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _savingService.DeleteSaving(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }        
     }
 }

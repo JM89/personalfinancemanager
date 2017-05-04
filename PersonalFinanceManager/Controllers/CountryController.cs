@@ -1,20 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
+﻿using System.Net;
 using System.Web.Mvc;
-using PersonalFinanceManager.Entities;
-using PersonalFinanceManager.Models;
-using System.Web.Helpers;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.Country;
-using AutoMapper;
 using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
@@ -110,27 +96,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the country you are about to delete.
-        /// </summary>
-        /// <param name="id">Country id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            CountryEditModel countryModel = _countryService.GetById(id.Value);
-
-            if (countryModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(countryModel);
-        }
-
-        /// <summary>
         /// Delete the country after confirmation.
         /// </summary>
         /// <param name="id">Account id</param>
@@ -141,7 +106,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _countryService.DeleteCountry(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
     }
 }

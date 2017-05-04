@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
+﻿using System.Net;
 using System.Web.Mvc;
-using PersonalFinanceManager.Models;
-using PersonalFinanceManager.Entities;
-using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.Currency;
 using PersonalFinanceManager.Services.Interfaces;
 
@@ -103,27 +94,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the currency you are about to delete.
-        /// </summary>
-        /// <param name="id">Currency id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            CurrencyEditModel currencyModel = _currencyService.GetById(id.Value);
-
-            if (currencyModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(currencyModel);
-        }
-
-        /// <summary>
         /// Delete the currency after confirmation.
         /// </summary>
         /// <param name="id">Currency id</param>
@@ -134,7 +104,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _currencyService.DeleteCurrency(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
     }
 }

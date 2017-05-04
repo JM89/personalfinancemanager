@@ -115,27 +115,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the salary you are about to delete.
-        /// </summary>
-        /// <param name="id">Salary id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var salaryModel = _salaryService.GetById(id.Value);
-
-            if (salaryModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(salaryModel);
-        }
-
-        /// <summary>
         /// Delete the salary after confirmation.
         /// </summary>
         /// <param name="id">Salary id</param>
@@ -146,7 +125,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _salaryService.DeleteSalary(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
 
         private void PopulateDropDownLists(SalaryEditModel salaryModel)
@@ -165,9 +144,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _salaryService.CopySalary(sourceId);
 
-            var accountId = CurrentAccount;
-
-            return RedirectToAction("Index", new { accountId });
+            return RedirectToAction("Index");
         }
     }
 }

@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.PensionPages;
     ViewBag.GridTitle = Resources.TitleNames.PensionList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.PensionDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.PensionConfirmationDeletion;
 }
 
 @section BreadCrumbSection
@@ -67,7 +70,7 @@
                         @Html.DisplayFor(modelItem => item.CurrentPot)
                     </td>
                     <td align="right" class="tdActions">
-                        @CustomHelpers.ListButtons(@item.Id, true, "Pension", "")
+                        @CustomHelpers.ListButtons(@item.Id, true, "Pension", "", @item.Description)
                     </td>
                 </tr>
             }

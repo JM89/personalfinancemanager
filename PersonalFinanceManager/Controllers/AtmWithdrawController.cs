@@ -1,20 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using PersonalFinanceManager.Entities;
-using PersonalFinanceManager.Models;
-using System.Web.Helpers;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using PersonalFinanceManager.Services;
-using AutoMapper;
-using PersonalFinanceManager.Models.Income;
 using PersonalFinanceManager.Models.AtmWithdraw;
 using PersonalFinanceManager.Services.Interfaces;
 
@@ -139,29 +126,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the ATM withdraw you are about to delete.
-        /// </summary>
-        /// <param name="id">ATM withdraw id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            AccountBasicInfo();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            AtmWithdrawEditModel atmWithdrawEditModel = _atmWithdrawService.GetById(id.Value);
-
-            if (atmWithdrawEditModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(atmWithdrawEditModel);
-        }
-
-        /// <summary>
         /// Delete the ATM withdraw after confirmation.
         /// </summary>
         /// <param name="id">ATM withdraw id</param>
@@ -172,7 +136,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _atmWithdrawService.DeleteAtmWithdraw(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
 
         public ActionResult UndoDebit(int? id)
@@ -184,9 +148,7 @@ namespace PersonalFinanceManager.Controllers
 
             _atmWithdrawService.ChangeDebitStatus(id.Value, false);
 
-            var accountId = CurrentAccount;
-
-            return RedirectToAction("Index", new { accountId });
+            return RedirectToAction("Index");
         }
 
         public ActionResult Debit(int? id)

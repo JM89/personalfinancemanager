@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.SalaryPages;
     ViewBag.GridTitle = Resources.TitleNames.SalaryList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.SalaryDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.SalaryConfirmationDeletion;
 }
 
 @section BreadCrumbSection
@@ -82,7 +85,7 @@
                     </td>
                     <td align="right" class="tdActions">
                         <a href="/Salary/Copy?sourceId=@item.Id" title="@Resources.ButtonNames.CopyButton" class="btn_copy"><i class="fa fa-clone"></i></a>
-                        @CustomHelpers.ListButtons(@item.Id, true, "Salary", "")
+                        @CustomHelpers.ListButtons(@item.Id, true, "Salary", "", @item.Description)
                     </td>
                 </tr>
             }

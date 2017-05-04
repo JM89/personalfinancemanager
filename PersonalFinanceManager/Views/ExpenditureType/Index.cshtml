@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.ExpenditureTypePages;
     ViewBag.GridTitle = Resources.TitleNames.ExpenditureTypeList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.ExpenditureTypeDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.ExpenditureTypeConfirmationDeletion;
 }
 
 @section AddButtonSection
@@ -51,7 +54,7 @@
                         @Html.DisplayFor(modelItem => item.ShowOnDashboard)
                     </td>
                     <td align="right">
-                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "ExpenditureType", @Resources.DisabledButtonTooltips.ExpenditureTypeCantBeDeleted)
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "ExpenditureType", @Resources.DisabledButtonTooltips.ExpenditureTypeCantBeDeleted, @item.Name)
                     </td>
                 </tr>
             }

@@ -61,6 +61,15 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this account?.
+        /// </summary>
+        public static string AccountConfirmationDeletion {
+            get {
+                return ResourceManager.GetString("AccountConfirmationDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this ATM withdraw?.
         /// </summary>
         public static string AtmWithdrawConfirmationDeletion {

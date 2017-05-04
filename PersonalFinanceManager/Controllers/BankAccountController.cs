@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using PersonalFinanceManager.Entities;
-using PersonalFinanceManager.Models;
-using System.Web.Helpers;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.Account;
-using AutoMapper;
 using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
@@ -153,27 +142,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the account you are about to delete.
-        /// </summary>
-        /// <param name="id">Account id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            AccountEditModel accountModel = _bankAccountService.GetById(id.Value);
-
-            if (accountModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(accountModel);
-        }
-
-        /// <summary>
         /// Delete the account after confirmation.
         /// </summary>
         /// <param name="id">Account id</param>
@@ -184,7 +152,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _bankAccountService.DeleteBankAccount(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
 
         public ActionResult SetAsFavorite(int? id)
@@ -195,8 +163,6 @@ namespace PersonalFinanceManager.Controllers
             }
 
             _bankAccountService.SetAsFavorite(id.Value);
-
-            var accountId = CurrentAccount;
 
             return RedirectToAction("Index");
         }

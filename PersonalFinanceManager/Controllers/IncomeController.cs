@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using PersonalFinanceManager.Entities;
-using PersonalFinanceManager.Models;
-using System.Web.Helpers;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using PersonalFinanceManager.Services;
-using AutoMapper;
 using PersonalFinanceManager.Models.Income;
 using PersonalFinanceManager.Services.Interfaces;
 
@@ -126,29 +114,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the income you are about to delete.
-        /// </summary>
-        /// <param name="id">Income id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            AccountBasicInfo();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            IncomeEditModel incomeModel = _incomeService.GetById(id.Value);
-
-            if (incomeModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(incomeModel);
-        }
-
-        /// <summary>
         /// Delete the income after confirmation.
         /// </summary>
         /// <param name="id">Income id</param>
@@ -159,7 +124,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _incomeService.DeleteIncome(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
     }
 }

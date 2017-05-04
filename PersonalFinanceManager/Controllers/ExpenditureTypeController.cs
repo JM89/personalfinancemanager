@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
+﻿using System.Net;
 using System.Web.Mvc;
-using PersonalFinanceManager.Models;
-using PersonalFinanceManager.Entities;
-using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.ExpenditureType;
 using PersonalFinanceManager.Services.Interfaces;
 
@@ -102,27 +93,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the expenditure type you are about to delete.
-        /// </summary>
-        /// <param name="id">Expenditure type id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            ExpenditureTypeEditModel expenditureTypeModel = _expenditureTypeService.GetById(id.Value);
-
-            if (expenditureTypeModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(expenditureTypeModel);
-        }
-
-        /// <summary>
         /// Delete the expenditure type after confirmation.
         /// </summary>
         /// <param name="id">Expenditure type id</param>
@@ -133,7 +103,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _expenditureTypeService.DeleteExpenditureType(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
     }
 }

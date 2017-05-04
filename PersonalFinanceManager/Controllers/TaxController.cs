@@ -126,27 +126,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the Tax you are about to delete.
-        /// </summary>
-        /// <param name="id">Tax id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var taxModel = _taxService.GetById(id.Value);
-
-            if (taxModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(taxModel);
-        }
-
-        /// <summary>
         /// Delete the Tax after confirmation.
         /// </summary>
         /// <param name="id">Tax id</param>
@@ -157,7 +136,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _taxService.DeleteTax(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
 
         /// <summary>

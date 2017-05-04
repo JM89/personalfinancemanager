@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.BankPages;
     ViewBag.GridTitle = Resources.TitleNames.BankList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.BankDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.BankConfirmationDeletion;
 }
 
 @section AddButtonSection
@@ -47,7 +50,7 @@
                         @Html.DisplayFor(modelItem => item.CountryName)
                     </td>
                     <td align="right">
-                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "Bank", @Resources.DisabledButtonTooltips.BankCantBeDeleted)
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "Bank", @Resources.DisabledButtonTooltips.BankCantBeDeleted, @item.Name)
                     </td>
                 </tr>
             }

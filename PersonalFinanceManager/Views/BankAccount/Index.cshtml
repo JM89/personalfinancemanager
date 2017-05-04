@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.AccountPages;
     ViewBag.GridTitleadmin = Resources.TitleNames.AccountList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.AccountDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.AccountConfirmationDeletion;
 }
 
 @section AddButtonSection
@@ -76,7 +79,7 @@
                                 <i class="fa fa-star-o" aria-hidden="true"></i>
                             </a>
                         }                            
-                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "BankAccount", @Resources.DisabledButtonTooltips.AccountCantBeDeleted)
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "BankAccount", @Resources.DisabledButtonTooltips.AccountCantBeDeleted, @item.Name)
                     </td>
                 </tr>
             }

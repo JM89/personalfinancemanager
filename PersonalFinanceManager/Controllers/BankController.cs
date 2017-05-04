@@ -1,14 +1,9 @@
-﻿using System;
-using System.Data;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Models.Bank;
-using System.IO;
 using PersonalFinanceManager.Helpers;
-using System.Collections.Generic;
 using PersonalFinanceManager.Utils;
 using PersonalFinanceManager.Services.Interfaces;
 
@@ -157,27 +152,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the bank you are about to delete.
-        /// </summary>
-        /// <param name="id">Bank id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            BankEditModel bankModel = _bankService.GetById(id.Value);
-
-            if (bankModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(bankModel);
-        }
-
-        /// <summary>
         /// Delete the bank after confirmation.
         /// </summary>
         /// <param name="id">Account id</param>
@@ -188,7 +162,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _bankService.DeleteBank(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
     }
 }

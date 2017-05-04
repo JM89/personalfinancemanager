@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.IncomePages;
     ViewBag.GridTitle = Resources.TitleNames.IncomeList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.IncomeDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.IncomeConfirmationDeletion;
 }
 
 @section BreadCrumbSection
@@ -70,7 +73,7 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td align="right" class="tdActions">
-                        @CustomHelpers.ListButtons(@item.Id, true, "Income", "")
+                        @CustomHelpers.ListButtons(@item.Id, true, "Income", "", @item.Description)
                     </td>
                 </tr>
             }

@@ -32,8 +32,34 @@
     </div>
 </div>
 
+<div id="DeletionConfirmationBox" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@ViewBag.DeletionConfirmationTitle</h4>
+            </div>
+            <div class="modal-body">
+                <p>@ViewBag.DeletionConfirmationMessage</p>
+                <label id="ItemDescription"></label>
+                <form id="__AjaxAntiForgeryForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="ItemUrl" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn_delete_confirm" data-dismiss="modal">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
 {
     @RenderSection("ScriptsSection", false)
+    <script type="text/javascript">
+        initDeletionConfirmation();
+     </script>
 }
 

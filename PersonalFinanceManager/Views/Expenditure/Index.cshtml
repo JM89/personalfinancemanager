@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.ExpenditurePages;
     ViewBag.GridTitle = Resources.TitleNames.ExpenditureList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.ExpenditureDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.ExpenditureConfirmationDeletion;
 }
 
 @section BreadCrumbSection
@@ -103,8 +106,7 @@
                                 @Html.Raw("|")
                             }
                         }
-
-                        @CustomHelpers.ListButtons(@item.Id, true, "Expenditure", "")
+                        @CustomHelpers.ListButtons(@item.Id, true, "Expenditure", "", @item.Description)
                     </td>
                 </tr>
             }

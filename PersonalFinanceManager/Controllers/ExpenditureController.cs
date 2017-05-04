@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using PersonalFinanceManager.Models;
-using PersonalFinanceManager.Services;
-using PersonalFinanceManager.Entities;
-using Microsoft.AspNet.Identity;
 using PersonalFinanceManager.Models.Expenditure;
 using PersonalFinanceManager.Services.Interfaces;
-using PersonalFinanceManager.Services.RequestObjects;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -173,26 +164,6 @@ namespace PersonalFinanceManager.Controllers
             return RedirectToAction("Index", new { accountId });
         }
 
-
-        // GET: ExpenditureModels/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            AccountBasicInfo();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            ExpenditureEditModel expenditureModel = _expenditureService.GetById(id.Value);
-
-            if (expenditureModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(expenditureModel);
-        }
-
         // POST: ExpenditureModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -200,9 +171,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _expenditureService.DeleteExpenditure(id);
 
-            var accountId = CurrentAccount;
-
-            return RedirectToAction("Index", new { accountId });
+            return Content(Url.Action("Index"));
         }
     }
 }

@@ -111,27 +111,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        /// Show the details of the pension you are about to delete.
-        /// </summary>
-        /// <param name="id">Pension id</param>
-        /// <returns></returns>
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var pensionModel = _pensionService.GetById(id.Value);
-
-            if (pensionModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(pensionModel);
-        }
-
-        /// <summary>
         /// Delete the pension after confirmation.
         /// </summary>
         /// <param name="id">Pension id</param>
@@ -142,7 +121,7 @@ namespace PersonalFinanceManager.Controllers
         {
             _pensionService.DeletePension(id);
 
-            return RedirectToAction("Index");
+            return Content(Url.Action("Index"));
         }
 
         /// <summary>

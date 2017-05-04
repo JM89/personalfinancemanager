@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.CurrencyPages;
     ViewBag.GridTitle = Resources.TitleNames.CurrencyList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.CurrencyDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.CurrencyConfirmationDeletion;
 }
 
 @section AddButtonSection
@@ -42,7 +45,7 @@
                     </td>
 
                     <td align="right">
-                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "Currency", @Resources.DisabledButtonTooltips.CurrencyCantBeDeleted)
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "Currency", @Resources.DisabledButtonTooltips.CurrencyCantBeDeleted, @item.Name)
                     </td>
                 </tr>
             }

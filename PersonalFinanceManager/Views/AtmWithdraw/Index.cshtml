@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
     ViewBag.PageTitle = Resources.TitleNames.AtmWithdrawPages;
     ViewBag.GridTitle = Resources.TitleNames.AtmWithdrawList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.AtmWithdrawDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.AtmWithdrawConfirmationDeletion;
 }
 
 @section BreadCrumbSection
@@ -96,7 +99,7 @@
                             <a href="/AtmWithdraw/Close/@item.Id" title="@Resources.ButtonNames.CloseATMButton"><i class="fa fa-power-off"></i></a>
 
                             @CustomHelpers.EditButton(@item.Id, item.CanBeEdited, "AtmWithdraw", @Resources.DisabledButtonTooltips.AtmWithdrawCantBeEdited) @Html.Raw("|")
-                            @CustomHelpers.DeleteButton(@item.Id, item.CanBeDeleted, "AtmWithdraw", @Resources.DisabledButtonTooltips.AtmWithdrawCantBeDeleted)
+                            @CustomHelpers.DeleteButton(@item.Id, item.CanBeDeleted, "AtmWithdraw", @Resources.DisabledButtonTooltips.AtmWithdrawCantBeDeleted, @item.Description)
                         }
 
                     </td>

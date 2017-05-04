@@ -2,8 +2,11 @@
 
 @{
     Layout = "~/Views/Shared/_LayoutList.cshtml";
-    ViewBag.PageTitle = "Manage savings";
-    ViewBag.GridTitle = "List of savings";
+    ViewBag.PageTitle = Resources.TitleNames.SavingPages;
+    ViewBag.GridTitle = Resources.TitleNames.SavingList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.SavingDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.SavingConfirmationDeletion;
 }
 
 @section BreadCrumbSection
@@ -79,7 +82,7 @@
                         @Html.DisplayFor(modelItem => item.TargetInternalAccountName)
                     </td>
                     <td align="right" class="tdActions">
-                        @CustomHelpers.ListButtons(@item.Id, true, "Saving", "")
+                        @CustomHelpers.ListButtons(@item.Id, true, "Saving", "", @item.Description)
                     </td>
                 </tr>
             }

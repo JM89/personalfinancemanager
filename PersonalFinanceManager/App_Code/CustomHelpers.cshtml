@@ -1,4 +1,4 @@
-﻿@helper ListButtons(int id, bool canBeDeleted, string controllerName, string tooltipDeleteButton)
+﻿@helper ListButtons(int id, bool canBeDeleted, string controllerName, string tooltipDeleteButton, string description)
 {
     var Html = ((System.Web.Mvc.WebViewPage)WebPageContext.Current.Page).Html;
 
@@ -7,10 +7,10 @@
 
     if (@canBeDeleted)
     {
-            <a href="/@controllerName/Delete/@id" title="@Resources.ButtonNames.DeleteTooltip" class="btn_delete"><i class="fa fa-trash-o"></i></a>
+        <a title="@Resources.ButtonNames.DeleteTooltip" class="btn_delete" data-toggle="modal" data-target="#DeletionConfirmationBox" data-description="@description" data-url="/@controllerName/Delete/@id"><i class="fa fa-trash-o"></i></a>
     }
-    else
-    {
+else
+{
         <i class="fa fa-trash-o" style="color: darkgrey;" title="@tooltipDeleteButton"></i>
     }
 }
@@ -29,16 +29,16 @@
     }
 }
 
-@helper DeleteButton(int id, bool canBeDeleted, string controllerName, string tooltipDeleteButton)
+@helper DeleteButton(int id, bool canBeDeleted, string controllerName, string tooltipDeleteButton, string description)
 {
-    var Html = ((System.Web.Mvc.WebViewPage)WebPageContext.Current.Page).Html;
+var Html = ((System.Web.Mvc.WebViewPage)WebPageContext.Current.Page).Html;
 
-    if (@canBeDeleted)
-    {
-       <a href="/@controllerName/Delete/@id" title="@Resources.ButtonNames.DeleteTooltip" class="btn_delete"><i class="fa fa-trash-o"></i></a>
-    }
-    else
-    {
+if (@canBeDeleted)
+{
+   <a title="@Resources.ButtonNames.DeleteTooltip" class="btn_delete" data-toggle="modal" data-target="#DeletionConfirmationBox" data-description="@description" data-url="/@controllerName/Delete/@id"><i class="fa fa-trash-o"></i></a>
+}
+else
+{
        <i class="fa fa-trash-o" style="color: darkgrey;" title="@tooltipDeleteButton" class="btn_delete"></i>
     }
 }
