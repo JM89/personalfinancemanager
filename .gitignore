@@ -8,3 +8,4 @@ PersonalFinanceManager.csproj.user
 .vs
 ReleaseFolder
 /log
+/packages
