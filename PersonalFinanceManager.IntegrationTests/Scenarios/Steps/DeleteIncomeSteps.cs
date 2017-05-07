@@ -74,12 +74,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [When(@"I confirm the deletion")]
         public void WhenIConfirmTheDeletion()
         {
-            var deleteIncomePage = _ctx.WebDriver.FindElement(By.TagName("h5"));
+            var deleteIncomePage = _ctx.FindElement(By.ClassName("modal-title"), 10);
             if (deleteIncomePage.Text != "Delete an income")
             {
                 throw new Exception("The confirmation of deletion should be there.");
             }
-            var deleteBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_delete"));
+            var deleteBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_delete_confirm"));
             deleteBtn.Click();
 
             Thread.Sleep(2000);

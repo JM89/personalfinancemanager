@@ -70,6 +70,10 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             {
                 throw new Exception("There is no expenditure with payment method Cash to delete");
             }
+
+            var atmWithdrawHid = _firstRow.FindElement(By.Id("AtmWithdrawId"));
+            _atmWithdrawId = Convert.ToInt32(atmWithdrawHid.GetAttribute("value"));
+            _atmWithdrawAmount = _atmWithdrawService.GetAtmWithdrawCurrentAmount(_atmWithdrawId);
         }
         
         [When(@"I click on delete for this expenditure")]
@@ -85,17 +89,13 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [When(@"I confirm the deletion")]
         public void WhenIConfirmTheDeletion()
         {
-            var deleteExpenditurePage = _ctx.WebDriver.FindElement(By.TagName("h5"));
+            var deleteExpenditurePage = _ctx.FindElement(By.ClassName("modal-title"), 10);
             if (deleteExpenditurePage.Text != "Delete an expense")
             {
                 throw new Exception("The confirmation of deletion should be there.");
             }
 
-            var atmWithdrawHid = _ctx.WebDriver.FindElement(By.Id("AtmWithdrawId"));
-            _atmWithdrawId = Convert.ToInt32(atmWithdrawHid.GetAttribute("value"));
-            _atmWithdrawAmount = _atmWithdrawService.GetAtmWithdrawCurrentAmount(_atmWithdrawId);
-
-            var deleteBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_delete"));
+            var deleteBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_delete_confirm"));
             deleteBtn.Click();
 
             Thread.Sleep(2000);

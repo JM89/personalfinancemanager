@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenQA.Selenium.Support.UI;
 
 namespace PersonalFinanceManager.IntegrationTests.Infrastructure
 {
@@ -54,6 +55,16 @@ namespace PersonalFinanceManager.IntegrationTests.Infrastructure
         public void StopTest()
         {
             this.WebDriver.Quit();
+        }
+
+        public IWebElement FindElement(By by, int timeoutInSeconds)
+        {
+            if (timeoutInSeconds > 0)
+            {
+                var wait = new WebDriverWait(WebDriver, TimeSpan.FromSeconds(timeoutInSeconds));
+                return wait.Until(ExpectedConditions.ElementIsVisible(by));
+            }
+            return WebDriver.FindElement(by);
         }
     }
 }

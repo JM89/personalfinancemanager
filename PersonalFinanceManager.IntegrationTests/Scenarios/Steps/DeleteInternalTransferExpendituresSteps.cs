@@ -72,9 +72,13 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             if (paymentMethod != "Internal Transfer")
             {
                 throw new Exception("There is no expenditure with payment method Internal Transfer to delete");
-            }           
+            }
+
+            var targetAccountHid = _firstRow.FindElement(By.Id("TargetInternalAccountId"));
+            _targetAccountId = Convert.ToInt32(targetAccountHid.GetAttribute("value"));
+            _targetAccountAmount = _bankAccountService.GetAccountAmount(_targetAccountId);
         }
-        
+
         [When(@"I click on delete for this expenditure")]
         public void WhenIClickOnDeleteForThisExpenditure()
         {
@@ -88,17 +92,13 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [When(@"I confirm the deletion")]
         public void WhenIConfirmTheDeletion()
         {
-            var deleteExpenditurePage = _ctx.WebDriver.FindElement(By.TagName("h5"));
+            var deleteExpenditurePage = _ctx.FindElement(By.ClassName("modal-title"), 10);
             if (deleteExpenditurePage.Text != "Delete an expense")
             {
                 throw new Exception("The confirmation of deletion should be there.");
             }
             
-            var targetAccountHid = _ctx.WebDriver.FindElement(By.Id("TargetInternalAccountId"));
-            _targetAccountId = Convert.ToInt32(targetAccountHid.GetAttribute("value"));
-            _targetAccountAmount = _bankAccountService.GetAccountAmount(_targetAccountId);
-
-            var deleteBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_delete"));
+            var deleteBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_delete_confirm"));
             deleteBtn.Click();
 
             Thread.Sleep(2000);

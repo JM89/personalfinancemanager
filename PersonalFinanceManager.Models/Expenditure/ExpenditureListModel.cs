@@ -1,12 +1,5 @@
 ﻿using PersonalFinanceManager.Models.Resources;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PersonalFinanceManager.Models.Expenditure
 {
@@ -63,6 +56,12 @@ namespace PersonalFinanceManager.Models.Expenditure
 
         [LocalizedDisplayName("ExpenditureHasBeenAlreadyDebited")]
         public bool HasBeenAlreadyDebited { get; set; }
+
+        [LocalizedDisplayName("ExpenditureAtmWithdraw")]
+        public int? AtmWithdrawId { get; set; }
+
+        [LocalizedDisplayName("ExpenditureTargetInternalAccount")]
+        public int? TargetInternalAccountId { get; set; }
     }
 
 }
