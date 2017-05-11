@@ -21,7 +21,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
             else
             {
-                throw new Exception("ATM Withdraw can't be null.");
+                throw new ArgumentException("ATM Withdraw can't be null.");
             }
         }
 
@@ -42,7 +42,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
             else
             {
-                throw new Exception("ATM Withdraw can't be null.");
+                throw new ArgumentException("ATM Withdraw can't be null.");
             }
         }
 
@@ -70,7 +70,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
                 else
                 {
                     if (!newMovement.AtmWithdrawId.HasValue)
-                        throw new Exception("New Target account can't be null.");
+                        throw new ArgumentException("New Target account can't be null.");
 
                     if (CurrentMovement.AtmWithdrawId.Value != newMovement.AtmWithdrawId.Value)
                     {
@@ -87,7 +87,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
             else
             {
-                throw new Exception("Current Source account & Target ATM can't be null.");
+                throw new ArgumentException("Current Source account & Target ATM can't be null.");
             }
         }
     }

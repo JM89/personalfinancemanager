@@ -25,7 +25,7 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult Index()
         {
-            var model = _budgetPlanService.GetBudgetPlans(CurrentAccount);
+            var model = _budgetPlanService.GetBudgetPlans(GetCurrentAccount());
 
             return View(model);
         }
@@ -36,7 +36,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Create()
         {
-            var budgetPlanEditModel = _budgetPlanService.BuildBudgetPlan(CurrentAccount);
+            var budgetPlanEditModel = _budgetPlanService.BuildBudgetPlan(GetCurrentAccount());
             return View(budgetPlanEditModel);
         }
 
@@ -48,7 +48,7 @@ namespace PersonalFinanceManager.Controllers
 
             if (ModelState.IsValid)
             {
-                _budgetPlanService.CreateBudgetPlan(budgetPlanEditModel, CurrentAccount);
+                _budgetPlanService.CreateBudgetPlan(budgetPlanEditModel, GetCurrentAccount());
                 result = true;
             }
             else
@@ -67,7 +67,7 @@ namespace PersonalFinanceManager.Controllers
 
         public ActionResult View(int? id)
         {
-            var budgetPlanEditModel = _budgetPlanService.BuildBudgetPlan(CurrentAccount, id);
+            var budgetPlanEditModel = _budgetPlanService.BuildBudgetPlan(GetCurrentAccount(), id);
             return View(budgetPlanEditModel);
         }
         
@@ -78,7 +78,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Edit(int? id)
         {
-            var budgetPlanEditModel = _budgetPlanService.BuildBudgetPlan(CurrentAccount, id);
+            var budgetPlanEditModel = _budgetPlanService.BuildBudgetPlan(GetCurrentAccount(), id);
             return View(budgetPlanEditModel);
         }
 
@@ -90,7 +90,7 @@ namespace PersonalFinanceManager.Controllers
 
             if (ModelState.IsValid)
             {
-                _budgetPlanService.EditBudgetPlan(budgetPlanEditModel, CurrentAccount);
+                _budgetPlanService.EditBudgetPlan(budgetPlanEditModel, GetCurrentAccount());
                 result = true;
             }
             else
@@ -115,7 +115,7 @@ namespace PersonalFinanceManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _budgetPlanService.StartBudgetPlan(id.Value, CurrentAccount);
+            _budgetPlanService.StartBudgetPlan(id.Value, GetCurrentAccount());
 
             return RedirectToAction("View", new { id=id });
         }

@@ -15,7 +15,7 @@ namespace PersonalFinanceManager.Helpers.Filters
             if (requestMethod == "POST" || requestMethod == "PUT" || requestMethod == "DELETE")
             {
                 var dbCtx = (ApplicationDbContext)HttpContext.Current.Items["_DbContext"];
-                var dbCxtTransaction = dbCtx.Database.BeginTransaction();
+                dbCtx.Database.BeginTransaction();
             }
             base.OnActionExecuting(filterContext);
         }

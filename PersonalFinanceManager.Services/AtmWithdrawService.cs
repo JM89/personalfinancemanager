@@ -41,7 +41,7 @@ namespace PersonalFinanceManager.Services
             mappedAtmWithdraws.ForEach(atmWithdraw =>
             {
                 atmWithdraw.CanBeDeleted = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id);
-                atmWithdraw.CanBeEdited = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id); ;
+                atmWithdraw.CanBeEdited = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id); 
             });
 
             return mappedAtmWithdraws;

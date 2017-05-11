@@ -29,7 +29,6 @@ namespace PersonalFinanceManager
         protected virtual void Application_BeginRequest()
         {
             var ctx = HttpContext.Current;
-            var requestMethod = ctx.Request.HttpMethod;
             ctx.Items["_DbContext"] = new ApplicationDbContext();
         }
 

@@ -10,6 +10,6 @@ namespace PersonalFinanceManager.Models.Shared
     {
         bool CanBeDeleted { get; set; }
 
-        string TooltipResourceName { get; set; }
+        string TooltipResourceName { get; }
     }
 }

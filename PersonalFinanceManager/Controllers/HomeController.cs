@@ -85,7 +85,7 @@ namespace PersonalFinanceManager.Controllers
                 if (currencies.Any())
                 {
                     var rdn = new Random();
-                    var randomCurrency = currencies[rdn.Next(0, currencies.Count())];
+                    var randomCurrency = currencies[rdn.Next(0, currencies.Count)];
 
                     var conversionRate = ConversionRateApi.GetRate(fullAccountDetails.CurrencyName, randomCurrency.Name);
 

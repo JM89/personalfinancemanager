@@ -23,7 +23,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var accountId = CurrentAccount;
+            var accountId = GetCurrentAccount();
 
             AccountBasicInfo();
 
@@ -57,7 +57,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var accountId = CurrentAccount;
+                var accountId = GetCurrentAccount();
                 incomeEditModel.AccountId = accountId;
 
                 _incomeService.CreateIncome(incomeEditModel);
@@ -103,7 +103,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var accountId = CurrentAccount;
+                var accountId = GetCurrentAccount();
                 incomeEditModel.AccountId = accountId;
 
                 _incomeService.EditIncome(incomeEditModel);

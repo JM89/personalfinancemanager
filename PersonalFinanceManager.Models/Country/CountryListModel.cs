@@ -15,16 +15,6 @@ namespace PersonalFinanceManager.Models.Country
 
         public bool CanBeDeleted { get; set; }
 
-        public string TooltipResourceName
-        {
-            get
-            {
-                return "CountryCantBeDeleted";
-            }
-            set
-            {
-
-            }
-        }
+        public string TooltipResourceName => "CountryCantBeDeleted";
     }
 }

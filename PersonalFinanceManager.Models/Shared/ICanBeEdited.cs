@@ -10,6 +10,6 @@ namespace PersonalFinanceManager.Models.Shared
     {
         bool CanBeEdited { get; set; }
 
-        string CanBeEditedTooltipResourceName { get; set; }
+        string CanBeEditedTooltipResourceName { get; }
     }
 }

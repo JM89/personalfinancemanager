@@ -32,6 +32,5 @@ function getRGBA(hexa, a)
 {
     var patt = /^([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})$/;
     var matches = patt.exec(hexa);
-    var rgba = "rgba(" + parseInt(matches[1], 16) + "," + parseInt(matches[2], 16) + "," + parseInt(matches[3], 16) + ", " + a + ")";
-    return rgba;
+    return "rgba(" + parseInt(matches[1], 16) + "," + parseInt(matches[2], 16) + "," + parseInt(matches[3], 16) + ", " + a + ")";
 }

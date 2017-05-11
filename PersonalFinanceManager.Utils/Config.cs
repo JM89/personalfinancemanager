@@ -8,22 +8,13 @@ using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Utils
 {
-    public class Config
+    public static class Config
     {
-        public static List<string> BankIconAllowedExtensions
-        {
-            get { return GetConfig().Split(';').ToList(); }
-        }
+        public static List<string> BankIconAllowedExtensions => GetConfig().Split(';').ToList();
 
-        public static long BankIconMaxSize
-        {
-            get { return Convert.ToInt64(GetConfig()); }
-        }
+        public static long BankIconMaxSize => Convert.ToInt64(GetConfig());
 
-        public static string BankIconBasePath
-        {
-            get { return GetConfig(); }
-        } 
+        public static string BankIconBasePath => GetConfig();
 
         private static string GetConfig(string settingName = null, [CallerMemberName] string callerProperty = "")
         {

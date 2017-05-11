@@ -10,7 +10,6 @@
         var url = $(".modal-body #ItemUrl").val();
         var form = $('#__AjaxAntiForgeryForm');
         var token = $('input[name="__RequestVerificationToken"]', form).val();
-        console.log(token);
 
         $.ajax({
             url: url,

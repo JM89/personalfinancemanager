@@ -10,14 +10,14 @@ namespace PersonalFinanceManager.App_Start
 {
     public class NinjectControllerFactory : DefaultControllerFactory
     {
-        private IKernel ninjectKernel;
+        private readonly IKernel _ninjectKernel;
         public NinjectControllerFactory(IKernel kernel)
         {
-            ninjectKernel = kernel;
+            _ninjectKernel = kernel;
         }
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
         {
-            return (controllerType == null) ? null : (IController)ninjectKernel.Get(controllerType);
+            return (controllerType == null) ? null : (IController)_ninjectKernel.Get(controllerType);
         }
     }
 }

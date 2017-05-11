@@ -1,12 +1,6 @@
 ﻿using PersonalFinanceManager.Models.Resources;
 using PersonalFinanceManager.Models.Shared;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Models.Bank
 {
@@ -26,16 +20,6 @@ namespace PersonalFinanceManager.Models.Bank
 
         public bool CanBeDeleted { get; set; }
 
-        public string TooltipResourceName
-        {
-            get
-            {
-                return "BankCantBeDeleted";
-            }
-            set
-            {
-
-            }
-        }
+        public string TooltipResourceName => "BankCantBeDeleted";
     }
 }

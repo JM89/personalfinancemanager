@@ -29,7 +29,7 @@ namespace PersonalFinanceManager.Helpers.ExternalApi
                         conversionRate.ConversionRate = new ConversionRateCurrencyResult()
                         {
                             Currency = targetCurrency,
-                            ConversionRate = (decimal)jObject["rates"].ToArray().First()
+                            ConversionRate = (decimal)jObject["rates"].First()
                         };
                     }
                 }

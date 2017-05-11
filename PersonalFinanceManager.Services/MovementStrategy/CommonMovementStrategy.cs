@@ -21,7 +21,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
             else
             {
-                throw new Exception("Current movement / Source account can't be null.");
+                throw new ArgumentException("Current movement / Source account can't be null.");
             }
         }
 
@@ -42,7 +42,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
             else
             {
-                throw new Exception("Current movement / Source account can't be null.");
+                throw new ArgumentException("Current movement / Source account can't be null.");
             }
         }
 
@@ -76,7 +76,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
             else
             {
-                throw new Exception("Current Source account can't be null.");
+                throw new ArgumentException("Current Source account can't be null.");
             }
         }
     }

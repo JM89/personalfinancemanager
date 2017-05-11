@@ -39,7 +39,7 @@ namespace PersonalFinanceManager.Services
             strategy.Debit();
 
             if (!movement.TargetIncomeId.HasValue)
-                throw new Exception("Target Income ID should not be null.");
+                throw new ArgumentException("Target Income ID should not be null.");
 
             savingModel.GeneratedIncomeId = movement.TargetIncomeId.Value;
 
@@ -74,7 +74,7 @@ namespace PersonalFinanceManager.Services
             strategy.UpdateDebit(newMovement);
 
             if (!newMovement.TargetIncomeId.HasValue)
-                throw new Exception("Target Income ID should not be null.");
+                throw new ArgumentException("Target Income ID should not be null.");
 
             // Update the GenerateIncomeId.
             savingModel.GeneratedIncomeId = newMovement.TargetIncomeId.Value;
@@ -83,7 +83,7 @@ namespace PersonalFinanceManager.Services
 
         public SavingEditModel GetById(int id)
         {
-            var saving = _savingRepository.GetList().Include(u => u.TargetInternalAccount).ToList().Single(x => x.Id == id);
+            var saving = _savingRepository.GetById(id, u => u.TargetInternalAccount);
 
             if (saving == null)
             {

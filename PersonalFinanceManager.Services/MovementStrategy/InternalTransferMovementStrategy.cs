@@ -22,7 +22,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
             else
             {
-                throw new Exception("Current movement / Source account / Target Account can't be null.");
+                throw new ArgumentException("Current movement / Source account / Target Account can't be null.");
             }
         }
 
@@ -37,7 +37,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             BankAccountRepository.Update(internalAccount);
 
             if (!movement.TargetAccountId.HasValue)
-                throw new Exception("Target Income ID should not be null.");
+                throw new ArgumentException("Target Income ID should not be null.");
 
             var incomeModel = new IncomeModel
             {
@@ -61,7 +61,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
             else
             {
-                throw new Exception("Current movement / Source account / Target Account can't be null.");
+                throw new ArgumentException("Current movement / Source account / Target Account can't be null.");
             }
         }
 
@@ -76,7 +76,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             BankAccountRepository.Update(internalAccount);
 
             if (!movement.TargetIncomeId.HasValue)
-                throw new Exception("Target Income ID should not be null.");
+                throw new ArgumentException("Target Income ID should not be null.");
 
             var income = IncomeRepository.GetById(movement.TargetIncomeId.Value);
             IncomeRepository.Delete(income);
@@ -99,7 +99,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
                 else
                 {
                     if (!newMovement.TargetAccountId.HasValue)
-                        throw new Exception("New Target account can't be null.");
+                        throw new ArgumentException("New Target account can't be null.");
 
                     if (CurrentMovement.TargetAccountId.Value != newMovement.TargetAccountId.Value)
                     {
@@ -116,7 +116,7 @@ namespace PersonalFinanceManager.Services.MovementStrategy
             }
             else
             {
-                throw new Exception("Current Source account & Target Account can't be null.");
+                throw new ArgumentException("Current Source account & Target Account can't be null.");
             }
         }
     }

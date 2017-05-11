@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
 using PersonalFinanceManager.Core.Exceptions;
 
 namespace PersonalFinanceManager.Helpers
 {
-    public class FileUpload
+    public static class FileUpload
     {
         /// <summary>
         /// Validate and upload a file on the webserver (default location is root of the current project).
@@ -20,65 +19,35 @@ namespace PersonalFinanceManager.Helpers
         /// <returns></returns>
         public static string UploadFileToServer(HttpPostedFileBase file, string fieldName, string relativeLocation, long maxSize, List<string> allowedExtensions)
         {
-            var businessException = new BusinessException();
-
-            if (file == null)
-            {
+            if (file?.FileName == null)
                 throw new BusinessException(fieldName, BusinessExceptionMessage.FileUploadHasNotBeenSelected);
-            }
-
-            var relativeFilePath = string.Empty;
 
             var path = System.Web.Hosting.HostingEnvironment.MapPath((relativeLocation.StartsWith("/") ? ("~") : string.Empty) + relativeLocation);
 
             if (path == null)
-            {
                 throw new ArgumentException("Location is not found on the server.");
-            }
 
-            if (file.ContentLength > 0)
+            if (file.ContentLength <= 0)
+                throw new BusinessException(fieldName, BusinessExceptionMessage.FileUploadEmpty);
+
+            if (file.ContentLength > maxSize)
+                throw new BusinessException(fieldName, string.Format(BusinessExceptionMessage.FileUploadMaxSize, maxSize));
+
+            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant().Replace(".", "");
+
+            if (!allowedExtensions.Contains(fileExtension))
             {
-                if (file.ContentLength > maxSize)
-                {
-                    businessException.AddErrorMessage(fieldName, string.Format(BusinessExceptionMessage.FileUploadMaxSize, maxSize));
-                }
-                else
-                {
-                    var fileExtension = Path.GetExtension(file.FileName).ToLower().Replace(".", "");
-
-                    if (!allowedExtensions.Contains(fileExtension))
-                    {
-                        var allowedExtensionsStr = string.Join(";", allowedExtensions.ToArray());
-
-                        businessException.AddErrorMessage(fieldName, string.Format(BusinessExceptionMessage.FileUploadWrongExtensions, fileExtension, allowedExtensionsStr));
-                    }
-                    else
-                    {
-                        var filePath = Path.Combine(path, Path.GetFileName(file.FileName));
-                        if (File.Exists(filePath))
-                        {
-                            businessException.AddErrorMessage(fieldName, BusinessExceptionMessage.FileUploadSameName);
-                        }
-                        else
-                        {
-                            file.SaveAs(filePath);
-
-                            relativeFilePath = string.Format("{0}/{1}", relativeLocation, file.FileName);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                businessException.AddErrorMessage(fieldName, BusinessExceptionMessage.FileUploadEmpty);
+                var allowedExtensionsStr = string.Join(";", allowedExtensions.ToArray());
+                throw new BusinessException(fieldName, string.Format(BusinessExceptionMessage.FileUploadWrongExtensions, fileExtension, allowedExtensionsStr));
             }
 
-            if (businessException.HasError())
-            {
-                throw businessException;
-            }
+            var filePath = Path.Combine(path, Path.GetFileName(file.FileName));
+            if (File.Exists(filePath))
+                throw new BusinessException(fieldName, BusinessExceptionMessage.FileUploadSameName);
 
-            return relativeFilePath;
+            file.SaveAs(filePath);
+
+            return $"{relativeLocation}/{file.FileName}";
         }
     }
 }

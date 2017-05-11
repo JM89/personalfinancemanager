@@ -26,7 +26,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var accountId = CurrentAccount;
+            var accountId = GetCurrentAccount();
 
             AccountBasicInfo();
 
@@ -62,7 +62,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var accountId = CurrentAccount;
+                var accountId = GetCurrentAccount();
                 savingEditModel.AccountId = accountId;
 
                 _savingService.CreateSaving(savingEditModel);
@@ -111,7 +111,7 @@ namespace PersonalFinanceManager.Controllers
 
             if (ModelState.IsValid)
             {
-                var accountId = CurrentAccount;
+                var accountId = GetCurrentAccount();
                 savingEditModel.AccountId = accountId;
 
                 _savingService.EditSaving(savingEditModel);
@@ -124,7 +124,7 @@ namespace PersonalFinanceManager.Controllers
         private void PopulateDropDownLists(SavingEditModel savingModel)
         {
             savingModel.AvailableInternalAccounts = _bankAccountService.GetAccountsByUser(CurrentUser)
-                .Where(x => x.Id != CurrentAccount && x.IsSavingAccount)
+                .Where(x => x.Id != GetCurrentAccount() && x.IsSavingAccount)
                 .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
         }
 

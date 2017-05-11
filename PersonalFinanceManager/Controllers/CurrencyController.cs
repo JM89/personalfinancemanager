@@ -8,7 +8,7 @@ namespace PersonalFinanceManager.Controllers
     [Authorize]
     public class CurrencyController : BaseController
     {
-        private ICurrencyService _currencyService;
+        private readonly ICurrencyService _currencyService;
 
         public CurrencyController(ICurrencyService currencyService, IBankAccountService bankAccountService) : base(bankAccountService)
         {

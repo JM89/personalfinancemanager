@@ -21,8 +21,6 @@ namespace PersonalFinanceManager.Controllers
             this._countryService = countryService;
         }
 
-        private const int MaxAttempt = 5;
-
         /// <summary>
         /// Return the list of banks.
         /// </summary>
@@ -37,7 +35,7 @@ namespace PersonalFinanceManager.Controllers
         /// <summary>
         /// Populate the list of countries for the Create / Edit form. 
         /// </summary>
-        /// <param name="accountModel"></param>
+        /// <param name="bankModel"></param>
         private void PopulateDropDownLists(BankEditModel bankModel)
         {
             bankModel.AvailableCountries = _countryService.GetCountries().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();

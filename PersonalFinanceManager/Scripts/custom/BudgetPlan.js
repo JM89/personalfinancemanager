@@ -29,11 +29,6 @@ function createBudgetPlan() {
             else {
                 handleJsonValidationErrors(data.ErrorMessages);
             }
-        })
-        .fail(function (xhr, ajaxOptions, thrownError) {
-            console.log(xhr.status);
-            console.log(xhr.responseText);
-            console.log(thrownError);
         });
 }
 
@@ -49,10 +44,5 @@ function editBudgetPlan() {
             else {
                 handleJsonValidationErrors(data.ErrorMessages);
             }
-        })
-        .fail(function (xhr, ajaxOptions, thrownError) {
-            console.log(xhr.status);
-            console.log(xhr.responseText);
-            console.log(thrownError);
         });
 }

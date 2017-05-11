@@ -15,7 +15,7 @@ namespace PersonalFinanceManager.Controllers
 {
     public class BaseController : Controller
     {
-        private ILog log = LogManager.GetLogger(typeof(BaseController));
+        private readonly ILog _log = LogManager.GetLogger(typeof(BaseController));
 
         private readonly IBankAccountService _bankAccountService;
 
@@ -50,47 +50,32 @@ namespace PersonalFinanceManager.Controllers
             }
             else
             {
-                log.Error($"\n{ex.Message}");
+                _log.Error($"\n{ex.Message}");
             }
         }
 
-        protected string CurrentUser
-        {
-            get
-            {
-                return User.Identity.GetUserId();
-            }
-        }
+        protected string CurrentUser => User.Identity.GetUserId();
 
         protected bool HasAccount => _bankAccountService.GetAccountsByUser(CurrentUser).Any();
 
-        protected int CurrentAccount
+        protected int GetCurrentAccount()
         {
-            get
+            if (Session["CurrentAccount"] != null)
             {
-                if (Session["CurrentAccount"] != null)
-                {
-                    return (int)Session["CurrentAccount"];
-                }
-                else
-                {
-                    var firstAccount = _bankAccountService.GetAccountsByUser(CurrentUser).FirstOrDefault();
-
-                    if (firstAccount != null)
-                    {
-                        return firstAccount.Id;
-                    }
-                    else
-                    {
-                        throw new Exception("User has no account yet");
-                    }
-                }
+                return (int)Session["CurrentAccount"];
             }
+            var firstAccount = _bankAccountService.GetAccountsByUser(CurrentUser).FirstOrDefault();
+
+            if (firstAccount != null)
+            {
+                return firstAccount.Id;
+            }
+            throw new ArgumentException("User has no account yet");
         }
 
         protected void AccountBasicInfo()
         {
-            int accountId = CurrentAccount;
+            int accountId = GetCurrentAccount();
 
             var account = _bankAccountService.GetById(accountId);
             var accountName = account.Name;

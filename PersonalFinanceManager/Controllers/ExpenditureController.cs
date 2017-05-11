@@ -31,11 +31,9 @@ namespace PersonalFinanceManager.Controllers
         // GET: ExpenditureModels
         public ActionResult Index()
         {
-            var accountId = CurrentAccount;
-
             AccountBasicInfo();
 
-            var expenditures = _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { AccountId = CurrentAccount })
+            var expenditures = _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { AccountId = GetCurrentAccount() })
                 .OrderByDescending(x => x.DateExpenditure)
                 .ThenByDescending(x => x.Id)
                 .ToList();
@@ -45,11 +43,10 @@ namespace PersonalFinanceManager.Controllers
 
         private void PopulateDropDownLists(ExpenditureEditModel expenditureModel)
         {
-            //expenditureModel.AvailableAccounts = bankAccountService.GetAccountsByUser(CurrentUser).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            expenditureModel.AvailableInternalAccounts = _bankAccountService.GetAccountsByUser(CurrentUser).Where(x => x.Id != CurrentAccount).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            expenditureModel.AvailableInternalAccounts = _bankAccountService.GetAccountsByUser(CurrentUser).Where(x => x.Id != GetCurrentAccount()).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
             expenditureModel.AvailableExpenditureTypes = _expenditureTypeService.GetExpenditureTypes().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).OrderBy(x => x.Text).ToList();
             expenditureModel.AvailablePaymentMethods = _paymentMethodService.GetPaymentMethods().ToList();
-            expenditureModel.AvailableAtmWithdraws = _atmWithdrawService.GetAtmWithdrawsByAccountId(CurrentAccount).Where(x => !x.IsClosed).OrderBy(x => x.DateExpenditure).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Description }).ToList();
+            expenditureModel.AvailableAtmWithdraws = _atmWithdrawService.GetAtmWithdrawsByAccountId(GetCurrentAccount()).Where(x => !x.IsClosed).OrderBy(x => x.DateExpenditure).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Description }).ToList();
         }
 
         // GET: ExpenditureModels/Create
@@ -73,7 +70,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var accountId = CurrentAccount;
+                var accountId = GetCurrentAccount();
 
                 expenditureModel.AccountId = accountId;
                 _expenditureService.CreateExpenditure(expenditureModel);
@@ -96,14 +93,10 @@ namespace PersonalFinanceManager.Controllers
         // GET: BankAccount/Edit/5
         public ActionResult Edit(int? id)
         {
-            var accountId = CurrentAccount;
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var accountName = _bankAccountService.GetById(accountId).Name;
 
             AccountBasicInfo();
 
@@ -125,7 +118,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var accountId = CurrentAccount;
+                var accountId = GetCurrentAccount();
 
                 expenditureModel.AccountId = accountId;
 
@@ -145,7 +138,7 @@ namespace PersonalFinanceManager.Controllers
 
             _expenditureService.ChangeDebitStatus(id.Value, false);
 
-            var accountId = CurrentAccount;
+            var accountId = GetCurrentAccount();
 
             return RedirectToAction("Index", new { accountId });
         }
@@ -159,7 +152,7 @@ namespace PersonalFinanceManager.Controllers
 
             _expenditureService.ChangeDebitStatus(id.Value, true);
 
-            var accountId = CurrentAccount;
+            var accountId = GetCurrentAccount();
 
             return RedirectToAction("Index", new { accountId });
         }

@@ -15,16 +15,6 @@ namespace PersonalFinanceManager.Models.Currency
 
         public bool CanBeDeleted { get; set; }
 
-        public string TooltipResourceName
-        {
-            get
-            {
-                return "CurrencyCantBeDeleted";
-            }
-            set
-            {
-
-            }
-        }
+        public string TooltipResourceName => "CurrencyCantBeDeleted";
     }
 }

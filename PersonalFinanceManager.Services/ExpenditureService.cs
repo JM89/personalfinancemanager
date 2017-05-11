@@ -156,12 +156,6 @@ namespace PersonalFinanceManager.Services
                 EndDate = currentMonthInterval.EndDate
             });
 
-            var incomes = _incomeRepository.GetList().Where(x => x.AccountId == accountId).ToList().Where(x =>
-                x.DateIncome >= over12MonthsInterval.StartDate && x.DateIncome < currentMonthInterval.EndDate).ToList();
-
-            var savings = _savingRepository.GetList().Where(x => x.AccountId == accountId).ToList().Where(x =>
-                x.DateSaving >= over12MonthsInterval.StartDate && x.DateSaving < currentMonthInterval.EndDate).ToList(); 
-
             // Reset the start date to the first movement (First day of the same month)
             over12MonthsInterval.StartDate = DateTimeFormatHelper.GetFirstDayOfMonth(
                 expenses.Any() ?
@@ -237,6 +231,9 @@ namespace PersonalFinanceManager.Services
                 ExpenseValue = expenses.Where(x => currentMonthInterval.IsBetween(x.DateExpenditure)).Sum(x => x.Cost),
                 ExpenseExpectedValue = budgetPlanExpenses
             });
+
+            var incomes = _incomeRepository.GetList().Where(x => x.AccountId == accountId && x.DateIncome >= over12MonthsInterval.StartDate && x.DateIncome < currentMonthInterval.EndDate).ToList();
+            var savings = _savingRepository.GetList().Where(x => x.AccountId == accountId && x.DateSaving >= over12MonthsInterval.StartDate && x.DateSaving < currentMonthInterval.EndDate).ToList();
 
             // Get the incomes/expenses/savings by month for last 6 months
             var over6MonthsNames = over6MonthsInterval.GetIntervalsByMonth();

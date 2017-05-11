@@ -1,8 +1,6 @@
 ﻿using System;
-using PersonalFinanceManager.Models.Helpers;
 using PersonalFinanceManager.Models.Resources;
 using PersonalFinanceManager.Models.Shared;
-using PersonalFinanceManager.Utils.Helpers;
 using PersonalFinanceManager.Utils.Helpers;
 
 namespace PersonalFinanceManager.Models.Tax
@@ -46,9 +44,6 @@ namespace PersonalFinanceManager.Models.Tax
 
         public bool CanBeDeleted { get; set; }
 
-        public string TooltipResourceName {
-            get { return "TaxCantBeDeleted"; }
-            set { }
-        }
+        public string TooltipResourceName => "TaxCantBeDeleted";
     }
 }

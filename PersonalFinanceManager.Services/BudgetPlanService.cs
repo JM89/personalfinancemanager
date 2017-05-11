@@ -48,16 +48,16 @@ namespace PersonalFinanceManager.Services
         /// <returns></returns>
         public IList<BudgetPlanListModel> GetBudgetPlans(int accountId)
         {
-            var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList().Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+            var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList2().Where(x => x.AccountId == accountId).Select(x => x.BudgetPlanId);
 
             var budgetPlans = _budgetPlanRepository.GetList().Where(x => budgetPlansForAccount.Contains(x.Id)).ToList();
 
-            return budgetPlans.Select(x => Mapper.Map<BudgetPlanListModel>(x)).ToList();
+            return budgetPlans.Select(Mapper.Map<BudgetPlanListModel>).ToList();
         }
         
         public BudgetPlanEditModel GetCurrent(int accountId)
         {
-            var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList().Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+            var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList2().Where(x => x.AccountId == accountId).Select(x => x.BudgetPlanId);
 
             var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && x.StartDate.HasValue && !x.EndDate.HasValue);
             if (currentBudgetPlan != null)
@@ -75,9 +75,7 @@ namespace PersonalFinanceManager.Services
                 return null;
             }
 
-            var budgetPlanExpenditures = _budgetByExpenditureTypeRepository.GetList()
-                .Include(x => x.ExpenditureType)
-                .Where(x => x.BudgetPlanId == id);
+            var budgetPlanExpenditures = _budgetByExpenditureTypeRepository.GetList2(x => x.ExpenditureType).Where(x => x.BudgetPlanId == id);
 
             var budgetExpenditureTypes = new List<BudgetPlanExpenditureType>();
             foreach(var budgetPlanExpenditure in budgetPlanExpenditures)
@@ -108,17 +106,18 @@ namespace PersonalFinanceManager.Services
             var budgetPlanModel = Mapper.Map<BudgetPlanModel>(budgetPlanEditModel);
             _budgetPlanRepository.Create(budgetPlanModel);
 
-            var plannedExpenditures = new List<BudgetByExpenditureTypeModel>();
             foreach(var expenditureType in budgetPlanEditModel.ExpenditureTypes)
             {
-                var plannedExpenditure = new BudgetByExpenditureTypeModel();
-                plannedExpenditure.Budget = expenditureType.ExpectedValue;
-                plannedExpenditure.ExpenditureTypeId = expenditureType.ExpenditureType.Id;
-                plannedExpenditure.BudgetPlanId = budgetPlanModel.Id;
+                var plannedExpenditure = new BudgetByExpenditureTypeModel
+                {
+                    Budget = expenditureType.ExpectedValue,
+                    ExpenditureTypeId = expenditureType.ExpenditureType.Id,
+                    BudgetPlanId = budgetPlanModel.Id,
+                    AccountId = accountId
+                };
 
                 // Account ID is defined at BudgetByExpenditureTypeModel time because at first, I wanted to plan budget through several accounts.
                 // It might evolve later so for now, I keep it here, independently from BudgetByExpenditureTypeModel.
-                plannedExpenditure.AccountId = accountId;
 
                 _budgetByExpenditureTypeRepository.Create(plannedExpenditure);
             }
@@ -168,7 +167,7 @@ namespace PersonalFinanceManager.Services
 
         public void StartBudgetPlan(int value, int accountId)
         {
-            var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList().Where(x => x.AccountId == accountId).ToList().Select(x => x.BudgetPlanId);
+            var budgetPlansForAccount = _budgetByExpenditureTypeRepository.GetList().Where(x => x.AccountId == accountId).Select(x => x.BudgetPlanId);
             var currentBudgetPlan = _budgetPlanRepository.GetList().SingleOrDefault(x => budgetPlansForAccount.Contains(x.Id) && x.StartDate.HasValue && !x.EndDate.HasValue);
             if (currentBudgetPlan != null)
             {

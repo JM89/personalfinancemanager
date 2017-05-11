@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace PersonalFinanceManager.Helpers
 {
-    public class ModelStateJsonConvertor
+    public static class ModelStateJsonConvertor
     {
         public static List<JsonError> Convert(ModelStateDictionary modelState)
         {

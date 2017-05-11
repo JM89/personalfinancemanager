@@ -34,7 +34,7 @@
    
     var canvas = document.getElementById("actualVsExpectedExpensesOver12months-canvas");
     var ctx = canvas.getContext("2d");
-    var chart = new Chart(ctx).Line(data);
+    new Chart(ctx).Line(data);
 }
 
 function updateBarChartIncomesOutcomesOver6Months(detailedMovementsOver6Months) {
@@ -76,7 +76,7 @@ function updateBarChartIncomesOutcomesOver6Months(detailedMovementsOver6Months) 
 
     var canvas = document.getElementById("incomesOutcomesOver6months-canvas");
     var ctx = canvas.getContext("2d");
-    var chart = new Chart(ctx).Bar(data);
+    new Chart(ctx).Bar(data);
 }
 
 function updatePieChartExpensesOver12Months(expenses, totalSum, currencySymbol) {
@@ -130,13 +130,6 @@ function showExpenditureTypeOverTime(category) {
     var data = {
         labels: [],
         datasets: [
-            //{
-            //    fillColor: getRGBA("D3D3D3", 0.5),
-            //    strokeColor: getRGBA("D3D3D3", 0.8),
-            //    highlightFill: getRGBA("D3D3D3", 0.75),
-            //    highlightStroke: getRGBA("D3D3D3", 1),
-            //    data: []
-            //},
             {
                 fillColor: getRGBA(category.CategoryColor, 0.5),
                 strokeColor: getRGBA(category.CategoryColor, 0.8),
@@ -149,7 +142,6 @@ function showExpenditureTypeOverTime(category) {
 
     $.each(category.ExpensesByMonth, function (index, value) {
         data.labels.push(index);
-        //data.datasets[0].data.push(value.TotalExpenses);
         data.datasets[0].data.push(value.CategoryExpenses);
     });
 
@@ -159,7 +151,7 @@ function showExpenditureTypeOverTime(category) {
     var ctx = canvas.getContext("2d");
     var typeOverTimeChart = new Chart(ctx).Bar(data);
 
-    canvas.onclick = function (evt) {
+    canvas.onclick = function () {
         if (typeOverTimeChart.activeElements[0]) {
             var month = typeOverTimeChart.activeElements[0].label;
             var categoryId = $("#selectedCategoryId").val();
@@ -223,7 +215,6 @@ function closeDetailExpensesContainer() {
 
 function buildAccountList(data) {
 
-    var link = "";
     var ddData = [];
 
     $.each(data,
@@ -240,18 +231,15 @@ function buildAccountList(data) {
         indexAccountList = 0;
     }
 
-    var selected = false;
-
     $('#availableAccounts').ddslick({
         data: ddData,
         width: 190,
         imagePosition: "left",
         defaultSelectedIndex: indexAccountList,
         onSelected: function (data) {
-            console.log(data);
             var url = "/AccountManagement/SaveCurrentAccount?accountId=" + data.selectedData.value + "&indexAccountList=" + data.selectedIndex;
             $.get(url, null, function (data) {
-                if (data.Data.reloadPage == true) {
+                if (data.Data.reloadPage) {
                     location.reload();
                 }
             });
@@ -277,8 +265,5 @@ function getAccountsForCurrentUser() {
                 $("#movements").hide();
                 $("#budget").hide();
             }
-        })
-        .fail(function (error) {
-            console.error("Something is wrong");
         });
 }

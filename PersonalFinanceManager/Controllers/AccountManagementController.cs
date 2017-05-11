@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using PersonalFinanceManager.Models.Expenditure;
-using PersonalFinanceManager.Helpers;
-using PersonalFinanceManager.Models.BudgetPlan;
+﻿using System.Web.Mvc;
 using PersonalFinanceManager.Services.Interfaces;
-using PersonalFinanceManager.Services.RequestObjects;
-using PersonalFinanceManager.Models.Dashboard;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -30,10 +22,10 @@ namespace PersonalFinanceManager.Controllers
             }
 
             // Get current budget plan if it exists
-            var budgetPlan = _budgetPlanService.GetCurrent(CurrentAccount);
+            var budgetPlan = _budgetPlanService.GetCurrent(GetCurrentAccount());
 
             // Get the expense summary by category
-            var expenditureSummaryModel = _expenditureService.GetExpenseSummary(CurrentAccount, budgetPlan);
+            var expenditureSummaryModel = _expenditureService.GetExpenseSummary(GetCurrentAccount(), budgetPlan);
 
             return View(expenditureSummaryModel);
         }

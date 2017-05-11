@@ -23,7 +23,7 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var accountId = CurrentAccount;
+            var accountId = GetCurrentAccount();
 
             AccountBasicInfo();
 
@@ -57,7 +57,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var accountId = CurrentAccount;
+                var accountId = GetCurrentAccount();
                 atmWithdrawEditModel.AccountId = accountId;
 
                 _atmWithdrawService.CreateAtmWithdraw(atmWithdrawEditModel);
@@ -103,7 +103,7 @@ namespace PersonalFinanceManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var accountId = CurrentAccount;
+                var accountId = GetCurrentAccount();
                 atmWithdrawEditModel.AccountId = accountId;
 
                 _atmWithdrawService.EditAtmWithdraw(atmWithdrawEditModel);
@@ -160,7 +160,7 @@ namespace PersonalFinanceManager.Controllers
 
             _atmWithdrawService.ChangeDebitStatus(id.Value, true);
 
-            var accountId = CurrentAccount;
+            var accountId = GetCurrentAccount();
 
             return RedirectToAction("Index", new { accountId });
         }

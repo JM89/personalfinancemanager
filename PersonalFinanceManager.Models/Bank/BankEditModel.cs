@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace PersonalFinanceManager.Models.Bank
             {
                 if (IconPath != null)
                 {
-                    var indexLastSlash = IconPath.LastIndexOf("/") + 1;
+                    var indexLastSlash = IconPath.LastIndexOf("/", StringComparison.Ordinal) + 1;
                     var fileName = IconPath.Substring(indexLastSlash, IconPath.Length - indexLastSlash);
                     return fileName;
                 }

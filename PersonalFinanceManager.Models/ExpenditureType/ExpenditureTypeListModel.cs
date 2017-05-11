@@ -1,8 +1,5 @@
 ﻿using PersonalFinanceManager.Models.Resources;
 using PersonalFinanceManager.Models.Shared;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PersonalFinanceManager.Models.ExpenditureType
 {
@@ -18,18 +15,7 @@ namespace PersonalFinanceManager.Models.ExpenditureType
 
         public bool CanBeDeleted { get; set; }
 
-        public string TooltipResourceName
-        {
-            get
-            {
-                return "ExpenditureTypeCantBeDeleted";
-            }
-            set
-            {
-
-            }
-        }
-
+        public string TooltipResourceName => "ExpenditureTypeCantBeDeleted";
 
         [LocalizedDisplayName("ExpenditureTypeShowOnDashboard")]
         public bool ShowOnDashboard { get; set; }

@@ -26,9 +26,6 @@
             };
 
             var ctx = document.getElementById("lDebitMovementsOverTime").getContext("2d");
-            var myLineChart = new Chart(ctx).Line(data);
-        })
-        .fail(function (error) {
-            console.error("Something is wrong");
+            new Chart(ctx).Line(data);
         });
 }

@@ -51,18 +51,8 @@ namespace PersonalFinanceManager.Models.Account
         
         public bool CanBeDeleted { get; set; }
 
-        public string TooltipResourceName
-        {
-            get
-            {
-                return "AccountCantBeDeleted";
-            }
-            set
-            {
+        public string TooltipResourceName => "AccountCantBeDeleted";
 
-            }
-        }
-        
         public bool IsFavorite { get; set; }
 
         [LocalizedDisplayName("AccountIsSavingAccount")]
