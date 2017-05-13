@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalFinanceManager.IntegrationTests", "PersonalFinanceManager.IntegrationTests\PersonalFinanceManager.IntegrationTests.csproj", "{80B07763-E04F-4D5A-8F97-372FCAF6C630}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalFinanceManager.DataAccess", "PersonalFinanceManager.DataAccess\PersonalFinanceManager.DataAccess.csproj", "{9312252F-173C-4563-B24E-AAD56C696784}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalFinanceManager.Entities", "PersonalFinanceManager.Entities\PersonalFinanceManager.Entities.csproj", "{92D1D39B-F7F1-4208-9DA0-6CCE314B12A6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalFinanceManager.ServicesForTests", "PersonalFinanceManager.ServicesForTests\PersonalFinanceManager.ServicesForTests.csproj", "{380849AF-AD1F-4534-A6BF-487250DE4651}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{92D1D39B-F7F1-4208-9DA0-6CCE314B12A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92D1D39B-F7F1-4208-9DA0-6CCE314B12A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92D1D39B-F7F1-4208-9DA0-6CCE314B12A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{380849AF-AD1F-4534-A6BF-487250DE4651}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{380849AF-AD1F-4534-A6BF-487250DE4651}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{380849AF-AD1F-4534-A6BF-487250DE4651}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{380849AF-AD1F-4534-A6BF-487250DE4651}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

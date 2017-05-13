@@ -15,12 +15,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         {
             SiteMap.AccountManagementDashboardPage.GoTo();
             _sourceAccountId = SiteMap.AccountManagementDashboardPage.SelectAccount();
-            _sourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            _sourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
 
             SiteMap.AtmWithdrawListPage.GoTo();
 
-            _countAtmWithdraws = DatabaseChecker.AtmWithdrawService.CountAtmWithdraws();
-            _countMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            _countAtmWithdraws = DatabaseChecker.AtmWithdrawRepository.CountAtmWithdraws();
+            _countMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
         }
         
         [Given(@"I have clicked on the Create button")]
@@ -44,21 +44,21 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Then(@"the source account is updated")]
         public void ThenTheSourceAccountIsUpdated()
         {
-            var newSourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            var newSourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
             Assert.AreEqual(newSourceAccountAmount, _sourceAccountAmount - 100);
         }
         
         [Then(@"an ATM withdraw has been created")]
         public void ThenAnAtmWithdrawHasBeenCreated()
         {
-            var newCountAtmWithdraws = DatabaseChecker.AtmWithdrawService.CountAtmWithdraws();
+            var newCountAtmWithdraws = DatabaseChecker.AtmWithdrawRepository.CountAtmWithdraws();
             Assert.AreEqual(newCountAtmWithdraws, _countAtmWithdraws + 1);
         }
         
         [Then(@"a mouvement entry has been saved")]
         public void ThenAMouvementEntryHasBeenSaved()
         {
-            var newCountMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            var newCountMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
             Assert.AreEqual(newCountMovements, _countMovements + 1);
         }
     }

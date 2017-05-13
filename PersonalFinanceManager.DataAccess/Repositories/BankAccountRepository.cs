@@ -1,10 +1,5 @@
 ﻿using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 using PersonalFinanceManager.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.DataAccess.Repositories
 {
@@ -13,6 +8,13 @@ namespace PersonalFinanceManager.DataAccess.Repositories
         public BankAccountRepository(ApplicationDbContext db) : base(db)
         {
             
+        }
+
+        public decimal GetAccountAmount(int id)
+        {
+            var entity = GetById(id);
+            Refresh(entity);
+            return entity.CurrentBalance;
         }
     }
 }

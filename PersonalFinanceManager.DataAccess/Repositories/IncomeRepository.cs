@@ -14,5 +14,17 @@ namespace PersonalFinanceManager.DataAccess.Repositories
         {
 
         }
+
+        public int CountIncomes()
+        {
+            return GetList().Count();
+        }
+
+        public decimal GetIncomeCost(int id)
+        {
+            var entity = GetById(id);
+            Refresh(entity);
+            return entity.Cost;
+        }
     }
 }

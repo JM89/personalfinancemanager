@@ -25,5 +25,7 @@ namespace PersonalFinanceManager.DataAccess.Repositories.Interfaces
         List<TEntity> GetList2(params Expression<Func<TEntity, object>>[] includeProperties);
 
         TEntity GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties);
+
+        void Refresh<T>(T entity);
     }
 }

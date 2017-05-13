@@ -23,13 +23,13 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         {
             SiteMap.AccountManagementDashboardPage.GoTo();
             _sourceAccountId = SiteMap.AccountManagementDashboardPage.SelectAccount();
-            _sourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            _sourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
 
             SiteMap.ExpenseListPage.GoTo();
 
-            _countExpenditures = DatabaseChecker.ExpenditureService.CountExpenditures();
-            _countIncomes = DatabaseChecker.IncomeService.CountIncomes();
-            _countMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            _countExpenditures = DatabaseChecker.ExpenditureRepository.CountExpenditures();
+            _countIncomes = DatabaseChecker.IncomeRepository.CountIncomes();
+            _countMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
         }
 
         [Given(@"I have at least one expenditure with this payment method in the list")]
@@ -38,7 +38,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
             _firstRow = SiteMap.ExpenseListPage.FindFirstRowAndCheckPaymentMethod("Internal Transfer");
 
             _targetAccountId = SiteMap.ExpenseListPage.FindTargetInternalAccountId(_firstRow);
-            _targetAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_targetAccountId);
+            _targetAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_targetAccountId);
             _costExpenditure = SiteMap.ExpenseListPage.FindCost(_firstRow);
         }
 
@@ -58,35 +58,35 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Then(@"the expenditure has been removed")]
         public void ThenTheExpenditureHasBeenRemoved()
         {
-            var newCountExpenditures = DatabaseChecker.ExpenditureService.CountExpenditures();
+            var newCountExpenditures = DatabaseChecker.ExpenditureRepository.CountExpenditures();
             Assert.AreEqual(newCountExpenditures, _countExpenditures - 1);
         }
 
         [Then(@"the source account is updated")]
         public void ThenTheSourceAccountIsUpdated()
         {
-            var newSourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            var newSourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
             Assert.AreEqual(newSourceAccountAmount, _sourceAccountAmount + _costExpenditure);
         }
 
         [Then(@"the target account is updated")]
         public void ThenTheTargetAccountIsUpdated()
         {
-            var newTargetAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_targetAccountId);
+            var newTargetAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_targetAccountId);
             Assert.AreEqual(newTargetAccountAmount, _targetAccountAmount - _costExpenditure);
         }
 
         [Then(@"an income has been removed")]
         public void ThenAnIncomeHasBeenRemoved()
         {
-            var newCountIncomes = DatabaseChecker.IncomeService.CountIncomes();
+            var newCountIncomes = DatabaseChecker.IncomeRepository.CountIncomes();
             Assert.AreEqual(newCountIncomes, _countIncomes - 1);
         }
 
         [Then(@"a mouvement entry has been saved")]
         public void ThenAMouvementEntryHasBeenSaved()
         {
-            var newCountMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            var newCountMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
             Assert.AreEqual(newCountMovements, _countMovements + 1);
         }
     }

@@ -15,12 +15,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         {
             SiteMap.AccountManagementDashboardPage.GoTo();
             _sourceAccountId = SiteMap.AccountManagementDashboardPage.SelectAccount();
-            _sourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            _sourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
 
             SiteMap.ExpenseListPage.GoTo();
 
-            _countExpenditures = DatabaseChecker.ExpenditureService.CountExpenditures();
-            _countMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            _countExpenditures = DatabaseChecker.ExpenditureRepository.CountExpenditures();
+            _countMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
         }
 
         [Given(@"I have clicked on the Create button")]
@@ -57,7 +57,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         public void WhenISelectAnAtmWithdraw()
         {
             _atmWithdrawId = SiteMap.ExpenseCreatePage.SelectFirstAtmWithdraw();
-            _atmWithdrawAmount = DatabaseChecker.AtmWithdrawService.GetAtmWithdrawCurrentAmount(_atmWithdrawId);
+            _atmWithdrawAmount = DatabaseChecker.AtmWithdrawRepository.GetAtmWithdrawCurrentAmount(_atmWithdrawId);
         }
 
         [When(@"I click on the Save button")]
@@ -69,21 +69,21 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Then(@"the Expenditure Has Been Created")]
         public void ThenTheExpenditureHasBeenCreated()
         {
-            var newCountExpenditures = DatabaseChecker.ExpenditureService.CountExpenditures();
+            var newCountExpenditures = DatabaseChecker.ExpenditureRepository.CountExpenditures();
             Assert.AreEqual(newCountExpenditures, _countExpenditures + 1);
         }
 
         [Then(@"the source account is unchanged")]
         public void ThenTheSourceAccountUnchanged()
         {
-            var newSourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            var newSourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
             Assert.AreEqual(newSourceAccountAmount, _sourceAccountAmount);
         }
 
         [Then(@"the target atm withdraw is updated")]
         public void ThenTheTargetAtmWithdrawIsUpdated()
         {
-            var newTargetAtmWithdrawAmount = DatabaseChecker.AtmWithdrawService.GetAtmWithdrawCurrentAmount(_atmWithdrawId);
+            var newTargetAtmWithdrawAmount = DatabaseChecker.AtmWithdrawRepository.GetAtmWithdrawCurrentAmount(_atmWithdrawId);
             var expectedTargetAmount = _atmWithdrawAmount - 100;
             Assert.AreEqual(expectedTargetAmount, newTargetAtmWithdrawAmount);
         }
@@ -91,7 +91,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Then(@"a mouvement entry has been saved")]
         public void ThenAMouvementEntryHasBeenSaved()
         {
-            var newCountMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            var newCountMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
             Assert.AreEqual(newCountMovements, _countMovements + 1);
         }
     }

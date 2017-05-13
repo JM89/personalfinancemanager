@@ -9,5 +9,6 @@ namespace PersonalFinanceManager.DataAccess.Repositories.Interfaces
 {
     public interface IBankAccountRepository : IBaseRepository<AccountModel>
     {
+        decimal GetAccountAmount(int id);
     }
 }

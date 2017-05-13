@@ -23,12 +23,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         {
             SiteMap.AccountManagementDashboardPage.GoTo();
             _sourceAccountId = SiteMap.AccountManagementDashboardPage.SelectAccount();
-            _sourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            _sourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
 
             SiteMap.AtmWithdrawListPage.GoTo();
 
-            _countAtmWithdraws = DatabaseChecker.AtmWithdrawService.CountAtmWithdraws();
-            _countMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            _countAtmWithdraws = DatabaseChecker.AtmWithdrawRepository.CountAtmWithdraws();
+            _countMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
         }
 
         [Given(@"I have at least one ATM withdraw in the list")]
@@ -62,17 +62,17 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Then(@"the ATM withdraw has been updated")]
         public void ThenTheAtmWithdrawHasBeenUpdated()
         {
-            var newCountAtmWithdraws = DatabaseChecker.AtmWithdrawService.CountAtmWithdraws();
+            var newCountAtmWithdraws = DatabaseChecker.AtmWithdrawRepository.CountAtmWithdraws();
             Assert.AreEqual(newCountAtmWithdraws, _countAtmWithdraws);
 
-            _newCostAtmWithdraw = DatabaseChecker.AtmWithdrawService.GetAtmWithdrawInitialAmount(_atmWithdrawId);
+            _newCostAtmWithdraw = DatabaseChecker.AtmWithdrawRepository.GetAtmWithdrawInitialAmount(_atmWithdrawId);
             Assert.AreEqual(_costAtmWithdraw + 100, _newCostAtmWithdraw);
         }
 
         [Then(@"the source account is updated")]
         public void ThenTheSourceAccountIsUpdated()
         {
-            var newSourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            var newSourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
             var expectedSourceAmount = _sourceAccountAmount + _costAtmWithdraw - _newCostAtmWithdraw;
             Assert.AreEqual(expectedSourceAmount, newSourceAccountAmount);
         }
@@ -80,7 +80,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Then(@"a mouvement entry has been saved")]
         public void ThenAMouvementEntryHasBeenSaved()
         {
-            var newCountMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            var newCountMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
             Assert.AreEqual(newCountMovements, _countMovements + 2);
         }
     }

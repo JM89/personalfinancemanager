@@ -101,5 +101,11 @@ namespace PersonalFinanceManager.DataAccess.Repositories
 
             return query?.Single(x => x.Id == id) ?? result.Single(x => x.Id == id); 
         }
+
+        public void Refresh<T>(T entity)
+        {
+            var ctx = ((IObjectContextAdapter)_db).ObjectContext;
+            ctx.Refresh(RefreshMode.StoreWins, entity);
+        }
     }
 }

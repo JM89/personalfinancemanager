@@ -1,14 +1,19 @@
 ﻿using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 using PersonalFinanceManager.Entities;
-using PersonalFinanceManager.Entities.Enumerations;
-using System;
+using System.Linq;
+
 namespace PersonalFinanceManager.DataAccess.Repositories
 {
     public class HistoricMovementRepository : BaseRepository<HistoricMovementModel>, IHistoricMovementRepository
     {
         public HistoricMovementRepository(ApplicationDbContext db) : base(db)
         {
+            
+        }
 
+        public int CountMovements()
+        {
+            return GetList().Count();
         }
     }
 }

@@ -1,25 +1,27 @@
-﻿using PersonalFinanceManager.ServicesForTests;
-using PersonalFinanceManager.ServicesForTests.Interfaces;
+﻿using PersonalFinanceManager.DataAccess;
+using PersonalFinanceManager.DataAccess.Repositories;
+using PersonalFinanceManager.DataAccess.Repositories.Interfaces;
 
 namespace PersonalFinanceManager.IntegrationTests.Infrastructure
 {
     public static class DatabaseChecker
     {
-        public static IBankAccountService BankAccountService;
-        public static IAtmWithdrawService AtmWithdrawService;
-        public static IHistoricMovementService HistoricMovementService;
-        public static IExpenditureService ExpenditureService;
-        public static IIncomeService IncomeService;
-        public static ISavingService SavingService;
+        public static IBankAccountRepository BankAccountRepository;
+        public static IAtmWithdrawRepository AtmWithdrawRepository;
+        public static IHistoricMovementRepository HistoricMovementRepository;
+        public static IExpenditureRepository ExpenditureRepository;
+        public static IIncomeRepository IncomeRepository;
+        public static ISavingRepository SavingRepository;
 
         public static void Initialize()
         {
-            BankAccountService = new BankAccountService();
-            AtmWithdrawService = new AtmWithdrawService();
-            HistoricMovementService = new HistoricMovementService();
-            ExpenditureService = new ExpenditureService();
-            IncomeService = new IncomeService();
-            SavingService = new SavingService();
+            var ctx = new ApplicationDbContext();
+            BankAccountRepository = new BankAccountRepository(ctx);
+            AtmWithdrawRepository = new AtmWithdrawRepository(ctx);
+            HistoricMovementRepository = new HistoricMovementRepository(ctx);
+            ExpenditureRepository = new ExpenditureRepository(ctx);
+            IncomeRepository = new IncomeRepository(ctx);
+            SavingRepository = new SavingRepository(ctx);
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using PersonalFinanceManager.IntegrationTests.Infrastructure;
-using PersonalFinanceManager.ServicesForTests;
-using System;
-using System.Threading;
-
 using TechTalk.SpecFlow;
 
 namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
@@ -27,13 +23,13 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         {
             SiteMap.AccountManagementDashboardPage.GoTo();
             _sourceAccountId = SiteMap.AccountManagementDashboardPage.SelectAccount();
-            _sourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            _sourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
 
             SiteMap.SavingListPage.GoTo();
 
-            _countSavings = DatabaseChecker.SavingService.CountSavings();
-            _countIncomes = DatabaseChecker.IncomeService.CountIncomes();
-            _countMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            _countSavings = DatabaseChecker.SavingRepository.CountSavings();
+            _countIncomes = DatabaseChecker.IncomeRepository.CountIncomes();
+            _countMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
         }
         
         [Given(@"I have at least one saving in the list")]
@@ -43,7 +39,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
 
             _costSaving = SiteMap.SavingListPage.FindCost(_firstRow);
             _targetAccountId = SiteMap.SavingListPage.FindTargetInternalAccountId(_firstRow);
-            _targetAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_targetAccountId);
+            _targetAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_targetAccountId);
         }
 
         [When(@"I click on delete for the first saving")]
@@ -62,35 +58,35 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Then(@"the Saving has been removed")]
         public void ThenTheSavingHasBeenRemoved()
         {
-            var newCountSavings = DatabaseChecker.SavingService.CountSavings();
+            var newCountSavings = DatabaseChecker.SavingRepository.CountSavings();
             Assert.AreEqual(newCountSavings, _countSavings - 1);
         }
         
         [Then(@"the source account is updated")]
         public void ThenTheSourceAccountIsUpdated()
         {
-            var newSourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
+            var newSourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
             Assert.AreEqual(newSourceAccountAmount, _sourceAccountAmount + _costSaving);
         }
         
         [Then(@"the target account is updated")]
         public void ThenTheTargetAccountIsUpdated()
         {
-            var newTargetAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_targetAccountId);
+            var newTargetAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_targetAccountId);
             Assert.AreEqual(newTargetAccountAmount, _targetAccountAmount - _costSaving);
         }
         
         [Then(@"an income has been removed")]
         public void ThenAnIncomeHasBeenRemoved()
         {
-            var newCountIncomes = DatabaseChecker.IncomeService.CountIncomes();
+            var newCountIncomes = DatabaseChecker.IncomeRepository.CountIncomes();
             Assert.AreEqual(newCountIncomes, _countIncomes - 1);
         }
         
         [Then(@"a mouvement entry has been saved")]
         public void ThenAMouvementEntryHasBeenSaved()
         {
-            var newCountMovements = DatabaseChecker.HistoricMovementService.CountMovements();
+            var newCountMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
             Assert.AreEqual(newCountMovements, _countMovements + 1);
         }
     }

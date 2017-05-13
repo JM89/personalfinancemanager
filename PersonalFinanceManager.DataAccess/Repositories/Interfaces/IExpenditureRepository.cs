@@ -11,5 +11,9 @@ namespace PersonalFinanceManager.DataAccess.Repositories.Interfaces
     public interface IExpenditureRepository : IBaseRepository<ExpenditureModel>
     {
         List<ExpenditureModel> GetByParameters(ExpenditureGetListSearchParameters search);
+
+        int CountExpenditures();
+
+        decimal GetExpenditureCost(int id);
     }
 }

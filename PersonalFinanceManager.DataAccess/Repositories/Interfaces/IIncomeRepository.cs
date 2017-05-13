@@ -9,5 +9,8 @@ namespace PersonalFinanceManager.DataAccess.Repositories.Interfaces
 {
     public interface IIncomeRepository : IBaseRepository<IncomeModel>
     {
+        int CountIncomes();
+
+        decimal GetIncomeCost(int id);
     }
 }
