@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -66,6 +67,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\BrowserType.cs" />
+    <Compile Include="Infrastructure\BrowserHelper.cs" />
+    <Compile Include="Infrastructure\DatabaseChecker.cs" />
+    <Compile Include="Infrastructure\SiteMap.cs" />
+    <Compile Include="Infrastructure\BasePages\EditPage.cs" />
+    <Compile Include="Scenarios\Steps\TestInitialization.cs" />
+    <Compile Include="Infrastructure\WebDrivertExtensions.cs" />
     <Compile Include="Scenarios\CreateCashExpenditures.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -111,12 +119,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EditInternalTransferExpenditures.feature</DependentUpon>
     </Compile>
-    <Compile Include="Scenarios\PreActions\CreateSavings.cs" />
-    <Compile Include="Scenarios\PreActions\CreateIncomes.cs" />
-    <Compile Include="Scenarios\PreActions\CreateAtmWithdraws.cs" />
-    <Compile Include="Scenarios\PreActions\CreateCashExpenditures.cs" />
-    <Compile Include="Scenarios\PreActions\CreateCommonExpenditures.cs" />
-    <Compile Include="Scenarios\PreActions\CreateInternalTransferExpenditures.cs" />
+    <Compile Include="Infrastructure\BasePages\BasePage.cs" />
+    <Compile Include="Infrastructure\BasePages\ListPage.cs" />
+    <Compile Include="Scenarios\Pages\AccountManagement\AccountManagementDashboardPage.cs" />
+    <Compile Include="Scenarios\Pages\Account\LoginPage.cs" />
+    <Compile Include="Scenarios\Pages\AtmWithdraw\AtmWithdrawCreatePage.cs" />
+    <Compile Include="Scenarios\Pages\AtmWithdraw\AtmWithdrawEditPage.cs" />
+    <Compile Include="Scenarios\Pages\AtmWithdraw\AtmWithdrawListPage.cs" />
+    <Compile Include="Scenarios\Pages\Expense\ExpenseCreatePage.cs" />
+    <Compile Include="Scenarios\Pages\Expense\ExpenseEditPage.cs" />
+    <Compile Include="Scenarios\Pages\Expense\ExpenseListPage.cs" />
+    <Compile Include="Scenarios\Pages\Income\IncomeListPage.cs" />
+    <Compile Include="Scenarios\Pages\Income\IncomeEditPage.cs" />
+    <Compile Include="Scenarios\Pages\Income\IncomeCreatePage.cs" />
+    <Compile Include="Scenarios\Pages\Saving\SavingCreatePage.cs" />
+    <Compile Include="Scenarios\Pages\Saving\SavingEditPage.cs" />
+    <Compile Include="Scenarios\Pages\Saving\SavingListPage.cs" />
     <Compile Include="Scenarios\Steps\CreateCashExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\CreateCommonExpendituresSteps.cs" />
     <Compile Include="Scenarios\Steps\CreateInternalTransferExpendituresSteps.cs" />
@@ -164,7 +182,6 @@
     <Compile Include="Scenarios\Steps\DeleteAtmWithdrawsSteps.cs" />
     <Compile Include="Scenarios\Steps\DeleteIncomeSteps.cs" />
     <Compile Include="Scenarios\Steps\DeleteSavingsSteps.cs" />
-    <Compile Include="Infrastructure\TestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenarios\DeleteSavings.feature.cs">
       <DependentUpon>DeleteSavings.feature</DependentUpon>
@@ -271,6 +288,7 @@
   <ItemGroup>
     <Content Include="Drivers\chromedriver.exe" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

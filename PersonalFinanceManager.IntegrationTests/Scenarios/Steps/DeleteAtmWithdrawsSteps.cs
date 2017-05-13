@@ -3,9 +3,6 @@ using System;
 using System.Threading;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using PersonalFinanceManager.IntegrationTests.Scenarios.PreActions;
-using PersonalFinanceManager.ServicesForTests;
-using PersonalFinanceManager.ServicesForTests.Interfaces;
 using TechTalk.SpecFlow;
 
 namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
@@ -13,108 +10,67 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
     [Binding]
     public class DeleteAtmWithdrawsSteps
     {
-        private readonly IntegrationTestContext _ctx = new IntegrationTestContext();
-
         private int _sourceAccountId, _countAtmWithdraws, _countMovements;
         private decimal _sourceAccountAmount;
         private IWebElement _firstRow;
 
-        private readonly IBankAccountService _bankAccountService;
-        private readonly IAtmWithdrawService _atmWithdrawService;
-        private readonly IHistoricMovementService _historicMovementService;
-
-        public DeleteAtmWithdrawsSteps()
-        {
-            _bankAccountService = new BankAccountService();
-            _atmWithdrawService = new AtmWithdrawService();
-            _historicMovementService = new HistoricMovementService();
-        }
-
         [BeforeScenario]
         public void PrepareForTest()
         {
-            CreateAtmWithdraws.Execute(_ctx);
+            SiteMap.AtmWithdrawCreatePage.QuickCreate();
         }
 
         [Given(@"I have accessed the ATM Withdraw List page")]
         public void GivenIHaveAccessedTheAtmWithdrawListPage()
         {
-            // Get Source Account Amount Before Creating AtmWithdraws
-            _sourceAccountId = _ctx.SelectedSourceAccountId();
-            _sourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
+            SiteMap.AccountManagementDashboardPage.GoTo();
+            _sourceAccountId = SiteMap.AccountManagementDashboardPage.SelectAccount();
+            _sourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
 
-            _ctx.GotToUrl("/AtmWithdraw/Index");
+            SiteMap.AtmWithdrawListPage.GoTo();
 
-            // Get Number Of Incomes Before Creating AtmWithdraws
-            _countAtmWithdraws = _atmWithdrawService.CountAtmWithdraws();
-
-            // Get Number Of Movements Before Creating AtmWithdraws
-            _countMovements = _historicMovementService.CountMovements();
+            _countAtmWithdraws = DatabaseChecker.AtmWithdrawService.CountAtmWithdraws();
+            _countMovements = DatabaseChecker.HistoricMovementService.CountMovements();
         }
 
         [Given(@"I have at least one ATM Withdraw in the list")]
         public void GivenIHaveAtLeastOneAtmWithdrawInTheList()
         {
-            var atmWithdraws = _ctx.WebDriver.FindElements(By.ClassName("trAtmWithdraw"));
-            if (atmWithdraws.Count < 1)
-            {
-                throw new Exception("There is no atm withdraws to delete");
-            }
-            _firstRow = atmWithdraws[0];
+            _firstRow = SiteMap.AtmWithdrawListPage.FindFirstRow();
         }
         
         [When(@"I click on delete for the first ATM Withdraw")]
         public void WhenIClickOnDeleteForTheFirstAtmWithdraw()
         {
-            var deleteConfirmBtn = _firstRow.FindElement(By.ClassName("btn_delete"));
-            deleteConfirmBtn.Click();
+            SiteMap.AtmWithdrawListPage.ClickDeleteButton(_firstRow);
         }
         
         [When(@"I confirm the deletion")]
         public void WhenIConfirmTheDeletion()
         {
-            var deleteAtmWithdrawPage = _ctx.FindElement(By.ClassName("modal-title"), 10);
-            if (deleteAtmWithdrawPage.Text != "Delete an ATM withdraw")
-            {
-                throw new Exception("The confirmation of deletion should be there.");
-            }
-            var deleteBtn = _ctx.WebDriver.FindElement(By.ClassName("btn_delete_confirm"));
-            deleteBtn.Click();
-            
-            Thread.Sleep(2000);
+            SiteMap.AtmWithdrawListPage.CheckDeletionConfirmationModalTitle();
+            SiteMap.AtmWithdrawListPage.ClickConfirmDeletionButton();
         }
         
         [Then(@"the ATM Withdraw has been removed")]
         public void ThenTheAtmWithdrawHasBeenRemoved()
         {
-            // Get Number Of ATM Withdraws After
-            var newCountAtmWithdraws = _atmWithdrawService.CountAtmWithdraws();
-
+            var newCountAtmWithdraws = DatabaseChecker.AtmWithdrawService.CountAtmWithdraws();
             Assert.AreEqual(newCountAtmWithdraws, _countAtmWithdraws - 1);
         }
         
         [Then(@"the source account is updated")]
         public void ThenTheSourceAccountIsUpdated()
         {
-            // Get Source Account Amount After
-            var newSourceAccountAmount = _bankAccountService.GetAccountAmount(_sourceAccountId);
-
+            var newSourceAccountAmount = DatabaseChecker.BankAccountService.GetAccountAmount(_sourceAccountId);
             Assert.AreEqual(newSourceAccountAmount, _sourceAccountAmount + 100);
         }
 
         [Then(@"a mouvement entry has been saved")]
         public void ThenAMouvementEntryHasBeenSaved()
         {
-            // Get Number Of Movements After
-            var newCountMovements = _historicMovementService.CountMovements();
-
+            var newCountMovements = DatabaseChecker.HistoricMovementService.CountMovements();
             Assert.AreEqual(newCountMovements, _countMovements + 1);
-        }
-
-        [AfterScenario]
-        public void TestTearDown()
-        {
-            _ctx.StopTest();
         }
     }
 }
