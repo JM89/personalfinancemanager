@@ -222,6 +222,9 @@
   <data name="ExpenditureEdit" xml:space="preserve">
     <value>Edit an expense</value>
   </data>
+  <data name="ExpenditureImport" xml:space="preserve">
+    <value>Import Expenses using CSV file</value>
+  </data>
   <data name="ExpenditureList" xml:space="preserve">
     <value>List of expenses</value>
   </data>

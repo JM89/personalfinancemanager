@@ -55,5 +55,10 @@ namespace PersonalFinanceManager.Controllers
                 }
             }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult ImportMovements()
+        {
+            return View();
+        }
     }
 }

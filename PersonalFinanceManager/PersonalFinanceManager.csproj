@@ -403,6 +403,7 @@
     <Content Include="Views\Tax\Create.cshtml" />
     <Content Include="Views\Tax\Edit.cshtml" />
     <Content Include="Views\Tax\Index.cshtml" />
+    <Content Include="Views\AccountManagement\ImportMovements.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -376,6 +376,15 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import Expenses using CSV file.
+        /// </summary>
+        public static string ExpenditureImport {
+            get {
+                return ResourceManager.GetString("ExpenditureImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List of expenses.
         /// </summary>
         public static string ExpenditureList {

@@ -220,7 +220,7 @@ function buildAccountList(data) {
     $.each(data,
         function (index) {
             ddData.push({
-                text: data[index].Name,
+                text: data[index].Name + "<br/> <label style='font-weight:normal;'>Balance: " + data[index].DisplayedCurrentBalance + "</label>",
                 value: data[index].Id,
                 imageSrc: data[index].BankIconPath
             });
@@ -233,7 +233,7 @@ function buildAccountList(data) {
 
     $('#availableAccounts').ddslick({
         data: ddData,
-        width: 190,
+        background: "rgb(255,255,255)",
         imagePosition: "left",
         defaultSelectedIndex: indexAccountList,
         onSelected: function (data) {
