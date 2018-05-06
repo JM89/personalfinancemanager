@@ -87,6 +87,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManagement\ImportMovementEditModel.cs" />
+    <Compile Include="AccountManagement\ImportMovementModel.cs" />
+    <Compile Include="AccountManagement\ImportTypes.cs" />
+    <Compile Include="AccountManagement\MovementPropertyDefinition.cs" />
     <Compile Include="Account\AccountEditModel.cs" />
     <Compile Include="Account\AccountListModel.cs" />
     <Compile Include="AspNetUserAccount\AccountViewModels.cs" />

@@ -511,6 +511,24 @@ namespace PersonalFinanceManager.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Movement Import.
+        /// </summary>
+        public static string MovementImport {
+            get {
+                return ResourceManager.GetString("MovementImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload a CSV file.
+        /// </summary>
+        public static string MovementImportUploadCsv {
+            get {
+                return ResourceManager.GetString("MovementImportUploadCsv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a payment method.
         /// </summary>
         public static string PaymentMethodCreate {

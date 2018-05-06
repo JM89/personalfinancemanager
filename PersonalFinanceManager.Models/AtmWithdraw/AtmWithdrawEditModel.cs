@@ -21,13 +21,7 @@ namespace PersonalFinanceManager.Models.AtmWithdraw
         public DateTime DateExpenditure { get; set; }
 
         [LocalizedDisplayName("AtmWithdrawDateExpenditure")]
-        public string DisplayedDateExpenditure
-        {
-            get
-            {
-                return this.DateExpenditure.ToString("dd/MM/yyyy");
-            }
-        }
+        public string DisplayedDateExpenditure => this.DateExpenditure.ToString("dd/MM/yyyy");
 
         [Required]
         [LocalizedDisplayName("AtmWithdrawInitialAmount")]

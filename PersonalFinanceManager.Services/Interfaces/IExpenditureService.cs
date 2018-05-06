@@ -9,6 +9,8 @@ namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IExpenditureService : IBaseService
     {
+        void CreateExpenditures(List<ExpenditureEditModel> expenditureEditModel);
+
         void CreateExpenditure(ExpenditureEditModel expenditureEditModel);
 
         void EditExpenditure(ExpenditureEditModel expenditureEditModel);

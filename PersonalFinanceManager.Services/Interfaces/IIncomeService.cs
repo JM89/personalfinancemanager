@@ -6,6 +6,8 @@ namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IIncomeService : IBaseService
     {
+        void CreateIncomes(List<IncomeEditModel> incomeEditModel);
+
         void CreateIncome(IncomeEditModel incomeEditModel);
 
         IList<IncomeListModel> GetIncomes(int accountId);

@@ -24,7 +24,12 @@ namespace PersonalFinanceManager.Services
             this._bankAccountRepository = bankAccountRepository;
             this._historicMovementRepository = historicMovementRepository;
         }
-        
+
+        public void CreateIncomes(List<IncomeEditModel> incomeEditModel)
+        {
+            incomeEditModel.ForEach(CreateIncome);
+        }
+
         public void CreateIncome(IncomeEditModel incomeEditModel)
         {
             var incomeModel = Mapper.Map<IncomeModel>(incomeEditModel);

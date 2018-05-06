@@ -12,7 +12,6 @@ using PersonalFinanceManager.Models.Account;
 using PersonalFinanceManager.Models.Dashboard;
 using PersonalFinanceManager.Utils.Helpers;
 using PersonalFinanceManager.Models.BudgetPlan;
-using PersonalFinanceManager.Utils.Helpers;
 
 namespace PersonalFinanceManager.Services
 {
@@ -36,6 +35,11 @@ namespace PersonalFinanceManager.Services
             this._historicMovementRepository = historicMovementRepository;
             this._expenditureTypeRepository = expenditureTypeRepository;
             this._savingRepository = savingRepository;
+        }
+
+        public void CreateExpenditures(List<ExpenditureEditModel> expenditureEditModel)
+        {
+            expenditureEditModel.ForEach(CreateExpenditure);
         }
 
         public void CreateExpenditure(ExpenditureEditModel expenditureEditModel)

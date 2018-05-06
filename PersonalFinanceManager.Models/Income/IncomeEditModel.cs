@@ -29,13 +29,7 @@ namespace PersonalFinanceManager.Models.Income
         [Required]
         public DateTime DateIncome { get; set; }
 
-        public string DisplayedDateIncome
-        {
-            get
-            {
-                return this.DateIncome.ToString("dd/MM/yyyy");
-            }
-        }
-        
+        public string DisplayedDateIncome => this.DateIncome.ToString("dd/MM/yyyy");
+
     }
 }

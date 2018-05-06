@@ -47,6 +47,11 @@ namespace PersonalFinanceManager.Services
             return mappedAtmWithdraws;
         }
 
+        public void CreateAtmWithdraws(List<AtmWithdrawEditModel> atmWithdrawEditModel)
+        {
+            atmWithdrawEditModel.ForEach(CreateAtmWithdraw);
+        }
+
         public void CreateAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel)
         {
             var atmWithdrawModel = Mapper.Map<AtmWithdrawModel>(atmWithdrawEditModel);

@@ -5,318 +5,318 @@
 }
 
 <div class="row wrapper wrapper-content">
-    
-</div>
-
-    @if (@Model.DisplayDashboard && @Model.HasCategories)
-    {
-        <div class="row wrapper wrapper-content">
-            <div class="col-lg-3">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="ibox">
-                            <div class="ibox-content">
-                                <label style="font-size:21px;">Accounts</label>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <select id="availableAccounts"></select>
-                                    </div>
-                                </div>
-                                <label style="font-size:21px;margin-top: 10px;">Movements</label>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <a href="/Expenditure/Index">Manage expenses</a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <a href="/Expenditure/Index">Manage incomes</a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <a href="/Saving/Index">Manage savings</a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <a href="/AccountManagement/ImportMovements">Import movements</a>
-                                    </div>
-                                </div>
-                                <label style="font-size:21px;margin-top: 10px;">Budget Plan</label>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <a href="/BudgetPlan/Index">Manage budget plans</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="ibox">
-                            <div class="ibox-title">
-                                <h5 id="actualVsExpectedExpensesOver12months-title"></h5>
-                            </div>
-                            <div class="ibox-content">
-                                <div align="center">
-                                    @if (@Model.HasCurrentBudgetPlan)
-                                    {
-                                        <svg width="20" height="10"><rect width="20" height="10" style="fill: #dcdcdc; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg>
-                                        @Model.BudgetPlanName
-                                        @Html.Raw("&nbsp; &nbsp;")
-                                        ;
-                                    }
-                                    <svg width="20" height="10"><rect width="20" height="10" style="fill: #f8ac59; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Actual
-                                </div>
-                                <canvas id="actualVsExpectedExpensesOver12months-canvas"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="ibox">
-                            <div class="ibox-title">
-                                <h5 id="incomesOutcomesOver6months-title"></h5>
-                            </div>
-                            <div class="ibox-content">
-                                <div align="center">
-                                    <svg width="20" height="10"><rect width="20" height="10" style="fill: #1ab394; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Incomes
-                                    &nbsp;&nbsp;
-                                    <svg width="20" height="10"><rect width="20" height="10" style="fill: #f8ac59; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Expenses
-                                    &nbsp;&nbsp;
-                                    <svg width="20" height="10"><rect width="20" height="10" style="fill: #ed5565; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Savings
-                                </div>
-                                <canvas id="incomesOutcomesOver6months-canvas"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row wrapper wrapper-content">
-            <div class="col-lg-2">
-                <div class="smwidget lazur-bg">
-                    <div class="row vertical-align">
-                        <div class="col-xs-4">
-                            <i class="fa fa-sign-out fa-3x"></i>
-                        </div>
-                        <div class="col-xs-8 text-right">
-                            <span> Current Month Expenses </span>
-                            <label style="font-size: 25px;">
-                                <strong>@Model.DisplayedCurrentMonthTotalExpense </strong>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="smwidget navy-bg">
-                    <div class="row vertical-align">
-                        <div class="col-xs-4">
-                            <i class="fa fa-sign-in fa-3x"></i>
-                        </div>
-                        <div class="col-xs-8 text-right">
-                            <span> Avg Incomes </span>
-                            <label style="font-size: 24px;">
-                                <strong>@Model.DisplayedAverageIncomes</strong>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="smwidget yellow-bg">
-                    <div class="row vertical-align">
-                        <div class="col-xs-4">
-                            <i class="fa fa-sign-out fa-3x"></i>
-                        </div>
-                        <div class="col-xs-8 text-right">
-                            <span> Avg Expenses </span>
-                            <label style="font-size: 24px;">
-                                <strong>@Model.DisplayedAverageExpenses</strong>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="smwidget red-bg">
-                    <div class="row vertical-align">
-                        <div class="col-xs-4">
-                            <i class="fa fa-upload fa-3x"></i>
-                        </div>
-                        <div class="col-xs-8 text-right">
-                            <span> Avg Savings </span>
-                            <label style="font-size: 24px;">
-                                <strong>@Model.DisplayedAverageSavings</strong>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
+    <div class="col-lg-3">
+        <div class="row">
+            <div class="col-lg-12">
                 <div class="ibox">
-                    <div class="ibox-title">
-                        <h5 id="expensesOver12months-title"></h5>
-                    </div>
                     <div class="ibox-content">
-                        <canvas id="expensesOver12months-canvas"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-7">
-                <div class="ibox">
-                    <div class="ibox-title">
-                        <h5>Expenses By Category - @Model.LabelCurrentMonth</h5>
-                    </div>
-                    <div class="ibox-content">
+                        <label style="font-size:18px;">Accounts</label>
                         <div class="row">
                             <div class="col-lg-12">
-                                <table class="stripe" id="split-table">
-                                    <colgroup>
-                                        <col width="2%"/>
-                                        <col width="26%"/>
-                                        <col width="18%"/>
-                                        <col width="18%"/>
-                                        <col width="18%"/>
-                                        <col width="18%"/>
-                                    </colgroup>
-                                    <thead>
-                                    <tr>
-                                        <th>
-
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CategoryName)
-                                        </th>
-                                        <th style="text-align: right;">
-                                            @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostCurrentMonth)
-                                        </th>
-                                        @if (@Model.HasCurrentBudgetPlan)
-                                        {
-                                            <th style="text-align: right;">
-                                                @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostPlannedMonthly)
-                                            </th>
-                                        }
-                                        <th style="text-align: right;">
-                                            @Model.LabelPreviousMonth
-                                        </th>
-                                        <th style="text-align: right;">
-                                            @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostOver12Month)
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach (var item in @Model.ExpensesByCategory)
-                                    {
-                                        <tr id="row-@item.CategoryId" class="clickable-row">
-                                            <td>
-                                                <svg width="20" height="10">
-                                                    <rect width="20" height="10" style="fill: #@item.CategoryColor; stroke-width: 1; stroke: rgb(0, 0, 0)"/>
-                                                </svg>
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.CategoryName)
-                                            </td>
-                                            <td align="right">
-                                                <strong>@Html.DisplayFor(modelItem => item.DisplayedCostCurrentMonth)</strong>
-                                                <br/>
-                                                <label style="font-size: x-small;"></label>
-                                            </td>
-                                            @if (@Model.HasCurrentBudgetPlan)
-                                            {
-                                                <td align="right">
-                                                    @Html.DisplayFor(modelItem => item.DisplayedCostPlannedMonthly)
-                                                    @CustomHelpers.DisplayAmountDifference(@item.DiffCostPlannedMonthly, @item.DisplayedDiffCostPlannedMonthly)
-                                                </td>
-                                            }                                           
-                                            <td align="right">
-                                                @Html.DisplayFor(modelItem => item.DisplayedCostPreviousMonth)
-                                                @CustomHelpers.DisplayAmountDifference(@item.DiffCostPreviousMonth, @item.DisplayedDiffCostPreviousMonth)
-                                            </td>
-                                            <td align="right">
-                                                @Html.DisplayFor(modelItem => item.DisplayedAverageCostOver12Months)
-                                                @CustomHelpers.DisplayAmountDifference(@item.DiffAverageCostOver12Months, @item.DisplayedDiffAverageCostOver12Months)
-                                            </td>
-                                        </tr>
-                                    }
-                                    </tbody>
-                                </table>
+                                <select id="availableAccounts"></select>
+                            </div>
+                        </div>
+                        <label style="font-size:18px;margin-top: 8px;">Movements</label>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="/Expenditure/Index">Manage expenses</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="/AtmWithdraw/Index">Manage ATM Withdraws</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="/Income/Index">Manage incomes</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="/Saving/Index">Manage savings</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="/AccountManagement/ShowImportMovements">Import movements</a>
+                            </div>
+                        </div>
+                        <label style="font-size:18px;margin-top: 8px;">Budget Plan</label>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="/BudgetPlan/Index">Manage budget plans</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
-        <input type="hidden" id="categoryNames" />
-
-        <a name="typeOverTimeAnchor"></a>
-
-        <input type="hidden" id="selectedCategoryId" value="" />
-
-        <div id="typeOverTimeDiv" style="display:none;">
-            <div class="row wrapper wrapper-content">
+    </div>
+    @if (@Model.DisplayDashboard && @Model.HasCategories)
+    {
+        <div class="col-lg-9">
+            <div class="row">
                 <div class="col-lg-6">
                     <div class="ibox">
                         <div class="ibox-title">
-                            <h5 id="typeOverTime-title"></h5>
-                            <div class="ibox-tools pull-right">
-                                <a class="close-link" onclick="closeTypeOverTimeDiv()" style="color: lightgrey;">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
+                            <h5 id="actualVsExpectedExpensesOver12months-title"></h5>
                         </div>
                         <div class="ibox-content">
-                            <div class="row">
-                                <div class="col-lg-6" id="typeOverTime-container">
-                                    <canvas id="typeOverTime" width="600" height="300"></canvas>
-                                </div>
+                            <div align="center">
+                                @if (@Model.HasCurrentBudgetPlan)
+                                {
+                                    <svg width="20" height="10"><rect width="20" height="10" style="fill: #dcdcdc; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg>
+                                    @Model.BudgetPlanName
+                                    @Html.Raw("&nbsp; &nbsp;")
+                                    ;
+                                }
+                                <svg width="20" height="10"><rect width="20" height="10" style="fill: #f8ac59; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Actual
                             </div>
+                            <canvas id="actualVsExpectedExpensesOver12months-canvas"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="ibox" id="detailExpensesContainer" style="display: none;">
+                    <div class="ibox">
                         <div class="ibox-title">
-                            <h5 id="detailExpensesMonthly-title"></h5>
-                            <div class="ibox-tools pull-right">
-                                <a class="close-link" onclick="closeDetailExpensesContainer()" style="color: lightgrey;">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
+                            <h5 id="incomesOutcomesOver6months-title"></h5>
                         </div>
                         <div class="ibox-content">
-                            <table class="stripe" id="detailExpensesMonthly-table">
-                                <colgroup>
-                                    <col width="20%" />
-                                    <col width="60%" />
-                                    <col width="20%" />
-                                </colgroup>
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Description</th>
-                                        <th>Cost</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                            <div align="center">
+                                <svg width="20" height="10"><rect width="20" height="10" style="fill: #1ab394; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Incomes
+                                &nbsp;&nbsp;
+                                <svg width="20" height="10"><rect width="20" height="10" style="fill: #f8ac59; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Expenses
+                                &nbsp;&nbsp;
+                                <svg width="20" height="10"><rect width="20" height="10" style="fill: #ed5565; stroke-width: 1; stroke: rgb(0, 0, 0)"></rect></svg> Savings
+                            </div>
+                            <canvas id="incomesOutcomesOver6months-canvas"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-}
-else
-{
-        <div class="row wrapper wrapper-content">
-            <div class="col-lg-12">
-                <div class="alert alert-danger" role="alert">There is no expenditures for this account.</div>
+    }
+    else
+    {
+        <div class="col-lg-9">
+            <div class="alert alert-danger" role="alert">There is no expenditures for this account.</div>
+        </div>
+    }
+</div>
+
+<div class="row wrapper wrapper-content">
+    <div class="col-lg-2">
+        <div class="smwidget lazur-bg">
+            <div class="row vertical-align">
+                <div class="col-xs-4">
+                    <i class="fa fa-sign-out fa-3x"></i>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <span> Current Month Expenses </span>
+                    <label style="font-size: 25px;">
+                        <strong>@Model.DisplayedCurrentMonthTotalExpense </strong>
+                    </label>
+                </div>
             </div>
         </div>
-}
+        <div class="smwidget navy-bg">
+            <div class="row vertical-align">
+                <div class="col-xs-4">
+                    <i class="fa fa-sign-in fa-3x"></i>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <span> Avg Incomes </span>
+                    <label style="font-size: 24px;">
+                        <strong>@Model.DisplayedAverageIncomes</strong>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="smwidget yellow-bg">
+            <div class="row vertical-align">
+                <div class="col-xs-4">
+                    <i class="fa fa-sign-out fa-3x"></i>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <span> Avg Expenses </span>
+                    <label style="font-size: 24px;">
+                        <strong>@Model.DisplayedAverageExpenses</strong>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="smwidget red-bg">
+            <div class="row vertical-align">
+                <div class="col-xs-4">
+                    <i class="fa fa-upload fa-3x"></i>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <span> Avg Savings </span>
+                    <label style="font-size: 24px;">
+                        <strong>@Model.DisplayedAverageSavings</strong>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5 id="expensesOver12months-title"></h5>
+            </div>
+            <div class="ibox-content">
+                <canvas id="expensesOver12months-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>Expenses By Category - @Model.LabelCurrentMonth</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="stripe" id="split-table">
+                            <colgroup>
+                                <col width="2%"/>
+                                <col width="26%"/>
+                                <col width="18%"/>
+                                <col width="18%"/>
+                                <col width="18%"/>
+                                <col width="18%"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>
+
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CategoryName)
+                                </th>
+                                <th style="text-align: right;">
+                                    @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostCurrentMonth)
+                                </th>
+                                @if (@Model.HasCurrentBudgetPlan)
+                                {
+                                    <th style="text-align: right;">
+                                        @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostPlannedMonthly)
+                                    </th>
+                                }
+                                <th style="text-align: right;">
+                                    @Model.LabelPreviousMonth
+                                </th>
+                                <th style="text-align: right;">
+                                    @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostOver12Month)
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in @Model.ExpensesByCategory)
+                            {
+                                <tr id="row-@item.CategoryId" class="clickable-row">
+                                    <td>
+                                        <svg width="20" height="10">
+                                            <rect width="20" height="10" style="fill: #@item.CategoryColor; stroke-width: 1; stroke: rgb(0, 0, 0)"/>
+                                        </svg>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CategoryName)
+                                    </td>
+                                    <td align="right">
+                                        <strong>@Html.DisplayFor(modelItem => item.DisplayedCostCurrentMonth)</strong>
+                                        <br/>
+                                        <label style="font-size: x-small;"></label>
+                                    </td>
+                                    @if (@Model.HasCurrentBudgetPlan)
+                                    {
+                                        <td align="right">
+                                            @Html.DisplayFor(modelItem => item.DisplayedCostPlannedMonthly)
+                                            @CustomHelpers.DisplayAmountDifference(@item.DiffCostPlannedMonthly, @item.DisplayedDiffCostPlannedMonthly)
+                                        </td>
+                                    }                                           
+                                    <td align="right">
+                                        @Html.DisplayFor(modelItem => item.DisplayedCostPreviousMonth)
+                                        @CustomHelpers.DisplayAmountDifference(@item.DiffCostPreviousMonth, @item.DisplayedDiffCostPreviousMonth)
+                                    </td>
+                                    <td align="right">
+                                        @Html.DisplayFor(modelItem => item.DisplayedAverageCostOver12Months)
+                                        @CustomHelpers.DisplayAmountDifference(@item.DiffAverageCostOver12Months, @item.DisplayedDiffAverageCostOver12Months)
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<input type="hidden" id="categoryNames" />
+
+<a name="typeOverTimeAnchor"></a>
+
+<input type="hidden" id="selectedCategoryId" value="" />
+
+<div id="typeOverTimeDiv" style="display:none;">
+    <div class="row wrapper wrapper-content">
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5 id="typeOverTime-title"></h5>
+                    <div class="ibox-tools pull-right">
+                        <a class="close-link" onclick="closeTypeOverTimeDiv()" style="color: lightgrey;">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-6" id="typeOverTime-container">
+                            <canvas id="typeOverTime" width="600" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox" id="detailExpensesContainer" style="display: none;">
+                <div class="ibox-title">
+                    <h5 id="detailExpensesMonthly-title"></h5>
+                    <div class="ibox-tools pull-right">
+                        <a class="close-link" onclick="closeDetailExpensesContainer()" style="color: lightgrey;">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="stripe" id="detailExpensesMonthly-table">
+                        <colgroup>
+                            <col width="20%" />
+                            <col width="60%" />
+                            <col width="20%" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 
 @section style
 {

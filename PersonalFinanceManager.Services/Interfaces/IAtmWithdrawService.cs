@@ -6,6 +6,8 @@ namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IAtmWithdrawService : IBaseService
     {
+        void CreateAtmWithdraws(List<AtmWithdrawEditModel> atmWithdrawEditModel);
+
         IList<AtmWithdrawListModel> GetAtmWithdrawsByAccountId(int accountId);
 
         void CreateAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel);

@@ -267,6 +267,12 @@
   <data name="LoginPages" xml:space="preserve">
     <value>Log in</value>
   </data>
+  <data name="MovementImport" xml:space="preserve">
+    <value>Movement Import</value>
+  </data>
+  <data name="MovementImportUploadCsv" xml:space="preserve">
+    <value>Upload a CSV file</value>
+  </data>
   <data name="PaymentMethodCreate" xml:space="preserve">
     <value>Create a payment method</value>
   </data>

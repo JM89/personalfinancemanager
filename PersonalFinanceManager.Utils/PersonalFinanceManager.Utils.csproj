@@ -49,6 +49,7 @@
     <Compile Include="Helpers\DateTimeFormatHelper.cs" />
     <Compile Include="Helpers\DateTimeUnitEnums.cs" />
     <Compile Include="Helpers\DecimalFormatHelper.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\Interval.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -294,6 +294,9 @@
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
     <Content Include="Scripts\custom\Bank.js" />
+    <Content Include="Scripts\custom\ImportMovements\TransformationFormattedToSummary.js" />
+    <Content Include="Scripts\custom\ImportMovements\UploadCsvFile.js" />
+    <Content Include="Scripts\custom\ImportMovements\TransformationRawToFormatted.js" />
     <Content Include="Scripts\custom\Salary.js" />
     <Content Include="Scripts\custom\Pension.js" />
     <Content Include="Scripts\custom\Saving.js" />
@@ -403,7 +406,7 @@
     <Content Include="Views\Tax\Create.cshtml" />
     <Content Include="Views\Tax\Edit.cshtml" />
     <Content Include="Views\Tax\Index.cshtml" />
-    <Content Include="Views\AccountManagement\ImportMovements.cshtml" />
+    <Content Include="Views\AccountManagement\ShowImportMovements.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
