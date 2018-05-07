@@ -101,7 +101,7 @@ namespace PersonalFinanceManager.Controllers
             };
 
             model.PaymentMethods.Add(new SelectListItem() { Text = "Not Applicable" });
-            model.PaymentMethods.AddRange(paymentMethods.Where(x => x.Name != "Cash").Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() }).ToList());
+            model.PaymentMethods.AddRange(paymentMethods.Where(x => x.Name != "Cash" && x.Name != "Internal Transfer").Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() }).ToList());
 
             return View(model);
         }

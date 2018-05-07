@@ -89,7 +89,7 @@
                                     <option value="@paymentMethod.Value">@paymentMethod.Text</option>
                                 }
                             </select>
-                            <select id="ImportTypes" name="ImportTypes" style="display:none;">
+                            <select id="ImportTypes" name="ImportTypes" style="display:none;" onchange="SetNotApplicable()">
                                 <option value=""></option>
                                 @foreach (var importType in @Model.ImportTypes)
                                 {
