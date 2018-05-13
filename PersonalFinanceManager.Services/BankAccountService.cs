@@ -75,17 +75,20 @@ namespace PersonalFinanceManager.Services
                 return null;
             }
 
-            var favoriteBankDetails = _bankBranchRepository.GetList().Single(x => x.BankId == account.BankId);
+            // Can be null for online banking
+            var favoriteBankDetails = _bankBranchRepository.GetList().SingleOrDefault(x => x.BankId == account.BankId);
 
             var accountModel = Mapper.Map<AccountEditModel>(account);
 
-            accountModel.BankBranchName = favoriteBankDetails.Name;
-            accountModel.BankBranchAddressLine1 = favoriteBankDetails.AddressLine1;
-            accountModel.BankBranchAddressLine2 = favoriteBankDetails.AddressLine2;
-            accountModel.BankBranchPostCode = favoriteBankDetails.PostCode;
-            accountModel.BankBranchCity = favoriteBankDetails.City;
-            accountModel.BankBranchPhoneNumber = favoriteBankDetails.PhoneNumber;
-
+            if (favoriteBankDetails != null)
+            {
+                accountModel.BankBranchName = favoriteBankDetails.Name;
+                accountModel.BankBranchAddressLine1 = favoriteBankDetails.AddressLine1;
+                accountModel.BankBranchAddressLine2 = favoriteBankDetails.AddressLine2;
+                accountModel.BankBranchPostCode = favoriteBankDetails.PostCode;
+                accountModel.BankBranchCity = favoriteBankDetails.City;
+                accountModel.BankBranchPhoneNumber = favoriteBankDetails.PhoneNumber;
+            }
             return accountModel;
         }
 

@@ -36,7 +36,7 @@ namespace PersonalFinanceManager.Controllers
             }
             
             var first = accountsMenu.First(x => x.IsFavorite);
-            var otherAccounts = accountsMenu.Where(x => !x.IsFavorite).OrderBy(x => x.Name);
+            var otherAccounts = accountsMenu.Where(x => !x.IsFavorite).OrderBy(x => x.BankName);
 
             var generatedAccountMenu = new List<AccountListModel>();
             generatedAccountMenu.Add(first);

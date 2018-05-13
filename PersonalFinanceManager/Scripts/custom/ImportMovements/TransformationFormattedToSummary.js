@@ -5,8 +5,8 @@
 
     $("#FormattedContentTable tbody tr").each(function (idxtr, tr) {
         var row = $(tr).find("td");
-
-        if ($(row[0]).find("input").val() === "on") 
+        var included = $(row[0]).find("input").attr("checked");
+        if (included == "checked") 
         {
             switch (row[1].innerHTML) {
                 case "Expenses":

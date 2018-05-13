@@ -110,13 +110,23 @@ namespace PersonalFinanceManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ImportMovements(ImportMovementEditModel model)
         {
-            model.Expenses.ForEach(x => { x.AccountId = model.AccountId; });
-            model.Incomes.ForEach(x => { x.AccountId = model.AccountId; });
-            model.AtmWithdraws.ForEach(x => { x.AccountId = model.AccountId; });
+            if (model.Expenses != null)
+            {
+                model.Expenses.ForEach(x => { x.AccountId = model.AccountId; x.HasBeenAlreadyDebited = true; });
+                _expenditureService.CreateExpenditures(model.Expenses.ToList());
+            }
 
-            _expenditureService.CreateExpenditures(model.Expenses.ToList());
-            _incomeService.CreateIncomes(model.Incomes.ToList());
-            _atmWithdrawService.CreateAtmWithdraws(model.AtmWithdraws.ToList());
+            if (model.Incomes != null)
+            {
+                model.Incomes.ForEach(x => { x.AccountId = model.AccountId; });
+                _incomeService.CreateIncomes(model.Incomes.ToList());
+            }
+            
+            if (model.AtmWithdraws != null)
+            {
+                model.AtmWithdraws.ForEach(x => { x.AccountId = model.AccountId; x.HasBeenAlreadyDebited = true; });
+                _atmWithdrawService.CreateAtmWithdraws(model.AtmWithdraws.ToList());
+            }
 
             return RedirectToAction("Index");
         }

@@ -47,7 +47,7 @@ namespace PersonalFinanceManager.Services
 
         public void Validate(BankEditModel bankEditModel)
         {
-            var duplicateName = _bankRepository.GetList().Any(x => x.Name.ToLowerInvariant() == bankEditModel.Name.Trim().ToLowerInvariant() && x.Id != bankEditModel.Id);
+            var duplicateName = _bankRepository.GetList().Any(x => x.Name.ToLower() == bankEditModel.Name.Trim().ToLower() && x.Id != bankEditModel.Id);
             if (duplicateName)
             {
                 throw new BusinessException("Name", BusinessExceptionMessage.BankDuplicateName);

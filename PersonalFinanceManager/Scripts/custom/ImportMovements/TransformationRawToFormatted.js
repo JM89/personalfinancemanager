@@ -100,10 +100,10 @@ function PopulateFormattedTable(rows, model) {
             var htmlrow = "";
             htmlrow += "<tr>";
             htmlrow += "<td>";
-            if (row.Date > lastMovementRegistered) {
-                htmlrow += "<input type='checkbox' checked />";
+            if (lastMovementRegistered != null || row.Date > lastMovementRegistered) {
+                htmlrow += "<input type='checkbox' checked class='cbxInclMvts' />";
             } else {
-                htmlrow += "<input type='checkbox' />";
+                htmlrow += "<input type='checkbox' class='cbxInclMvts' />";
             }
             htmlrow += "</td>";
             htmlrow += "<td>" + row.ImportType + "</td>";

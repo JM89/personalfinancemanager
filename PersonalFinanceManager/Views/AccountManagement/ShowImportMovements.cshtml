@@ -288,6 +288,17 @@
 
                 var rows = ReturnFormattedRows(formattingParameters, model, formatterPaymentMethods);
                 PopulateFormattedTable(rows, model);
+
+                $(".cbxInclMvts").click(function () {
+
+                    if ($(this).attr("checked") != undefined) {
+                        $(this).removeAttr("checked");
+                    }
+                    else {
+                        $(this).attr("checked", "checked");
+                    }
+                });
+
                 $("#formatted_link").click();
             });
         }
