@@ -17,11 +17,11 @@ namespace PFM.Services
             this._pensionRepository = pensionRepository;
         }
 
-        public IList<Pension> GetPensions(string userId)
+        public IList<PensionList> GetPensions(string userId)
         {
             var pensions = _pensionRepository.GetList2(u => u.Currency, u => u.Country).Where(x => x.UserId == userId).ToList();
 
-            var mappedPensions = pensions.Select(Mapper.Map<Pension>);
+            var mappedPensions = pensions.Select(Mapper.Map<PensionList>);
 
             return mappedPensions.ToList();
         }

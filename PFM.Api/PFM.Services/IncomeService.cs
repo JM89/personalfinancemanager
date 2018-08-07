@@ -41,11 +41,11 @@ namespace PFM.Services
             _bankAccountRepository.Update(account);
         }
 
-        public IList<Income> GetIncomes(int accountId)
+        public IList<IncomeList> GetIncomes(int accountId)
         {
             var incomes = _incomeRepository.GetList2(u => u.Account.Currency).Where(x => x.AccountId == accountId).ToList();
 
-            var mappedIncomes = incomes.Select(x => Mapper.Map<Income>(x));
+            var mappedIncomes = incomes.Select(x => Mapper.Map<IncomeList>(x));
             
             return mappedIncomes.ToList();
         }

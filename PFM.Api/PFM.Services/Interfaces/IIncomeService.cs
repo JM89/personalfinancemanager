@@ -11,7 +11,7 @@ namespace PFM.Services.Interfaces
 
         void CreateIncome(IncomeDetails incomeDetails);
 
-        IList<Income> GetIncomes(int accountId);
+        IList<IncomeList> GetIncomes(int accountId);
 
         IncomeDetails GetById(int id);
 

@@ -19,7 +19,7 @@ namespace PFM.Services
             this._expenditureRepository = expenditureRepository;
         }
 
-        public IList<ExpenseTypeList> GetExpenditureTypes()
+        public IList<ExpenseTypeList> GetExpenseTypes()
         {
             var expenditures = _expenditureRepository.GetList();
 
@@ -47,13 +47,13 @@ namespace PFM.Services
             return Mapper.Map<ExpenseTypeDetails>(expenditureType);
         }
 
-        public void CreateExpenditureType(ExpenseTypeDetails expenditureTypeDetails)
+        public void CreateExpenseType(ExpenseTypeDetails expenditureTypeDetails)
         {
             var expenditureType = Mapper.Map<ExpenseType>(expenditureTypeDetails);
             _expenditureTypeRepository.Create(expenditureType);
         }
 
-        public void EditExpenditureType(ExpenseTypeDetails expenditureTypeDetails)
+        public void EditExpenseType(ExpenseTypeDetails expenditureTypeDetails)
         {
             var expenditureType = _expenditureTypeRepository.GetById(expenditureTypeDetails.Id);
             expenditureType.Name = expenditureTypeDetails.Name;
@@ -62,7 +62,7 @@ namespace PFM.Services
             _expenditureTypeRepository.Update(expenditureType);
         }
 
-        public void DeleteExpenditureType(int id)
+        public void DeleteExpenseType(int id)
         {
             var expenditureType = _expenditureTypeRepository.GetById(id);
             _expenditureTypeRepository.Delete(expenditureType);

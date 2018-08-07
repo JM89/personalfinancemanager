@@ -6,14 +6,14 @@ namespace PFM.Services.Interfaces
 {
     public interface IExpenseTypeService : IBaseService
     {
-        IList<ExpenseTypeList> GetExpenditureTypes();
+        IList<ExpenseTypeList> GetExpenseTypes();
 
         ExpenseTypeDetails GetById(int id);
 
-        void CreateExpenditureType(ExpenseTypeDetails expenditureTypeDetails);
+        void CreateExpenseType(ExpenseTypeDetails expenditureTypeDetails);
 
-        void EditExpenditureType(ExpenseTypeDetails expenditureTypeDetails);
+        void EditExpenseType(ExpenseTypeDetails expenditureTypeDetails);
 
-        void DeleteExpenditureType(int id);
+        void DeleteExpenseType(int id);
     }
 }

@@ -16,6 +16,6 @@ namespace PFM.Services.Interfaces
 
         void DeleteTax(int id);
 
-        IList<TaxList> GetTaxesByType(string currentUser, DataAccessLayer.Enumerations.TaxType incomeTax);
+        IList<TaxList> GetTaxesByType(string currentUser, int taxTypeId);
     }
 }

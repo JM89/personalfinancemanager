@@ -7,7 +7,7 @@ namespace PFM.Services.Interfaces
 {
     public interface IPensionService : IBaseService
     {
-        IList<Pension> GetPensions(string userId);
+        IList<PensionList> GetPensions(string userId);
 
         void CreatePension(PensionDetails pensionDetails);
 

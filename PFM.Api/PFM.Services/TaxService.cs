@@ -79,10 +79,9 @@ namespace PFM.Services
             return mappedTaxes.ToList();
         }
 
-        public IList<TaxList> GetTaxesByType(string currentUser, DataAccessLayer.Enumerations.TaxType incomeTax)
+        public IList<TaxList> GetTaxesByType(string currentUser, int taxTypeId)
         {
-            var incomeTaxTypeId = (int) incomeTax;
-            var taxes = _taxRepository.GetList().Where(x => x.TaxTypeId == incomeTaxTypeId).ToList();
+            var taxes = _taxRepository.GetList().Where(x => x.TaxTypeId == taxTypeId).ToList();
             return taxes.Select(Mapper.Map<TaxList>).ToList();
         }
     }
