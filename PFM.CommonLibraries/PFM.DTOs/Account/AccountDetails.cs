@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Account
 {
@@ -21,14 +20,11 @@ namespace PFM.DTOs.Account
 
         public decimal CurrentBalance { get; set; }
 
-        public string DisplayCurrentBalance
-            => DecimalFormatHelper.GetDisplayDecimalValue(CurrentBalance, CurrencySymbol);
-
         public bool IsSavingAccount { get; set; }
 
-        public IList<SelectListItem> AvailableCurrencies { get; set; }
+        public IList<MinifiedDTO> AvailableCurrencies { get; set; }
 
-        public IList<SelectListItem> AvailableBanks { get; set; }
+        public IList<MinifiedDTO> AvailableBanks { get; set; }
 
         public string BankWebsite { get; set; }
 

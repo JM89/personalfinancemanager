@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Tax
 {
@@ -14,11 +13,7 @@ namespace PFM.DTOs.Tax
 
         public DateTime StartDate { get; set; }
 
-        public string DisplayedStartDate => DateTimeFormatHelper.GetDisplayDateValue(StartDate);
-
         public DateTime? EndDate { get; set; }
-
-        public string DisplayedEndDate => DateTimeFormatHelper.GetDisplayDateValue(EndDate);
 
         public string UserId { get; set; }
 
@@ -26,20 +21,20 @@ namespace PFM.DTOs.Tax
 
         public decimal Amount { get; set; }
 
-        public IList<SelectListItem> AvailableCurrencies { get; set; }
+        public IList<MinifiedDTO> AvailableCurrencies { get; set; }
 
         public int CountryId { get; set; }
 
-        public IList<SelectListItem> AvailableCountries { get; set; }
+        public IList<MinifiedDTO> AvailableCountries { get; set; }
 
         public int FrequenceOptionId { get; set; }
 
-        public IList<SelectListItem> AvailableFrequenceOptions { get; set; }
+        public IList<MinifiedDTO> AvailableFrequenceOptions { get; set; }
 
         public int? Frequence { get; set; }
 
         public int TaxTypeId { get; set; }
 
-        public IList<SelectListItem> AvailableTaxTypes { get; set; }
+        public IList<MinifiedDTO> AvailableTaxTypes { get; set; }
     }
 }

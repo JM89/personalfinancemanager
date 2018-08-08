@@ -1,5 +1,4 @@
-﻿using PFM.Utils.Helpers;
-using System;
+﻿using System;
 
 namespace PFM.DTOs.Saving
 {
@@ -16,18 +15,6 @@ namespace PFM.DTOs.Saving
         public DateTime DateSaving { get; set; }
 
         public decimal Amount { get; set; }
-
-        public string DisplayedAmount => DecimalFormatHelper.GetDisplayDecimalValue(Amount, AccountCurrencySymbol);
-
-        public string DisplayedDateSaving => DateTimeFormatHelper.GetDisplayDateValue(this.DateSaving);
-
-        public string Description
-        {
-            get
-            {
-                return "Saving " + DisplayedDateSaving;
-            }
-        }
 
         public int TargetInternalAccountId { get; set; }
 

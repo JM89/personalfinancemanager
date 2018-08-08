@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PFM.DTOs.Account;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Dashboard
 {
@@ -37,14 +36,6 @@ namespace PFM.DTOs.Dashboard
         public decimal AverageExpenses { get; set; }
 
         public decimal AverageSavings { get; set; }
-
-        public string DisplayedCurrentMonthTotalExpense => DecimalFormatHelper.GetDisplayDecimalValue(CurrentMonthTotalExpense, CurrencySymbol);
-
-        public string DisplayedAverageIncomes => DecimalFormatHelper.GetDisplayDecimalValue(AverageIncomes, CurrencySymbol);
-
-        public string DisplayedAverageExpenses => DecimalFormatHelper.GetDisplayDecimalValue(AverageExpenses, CurrencySymbol);
-
-        public string DisplayedAverageSavings => DecimalFormatHelper.GetDisplayDecimalValue(AverageSavings, CurrencySymbol);
 
         public IDictionary<string, ExpenseSummaryByMonth> DetailedExpensesOver12Months { get; set; }
 

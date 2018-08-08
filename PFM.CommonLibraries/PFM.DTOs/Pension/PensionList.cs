@@ -1,5 +1,4 @@
 ﻿using System;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Pension
 {
@@ -11,11 +10,7 @@ namespace PFM.DTOs.Pension
 
         public DateTime StartDate { get; set; }
 
-        public string DisplayedStartDate => DateTimeFormatHelper.GetDisplayDateValue(StartDate);
-
         public DateTime? EndDate { get; set; }
-
-        public string DisplayedEndDate => DateTimeFormatHelper.GetDisplayDateValue(EndDate);
 
         public decimal CurrentPot { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PFM.DTOs.Expense;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Dashboard
 {
@@ -23,26 +22,6 @@ namespace PFM.DTOs.Dashboard
         public decimal AverageCostOver12Months { get; set; }
 
         public string CurrencySymbol { get; set; }
-
-        public decimal DiffCostPlannedMonthly => CostCurrentMonth - CostPlannedMonthly;
-
-        public decimal DiffCostPreviousMonth => CostCurrentMonth - CostPreviousMonth;
-
-        public decimal DiffAverageCostOver12Months => CostCurrentMonth - AverageCostOver12Months;
-
-        public string DisplayedCostCurrentMonth => DecimalFormatHelper.GetDisplayDecimalValue(CostCurrentMonth, CurrencySymbol);
-
-        public string DisplayedCostPlannedMonthly => DecimalFormatHelper.GetDisplayDecimalValue(CostPlannedMonthly, CurrencySymbol);
-
-        public string DisplayedCostPreviousMonth => DecimalFormatHelper.GetDisplayDecimalValue(CostPreviousMonth, CurrencySymbol);
-
-        public string DisplayedAverageCostOver12Months => DecimalFormatHelper.GetDisplayDecimalValue(AverageCostOver12Months, CurrencySymbol);
-
-        public string DisplayedDiffCostPlannedMonthly => DecimalFormatHelper.GetSignedCurrency(DiffCostPlannedMonthly, CurrencySymbol);
-
-        public string DisplayedDiffCostPreviousMonth => DecimalFormatHelper.GetSignedCurrency(DiffCostPreviousMonth, CurrencySymbol);
-
-        public string DisplayedDiffAverageCostOver12Months => DecimalFormatHelper.GetSignedCurrency(DiffAverageCostOver12Months, CurrencySymbol);
 
         public IDictionary<string, List<ExpenseList>> Expenses { get; set; }
 

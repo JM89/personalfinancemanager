@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Saving
 {
@@ -18,18 +17,10 @@ namespace PFM.DTOs.Saving
         
         public string TargetInternalAccountName { get; set; }
 
-        public string DisplayedDateSaving => DateTimeFormatHelper.GetDisplayDateValue(this.DateSaving);
-
-        public string Description
-        {
-            get
-            {
-                return "Saving " + DisplayedDateSaving;
-            }
-        }
-
-        public IList<SelectListItem> AvailableInternalAccounts { get; set; }
+        public IList<MinifiedDTO> AvailableInternalAccounts { get; set; }
 
         public int? GeneratedIncomeId { get; set; }
+
+        public string Description { get; set; }
     }
 }

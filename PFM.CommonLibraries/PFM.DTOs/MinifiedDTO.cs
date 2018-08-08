@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PFM.Utils.Helpers
+namespace PFM.DTOs
 {
-    public class SelectListItem
+    public class MinifiedDTO
     {
         public string Text { get; set; }
 

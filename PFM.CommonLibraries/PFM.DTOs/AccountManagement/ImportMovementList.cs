@@ -1,5 +1,4 @@
-﻿using PFM.Utils.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace PFM.DTOs.AccountManagement
@@ -10,21 +9,15 @@ namespace PFM.DTOs.AccountManagement
 
         public decimal AccountCurrentBalance { get; set; }
 
-        public string DisplayedAccountCurrentBalance
-            => DecimalFormatHelper.GetDisplayDecimalValue(AccountCurrentBalance, AccountCurrencySymbol);
-
         public string AccountCurrencySymbol { get; set; }
 
         public DateTime? LastMovementRegistered { get; set; }
 
-        public string DisplayedLastMovementRegistered
-            => DateTimeFormatHelper.GetDisplayDateValue(LastMovementRegistered);
+        public List<MinifiedDTO> PaymentMethods { get; set; }
 
-        public List<SelectListItem> PaymentMethods { get; set; }
+        public List<MinifiedDTO> ImportTypes { get; set; }
 
-        public List<SelectListItem> ImportTypes { get; set; }
-
-        public List<SelectListItem> ExpenseTypes { get; set; }
+        public List<MinifiedDTO> ExpenseTypes { get; set; }
 
         public List<string> SelectedValues { get; set; }
 

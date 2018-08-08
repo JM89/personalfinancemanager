@@ -1,6 +1,5 @@
 ﻿using System;
 using PFM.DTOs.Shared;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Tax
 {
@@ -14,11 +13,7 @@ namespace PFM.DTOs.Tax
 
         public DateTime StartDate { get; set; }
 
-        public string DisplayedStartDate => DateTimeFormatHelper.GetDisplayDateValue(StartDate);
-
         public DateTime? EndDate { get; set; }
-
-        public string DisplayedEndDate => DateTimeFormatHelper.GetDisplayDateValue(EndDate);
 
         public string TaxType { get; set; }
 
@@ -27,8 +22,6 @@ namespace PFM.DTOs.Tax
         public string CountryName { get; set; }
 
         public decimal Amount { get; set; }
-
-        public string DisplayedAmount => DecimalFormatHelper.GetDisplayDecimalValue(Amount, CurrencySymbol);
 
         public string FrequenceDescription { get; set; }
 

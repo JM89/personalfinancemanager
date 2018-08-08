@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Pension
 {
@@ -14,11 +13,7 @@ namespace PFM.DTOs.Pension
 
         public DateTime StartDate { get; set; }
 
-        public string DisplayedStartDate => DateTimeFormatHelper.GetDisplayDateValue(StartDate);
-
         public DateTime? EndDate { get; set; }
-
-        public string DisplayedEndDate => DateTimeFormatHelper.GetDisplayDateValue(EndDate);
 
         public decimal ContributionPercentage { get; set; }
 
@@ -32,10 +27,10 @@ namespace PFM.DTOs.Pension
 
         public int CurrencyId { get; set; }
 
-        public IList<SelectListItem> AvailableCurrencies { get; set; }
+        public IList<MinifiedDTO> AvailableCurrencies { get; set; }
 
         public int CountryId { get; set; }
 
-        public IList<SelectListItem> AvailableCountries { get; set; }
+        public IList<MinifiedDTO> AvailableCountries { get; set; }
     }
 }

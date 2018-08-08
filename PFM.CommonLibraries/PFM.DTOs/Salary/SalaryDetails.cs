@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Salary
 {
@@ -24,20 +23,16 @@ namespace PFM.DTOs.Salary
 
         public int CurrencyId { get; set; }
 
-        public IList<SelectListItem> AvailableCurrencies { get; set; }
-
-        public string DisplayedStartDate => DateTimeFormatHelper.GetDisplayDateValue(StartDate);
-
-        public string DisplayedEndDate => DateTimeFormatHelper.GetDisplayDateValue(EndDate);
+        public IList<MinifiedDTO> AvailableCurrencies { get; set; }
 
         public IList<SalaryDeductionDetails> SalaryDeductions { get; set; }
         
         public int CountryId { get; set; }
 
-        public IList<SelectListItem> AvailableCountries { get; set; }
+        public IList<MinifiedDTO> AvailableCountries { get; set; }
 
         public int TaxId { get; set; }
 
-        public IList<SelectListItem> AvailableTaxes { get; set; }
+        public IList<MinifiedDTO> AvailableTaxes { get; set; }
     }
 }

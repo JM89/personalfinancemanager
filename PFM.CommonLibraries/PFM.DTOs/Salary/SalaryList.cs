@@ -1,5 +1,4 @@
 ﻿using System;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Salary
 {
@@ -22,16 +21,5 @@ namespace PFM.DTOs.Salary
         public string CurrencySymbol { get; set; }
 
         public string CountryName { get; set; }
-
-        public string DisplayedStartDate => DateTimeFormatHelper.GetDisplayDateValue(StartDate);
-
-        public string DisplayedEndDate => DateTimeFormatHelper.GetDisplayDateValue(EndDate);
-
-        public string DisplayedYearlySalary => DecimalFormatHelper.GetDisplayDecimalValue(YearlySalary, CurrencySymbol);
-
-        public string DisplayedMonthlyGrossPay => DecimalFormatHelper.GetDisplayDecimalValue(MonthlyGrossPay, CurrencySymbol);
-
-        public string DisplayedMonthlyNetPay => DecimalFormatHelper.GetDisplayDecimalValue(MonthlyNetPay, CurrencySymbol);
-
     }
 }

@@ -1,9 +1,8 @@
 ﻿using PFM.DTOs.Shared;
-using PFM.Utils.Helpers;
 
 namespace PFM.DTOs.Account
 {
-    public class AccountList: ICanBeDeleted
+    public class AccountList
     {
         public int Id { get; set; }
 
@@ -19,27 +18,9 @@ namespace PFM.DTOs.Account
 
         public decimal InitialBalance { get; set; }
 
-        public string DisplayedInitialBalance
-        {
-            get
-            {
-                return DecimalFormatHelper.GetDisplayDecimalValue(this.InitialBalance, this.CurrencySymbol);
-            }
-        }
-
         public decimal CurrentBalance { get; set; }
-
-        public string DisplayedCurrentBalance
-        {
-            get
-            {
-                return DecimalFormatHelper.GetDisplayDecimalValue(this.CurrentBalance, this.CurrencySymbol);
-            }
-        }
-        
+       
         public bool CanBeDeleted { get; set; }
-
-        public string TooltipResourceName => "AccountCantBeDeleted";
 
         public bool IsFavorite { get; set; }
 
