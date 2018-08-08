@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Manager</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.10/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    @RenderSection("style", required: false)
+</head>
+<body>
+    <div class="navbar navbar-inverse">
+        <input type="hidden" id="indexAccountList" value="@Session["IndexAccountList"]"/>
+        <div class="container">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <img src="~/Resources/pfm_logo.png" style="width: 155px; border-radius: 5px; margin-top: 5px; margin-bottom: 5px;"/>
+                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="menuitem" id="home" style="margin-top: 30px;">
+                           <a href="/Home/Index"><strong>Home</strong></a>
+                        </li>
+                        <li class="menuitem" id="movements" style="margin-top: 30px;">
+                            <a href="/AccountManagement/Index" id="id_menu_movements">Account Management</a>
+                        </li>
+                        <li class="menuitem" id="budget" style="margin-top: 30px;">
+                            <a data-toggle="dropdown" href="#">Taxes & Allowances</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                <li><a href="/Salary/Index">Manage Salaries</a></li>
+                                <li><a href="/Pension/Index">Manage Pensions</a></li>
+                                <li><a href="/Tax/Index">Manage Taxes</a></li>
+                            </ul>
+                        </li>
+                        <li class="menuitem" id="configuration" style="margin-top: 30px;">
+                            <a data-toggle="dropdown" href="#">Configuration</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <li><a href="/BankAccount/Index">Manage Accounts</a></li>
+                                <li><a href="/Bank/Index">Manage Banks</a></li>
+                                <li><a href="/Country/Index">Manage Countries</a></li>
+                                <li><a href="/Currency/Index">Manage Currencies</a></li>
+                                <li><a href="/ExpenditureType/Index">Manage Expenditure Types</a></li>
+                                <li><a href="/PaymentMethod/Index">Manage Payment Methods</a></li>
+                                <li><a href="/TaxType/Index">Manage Tax Types</a></li>
+                            </ul>
+                        </li>
+                    }
+                   
+                </ul>
+                @Html.Partial("_LoginPartial")
+               
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/plug-ins/1.10.10/sorting/datetime-moment.js"></script>
+    <script type="text/javascript" src="~/Scripts/plugins/ddslick/jquery.ddslick.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/custom/Shared.js"></script>
+    @RenderSection("scripts", required: false)
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('DD/MM/YYYY');
+
+            $('#accountList').DataTable({
+                "iDisplayLength": 18,
+                "bLengthChange": false,
+                "bFilter": false
+            });
+
+            $('#mytable').DataTable({
+                "iDisplayLength": 18,
+                "bLengthChange": false,
+                "bFilter": false,
+                "order": [[0, "desc"]]
+            });
+            $('#mytable2').DataTable({
+                "iDisplayLength": 12,
+                "bLengthChange": false,
+                "order": [[0, "desc"]]
+            });
+            $('#mytable4').DataTable({
+                "bLengthChange": false,
+                "bFilter": false,
+                "bPaginate": false,
+                "bInfo": false
+            });
+            
+
+        });
+
+</script>
+
+</body>
+
+
+</html>

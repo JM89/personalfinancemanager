@@ -1,0 +1,64 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.ExpenditureType.ExpenditureTypeListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.ExpenditureTypePages;
+    ViewBag.GridTitle = Resources.TitleNames.ExpenditureTypeList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.ExpenditureTypeDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.ExpenditureTypeConfirmationDeletion;
+}
+
+@section AddButtonSection
+{
+    <a href="/ExpenditureType/Create" title="add"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable">
+        <colgroup>
+            <col width="3%" />
+            <col width="50%" />
+            <col width="10%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShowOnDashboard)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td >
+                        @*@Html.DisplayFor(modelItem => item.GraphColor)*@
+                        <svg width="20" height="10">
+                            <rect width="20" height="10" style="fill:#@item.GraphColor;stroke-width:1;stroke:rgb(0,0,0)" />
+                        </svg>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShowOnDashboard)
+                    </td>
+                    <td align="right">
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "ExpenditureType", @Resources.DisabledButtonTooltips.ExpenditureTypeCantBeDeleted, @item.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}

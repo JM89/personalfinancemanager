@@ -1,0 +1,60 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Bank.BankListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.BankPages;
+    ViewBag.GridTitle = Resources.TitleNames.BankList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.BankDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.BankConfirmationDeletion;
+}
+
+@section AddButtonSection
+{
+    <a href="/Bank/Create" title="add"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable">
+        <colgroup>
+            <col width="5%" />
+            <col width="25%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                   @Html.DisplayNameFor(model => model.CountryName)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.IconPath" width="18" height="18" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CountryName)
+                    </td>
+                    <td align="right">
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "Bank", @Resources.DisabledButtonTooltips.BankCantBeDeleted, @item.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}

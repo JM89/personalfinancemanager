@@ -1,0 +1,92 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Saving.SavingListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.SavingPages;
+    ViewBag.GridTitle = Resources.TitleNames.SavingList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.SavingDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.SavingConfirmationDeletion;
+}
+
+@section BreadCrumbSection
+{
+<li>
+    <a href="/Dashboard/SplitByTypeDashboard">Movements</a>
+</li>
+<li class="active">
+    <strong>@ViewBag.GridTitle</strong>
+</li>
+}
+
+@section AccountDetails
+{
+    <div class="alert alert-info" role="alert">
+        <table>
+            <tr>
+                <td><strong>@Html.DisplayName("Current Amount:")</strong></td>
+                <td>@ViewBag.CurrentAmount</td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section AddButtonSection
+{
+    <a href="/Saving/Create" title="add" class="btn_create"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable2">
+        <colgroup>
+            <col width="10%" />
+            <col width="7%" />
+            <col width="30%" />
+            <col width="30%" />
+            <col width="23%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateSaving)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TargetInternalAccountName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr class="trSaving">
+                    <td class="tdDateSaving">
+                        @Html.DisplayFor(modelItem => item.DisplayedDateSaving)
+                    </td>
+                    <td align="right" class="tdAmount">
+                        @Html.DisplayFor(modelItem => item.DisplayedAmount)
+                    </td>
+                    <td class="tdDescription">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td class="tdTargetInternalAccount">
+                        @Html.HiddenFor(modelItem => item.TargetInternalAccountId)
+                        @Html.DisplayFor(modelItem => item.TargetInternalAccountName)
+                    </td>
+                    <td align="right" class="tdActions">
+                        @CustomHelpers.ListButtons(@item.Id, true, "Saving", "", @item.Description)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

@@ -1,0 +1,447 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountBank" xml:space="preserve">
+    <value>Bank</value>
+  </data>
+  <data name="AccountCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="AccountCurrentBalance" xml:space="preserve">
+    <value>Current Balance</value>
+  </data>
+  <data name="AccountInitialBalance" xml:space="preserve">
+    <value>Initial Balance</value>
+  </data>
+  <data name="AccountIsSavingAccount" xml:space="preserve">
+    <value>Saving account?</value>
+  </data>
+  <data name="AtmWithdrawCurrentAmount" xml:space="preserve">
+    <value>Current Amount</value>
+  </data>
+  <data name="AtmWithdrawDateExpenditure" xml:space="preserve">
+    <value>Date Withdraw</value>
+  </data>
+  <data name="AtmWithdrawDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="AtmWithdrawHasBeenAlreadyDebited" xml:space="preserve">
+    <value>Already Debited</value>
+  </data>
+  <data name="AtmWithdrawInitialAmount" xml:space="preserve">
+    <value>Initial Amount</value>
+  </data>
+  <data name="BankBranchAddressLine1" xml:space="preserve">
+    <value>Address Line 1</value>
+  </data>
+  <data name="BankBranchAddressLine2" xml:space="preserve">
+    <value>Address Line 2</value>
+  </data>
+  <data name="BankBranchCity" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="BankBranchName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BankBranchPhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="BankBranchPostCode" xml:space="preserve">
+    <value>Post Code</value>
+  </data>
+  <data name="BankCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="BankFavoriteBranch" xml:space="preserve">
+    <value>Favorite Branch</value>
+  </data>
+  <data name="BankGeneralEnquiryPhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="BankIconPath" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="BankIconPathPreview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="BankName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BankUploadImage" xml:space="preserve">
+    <value>Upload an icon</value>
+  </data>
+  <data name="BankWebsite" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="BudgetPlanAverageMonthValue" xml:space="preserve">
+    <value>Average Month Value</value>
+  </data>
+  <data name="BudgetPlanEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="BudgetPlanExpectedIncomes" xml:space="preserve">
+    <value>Incomes</value>
+  </data>
+  <data name="BudgetPlanExpectedSavings" xml:space="preserve">
+    <value>Savings</value>
+  </data>
+  <data name="BudgetPlanExpectedValue" xml:space="preserve">
+    <value>Expected Value</value>
+  </data>
+  <data name="BudgetPlanExpenditureType" xml:space="preserve">
+    <value>Expenditure Type</value>
+  </data>
+  <data name="BudgetPlanName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BudgetPlanPreviousMonthValue" xml:space="preserve">
+    <value>Previous Month Value</value>
+  </data>
+  <data name="BudgetPlanStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="CountryName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="CurrencyName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="CurrencySymbol" xml:space="preserve">
+    <value>Symbol</value>
+  </data>
+  <data name="ExpenditureAtmWithdraw" xml:space="preserve">
+    <value>ATM Withdraw</value>
+  </data>
+  <data name="ExpenditureDateExpenditure" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="ExpenditureDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="ExpenditureHasBeenAlreadyDebited" xml:space="preserve">
+    <value>Debited?</value>
+  </data>
+  <data name="ExpenditurePaymentMethod" xml:space="preserve">
+    <value>Payment Method</value>
+  </data>
+  <data name="ExpenditureTargetInternalAccount" xml:space="preserve">
+    <value>Internal Account</value>
+  </data>
+  <data name="ExpenditureTypeExpenditure" xml:space="preserve">
+    <value>Expenditure Type</value>
+  </data>
+  <data name="ExpenditureTypeGraphColor" xml:space="preserve">
+    <value>Graph Color</value>
+  </data>
+  <data name="ExpenditureTypeName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ExpenditureTypeShowOnDashboard" xml:space="preserve">
+    <value>Show On Dashboard</value>
+  </data>
+  <data name="ExpenseSummaryByCategoryCategoryName" xml:space="preserve">
+    <value>Expenditure Type</value>
+  </data>
+  <data name="ExpenseSummaryByCategoryCostCurrentMonth" xml:space="preserve">
+    <value>Actual</value>
+  </data>
+  <data name="ExpenseSummaryByCategoryCostOver12Month" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="ExpenseSummaryByCategoryCostPlannedMonthly" xml:space="preserve">
+    <value>Expected</value>
+  </data>
+  <data name="ExpenseSummaryByCategoryCostPreviousMonth" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="IncomeAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="IncomeCost" xml:space="preserve">
+    <value>Cost</value>
+  </data>
+  <data name="IncomeDateIncome" xml:space="preserve">
+    <value>Date Income</value>
+  </data>
+  <data name="IncomeDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="IncomeEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="IncomeFrequency" xml:space="preserve">
+    <value>Frequency</value>
+  </data>
+  <data name="IncomeIsEnabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="IncomeStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="PaymentMethodHasAtmWithdrawOption" xml:space="preserve">
+    <value>ATM Withdraw Option</value>
+  </data>
+  <data name="PaymentMethodHasBeenAlreadyDebitedOption" xml:space="preserve">
+    <value>Already Debited Option</value>
+  </data>
+  <data name="PaymentMethodName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="PensionCompanyContributionPercentage" xml:space="preserve">
+    <value>Company Contribution (%)</value>
+  </data>
+  <data name="PensionContributionPercentage" xml:space="preserve">
+    <value>Personal Contribution (%)</value>
+  </data>
+  <data name="PensionCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="PensionCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="PensionCurrentPot" xml:space="preserve">
+    <value>Current Pot</value>
+  </data>
+  <data name="PensionDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="PensionEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="PensionId" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="PensionInterest" xml:space="preserve">
+    <value>Optional Interest (%)</value>
+  </data>
+  <data name="PensionStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="PensionWebsite" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="PeriodicOutcomeAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="PeriodicOutcomeCost" xml:space="preserve">
+    <value>Cost</value>
+  </data>
+  <data name="PeriodicOutcomeDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="PeriodicOutcomeEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="PeriodicOutcomeFrequency" xml:space="preserve">
+    <value>Frequency</value>
+  </data>
+  <data name="PeriodicOutcomeIsEnabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="PeriodicOutcomeStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="PeriodicOutcomeTypeExpenditure" xml:space="preserve">
+    <value>Expenditure Type</value>
+  </data>
+  <data name="SalaryCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="SalaryCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="SalaryDeductions" xml:space="preserve">
+    <value>Salary Deductions</value>
+  </data>
+  <data name="SalaryDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="SalaryEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="SalaryMonthlyGrossPay" xml:space="preserve">
+    <value>Monthly Gross Pay</value>
+  </data>
+  <data name="SalaryMonthlyNetPay" xml:space="preserve">
+    <value>Monthly Net Pay</value>
+  </data>
+  <data name="SalaryStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="SalaryTax" xml:space="preserve">
+    <value>Tax</value>
+  </data>
+  <data name="SalaryYearlySalary" xml:space="preserve">
+    <value>Yearly Salary</value>
+  </data>
+  <data name="SavingAmount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="SavingDateSaving" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="SavingDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="SavingTargetInternalAccount" xml:space="preserve">
+    <value>Saving Account</value>
+  </data>
+  <data name="TaxCode" xml:space="preserve">
+    <value>Code / Reference</value>
+  </data>
+  <data name="TaxCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="TaxCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="TaxDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="TaxEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="TaxFrequence" xml:space="preserve">
+    <value>Frequence</value>
+  </data>
+  <data name="TaxFrequenceOption" xml:space="preserve">
+    <value>Frequence Option</value>
+  </data>
+  <data name="TaxId" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="TaxStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="TaxType" xml:space="preserve">
+    <value>Tax Type</value>
+  </data>
+  <data name="UserProfileFirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="UserProfileLastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="UserProfileSourceWages" xml:space="preserve">
+    <value>Source Wages</value>
+  </data>
+  <data name="UserProfileYearlyWages" xml:space="preserve">
+    <value>Yearly Wages</value>
+  </data>
+</root>

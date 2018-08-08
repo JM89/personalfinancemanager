@@ -1,0 +1,49 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Country.CountryListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.CountryPages;
+    ViewBag.GridTitle = Resources.TitleNames.CountryList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.CountryDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.CountryConfirmationDeletion;
+}
+
+@section AddButtonSection
+{
+    <a href="/Country/Create" title="add"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable">
+        <colgroup>
+            <col width="90%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <td align="right">
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "Country", @Resources.DisabledButtonTooltips.CountryCantBeDeleted, @item.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}

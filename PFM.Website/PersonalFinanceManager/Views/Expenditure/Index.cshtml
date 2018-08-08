@@ -1,0 +1,118 @@
+﻿@model IEnumerable<PersonalFinanceManager.Models.Expenditure.ExpenditureListModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.ExpenditurePages;
+    ViewBag.GridTitle = Resources.TitleNames.ExpenditureList;
+
+    ViewBag.DeletionConfirmationTitle = Resources.TitleNames.ExpenditureDelete;
+    ViewBag.DeletionConfirmationMessage = Resources.ConfirmationMessages.ExpenditureConfirmationDeletion;
+}
+
+@section BreadCrumbSection
+{
+    <li>
+        <a href="/AccountManagement/Index">Account Management</a>
+    </li>
+    <li class="active">
+        <strong>@ViewBag.GridTitle</strong>
+    </li>
+}
+
+@section AccountDetails
+{
+    <div class="alert alert-info" role="alert">
+        <table>
+            <tr>
+                <td><strong>@Html.DisplayName("Current Amount:")</strong></td>
+                <td>@ViewBag.CurrentAmount</td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section AddButtonSection
+{
+    <a href="/Expenditure/Create" title="add" class="btn_create"><i class="fa fa-plus"></i></a>
+}
+
+@section GridSection
+{
+    <table class="stripe" id="mytable2">
+        <colgroup>
+            <col style="width:2%" />
+            <col style="width:7%" />
+            <col style="width:30%" />
+            <col style="width:40%" />
+            <col style="width:7%" />
+            <col style="width:5%" />
+            <col style="width:7%" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>
+               
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateExpenditure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeExpenditureName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasBeenAlreadyDebited)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="trExpenditure">
+                    <td class="tdPaymentMethod">
+                        @Html.HiddenFor(modelItem => item.PaymentMethodName)
+                        <i class="@item.PaymentMethodIconClass" aria-hidden="true"></i>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayedDateExpenditure)
+                    </td>
+                    <td class="tdTypeExpenditure">
+                        @Html.DisplayFor(modelItem => item.TypeExpenditureName)
+                    </td>
+                    <td class="tdDescription">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td align="right" class="tdCost">
+                        @Html.DisplayFor(modelItem => item.DisplayedCost)
+                    </td>
+                    <td align="center">
+                        @if (item.PaymentMethodHasBeenAlreadyDebitedOption)
+                        {
+                            @Html.DisplayFor(modelItem => item.HasBeenAlreadyDebited)
+                        }
+                    </td>
+                    <td align="right">
+                        @if (item.PaymentMethodHasBeenAlreadyDebitedOption)
+                        {
+                            if (!item.HasBeenAlreadyDebited)
+                            {
+                                <a href="/Expenditure/Debit/@item.Id?accountId=@ViewBag.AccountId" title="@Resources.ButtonNames.DebitButton"><i class="fa fa-thumbs-o-up"></i></a>
+                                @Html.Raw("|")
+                            }
+                        }
+                        @CustomHelpers.ListButtons(@item.Id, true, "Expenditure", "", @item.Description)
+                    </td>
+                    @Html.Hidden("AtmWithdrawId", @item.AtmWithdrawId)
+                    @Html.Hidden("TargetInternalAccountId", @item.TargetInternalAccountId)
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

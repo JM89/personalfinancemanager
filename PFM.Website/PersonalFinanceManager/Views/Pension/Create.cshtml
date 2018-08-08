@@ -1,0 +1,64 @@
+﻿@model PersonalFinanceManager.Models.Pension.PensionEditModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutEditor.cshtml";
+    ViewBag.PageTitle = Resources.TitleNames.PensionPages;
+    ViewBag.FormTitle = Resources.TitleNames.PensionCreate;
+}
+
+@section BreadCrumbSection
+{
+
+}
+
+
+@section EditorSection
+{
+    
+    @using (Html.BeginForm()) 
+    {
+        @Html.AntiForgeryToken()
+    
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.FieldEditor(model => model.Description)
+            
+            @Html.FieldEditor(model => model.Website)
+
+            @Html.DateFieldEditor(model => model.StartDate)
+
+            @Html.DateFieldEditor(model => model.EndDate)
+
+            @Html.ListEditor(model => model.CurrencyId, @Model.AvailableCurrencies)
+
+            @Html.ListEditor(model => model.CountryId, @Model.AvailableCountries)
+
+            @Html.FieldEditor(model => model.ContributionPercentage)
+            
+            @Html.FieldEditor(model => model.CompanyContributionPercentage)
+            
+            @Html.FieldEditor(model => model.CurrentPot)
+            
+            @Html.FieldEditor(model => model.Interest)
+
+            @CustomHelpers.FormFooterButtons("Pension")
+
+        </div>
+    }
+}
+
+@section ScriptsSection
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+    <script src="~/Scripts/custom/Pension.js"></script>
+    
+    <script type="text/javascript">
+            $(function () {
+                initializeForm();
+            });
+    </script>
+}
