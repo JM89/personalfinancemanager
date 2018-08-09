@@ -9,6 +9,7 @@ PersonalFinanceManager.csproj.user
 ReleaseFolder
 /log
 /packages
+/PFM.Website/packages
 .sonarqube
 bank_icons
 /*.user
