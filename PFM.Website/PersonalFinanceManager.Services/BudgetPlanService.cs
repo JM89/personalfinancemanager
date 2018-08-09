@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PersonalFinanceManager.Models.BudgetPlan;
+using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
@@ -9,42 +11,80 @@ namespace PersonalFinanceManager.Services
     {
         public IList<BudgetPlanListModel> GetBudgetPlans(int accountId)
         {
-            throw new NotImplementedException();
+            IList<BudgetPlanListModel> result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetList<PFM.DTOs.BudgetPlan.BudgetPlanList>($"/BudgetPlan/GetList/{accountId}");
+                result = response.Select(AutoMapper.Mapper.Map<BudgetPlanListModel>).ToList();
+            }
+            return result;
         }
         
         public BudgetPlanEditModel GetCurrent(int accountId)
         {
-            throw new NotImplementedException();
+            BudgetPlanEditModel result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetSingle<PFM.DTOs.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/GetCurrent/{accountId}");
+                result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
+            }
+            return result;
         }
 
         public BudgetPlanEditModel GetById(int id)
         {
-            throw new NotImplementedException();
+            BudgetPlanEditModel result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetSingle<PFM.DTOs.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/Get/{id}");
+                result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
+            }
+            return result;
         }
 
-        public void CreateBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId)
+        public void CreateBudgetPlan(BudgetPlanEditModel model, int accountId)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.BudgetPlan.BudgetPlanDetails>(model);
+                httpClient.Post($"/BudgetPlan/Create/{accountId}", dto);
+            }
         }
 
-        public void EditBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId)
+        public void EditBudgetPlan(BudgetPlanEditModel model, int accountId)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.BudgetPlan.BudgetPlanDetails>(model);
+                httpClient.Put($"/BudgetPlan/Edit/{accountId}", dto);
+            }
         }
 
         public void StartBudgetPlan(int value, int accountId)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Post($"/BudgetPlan/Start/{value}/{accountId}");
+            }
         }
 
         public void StopBudgetPlan(int value)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Post($"/BudgetPlan/Stop/{value}");
+            }
         }
 
         public BudgetPlanEditModel BuildBudgetPlan(int accountId, int? budgetPlanId = null)
         {
-            throw new NotImplementedException();
+            BudgetPlanEditModel result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetSingle<PFM.DTOs.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/BuildEmpty/{accountId}/{budgetPlanId}");
+                result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
+            }
+            return result;
         }
     }
 }

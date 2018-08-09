@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PersonalFinanceManager.Models.Bank;
+using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
@@ -9,32 +11,56 @@ namespace PersonalFinanceManager.Services
     {
         public IList<BankListModel> GetBanks()
         {
-            throw new NotImplementedException();
+            IList<BankListModel> result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetList<PFM.DTOs.Currency.CurrencyList>($"/Bank/GetList");
+                result = response.Select(AutoMapper.Mapper.Map<BankListModel>).ToList();
+            }
+            return result;
         }
 
         public void Validate(BankEditModel bankEditModel)
         {
+            // API NOT IMPLEMENTED
             throw new NotImplementedException();
         }
 
-        public void CreateBank(BankEditModel bankEditModel)
+        public void CreateBank(BankEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Bank.BankDetails>(model);
+                httpClient.Post($"/Bank/Create", dto);
+            }
         }
 
         public BankEditModel GetById(int id)
         {
-            throw new NotImplementedException();
+            BankEditModel result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetSingle<PFM.DTOs.Bank.BankDetails>($"/Bank/Get/{id}");
+                result = AutoMapper.Mapper.Map<BankEditModel>(response);
+            }
+            return result;
         }
 
-        public void EditBank(BankEditModel bankEditModel)
+        public void EditBank(BankEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Bank.BankDetails>(model);
+                httpClient.Put($"/Bank/Edit/{model.Id}", dto);
+            }
         }
 
         public void DeleteBank(int id)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Delete($"/Bank/Delete/{id}");
+            }
         }
     }
 }

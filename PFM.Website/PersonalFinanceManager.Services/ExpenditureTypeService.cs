@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PersonalFinanceManager.Models.ExpenditureType;
+using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
@@ -9,27 +11,50 @@ namespace PersonalFinanceManager.Services
     {
         public IList<ExpenditureTypeListModel> GetExpenditureTypes()
         {
-            throw new NotImplementedException();
+            IList<ExpenditureTypeListModel> result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetList<PFM.DTOs.ExpenseType.ExpenseTypeList>($"/ExpenseType/GetList");
+                result = response.Select(AutoMapper.Mapper.Map<ExpenditureTypeListModel>).ToList();
+            }
+            return result;
         }
 
         public ExpenditureTypeEditModel GetById(int id)
         {
-            throw new NotImplementedException();
+            ExpenditureTypeEditModel result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetSingle<PFM.DTOs.ExpenseType.ExpenseTypeDetails>($"/ExpenseType/Get/{id}");
+                result = AutoMapper.Mapper.Map<ExpenditureTypeEditModel>(response);
+            }
+            return result;
         }
 
-        public void CreateExpenditureType(ExpenditureTypeEditModel expenditureTypeEditModel)
+        public void CreateExpenditureType(ExpenditureTypeEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.ExpenseType.ExpenseTypeDetails>(model);
+                httpClient.Post($"/ExpenseType/Create", dto);
+            }
         }
 
-        public void EditExpenditureType(ExpenditureTypeEditModel expenditureTypeEditModel)
+        public void EditExpenditureType(ExpenditureTypeEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.ExpenseType.ExpenseTypeDetails>(model);
+                httpClient.Put($"/ExpenseType/Edit/{model.Id}", dto);
+            }
         }
 
         public void DeleteExpenditureType(int id)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Delete($"/ExpenseType/Delete/{id}");
+            }
         }
     }
 }

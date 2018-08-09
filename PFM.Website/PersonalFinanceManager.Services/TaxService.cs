@@ -3,39 +3,71 @@ using System.Collections.Generic;
 using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Models.Tax;
 using System;
+using PersonalFinanceManager.Services.HttpClientWrapper;
+using System.Linq;
 
 namespace PersonalFinanceManager.Services
 {
     public class TaxService : ITaxService
     {
-        public void CreateTax(TaxEditModel taxEditModel)
+        public void CreateTax(TaxEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Tax.TaxDetails>(model);
+                httpClient.Post($"/Tax/Create", dto);
+            }
         }
 
         public void DeleteTax(int id)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Delete($"/Tax/Delete/{id}");
+            }
         }
 
-        public void EditTax(TaxEditModel taxEditModel)
+        public void EditTax(TaxEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Tax.TaxDetails>(model);
+                httpClient.Put($"/Tax/Edit/{model.Id}", dto);
+            }
         }
 
         public TaxEditModel GetById(int id)
         {
-            throw new NotImplementedException();
+            TaxEditModel result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetSingle<PFM.DTOs.Tax.TaxDetails>($"/Tax/Get/{id}");
+                result = AutoMapper.Mapper.Map<TaxEditModel>(response);
+            }
+            return result;
         }
 
         public IList<TaxListModel> GetTaxes(string userId)
         {
-            throw new NotImplementedException();
+            IList<TaxListModel> result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetList<PFM.DTOs.Tax.TaxList>($"/Tax/GetList/{userId}");
+                result = response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
+            }
+            return result;
         }
 
         public IList<TaxListModel> GetTaxesByType(string currentUser, TaxType incomeTax)
         {
-            throw new NotImplementedException();
+            IList<TaxListModel> result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var taxTypeId = (int)TaxType.IncomeTax;
+                var response = httpClient.GetList<PFM.DTOs.Tax.TaxList>($"/Tax/GetTaxesByType/{currentUser}/{taxTypeId}");
+                result = response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
+            }
+            return result;
         }
     }
 }

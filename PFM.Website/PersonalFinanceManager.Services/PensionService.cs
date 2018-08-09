@@ -2,6 +2,8 @@
 using PersonalFinanceManager.Models.Pension;
 using System.Collections.Generic;
 using System;
+using PersonalFinanceManager.Services.HttpClientWrapper;
+using System.Linq;
 
 namespace PersonalFinanceManager.Services
 {
@@ -9,27 +11,50 @@ namespace PersonalFinanceManager.Services
     {
         public IList<PensionListModel> GetPensions(string userId)
         {
-            throw new NotImplementedException();
+            IList<PensionListModel> result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetList<PFM.DTOs.Pension.PensionList>($"/Pension/GetList");
+                result = response.Select(AutoMapper.Mapper.Map<PensionListModel>).ToList();
+            }
+            return result;
         }
 
-        public void CreatePension(PensionEditModel pensionEditModel)
+        public void CreatePension(PensionEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Pension.PensionDetails>(model);
+                httpClient.Post($"/Pension/Create", dto);
+            }
         }
 
         public PensionEditModel GetById(int id)
         {
-            throw new NotImplementedException();
+            PensionEditModel result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetSingle<PFM.DTOs.Pension.PensionDetails>($"/Pension/Get/{id}");
+                result = AutoMapper.Mapper.Map<PensionEditModel>(response);
+            }
+            return result;
         }
 
-        public void EditPension(PensionEditModel pensionEditModel)
+        public void EditPension(PensionEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Pension.PensionDetails>(model);
+                httpClient.Put($"/Pension/Edit/{model.Id}", dto);
+            }
         }
 
         public void DeletePension(int id)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Delete($"/Pension/Delete/{id}");
+            }
         }
     }
 }

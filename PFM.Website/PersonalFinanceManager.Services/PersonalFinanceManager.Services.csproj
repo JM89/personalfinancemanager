@@ -51,6 +51,12 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PFM.DTOs">
+      <HintPath>..\..\PFM.CommonLibraries\PFM.DTOs\bin\Release\netstandard2.0\PFM.DTOs.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -64,12 +70,14 @@
   <ItemGroup>
     <Compile Include="Automapper\DTOToModelMapping.cs" />
     <Compile Include="Automapper\ModelToDTOMapping.cs" />
+    <Compile Include="Exceptions\ApiException.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Exceptions\BusinessExceptionMessage.Designer.cs">
       <DependentUpon>BusinessExceptionMessage.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="HttpClientWrapper\HttpClientExtended.cs" />
     <Compile Include="Interfaces\IFrequenceOptionService.cs" />
     <Compile Include="Interfaces\ITaxTypeService.cs" />
     <Compile Include="Interfaces\ITaxService.cs" />

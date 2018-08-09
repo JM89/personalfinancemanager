@@ -4,6 +4,8 @@ using PersonalFinanceManager.Services.Interfaces;
 using System;
 using PersonalFinanceManager.Models.Dashboard;
 using PersonalFinanceManager.Models.BudgetPlan;
+using System.Linq;
+using PersonalFinanceManager.Services.HttpClientWrapper;
 
 namespace PersonalFinanceManager.Services
 {
@@ -11,41 +13,70 @@ namespace PersonalFinanceManager.Services
     {
         public void CreateExpenditures(List<ExpenditureEditModel> expenditureEditModel)
         {
+            // HTTP CLIENT EXTENDED IMPL.
             throw new NotImplementedException();
         }
 
-        public void CreateExpenditure(ExpenditureEditModel expenditureEditModel)
+        public void CreateExpenditure(ExpenditureEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Expense.ExpenseDetails>(model);
+                httpClient.Post($"/Expense/Create", dto);
+            }
         }
         
-        public void EditExpenditure(ExpenditureEditModel expenditureEditModel)
+        public void EditExpenditure(ExpenditureEditModel model)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Expense.ExpenseDetails>(model);
+                httpClient.Put($"/Expense/Edit/{model.Id}", dto);
+            }
         }
 
         public void DeleteExpenditure(int id)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Delete($"/Expense/Delete/{id}");
+            }
         }
 
         public ExpenditureEditModel GetById(int id)
         {
-            throw new NotImplementedException();
+            ExpenditureEditModel result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var response = httpClient.GetSingle<PFM.DTOs.Expense.ExpenseDetails>($"/Expense/Get/{id}");
+                result = AutoMapper.Mapper.Map<ExpenditureEditModel>(response);
+            }
+            return result;
         }
 
         public void ChangeDebitStatus(int id, bool debitStatus)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Post($"/Expense/ChangeDebitStatus/{id}/{debitStatus}");
+            }
         }
 
         public IList<ExpenditureListModel> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search)
         {
-            throw new NotImplementedException();
+            IList<ExpenditureListModel> result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var searchParameters = AutoMapper.Mapper.Map<PFM.DTOs.SearchParameters.ExpenseGetListSearchParameters>(search);
+                var response = httpClient.GetListBySearchParameters<PFM.DTOs.Expense.ExpenseList, PFM.DTOs.SearchParameters.ExpenseGetListSearchParameters>("/Expense/GetExpenses", searchParameters);
+                result = response.Select(AutoMapper.Mapper.Map<ExpenditureListModel>).ToList();
+            }
+            return result;
         }
 
         public ExpenseSummaryModel GetExpenseSummary(int accountId, BudgetPlanEditModel budgetPlan)
         {
+            // HTTP CLIENT EXTENDED IMPL.
             throw new NotImplementedException();
         }
     }
