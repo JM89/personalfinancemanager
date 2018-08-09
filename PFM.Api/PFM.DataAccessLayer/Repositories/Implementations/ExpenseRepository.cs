@@ -22,7 +22,7 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
                     && (!search.StartDate.HasValue || (search.StartDate.HasValue && x.DateExpense >= search.StartDate))
                     && (!search.EndDate.HasValue || (search.EndDate.HasValue && x.DateExpense < search.EndDate))
                     && (!search.ShowOnDashboard.HasValue || (x.ExpenseType.ShowOnDashboard == search.ShowOnDashboard))
-                    && (!search.ExpenditureTypeId.HasValue || (search.ExpenditureTypeId.HasValue && x.ExpenseTypeId == search.ExpenditureTypeId.Value)))
+                    && (!search.ExpenseTypeId.HasValue || (search.ExpenseTypeId.HasValue && x.ExpenseTypeId == search.ExpenseTypeId.Value)))
                 .Include(u => u.Account.Currency)
                 .Include(u => u.ExpenseType)
                 .Include(u => u.PaymentMethod).ToList();

@@ -174,7 +174,7 @@ namespace PFM.Services.Interfaces.Services
                 ?? categories.ToDictionary(x => x.Key, y => (decimal)0.00);
 
             var expensesByCategories = expenses.Any()
-                ? expenses.GroupBy(x => x.TypeExpenseId).ToDictionary(x => x.Key, y => y.ToList())
+                ? expenses.GroupBy(x => x.ExpenseTypeId).ToDictionary(x => x.Key, y => y.ToList())
                 : categories.ToDictionary(x => x.Key, y => new List<ExpenseList>());
 
             var expensesByCategory = new List<ExpenseSummaryByCategory>();
@@ -233,8 +233,8 @@ namespace PFM.Services.Interfaces.Services
                 ExpenseExpectedValue = budgetPlanExpenses
             });
 
-            var incomes = _incomeRepository.GetList().Where(x => x.AccountId == accountId && x.DateIncome >= over12MonthsInterval.StartDate && x.DateIncome < currentMonthInterval.EndDate).ToList();
-            var savings = _savingRepository.GetList().Where(x => x.AccountId == accountId && x.DateSaving >= over12MonthsInterval.StartDate && x.DateSaving < currentMonthInterval.EndDate).ToList();
+            var incomes = _incomeRepository.GetList2().Where(x => x.AccountId == accountId && x.DateIncome >= over12MonthsInterval.StartDate && x.DateIncome < currentMonthInterval.EndDate).ToList();
+            var savings = _savingRepository.GetList2().Where(x => x.AccountId == accountId && x.DateSaving >= over12MonthsInterval.StartDate && x.DateSaving < currentMonthInterval.EndDate).ToList();
 
             // Get the incomes/expenses/savings by month for last 6 months
             var over6MonthsNames = over6MonthsInterval.GetIntervalsByMonth();

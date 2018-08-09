@@ -17,9 +17,9 @@ namespace PFM.DTOs.Expense
 
         public decimal Cost { get; set; }
 
-        public int TypeExpenseId { get; set; }
+        public int ExpenseTypeId { get; set; }
 
-        public string TypeExpenseName { get; set; }
+        public string ExpenseTypeName { get; set; }
 
         public int PaymentMethodId { get; set; }
 

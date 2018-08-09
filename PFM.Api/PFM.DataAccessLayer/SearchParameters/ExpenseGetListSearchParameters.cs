@@ -14,7 +14,7 @@ namespace PFM.DataAccessLayer.SearchParameters
 
         public DateTime? EndDate { get; set; }
 
-        public int? ExpenditureTypeId { get; set; }
+        public int? ExpenseTypeId { get; set; }
 
         public bool? ShowOnDashboard { get; set; }
     }
