@@ -32,9 +32,6 @@
     <Reference Include="PFM.DTOs">
       <HintPath>..\..\PFM.CommonLibraries\PFM.DTOs\bin\Release\netstandard2.0\PFM.DTOs.dll</HintPath>
     </Reference>
-    <Reference Include="PFM.Utils">
-      <HintPath>..\..\PFM.CommonLibraries\PFM.DTOs\bin\Release\netstandard2.0\PFM.Utils.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
