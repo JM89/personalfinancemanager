@@ -9,6 +9,5 @@ namespace PFM.DataAccessLayer.Repositories.Interfaces
 {
     public interface IBankAccountRepository : IBaseRepository<Account>
     {
-        decimal GetAccountAmount(int id);
     }
 }

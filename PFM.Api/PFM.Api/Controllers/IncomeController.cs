@@ -45,5 +45,11 @@ namespace PFM.Api.Controllers
         {
             _IncomeService.DeleteIncome(id);
         }
+        
+        [HttpPost("CreateIncomes")]
+        public void CreateIncomes([FromBody]List<IncomeDetails> createdObjs)
+        {
+            _IncomeService.CreateIncomes(createdObjs);
+        }
     }
 }

@@ -9,12 +9,5 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
         {
             
         }
-
-        public decimal GetAccountAmount(int id)
-        {
-            var entity = GetById(id);
-            Refresh(entity);
-            return entity.CurrentBalance;
-        }
     }
 }

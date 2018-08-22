@@ -282,12 +282,6 @@
   <ItemGroup>
     <Content Include="Drivers\chromedriver.exe" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PersonalFinanceManager.DataAccess\PersonalFinanceManager.DataAccess.csproj">
-      <Project>{9312252f-173c-4563-b24e-aad56c696784}</Project>
-      <Name>PersonalFinanceManager.DataAccess</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

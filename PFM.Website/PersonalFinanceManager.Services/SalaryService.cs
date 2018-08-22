@@ -31,8 +31,10 @@ namespace PersonalFinanceManager.Services
 
         public void CopySalary(int sourceId)
         {
-            // API NOT IMPLEMENTED
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Post($"/Salary/CopySalary/{sourceId}");
+            }
         }
 
         public SalaryEditModel GetById(int id)

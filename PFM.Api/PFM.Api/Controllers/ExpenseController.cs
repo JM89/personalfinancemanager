@@ -29,7 +29,13 @@ namespace PFM.Api.Controllers
         {
             _ExpenseService.CreateExpense(createdObj);
         }
-        
+
+        [HttpPost("CreateExpenses")]
+        public void CreateExpenses([FromBody]List<ExpenseDetails> createdObjs)
+        {
+            _ExpenseService.CreateExpenses(createdObjs);
+        }
+
         [HttpPut("Edit/{id}")]
         public void Put(int id, [FromBody]ExpenseDetails editedObj)
         {

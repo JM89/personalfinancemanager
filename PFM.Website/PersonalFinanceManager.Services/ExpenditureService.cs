@@ -11,10 +11,13 @@ namespace PersonalFinanceManager.Services
 {
     public class ExpenditureService : IExpenditureService
     {
-        public void CreateExpenditures(List<ExpenditureEditModel> expenditureEditModel)
+        public void CreateExpenditures(List<ExpenditureEditModel> models)
         {
-            // HTTP CLIENT EXTENDED IMPL.
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = models.Select(AutoMapper.Mapper.Map<PFM.DTOs.Expense.ExpenseDetails>).ToList();
+                httpClient.Post($"/Expense/CreateExpenses", dto);
+            }
         }
 
         public void CreateExpenditure(ExpenditureEditModel model)
@@ -74,10 +77,16 @@ namespace PersonalFinanceManager.Services
             return result;
         }
 
-        public ExpenseSummaryModel GetExpenseSummary(int accountId, BudgetPlanEditModel budgetPlan)
+        public ExpenseSummaryModel GetExpenseSummary(int accountId, BudgetPlanEditModel model)
         {
-            // HTTP CLIENT EXTENDED IMPL.
-            throw new NotImplementedException();
+            ExpenseSummaryModel result = null;
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.BudgetPlan.BudgetPlanDetails>(model);
+                var response = httpClient.Post<PFM.DTOs.BudgetPlan.BudgetPlanDetails, PFM.DTOs.Dashboard.ExpenseSummary>($"/Expense/GetExpenseSummary/{accountId}", dto);
+                result = AutoMapper.Mapper.Map<ExpenseSummaryModel>(response);
+            }
+            return result;
         }
     }
 }

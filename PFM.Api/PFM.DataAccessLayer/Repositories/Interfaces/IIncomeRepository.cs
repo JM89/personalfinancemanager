@@ -9,8 +9,6 @@ namespace PFM.DataAccessLayer.Repositories.Interfaces
 {
     public interface IIncomeRepository : IBaseRepository<Income>
     {
-        int CountIncomes();
 
-        decimal GetIncomeCost(int id);
     }
 }

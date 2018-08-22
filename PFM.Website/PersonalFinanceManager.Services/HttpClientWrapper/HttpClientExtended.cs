@@ -91,6 +91,12 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
         public void Post<TObject>(string url, TObject obj)
         {
+            Post<TObject, object>(url, obj);
+        }
+
+        public TResult Post<TObject, TResult>(string url, TObject obj)
+        {
+            TResult result = default(TResult);
             using (var httpClient = new HttpClient())
             {
                 var endpoint = _apiBaseUrl + url;
@@ -103,12 +109,14 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 {
                     var content = httpResponse.Content.ReadAsStringAsync();
                     content.Wait();
+                    result = JsonConvert.DeserializeObject<TResult>(content.Result);
                 }
                 else
                 {
                     throw new ApiException(url, httpResponse.StatusCode.ToString());
                 }
             }
+            return result;
         }
 
         public void Post(string url)

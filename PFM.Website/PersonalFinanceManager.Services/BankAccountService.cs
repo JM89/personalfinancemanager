@@ -59,8 +59,10 @@ namespace PersonalFinanceManager.Services
         
         public void SetAsFavorite(int id)
         {
-            // API NOT IMPLEMENTED
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Delete($"/BankAccount/SetAsFavorite/{id}");
+            }
         }
     }
 }

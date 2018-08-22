@@ -14,24 +14,5 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
         {
 
         }
-
-        public int CountAtmWithdraws()
-        {
-            return GetList().Count();
-        }
-
-        public decimal GetAtmWithdrawInitialAmount(int id)
-        {
-            var entity = GetById(id);
-            Refresh(entity);
-            return entity.InitialAmount;
-        }
-
-        public decimal GetAtmWithdrawCurrentAmount(int id)
-        {
-            var entity = GetById(id);
-            Refresh(entity);
-            return entity.CurrentAmount;
-        }
     }
 }

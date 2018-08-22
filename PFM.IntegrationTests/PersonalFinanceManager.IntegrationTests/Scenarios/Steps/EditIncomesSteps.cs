@@ -23,12 +23,12 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         {
             SiteMap.AccountManagementDashboardPage.GoTo();
             _sourceAccountId = SiteMap.AccountManagementDashboardPage.SelectAccount();
-            _sourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
+            _sourceAccountAmount = DatabaseChecker.GetBankAccountAmount(_sourceAccountId);
 
             SiteMap.IncomeListPage.GoTo();
 
-            _countIncomes = DatabaseChecker.IncomeRepository.CountIncomes();
-            _countMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
+            _countIncomes = DatabaseChecker.CountIncomes();
+            _countMovements = DatabaseChecker.CountMovements();
         }
 
         [Given(@"I have at least one income in the list")]
@@ -62,17 +62,17 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Then(@"the Income has been updated")]
         public void ThenTheIncomeHasBeenUpdated()
         {
-            var newCountIncomes = DatabaseChecker.IncomeRepository.CountIncomes();
+            var newCountIncomes = DatabaseChecker.CountIncomes();
             Assert.AreEqual(newCountIncomes, _countIncomes);
 
-            _newCostIncome = DatabaseChecker.IncomeRepository.GetIncomeCost(_incomeId);
+            _newCostIncome = DatabaseChecker.GetIncomeCost(_incomeId);
             Assert.AreEqual(_costIncome + 100, _newCostIncome);
         }
 
         [Then(@"the source account is updated")]
         public void ThenTheSourceAccountIsUpdated()
         {
-            var newSourceAccountAmount = DatabaseChecker.BankAccountRepository.GetAccountAmount(_sourceAccountId);
+            var newSourceAccountAmount = DatabaseChecker.GetBankAccountAmount(_sourceAccountId);
             var expectedSourceAmount = _sourceAccountAmount - _costIncome + _newCostIncome;
             Assert.AreEqual(expectedSourceAmount, newSourceAccountAmount);
         }
@@ -80,7 +80,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
         [Then(@"a mouvement entry has been saved")]
         public void ThenAMouvementEntryHasBeenSaved()
         {
-            var newCountMovements = DatabaseChecker.HistoricMovementRepository.CountMovements();
+            var newCountMovements = DatabaseChecker.CountMovements();
             Assert.AreEqual(newCountMovements, _countMovements + 2);
         }
     }

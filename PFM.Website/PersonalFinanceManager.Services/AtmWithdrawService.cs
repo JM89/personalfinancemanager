@@ -9,7 +9,6 @@ namespace PersonalFinanceManager.Services
 {
     public class AtmWithdrawService : IAtmWithdrawService
     {
-             
         public IList<AtmWithdrawListModel> GetAtmWithdrawsByAccountId(int accountId)
         {
             IList<AtmWithdrawListModel> result = null;
@@ -23,8 +22,11 @@ namespace PersonalFinanceManager.Services
 
         public void CreateAtmWithdraws(List<AtmWithdrawEditModel> models)
         {
-            // API NOT IMPLEMENTED
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = models.Select(AutoMapper.Mapper.Map<PFM.DTOs.AtmWithdraw.AtmWithdrawDetails>).ToList();
+                httpClient.Post($"/AtmWithdraw/CreateAtmWithdraws", dto);
+            }
         }
 
         public void CreateAtmWithdraw(AtmWithdrawEditModel model)
@@ -58,8 +60,10 @@ namespace PersonalFinanceManager.Services
         
         public void CloseAtmWithdraw(int id)
         {
-            // API NOT IMPLEMENTED
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Post($"/AtmWithdraw/CloseAtmWithdraw/{id}");
+            }
         }
 
         public void DeleteAtmWithdraw(int id)
@@ -72,8 +76,10 @@ namespace PersonalFinanceManager.Services
 
         public void ChangeDebitStatus(int id, bool debitStatus)
         {
-            // API NOT IMPLEMENTED
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                httpClient.Delete($"/AtmWithdraw/ChangeDebitStatus/{id}/{debitStatus}");
+            }
         }
     }
 }

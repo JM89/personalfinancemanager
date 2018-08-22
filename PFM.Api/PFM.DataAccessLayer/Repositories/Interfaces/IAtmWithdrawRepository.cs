@@ -9,10 +9,6 @@ namespace PFM.DataAccessLayer.Repositories.Interfaces
 {
     public interface IAtmWithdrawRepository : IBaseRepository<AtmWithdraw>
     {
-        int CountAtmWithdraws();
-
-        decimal GetAtmWithdrawInitialAmount(int id);
-
-        decimal GetAtmWithdrawCurrentAmount(int id);
+       
     }
 }

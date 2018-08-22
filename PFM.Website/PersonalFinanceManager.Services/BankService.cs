@@ -20,12 +20,6 @@ namespace PersonalFinanceManager.Services
             return result;
         }
 
-        public void Validate(BankEditModel bankEditModel)
-        {
-            // API NOT IMPLEMENTED
-            throw new NotImplementedException();
-        }
-
         public void CreateBank(BankEditModel model)
         {
             using (var httpClient = new HttpClientExtended())

@@ -10,10 +10,5 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
         {
             
         }
-
-        public int CountMovements()
-        {
-            return GetList().Count();
-        }
     }
 }

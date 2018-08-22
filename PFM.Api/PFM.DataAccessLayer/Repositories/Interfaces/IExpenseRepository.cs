@@ -11,9 +11,5 @@ namespace PFM.DataAccessLayer.Repositories.Interfaces
     public interface IExpenseRepository : IBaseRepository<Expense>
     {
         List<Expense> GetByParameters(ExpenseGetListSearchParameters search);
-
-        int CountExpenditures();
-
-        decimal GetExpenditureCost(int id);
     }
 }

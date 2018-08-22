@@ -45,5 +45,11 @@ namespace PFM.Api.Controllers
         {
             _BankAccountService.DeleteBankAccount(id);
         }
+
+        [HttpPost("SetAsFavorite/{id}")]
+        public void SetAsFavorite(int id)
+        {
+            _BankAccountService.SetAsFavorite(id);
+        }
     }
 }

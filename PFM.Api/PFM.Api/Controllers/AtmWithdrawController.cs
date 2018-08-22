@@ -24,13 +24,13 @@ namespace PFM.Api.Controllers
         }
         
         [HttpPost("Create")]
-        public void Post(AtmWithdrawDetails createdObj)
+        public void Post([FromBody]AtmWithdrawDetails createdObj)
         {
             AtmWithdrawService.CreateAtmWithdraw(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, AtmWithdrawDetails editedObj)
+        public void Put(int id, [FromBody]AtmWithdrawDetails editedObj)
         {
             AtmWithdrawService.EditAtmWithdraw(editedObj);
         }
@@ -39,6 +39,24 @@ namespace PFM.Api.Controllers
         public void Delete(int id)
         {
             AtmWithdrawService.DeleteAtmWithdraw(id);
+        }
+
+        [HttpPost("CreateAtmWithdraws")]
+        public void CreateAtmWithdraws([FromBody]List<AtmWithdrawDetails> createdObj)
+        {
+            AtmWithdrawService.CreateAtmWithdraws(createdObj);
+        }
+
+        [HttpPost("CloseAtmWithdraw/{id}")]
+        public void CloseAtmWithdraw(int id)
+        {
+            AtmWithdrawService.CloseAtmWithdraw(id);
+        }
+
+        [HttpPost("CloseAtmWithdraw/{id}/debitStatus")]
+        public void ChangeDebitStatus(int id, bool debitStatus)
+        {
+            AtmWithdrawService.ChangeDebitStatus(id, debitStatus);
         }
     }
 }

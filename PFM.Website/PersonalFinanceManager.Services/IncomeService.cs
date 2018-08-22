@@ -9,10 +9,13 @@ namespace PersonalFinanceManager.Services
 {
     public class IncomeService: IIncomeService
     {
-        public void CreateIncomes(List<IncomeEditModel> incomeEditModel)
+        public void CreateIncomes(List<IncomeEditModel> models)
         {
-            // API NOT IMPLEMENTED
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClientExtended())
+            {
+                var dto = models.Select(AutoMapper.Mapper.Map<PFM.DTOs.Income.IncomeDetails>).ToList();
+                httpClient.Post($"/Income/CreateIncomes", dto);
+            }
         }
 
         public void CreateIncome(IncomeEditModel model)

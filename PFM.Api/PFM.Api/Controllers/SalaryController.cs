@@ -45,5 +45,11 @@ namespace PFM.Api.Controllers
         {
             _SalaryService.DeleteSalary(id);
         }
+
+        [HttpPost("CopySalary/{sourceId}")]
+        public void CopySalary(int sourceId)
+        {
+            _SalaryService.CopySalary(sourceId);
+        }
     }
 }

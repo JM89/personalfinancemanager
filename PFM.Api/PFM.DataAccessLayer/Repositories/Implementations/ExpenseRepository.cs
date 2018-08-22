@@ -29,17 +29,5 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
 
             return expenditures;
         }
-
-        public int CountExpenditures()
-        {
-            return GetList().Count();
-        }
-
-        public decimal GetExpenditureCost(int id)
-        {
-            var entity = GetById(id);
-            Refresh(entity);
-            return entity.Cost;
-        }
     }
 }

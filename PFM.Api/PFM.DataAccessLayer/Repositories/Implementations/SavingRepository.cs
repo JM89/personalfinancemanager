@@ -10,17 +10,5 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
         {
 
         }
-
-        public int CountSavings()
-        {
-            return GetList().Count();
-        }
-
-        public decimal GetSavingCost(int id)
-        {
-            var entity = GetById(id);
-            Refresh(entity);
-            return entity.Amount;
-        }
     }
 }
