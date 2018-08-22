@@ -40,6 +40,11 @@ namespace PersonalFinanceManager.IntegrationTests.Infrastructure
             return GetResult<decimal>($"SELECT Amount FROM Incomes WHERE Id={id}");
         }
 
+        public static int CountCountries()
+        {
+            return GetResult<int>($"SELECT COUNT(*) FROM Countries");
+        }
+
         public static decimal GetIncomeCost(int id)
         {
             return GetResult<decimal>($"SELECT Cost FROM Incomes WHERE Id={id}");

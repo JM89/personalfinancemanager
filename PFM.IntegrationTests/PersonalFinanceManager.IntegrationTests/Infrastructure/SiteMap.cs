@@ -24,6 +24,9 @@ namespace PersonalFinanceManager.IntegrationTests.Infrastructure
         public static SavingCreatePage SavingCreatePage;
         public static SavingEditPage SavingEditPage;
         public static LoginPage LoginPage;
+        public static CountryListPage CountryListPage;
+        public static CountryEditPage CountryEditPage;
+        public static CountryCreatePage CountryCreatePage;
 
         public static void Initialize(IWebDriver webDriver, string baseUrl)
         {
@@ -42,6 +45,9 @@ namespace PersonalFinanceManager.IntegrationTests.Infrastructure
             SavingCreatePage = new SavingCreatePage(webDriver, baseUrl);
             SavingEditPage = new SavingEditPage(webDriver, baseUrl);
             LoginPage = new LoginPage(webDriver, baseUrl);
+            CountryListPage = new CountryListPage(webDriver, baseUrl);
+            CountryEditPage = new CountryEditPage(webDriver, baseUrl);
+            CountryCreatePage = new CountryCreatePage(webDriver, baseUrl);
         }
     }
 }
