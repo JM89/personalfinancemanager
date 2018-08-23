@@ -7,7 +7,7 @@ using TechTalk.SpecFlow;
 
 namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
 {
-    [Binding]
+    [Binding, Scope(Feature = "DeleteAtmWithdraws")]
     public class DeleteAtmWithdrawsSteps
     {
         private int _sourceAccountId, _countAtmWithdraws, _countMovements;

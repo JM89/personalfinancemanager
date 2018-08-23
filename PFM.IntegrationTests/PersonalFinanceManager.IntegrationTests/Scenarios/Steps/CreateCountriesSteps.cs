@@ -5,7 +5,7 @@ using TechTalk.SpecFlow;
 
 namespace PersonalFinanceManager.IntegrationTests.Scenarios.Steps
 {
-    [Binding]
+    [Binding, Scope(Feature = "CreateCountries")]
     public class CreateCountriesSteps
     {
         private int _countCountries;

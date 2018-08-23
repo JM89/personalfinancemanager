@@ -96,6 +96,10 @@ namespace PersonalFinanceManager.IntegrationTests.Infrastructure
                 {
                     Console.WriteLine(ex.Message);
                 }
+                finally
+                {
+                    connection.Close();
+                }
 
                 return result; 
             }
