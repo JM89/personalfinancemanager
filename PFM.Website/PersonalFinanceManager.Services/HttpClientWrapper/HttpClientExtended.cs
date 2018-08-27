@@ -2,6 +2,7 @@
 using PersonalFinanceManager.Services.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -15,7 +16,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
         public HttpClientExtended()
         {
-            _apiBaseUrl = "http://localhost:52688/api";
+            _apiBaseUrl = ConfigurationManager.AppSettings["PfmApiUrl"];
         }
 
         public IList<TResult> GetList<TResult>(string url)
