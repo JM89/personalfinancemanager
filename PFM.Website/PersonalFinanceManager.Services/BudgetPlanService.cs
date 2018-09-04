@@ -81,7 +81,8 @@ namespace PersonalFinanceManager.Services
             BudgetPlanEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PFM.DTOs.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/BuildEmpty/{accountId}/{budgetPlanId}");
+                var url = budgetPlanId.HasValue ? $"/BudgetPlan/BuildEmpty/{accountId}/{budgetPlanId}" : $"/BudgetPlan/BuildEmpty/{accountId}";
+                var response = httpClient.GetSingle<PFM.DTOs.BudgetPlan.BudgetPlanDetails>(url);
                 result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
             }
             return result;

@@ -60,7 +60,7 @@ namespace PFM.Api.Controllers
             _ExpenseService.ChangeDebitStatus(id, debitStatus);
         }
 
-        [HttpPost("GetExpenseSummary")]
+        [HttpPost("GetExpenseSummary/{accountId}")]
         public ExpenseSummary GetExpenseSummary(int accountId, [FromBody]BudgetPlanDetails budgetPlan)
         {
             return _ExpenseService.GetExpenseSummary(accountId, budgetPlan);

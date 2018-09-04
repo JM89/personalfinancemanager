@@ -23,16 +23,10 @@ namespace PFM.DTOs.Salary
 
         public int CurrencyId { get; set; }
 
-        public IList<MinifiedDTO> AvailableCurrencies { get; set; }
-
         public IList<SalaryDeductionDetails> SalaryDeductions { get; set; }
         
         public int CountryId { get; set; }
 
-        public IList<MinifiedDTO> AvailableCountries { get; set; }
-
         public int TaxId { get; set; }
-
-        public IList<MinifiedDTO> AvailableTaxes { get; set; }
     }
 }

@@ -19,7 +19,9 @@ namespace PFM.DataAccessLayer.Repositories.Interfaces
         TEntity Create(TEntity entity);
 
         TEntity Update(TEntity entity);
-        
+
+        void UpdateAll(List<TEntity> entities);
+
         bool Delete(TEntity entity);
 
         List<TEntity> GetList2(params Expression<Func<TEntity, object>>[] includeProperties);

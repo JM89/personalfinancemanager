@@ -22,10 +22,6 @@ namespace PFM.DTOs.Account
 
         public bool IsSavingAccount { get; set; }
 
-        public IList<MinifiedDTO> AvailableCurrencies { get; set; }
-
-        public IList<MinifiedDTO> AvailableBanks { get; set; }
-
         public string BankWebsite { get; set; }
 
         public string BankIconPath { get; set; }

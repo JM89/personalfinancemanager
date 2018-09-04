@@ -13,7 +13,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Currency.CurrencyDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Account.AccountDetails>(model);
                 httpClient.Post($"/BankAccount/Create/{userId}", dto);
             }
         }
@@ -61,7 +61,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                httpClient.Delete($"/BankAccount/SetAsFavorite/{id}");
+                httpClient.Post($"/BankAccount/SetAsFavorite/{id}");
             }
         }
     }

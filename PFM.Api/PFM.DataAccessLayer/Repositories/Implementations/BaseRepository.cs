@@ -46,28 +46,18 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
 
         public TEntity Update(TEntity entity)
         {
-            try
+            _db.Entry(entity).State = EntityState.Modified;
+            _db.SaveChanges();
+            return entity;
+        }
+
+        public void UpdateAll (List<TEntity> entities)
+        {
+            foreach(var entity in entities)
             {
                 _db.Entry(entity).State = EntityState.Modified;
-                _db.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-                // TODO: Fix Regression from migrations
-                //if (ex.InnerException is OptimisticConcurrencyException)
-                //{
-                //    var ctx = ((IObjectContextAdapter)_db).ObjectContext;
-                //    ctx.Refresh(RefreshMode.ClientWins, entity);
-                //    ctx.SaveChanges();
-                //}
-                //else
-                //{
-                //    throw;
-                //}
-            }
-
-            return entity;
+            _db.SaveChanges();
         }
 
         public bool Delete(TEntity entity)

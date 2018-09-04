@@ -10,6 +10,11 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Pages.Income
 
         private const string NamePropertyId = "Name";
 
+        internal void QuickCreate()
+        {
+            throw new NotImplementedException();
+        }
+
         public CountryCreatePage(IWebDriver webDriver, string baseUrl) : base(webDriver, baseUrl)
         {
         }

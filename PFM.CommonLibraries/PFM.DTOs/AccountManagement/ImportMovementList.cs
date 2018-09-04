@@ -13,12 +13,6 @@ namespace PFM.DTOs.AccountManagement
 
         public DateTime? LastMovementRegistered { get; set; }
 
-        public List<MinifiedDTO> PaymentMethods { get; set; }
-
-        public List<MinifiedDTO> ImportTypes { get; set; }
-
-        public List<MinifiedDTO> ExpenseTypes { get; set; }
-
         public List<string> SelectedValues { get; set; }
 
         public List<MovementPropertyDefinition> MovementPropertyDefinitions { get; set; }

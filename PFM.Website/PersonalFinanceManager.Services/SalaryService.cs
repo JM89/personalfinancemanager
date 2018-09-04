@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<SalaryListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PFM.DTOs.Salary.SalaryList>($"/Salary/GetList");
+                var response = httpClient.GetList<PFM.DTOs.Salary.SalaryList>($"/Salary/GetList/{userId}");
                 result = response.Select(AutoMapper.Mapper.Map<SalaryListModel>).ToList();
             }
             return result;

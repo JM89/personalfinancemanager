@@ -27,10 +27,6 @@ namespace PFM.DTOs.Pension
 
         public int CurrencyId { get; set; }
 
-        public IList<MinifiedDTO> AvailableCurrencies { get; set; }
-
         public int CountryId { get; set; }
-
-        public IList<MinifiedDTO> AvailableCountries { get; set; }
     }
 }

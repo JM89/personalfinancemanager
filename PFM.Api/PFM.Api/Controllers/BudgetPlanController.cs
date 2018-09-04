@@ -40,7 +40,7 @@ namespace PFM.Api.Controllers
             _BudgetPlanService.CreateBudgetPlan(budgetPlanDetails, accountId);
         }
 
-        [HttpPost("Edit/{accountId}")]
+        [HttpPut("Edit/{accountId}")]
         public void Edit(int accountId, [FromBody]BudgetPlanDetails budgetPlanDetails)
         {
             _BudgetPlanService.EditBudgetPlan(budgetPlanDetails, accountId);
@@ -58,7 +58,7 @@ namespace PFM.Api.Controllers
             _BudgetPlanService.StopBudgetPlan(value);
         }
 
-        [HttpGet("BuildEmpty/{accountId}/{budgetPlanId}")]
+        [HttpGet("BuildEmpty/{accountId}/{budgetPlanId?}")]
         public BudgetPlanDetails Build(int accountId, int? budgetPlanId = null)
         {
             return _BudgetPlanService.BuildBudgetPlan(accountId, budgetPlanId);

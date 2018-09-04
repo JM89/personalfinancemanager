@@ -9,54 +9,59 @@ namespace PFM.Api.Controllers
     [Route("api/AtmWithdraw")]
     public class AtmWithdrawController : Controller
     {
-        public IAtmWithdrawService AtmWithdrawService { get; set; }
+        public IAtmWithdrawService _atmWithdrawService { get; set; }
+
+        public AtmWithdrawController(IAtmWithdrawService AtmWithdrawService)
+        {
+            _atmWithdrawService = AtmWithdrawService;
+        }
 
         [HttpGet("GetList/{accountId}")]
         public IEnumerable<AtmWithdrawList> GetList(int accountId)
         {
-            return AtmWithdrawService.GetAtmWithdrawsByAccountId(accountId);
+            return _atmWithdrawService.GetAtmWithdrawsByAccountId(accountId);
         }
 
         [HttpGet("Get/{id}")]
         public AtmWithdrawDetails Get(int id)
         {
-            return AtmWithdrawService.GetById(id);
+            return _atmWithdrawService.GetById(id);
         }
         
         [HttpPost("Create")]
         public void Post([FromBody]AtmWithdrawDetails createdObj)
         {
-            AtmWithdrawService.CreateAtmWithdraw(createdObj);
+            _atmWithdrawService.CreateAtmWithdraw(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
         public void Put(int id, [FromBody]AtmWithdrawDetails editedObj)
         {
-            AtmWithdrawService.EditAtmWithdraw(editedObj);
+            _atmWithdrawService.EditAtmWithdraw(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
         public void Delete(int id)
         {
-            AtmWithdrawService.DeleteAtmWithdraw(id);
+            _atmWithdrawService.DeleteAtmWithdraw(id);
         }
 
         [HttpPost("CreateAtmWithdraws")]
         public void CreateAtmWithdraws([FromBody]List<AtmWithdrawDetails> createdObj)
         {
-            AtmWithdrawService.CreateAtmWithdraws(createdObj);
+            _atmWithdrawService.CreateAtmWithdraws(createdObj);
         }
 
         [HttpPost("CloseAtmWithdraw/{id}")]
         public void CloseAtmWithdraw(int id)
         {
-            AtmWithdrawService.CloseAtmWithdraw(id);
+            _atmWithdrawService.CloseAtmWithdraw(id);
         }
 
         [HttpPost("CloseAtmWithdraw/{id}/debitStatus")]
         public void ChangeDebitStatus(int id, bool debitStatus)
         {
-            AtmWithdrawService.ChangeDebitStatus(id, debitStatus);
+            _atmWithdrawService.ChangeDebitStatus(id, debitStatus);
         }
     }
 }

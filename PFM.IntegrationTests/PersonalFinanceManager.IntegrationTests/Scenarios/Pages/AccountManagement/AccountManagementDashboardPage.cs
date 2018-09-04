@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using System.Linq;
 using PersonalFinanceManager.IntegrationTests.Infrastructure;
+using System.Threading;
 
 namespace PersonalFinanceManager.IntegrationTests.Scenarios.Pages.AccountManagement
 {
@@ -18,6 +19,7 @@ namespace PersonalFinanceManager.IntegrationTests.Scenarios.Pages.AccountManagem
 
         public int SelectAccount()
         {
+            Thread.Sleep(1000);
             var mainAccountDd = WebDriver.FindElements(By.ClassName(AccountDropDownListClassName));
             var firstAccount = mainAccountDd.FirstOrDefault();
             if (firstAccount == null)

@@ -11,8 +11,6 @@ namespace PFM.DTOs.Bank
 
         public int CountryId { get; set; }
 
-        public IList<MinifiedDTO> AvailableCountries { get; set; }
-
         public BankBranchDetails FavoriteBranch { get; set; }
 
         public string Website { get; set; }

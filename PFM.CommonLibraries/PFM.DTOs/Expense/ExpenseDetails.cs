@@ -14,7 +14,7 @@ namespace PFM.DTOs.Expense
 
         public decimal Cost { get; set; }
 
-        public int TypeExpenseId { get; set; }
+        public int ExpenseTypeId { get; set; }
 
         public int PaymentMethodId { get; set; }
 
@@ -27,15 +27,9 @@ namespace PFM.DTOs.Expense
         public bool HasBeenAlreadyDebited { get; set; }
 
         public bool PaymentMethodHasBeenAlreadyDebitedOption { get; set; }
-       
-        public IList<MinifiedDTO> AvailableExpenseTypes { get; set; }
-        
+              
         public IList<PaymentMethodList> AvailablePaymentMethods { get; set; }
         
-        public IList<MinifiedDTO> AvailableAtmWithdraws { get; set; }
-
-        public IList<MinifiedDTO> AvailableInternalAccounts { get; set; }
-
         public int? GeneratedIncomeId { get; set; }
     }
 

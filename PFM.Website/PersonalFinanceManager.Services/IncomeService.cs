@@ -32,7 +32,7 @@ namespace PersonalFinanceManager.Services
             IList<IncomeListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PFM.DTOs.Income.IncomeList>($"/Income/GetList");
+                var response = httpClient.GetList<PFM.DTOs.Income.IncomeList>($"/Income/GetList/{accountId}");
                 result = response.Select(AutoMapper.Mapper.Map<IncomeListModel>).ToList();
             }
             return result;

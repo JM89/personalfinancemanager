@@ -13,7 +13,7 @@ namespace PFM.Services.Core.Automapper
         {
             CreateMap<DataAccessLayer.Entities.Expense, DTOs.Expense.ExpenseList>();
             CreateMap<DataAccessLayer.Entities.Expense, DTOs.Expense.ExpenseDetails>();
-
+            
             CreateMap<DataAccessLayer.Entities.PaymentMethod, DTOs.PaymentMethod.PaymentMethodList>();
 
             CreateMap<DataAccessLayer.Entities.AtmWithdraw, DTOs.AtmWithdraw.AtmWithdrawDetails>();

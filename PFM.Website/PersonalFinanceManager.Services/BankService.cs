@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<BankListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PFM.DTOs.Currency.CurrencyList>($"/Bank/GetList");
+                var response = httpClient.GetList<PFM.DTOs.Bank.BankList>($"/Bank/GetList");
                 result = response.Select(AutoMapper.Mapper.Map<BankListModel>).ToList();
             }
             return result;

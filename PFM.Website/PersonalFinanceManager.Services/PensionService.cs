@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<PensionListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PFM.DTOs.Pension.PensionList>($"/Pension/GetList");
+                var response = httpClient.GetList<PFM.DTOs.Pension.PensionList>($"/Pension/GetList/{userId}");
                 result = response.Select(AutoMapper.Mapper.Map<PensionListModel>).ToList();
             }
             return result;

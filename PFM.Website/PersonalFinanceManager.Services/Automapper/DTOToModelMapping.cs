@@ -15,13 +15,20 @@ namespace PersonalFinanceManager.Services.Automapper
             CreateMap<PFM.DTOs.AccountManagement.ImportMovementList, Models.AccountManagement.ImportMovementModel>();
             CreateMap<PFM.DTOs.AccountManagement.ImportTypes, Models.AccountManagement.ImportTypes>();
             CreateMap<PFM.DTOs.AccountManagement.MovementPropertyDefinition, Models.AccountManagement.MovementPropertyDefinition>();
-            CreateMap<PFM.DTOs.AtmWithdraw.AtmWithdrawDetails, Models.AtmWithdraw.AtmWithdrawEditModel>();
-            CreateMap<PFM.DTOs.AtmWithdraw.AtmWithdrawList, Models.AtmWithdraw.AtmWithdrawListModel>();
+            CreateMap<PFM.DTOs.AtmWithdraw.AtmWithdrawDetails, Models.AtmWithdraw.AtmWithdrawEditModel>()
+                .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense));
+            CreateMap<PFM.DTOs.AtmWithdraw.AtmWithdrawList, Models.AtmWithdraw.AtmWithdrawListModel>()
+                 .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense)); 
             CreateMap<PFM.DTOs.Bank.BankBranchDetails, Models.Bank.BankBrandEditModel>();
             CreateMap<PFM.DTOs.Bank.BankDetails, Models.Bank.BankEditModel>();
             CreateMap<PFM.DTOs.Bank.BankList, Models.Bank.BankListModel>();
-            CreateMap<PFM.DTOs.BudgetPlan.BudgetPlanDetails, Models.BudgetPlan.BudgetPlanEditModel>();
-            CreateMap<PFM.DTOs.BudgetPlan.BudgetPlanExpenseType, Models.BudgetPlan.BudgetPlanExpenditureType>();
+            CreateMap<PFM.DTOs.BudgetPlan.BudgetPlanDetails, Models.BudgetPlan.BudgetPlanEditModel>()
+                .ForMember(dest => dest.ExpenditureTypes, src => src.MapFrom(opts => opts.ExpenseTypes))
+                .ForMember(dest => dest.ExpenditureAverageMonthValue, src => src.MapFrom(opts => opts.ExpenseAverageMonthValue))
+                .ForMember(dest => dest.ExpenditurePreviousMonthValue, src => src.MapFrom(opts => opts.ExpensePreviousMonthValue))
+                .ForMember(dest => dest.ExpenditureCurrentBudgetPlanValue, src => src.MapFrom(opts => opts.ExpenseCurrentBudgetPlanValue));
+            CreateMap<PFM.DTOs.BudgetPlan.BudgetPlanExpenseType, Models.BudgetPlan.BudgetPlanExpenditureType>()
+                 .ForMember(dest => dest.ExpenditureType, src => src.MapFrom(opts => opts.ExpenseType));
             CreateMap<PFM.DTOs.BudgetPlan.BudgetPlanList, Models.BudgetPlan.BudgetPlanListModel>();
             CreateMap<PFM.DTOs.Country.CountryDetails, Models.Country.CountryEditModel>();
             CreateMap<PFM.DTOs.Country.CountryList, Models.Country.CountryListModel>();
@@ -29,8 +36,13 @@ namespace PersonalFinanceManager.Services.Automapper
             CreateMap<PFM.DTOs.Dashboard.ExpenseSummaryByCategory, Models.Dashboard.ExpenseSummaryByCategoryModel>();
             CreateMap<PFM.DTOs.Dashboard.ExpenseSummaryByCategoryAndByMonth, Models.Dashboard.ExpenseSummaryByCategoryAndByMonthModel>();
             CreateMap<PFM.DTOs.Dashboard.ExpenseSummaryByMonth, Models.Dashboard.ExpenseSummaryByMonthModel>();
-            CreateMap<PFM.DTOs.Expense.ExpenseDetails, Models.Expenditure.ExpenditureEditModel>();
-            CreateMap<PFM.DTOs.Expense.ExpenseList, Models.Expenditure.ExpenditureListModel>();
+            CreateMap<PFM.DTOs.Expense.ExpenseDetails, Models.Expenditure.ExpenditureEditModel>()
+                .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense))
+                .ForMember(dest => dest.TypeExpenditureId, src => src.MapFrom(opts => opts.ExpenseTypeId)); 
+            CreateMap<PFM.DTOs.Expense.ExpenseList, Models.Expenditure.ExpenditureListModel>()
+                .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense))
+                .ForMember(dest => dest.TypeExpenditureId, src => src.MapFrom(opts => opts.ExpenseTypeId))
+                .ForMember(dest => dest.TypeExpenditureName, src => src.MapFrom(opts => opts.ExpenseTypeName));
             CreateMap<PFM.DTOs.ExpenseType.ExpenseTypeDetails, Models.ExpenditureType.ExpenditureTypeEditModel>();
             CreateMap<PFM.DTOs.ExpenseType.ExpenseTypeList, Models.ExpenditureType.ExpenditureTypeListModel>();
             CreateMap<PFM.DTOs.FrequenceOption.FrequenceOptionList, Models.FrequenceOption.FrequenceOptionListModel>();

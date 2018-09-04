@@ -21,20 +21,12 @@ namespace PFM.DTOs.Tax
 
         public decimal Amount { get; set; }
 
-        public IList<MinifiedDTO> AvailableCurrencies { get; set; }
-
         public int CountryId { get; set; }
 
-        public IList<MinifiedDTO> AvailableCountries { get; set; }
-
         public int FrequenceOptionId { get; set; }
-
-        public IList<MinifiedDTO> AvailableFrequenceOptions { get; set; }
 
         public int? Frequence { get; set; }
 
         public int TaxTypeId { get; set; }
-
-        public IList<MinifiedDTO> AvailableTaxTypes { get; set; }
     }
 }

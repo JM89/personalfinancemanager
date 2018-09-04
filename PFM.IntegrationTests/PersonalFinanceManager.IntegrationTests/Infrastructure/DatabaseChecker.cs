@@ -37,7 +37,7 @@ namespace PersonalFinanceManager.IntegrationTests.Infrastructure
 
         public static decimal GetSavingCost(int id)
         {
-            return GetResult<decimal>($"SELECT Amount FROM Incomes WHERE Id={id}");
+            return GetResult<decimal>($"SELECT Amount FROM Savings WHERE Id={id}");
         }
 
         public static int CountCountries()

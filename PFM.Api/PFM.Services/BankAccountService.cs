@@ -99,11 +99,14 @@ namespace PFM.Services
         
         public void SetAsFavorite(int id)
         {
-            foreach(var account in _bankAccountRepository.GetList())
+            var updatedList = _bankAccountRepository.GetList2();
+
+            foreach (var account in updatedList)
             {
                 account.IsFavorite = account.Id == id;
-                _bankAccountRepository.Update(account);
             }
+
+            _bankAccountRepository.UpdateAll(updatedList);
         }
     }
 }
