@@ -16,6 +16,8 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+    <PackageReference Include="PFM.DTOs" Version="0.0.1" />
+    <PackageReference Include="PFM.Utils" Version="0.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="3.0.0" />
@@ -28,15 +30,6 @@
   <ItemGroup>
     <ProjectReference Include="..\PFM.DataAccessLayer\PFM.DataAccessLayer.csproj" />
     <ProjectReference Include="..\PFM.Services\PFM.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="PFM.DTOs">
-      <HintPath>..\..\PFM.CommonLibraries\PFM.DTOs\bin\Release\netstandard2.0\PFM.DTOs.dll</HintPath>
-    </Reference>
-    <Reference Include="PFM.Utils">
-      <HintPath>..\..\PFM.CommonLibraries\PFM.Utils\bin\Release\netstandard2.0\PFM.Utils.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
