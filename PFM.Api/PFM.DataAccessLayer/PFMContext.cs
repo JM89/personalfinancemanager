@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PFM.DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PFM.DataAccessLayer
 {
-    public class PFMContext: DbContext
+    public class PFMContext: IdentityDbContext
     {
         public DbSet<Country> Countries { get; set; }
         public DbSet<Bank> Banks { get; set; }
@@ -37,6 +38,7 @@ namespace PFM.DataAccessLayer
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Salary>().HasOne(u => u.Tax).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Saving>().HasOne(u => u.TargetInternalAccount).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
         }

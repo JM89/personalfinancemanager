@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace PFM.Api
+namespace PFM.Api.Configuration
 {
     public class DefaultModule: Autofac.Module
     {

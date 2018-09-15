@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="PFM.DTOs" Version="0.0.1" />
+    <PackageReference Include="PFM.DTOs" Version="0.0.2" />
     <PackageReference Include="PFM.Utils" Version="0.0.1" />
   </ItemGroup>
 
