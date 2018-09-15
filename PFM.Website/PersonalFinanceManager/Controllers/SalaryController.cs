@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Models.Salary;
+using PersonalFinanceManager.Models.TaxType;
 using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers

@@ -37,7 +37,7 @@ namespace PFM.Api.Controllers
                 return TokenFactory.GenerateJwtToken(model.Email, appUser, _configuration);
             }
 
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+            return null;
         }
 
         [AllowAnonymous]
@@ -57,7 +57,7 @@ namespace PFM.Api.Controllers
                 return TokenFactory.GenerateJwtToken(model.Email, user, _configuration);
             }
 
-            throw new ApplicationException("UNKNOWN_ERROR");
+            return null;
         }
     }
 }

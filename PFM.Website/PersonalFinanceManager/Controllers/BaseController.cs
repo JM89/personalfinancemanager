@@ -1,13 +1,8 @@
 ﻿using log4net;
 using Microsoft.AspNet.Identity;
-using PersonalFinanceManager.DataAccess;
-using PersonalFinanceManager.Models.Account;
-using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using PersonalFinanceManager.Services.Exceptions;
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Models.Tax;
+using PersonalFinanceManager.Models.TaxType;
 using PersonalFinanceManager.Services.Core;
 
 namespace PersonalFinanceManager.Services.Interfaces

@@ -97,8 +97,8 @@
     <Compile Include="AccountManagement\MovementPropertyDefinition.cs" />
     <Compile Include="Account\AccountEditModel.cs" />
     <Compile Include="Account\AccountListModel.cs" />
-    <Compile Include="AspNetUserAccount\AccountViewModels.cs" />
-    <Compile Include="AspNetUserAccount\ManageViewModels.cs" />
+    <Compile Include="AspNetUserAccount\RegisterViewModel.cs" />
+    <Compile Include="AspNetUserAccount\LoginViewModel.cs" />
     <Compile Include="AtmWithdraw\AtmWithdrawListModel.cs" />
     <Compile Include="AtmWithdraw\AtmWithdrawEditModel.cs" />
     <Compile Include="Bank\BankBrandEditModel.cs" />
@@ -114,6 +114,7 @@
     <Compile Include="Helpers\Chart\ChartDataset.cs" />
     <Compile Include="Helpers\Chart\ChartValue.cs" />
     <Compile Include="SearchParameters\ExpenditureGetListSearchParameters.cs" />
+    <Compile Include="TaxType\TaxType.cs" />
     <Compile Include="TaxType\TaxTypeListModel.cs" />
     <Compile Include="Tax\TaxEditModel.cs" />
     <Compile Include="Tax\TaxListModel.cs" />

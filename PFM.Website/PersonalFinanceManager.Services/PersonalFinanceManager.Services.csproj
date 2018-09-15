@@ -55,7 +55,7 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PFM.DTOs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PFM.DTOs.0.0.1\lib\netstandard2.0\PFM.DTOs.dll</HintPath>
+      <HintPath>..\packages\PFM.DTOs.0.0.2\lib\netstandard2.0\PFM.DTOs.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountService.cs" />
     <Compile Include="Automapper\DTOToModelMapping.cs" />
     <Compile Include="Automapper\ModelToDTOMapping.cs" />
     <Compile Include="Exceptions\ApiException.cs" />
@@ -79,6 +80,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="HttpClientWrapper\HttpClientExtended.cs" />
+    <Compile Include="Interfaces\IAccountService.cs" />
     <Compile Include="Interfaces\IFrequenceOptionService.cs" />
     <Compile Include="Interfaces\ITaxTypeService.cs" />
     <Compile Include="Interfaces\ITaxService.cs" />
@@ -118,14 +120,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PersonalFinanceManager.DataAccess\PersonalFinanceManager.DataAccess.csproj">
-      <Project>{9312252f-173c-4563-b24e-aad56c696784}</Project>
-      <Name>PersonalFinanceManager.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PersonalFinanceManager.Entities\PersonalFinanceManager.Entities.csproj">
-      <Project>{92d1d39b-f7f1-4208-9da0-6cce314b12a6}</Project>
-      <Name>PersonalFinanceManager.Entities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PersonalFinanceManager.Models\PersonalFinanceManager.Models.csproj">
       <Project>{8ce35126-bb04-4d14-b968-62d99c6ad2ff}</Project>
       <Name>PersonalFinanceManager.Models</Name>

@@ -1,10 +1,9 @@
 ﻿using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
-using PersonalFinanceManager.Entities.Enumerations;
 using PersonalFinanceManager.Models.Tax;
-using System;
 using PersonalFinanceManager.Services.HttpClientWrapper;
 using System.Linq;
+using PersonalFinanceManager.Models.TaxType;
 
 namespace PersonalFinanceManager.Services
 {

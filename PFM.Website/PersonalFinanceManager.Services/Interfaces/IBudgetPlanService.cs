@@ -1,16 +1,5 @@
-﻿using PersonalFinanceManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.Entity;
-using PersonalFinanceManager.Entities;
+﻿using System.Collections.Generic;
 using PersonalFinanceManager.Models.BudgetPlan;
-using AutoMapper.QueryableExtensions;
-using AutoMapper;
-using PersonalFinanceManager.DataAccess;
-using PersonalFinanceManager.Models.ExpenditureType;
-using PersonalFinanceManager.Models.Dashboard;
 using PersonalFinanceManager.Services.Core;
 
 namespace PersonalFinanceManager.Services.Interfaces

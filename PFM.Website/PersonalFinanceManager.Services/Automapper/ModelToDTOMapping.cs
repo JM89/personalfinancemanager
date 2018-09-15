@@ -31,6 +31,8 @@ namespace PersonalFinanceManager.Services.Automapper
             CreateMap<Models.Saving.SavingEditModel, PFM.DTOs.Saving.SavingDetails>();
             CreateMap<Models.Tax.TaxEditModel, PFM.DTOs.Tax.TaxDetails>();
             CreateMap<Models.UserProfile.UserProfileEditModel, PFM.DTOs.UserProfile.UserProfileDetails>();
+            CreateMap<Models.AspNetUserAccount.LoginViewModel, PFM.DTOs.UserAccount.User>();
+            CreateMap<Models.AspNetUserAccount.RegisterViewModel, PFM.DTOs.UserAccount.User>();
         }
     }
 }

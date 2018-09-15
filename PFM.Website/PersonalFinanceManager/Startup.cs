@@ -13,7 +13,6 @@ namespace PersonalFinanceManager
         {
             XmlConfigurator.Configure();
 
-            ConfigureAuth(app);
             ConfigureNinject(app);
 
             ModelBinders.Binders.DefaultBinder = new CustomModelBinder();
