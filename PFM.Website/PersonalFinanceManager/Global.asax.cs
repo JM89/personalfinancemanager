@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using PersonalFinanceManager.Services.Automapper;
+using System.Web.Helpers;
+using System.Security.Claims;
 
 namespace PersonalFinanceManager
 {
@@ -19,6 +21,7 @@ namespace PersonalFinanceManager
                 cfg.AddProfile<ModelToDTOMapping>();
                 cfg.AddProfile<DTOToModelMapping>();
             });
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
         }
 
         protected virtual void Application_BeginRequest()

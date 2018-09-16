@@ -110,6 +110,9 @@
       <HintPath>..\packages\Ninject.Web.Common.OwinHost.3.2.3.0\lib\net45-full\Ninject.Web.Common.OwinHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PFM.DTOs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PFM.DTOs.0.0.3\lib\netstandard2.0\PFM.DTOs.dll</HintPath>
+    </Reference>
     <Reference Include="PFM.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PFM.Utils.0.0.1\lib\netstandard2.0\PFM.Utils.dll</HintPath>
     </Reference>
@@ -244,6 +247,66 @@
     <Compile Include="Helpers\MvcHtmlExtensions.cs" />
     <Compile Include="Helpers\JsonError.cs" />
     <Compile Include="Helpers\ModelStateJsonConvertor.cs" />
+    <Compile Include="Models\AccountManagement\ImportMovementEditModel.cs" />
+    <Compile Include="Models\AccountManagement\ImportMovementModel.cs" />
+    <Compile Include="Models\AccountManagement\ImportTypes.cs" />
+    <Compile Include="Models\AccountManagement\MovementPropertyDefinition.cs" />
+    <Compile Include="Models\Account\AccountEditModel.cs" />
+    <Compile Include="Models\Account\AccountListModel.cs" />
+    <Compile Include="Models\AspNetUserAccount\AuthenticatedUser.cs" />
+    <Compile Include="Models\AspNetUserAccount\LoginViewModel.cs" />
+    <Compile Include="Models\AspNetUserAccount\RegisterViewModel.cs" />
+    <Compile Include="Models\AtmWithdraw\AtmWithdrawEditModel.cs" />
+    <Compile Include="Models\AtmWithdraw\AtmWithdrawListModel.cs" />
+    <Compile Include="Models\Bank\BankBrandEditModel.cs" />
+    <Compile Include="Models\Bank\BankEditModel.cs" />
+    <Compile Include="Models\Bank\BankListModel.cs" />
+    <Compile Include="Models\BudgetPlan\BudgetPlanEditModel.cs" />
+    <Compile Include="Models\BudgetPlan\BudgetPlanExpenditureType.cs" />
+    <Compile Include="Models\BudgetPlan\BudgetPlanListModel.cs" />
+    <Compile Include="Models\Country\CountryEditModel.cs" />
+    <Compile Include="Models\Country\CountryListModel.cs" />
+    <Compile Include="Models\Currency\CurrencyEditModel.cs" />
+    <Compile Include="Models\Currency\CurrencyListModel.cs" />
+    <Compile Include="Models\Dashboard\ExpenseSummaryByCategoryAndByMonthModel.cs" />
+    <Compile Include="Models\Dashboard\ExpenseSummaryByCategoryModel.cs" />
+    <Compile Include="Models\Dashboard\ExpenseSummaryByMonthModel.cs" />
+    <Compile Include="Models\Dashboard\ExpenseSummaryModel.cs" />
+    <Compile Include="Models\ExpenditureType\ExpenditureTypeEditModel.cs" />
+    <Compile Include="Models\ExpenditureType\ExpenditureTypeListModel.cs" />
+    <Compile Include="Models\Expenditure\ExpenditureEditModel.cs" />
+    <Compile Include="Models\Expenditure\ExpenditureListModel.cs" />
+    <Compile Include="Models\FrequenceOption\FrequenceOptionListModel.cs" />
+    <Compile Include="Models\Helpers\Chart\ChartData.cs" />
+    <Compile Include="Models\Helpers\Chart\ChartDataset.cs" />
+    <Compile Include="Models\Helpers\Chart\ChartValue.cs" />
+    <Compile Include="Models\Home\ConversionRateModel.cs" />
+    <Compile Include="Models\Home\HomePageModel.cs" />
+    <Compile Include="Models\Home\NumberOfMvtPerPaymentMethodModel.cs" />
+    <Compile Include="Models\Income\IncomeEditModel.cs" />
+    <Compile Include="Models\Income\IncomeListModel.cs" />
+    <Compile Include="Models\PaymentMethod\PaymentMethodListModel.cs" />
+    <Compile Include="Models\Pension\PensionEditModel.cs" />
+    <Compile Include="Models\Pension\PensionListModel.cs" />
+    <Compile Include="Models\Resources\DisplayNames.Designer.cs">
+      <DependentUpon>DisplayNames.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Models\Resources\LocalizedDisplayNameAttribute.cs" />
+    <Compile Include="Models\Salary\SalaryDeductionEditModel.cs" />
+    <Compile Include="Models\Salary\SalaryEditModel.cs" />
+    <Compile Include="Models\Salary\SalaryListModel.cs" />
+    <Compile Include="Models\Saving\SavingEditModel.cs" />
+    <Compile Include="Models\Saving\SavingListModel.cs" />
+    <Compile Include="Models\SearchParameters\ExpenditureGetListSearchParameters.cs" />
+    <Compile Include="Models\Shared\ICanBeDeleted.cs" />
+    <Compile Include="Models\Shared\ICanBeEdited.cs" />
+    <Compile Include="Models\TaxType\TaxType.cs" />
+    <Compile Include="Models\TaxType\TaxTypeListModel.cs" />
+    <Compile Include="Models\Tax\TaxEditModel.cs" />
+    <Compile Include="Models\Tax\TaxListModel.cs" />
+    <Compile Include="Models\UserProfile\UserProfileEditModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App_GlobalResources\ButtonNames.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -263,6 +326,55 @@
       <DependentUpon>TitleNames.resx</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\AtmWithdrawService.cs" />
+    <Compile Include="Services\Automapper\DTOToModelMapping.cs" />
+    <Compile Include="Services\Automapper\ModelToDTOMapping.cs" />
+    <Compile Include="Services\BankAccountService.cs" />
+    <Compile Include="Services\BankService.cs" />
+    <Compile Include="Services\BudgetPlanService.cs" />
+    <Compile Include="Services\Core\IBaseService.cs" />
+    <Compile Include="Services\CountryService.cs" />
+    <Compile Include="Services\CurrencyService.cs" />
+    <Compile Include="Services\Exceptions\ApiException.cs" />
+    <Compile Include="Services\Exceptions\BusinessException.cs" />
+    <Compile Include="Services\Exceptions\BusinessExceptionMessage.Designer.cs">
+      <DependentUpon>BusinessExceptionMessage.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Services\ExpenditureService.cs" />
+    <Compile Include="Services\ExpenditureTypeService.cs" />
+    <Compile Include="Services\FrequenceOptionService.cs" />
+    <Compile Include="Services\HttpClientWrapper\HttpClientExtended.cs" />
+    <Compile Include="Services\HttpClientWrapper\HttpClientOptions.cs" />
+    <Compile Include="Services\IncomeService.cs" />
+    <Compile Include="Services\Interfaces\IAccountService.cs" />
+    <Compile Include="Services\Interfaces\IAtmWithdrawService.cs" />
+    <Compile Include="Services\Interfaces\IBankAccountService.cs" />
+    <Compile Include="Services\Interfaces\IBankService.cs" />
+    <Compile Include="Services\Interfaces\IBudgetPlanService.cs" />
+    <Compile Include="Services\Interfaces\ICountryService.cs" />
+    <Compile Include="Services\Interfaces\ICurrencyService.cs" />
+    <Compile Include="Services\Interfaces\IExpenditureService.cs" />
+    <Compile Include="Services\Interfaces\IExpenditureTypeService.cs" />
+    <Compile Include="Services\Interfaces\IFrequenceOptionService.cs" />
+    <Compile Include="Services\Interfaces\IIncomeService.cs" />
+    <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
+    <Compile Include="Services\Interfaces\IPensionService.cs" />
+    <Compile Include="Services\Interfaces\ISalaryService.cs" />
+    <Compile Include="Services\Interfaces\ISavingService.cs" />
+    <Compile Include="Services\Interfaces\ITaxService.cs" />
+    <Compile Include="Services\Interfaces\ITaxTypeService.cs" />
+    <Compile Include="Services\Interfaces\IUserProfileService.cs" />
+    <Compile Include="Services\PaymentMethodService.cs" />
+    <Compile Include="Services\PensionService.cs" />
+    <Compile Include="Services\RequestObjects\BudgetPlanSearch.cs" />
+    <Compile Include="Services\SalaryService.cs" />
+    <Compile Include="Services\SavingService.cs" />
+    <Compile Include="Services\TaxService.cs" />
+    <Compile Include="Services\TaxTypeService.cs" />
+    <Compile Include="Services\UserProfileService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -411,16 +523,6 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PersonalFinanceManager.Models\PersonalFinanceManager.Models.csproj">
-      <Project>{8ce35126-bb04-4d14-b968-62d99c6ad2ff}</Project>
-      <Name>PersonalFinanceManager.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PersonalFinanceManager.Services\PersonalFinanceManager.Services.csproj">
-      <Project>{c4710950-3074-4cb2-bab9-1866183f399f}</Project>
-      <Name>PersonalFinanceManager.Services</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="App_GlobalResources\DisabledButtonTooltips.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>DisabledButtonTooltips.Designer.cs</LastGenOutput>
@@ -447,6 +549,16 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>FieldHelper.Designer.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Models\Resources\DisplayNames.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DisplayNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Services\Exceptions\BusinessExceptionMessage.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BusinessExceptionMessage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

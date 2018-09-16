@@ -25,8 +25,7 @@ namespace PersonalFinanceManager
         public IKernel CreateKernel()
         {
             var kernel = new StandardKernel();
-            kernel.Load(Assembly.GetExecutingAssembly(), 
-                        typeof(IBaseService).Assembly);
+            kernel.Load(Assembly.GetExecutingAssembly());
             return kernel;
         }
     }

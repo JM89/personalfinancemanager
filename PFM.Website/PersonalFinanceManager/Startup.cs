@@ -1,7 +1,9 @@
 ﻿using log4net.Config;
 using Microsoft.Owin;
+using Microsoft.Owin.Security.Cookies;
 using Owin;
 using PersonalFinanceManager.App_Start;
+using PersonalFinanceManager.Services.Core;
 using System.Web.Mvc;
 
 [assembly: OwinStartupAttribute(typeof(PersonalFinanceManager.Startup))]
@@ -14,6 +16,12 @@ namespace PersonalFinanceManager
             XmlConfigurator.Configure();
 
             ConfigureNinject(app);
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            {
+                AuthenticationType = "ApplicationCookie",
+                LoginPath = new PathString("/Account/Login")
+            });
 
             ModelBinders.Binders.DefaultBinder = new CustomModelBinder();
         }

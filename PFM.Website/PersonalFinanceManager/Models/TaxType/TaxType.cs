@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.Entities.Enumerations
+namespace PersonalFinanceManager.Models.TaxType
 {
     public enum TaxType
     {
