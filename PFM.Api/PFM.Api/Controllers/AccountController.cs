@@ -27,14 +27,18 @@ namespace PFM.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<object> Login([FromBody]User model)
+        public async Task<AuthenticatedUser> Login([FromBody]User model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
             if (result.Succeeded)
             {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                return TokenFactory.GenerateJwtToken(model.Email, appUser, _configuration);
+                var token = TokenFactory.GenerateJwtToken(model.Email, appUser, _configuration);
+                return new AuthenticatedUser() {
+                    Token = token,
+                    UserId = appUser.Id
+                };
             }
 
             return null;
