@@ -5,10 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20180805190035_allentities.cs" />
-    <Compile Remove="Migrations\20180805190542_allentities_v2.cs" />
-    <Compile Remove="Migrations\20180805191547_allentities_v3.cs" />
-    <Compile Remove="Migrations\20180805191816_allentities.cs" />
+    <Compile Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Migrations\20180916102127_data.cs" />
+    <Compile Include="Migrations\20180916102127_data.Designer.cs" />
+    <Compile Include="Migrations\20180916104921_second.cs" />
+    <Compile Include="Migrations\20180916104921_second.Designer.cs" />
+    <Compile Include="Migrations\20180916105043_hjj.cs" />
+    <Compile Include="Migrations\20180916105043_hjj.Designer.cs" />
+    <Compile Include="Migrations\PFMContextModelSnapshot.cs" />
   </ItemGroup>
 
   <ItemGroup>
