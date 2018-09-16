@@ -11,22 +11,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Migrations\20180916102127_data.cs" />
-    <Compile Include="Migrations\20180916102127_data.Designer.cs" />
-    <Compile Include="Migrations\20180916104921_second.cs" />
-    <Compile Include="Migrations\20180916104921_second.Designer.cs" />
-    <Compile Include="Migrations\20180916105043_hjj.cs" />
-    <Compile Include="Migrations\20180916105043_hjj.Designer.cs" />
-    <Compile Include="Migrations\PFMContextModelSnapshot.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
