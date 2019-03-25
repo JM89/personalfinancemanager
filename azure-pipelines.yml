@@ -15,4 +15,4 @@ variables:
 
 steps:
 - script: dotnet build $(apiProjectPath) --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+  displayName: 'Build PFM API'
