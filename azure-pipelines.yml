@@ -11,7 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  apiProjectPath: "$(Agent.BuildDirectory)/personalfinancemanager/PFM.Api/PFM.Api/PFM.Api.csproj"
+  apiProjectPath: "./personalfinancemanager/PFM.Api/PFM.Api/PFM.Api.csproj"
 
 steps:
 - script: dotnet build $(apiProjectPath) --configuration $(buildConfiguration)
