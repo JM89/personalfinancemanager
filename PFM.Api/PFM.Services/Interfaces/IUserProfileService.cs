@@ -1,5 +1,4 @@
-﻿using PFM.Services.Core;
-using PFM.DTOs.UserProfile;
+﻿using PFM.Services.DTOs.UserProfile;
 
 namespace PFM.Services.Interfaces
 {

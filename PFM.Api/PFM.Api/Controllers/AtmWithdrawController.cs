@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PFM.DTOs.AtmWithdraw;
+using PFM.Services.DTOs.AtmWithdraw;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

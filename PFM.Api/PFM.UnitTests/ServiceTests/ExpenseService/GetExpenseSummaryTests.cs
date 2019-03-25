@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using PFM.DataAccessLayer.Entities;
-using PFM.DTOs.ExpenseType;
+using PFM.Services.DTOs.ExpenseType;
+using PFM.Services.Utils.Helpers;
 using PFM.UnitTests.Fixture;
 using PFM.UnitTests.Helpers;
-using PFM.Utils.Helpers;
 using Xunit;
 
 namespace PFM.UnitTests.ServiceTests.ExpenseService

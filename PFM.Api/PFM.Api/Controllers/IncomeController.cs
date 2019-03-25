@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PFM.DTOs.Income;
+using PFM.Services.DTOs.Income;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

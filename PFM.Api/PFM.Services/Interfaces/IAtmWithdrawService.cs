@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.Core;
-using PFM.DTOs.AtmWithdraw;
+using PFM.Services.DTOs.AtmWithdraw;
 
 namespace PFM.Services.Interfaces
 {

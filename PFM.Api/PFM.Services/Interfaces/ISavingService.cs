@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.Core;
-using PFM.DTOs.Saving;
+using PFM.Services.DTOs.Saving;
 
 namespace PFM.Services.Interfaces
 {

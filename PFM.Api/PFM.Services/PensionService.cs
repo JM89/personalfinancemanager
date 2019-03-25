@@ -4,7 +4,7 @@ using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.Entities;
 using System.Collections.Generic;
 using System.Linq;
-using PFM.DTOs.Pension;
+using PFM.Services.DTOs.Pension;
 
 namespace PFM.Services
 {

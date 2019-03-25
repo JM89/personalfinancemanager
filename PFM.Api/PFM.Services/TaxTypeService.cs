@@ -3,7 +3,7 @@ using System.Linq;
 using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DTOs.TaxType;
+using PFM.Services.DTOs.TaxType;
 
 namespace PFM.Services
 {

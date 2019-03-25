@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.DTOs.FrequenceOption;
-using PFM.Services.Core;
+using PFM.Services.DTOs.FrequenceOption;
 
 namespace PFM.Services.Interfaces
 {

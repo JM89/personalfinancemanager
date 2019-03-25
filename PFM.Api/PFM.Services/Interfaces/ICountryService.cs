@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.Core;
-using PFM.DTOs.Country;
+using PFM.Services.DTOs.Country;
 
 namespace PFM.Services.Interfaces
 {

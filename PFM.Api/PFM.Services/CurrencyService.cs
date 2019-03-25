@@ -3,8 +3,8 @@ using System.Linq;
 using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DTOs.Currency;
 using PFM.DataAccessLayer.Entities;
+using PFM.Services.DTOs.Currency;
 
 namespace PFM.Services
 {

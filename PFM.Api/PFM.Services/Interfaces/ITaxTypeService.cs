@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.DTOs.TaxType;
-using PFM.Services.Core;
+using PFM.Services.DTOs.TaxType;
 
 namespace PFM.Services.Interfaces
 {

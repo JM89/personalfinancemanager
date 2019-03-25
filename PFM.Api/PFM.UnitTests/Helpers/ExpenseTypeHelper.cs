@@ -1,5 +1,5 @@
 ﻿using PFM.DataAccessLayer.Entities;
-using PFM.DTOs.ExpenseType;
+using PFM.Services.DTOs.ExpenseType;
 
 namespace PFM.UnitTests.Helpers
 {

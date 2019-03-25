@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using PFM.DTOs.UserProfile;
+﻿using Microsoft.AspNetCore.Mvc;
+using PFM.Services.DTOs.UserProfile;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

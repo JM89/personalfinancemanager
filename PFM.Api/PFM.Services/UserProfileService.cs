@@ -3,7 +3,7 @@ using PFM.DataAccessLayer.Entities;
 using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DTOs.UserProfile;
+using PFM.Services.DTOs.UserProfile;
 
 namespace PFM.Services
 {

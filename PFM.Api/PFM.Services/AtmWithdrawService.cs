@@ -3,10 +3,10 @@ using System.Linq;
 using PFM.Services.Interfaces;
 using PFM.Services.Helpers;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DTOs.AtmWithdraw;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Enumerations;
 using AutoMapper;
+using PFM.Services.DTOs.AtmWithdraw;
 
 namespace PFM.Services
 {

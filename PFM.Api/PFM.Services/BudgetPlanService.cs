@@ -4,11 +4,11 @@ using System.Linq;
 using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DTOs.BudgetPlan;
-using PFM.DTOs.ExpenseType;
 using PFM.DataAccessLayer.Entities;
-using PFM.Utils.Helpers;
 using PFM.DataAccessLayer.SearchParameters;
+using PFM.Services.DTOs.BudgetPlan;
+using PFM.Services.Utils.Helpers;
+using PFM.Services.DTOs.ExpenseType;
 
 namespace PFM.Services
 {

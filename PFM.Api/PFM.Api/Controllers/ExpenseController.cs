@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PFM.DTOs.BudgetPlan;
-using PFM.DTOs.Dashboard;
-using PFM.DTOs.Expense;
+using PFM.Services.DTOs.BudgetPlan;
+using PFM.Services.DTOs.Dashboard;
+using PFM.Services.DTOs.Expense;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
@@ -67,7 +67,7 @@ namespace PFM.Api.Controllers
         }
 
         [HttpPost("GetExpenses")]
-        public IList<ExpenseList> GetExpenses([FromBody]DTOs.SearchParameters.ExpenseGetListSearchParameters search)
+        public IList<ExpenseList> GetExpenses([FromBody]Services.DTOs.SearchParameters.ExpenseGetListSearchParameters search)
         {
             return _ExpenseService.GetExpenses(search);
         }

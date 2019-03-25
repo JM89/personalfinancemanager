@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PFM.DTOs.ExpenseType;
+using PFM.Services.DTOs.ExpenseType;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

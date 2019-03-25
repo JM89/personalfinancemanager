@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using PFM.Api.Configuration;
-using PFM.DTOs.UserAccount;
+using PFM.Services.DTOs.UserAccount;
 
 namespace PFM.Api.Controllers
 {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.Core;
-using PFM.DTOs.ExpenseType;
+using PFM.Services.DTOs.ExpenseType;
 
 namespace PFM.Services.Interfaces
 {

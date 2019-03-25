@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.DataAccessLayer.Entities;
-using PFM.DTOs.Pension;
-using PFM.Services.Core;
+using PFM.Services.DTOs.Pension;
 
 namespace PFM.Services.Interfaces
 {

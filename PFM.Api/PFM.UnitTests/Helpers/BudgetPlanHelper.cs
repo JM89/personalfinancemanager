@@ -1,5 +1,5 @@
-﻿using PFM.DTOs.BudgetPlan;
-using PFM.DTOs.ExpenseType;
+﻿using PFM.Services.DTOs.BudgetPlan;
+using PFM.Services.DTOs.ExpenseType;
 using System.Collections.Generic;
 
 namespace PFM.UnitTests.Helpers

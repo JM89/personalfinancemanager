@@ -3,8 +3,8 @@ using System.Linq;
 using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DTOs.PaymentMethod;
 using PFM.DataAccessLayer.Enumerations;
+using PFM.Services.DTOs.PaymentMethod;
 
 namespace PFM.Services
 {

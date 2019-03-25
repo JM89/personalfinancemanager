@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.Core;
-using PFM.DTOs.Currency;
+using PFM.Services.DTOs.Currency;
 
 namespace PFM.Services.Interfaces
 {

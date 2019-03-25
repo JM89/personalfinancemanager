@@ -3,9 +3,8 @@ using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using PFM.DTOs.Tax;
-using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Entities;
+using PFM.Services.DTOs.Tax;
 
 namespace PFM.Services
 {

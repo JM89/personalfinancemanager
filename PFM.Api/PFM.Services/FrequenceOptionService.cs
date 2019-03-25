@@ -3,7 +3,7 @@ using System.Linq;
 using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DTOs.FrequenceOption;
+using PFM.Services.DTOs.FrequenceOption;
 
 namespace PFM.Services
 {

@@ -2,11 +2,11 @@
 using System.Linq;
 using PFM.DataAccessLayer.Entities;
 using AutoMapper;
-using PFM.DTOs.Income;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Helpers;
 using PFM.DataAccessLayer.Enumerations;
+using PFM.Services.DTOs.Income;
 
 namespace PFM.Services
 {

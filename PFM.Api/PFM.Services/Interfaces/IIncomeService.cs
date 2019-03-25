@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using PFM.DataAccessLayer.Entities;
-using PFM.DTOs.Income;
-using PFM.Services.Core;
+﻿using PFM.Services.DTOs.Income;
+using System.Collections.Generic;
 
 namespace PFM.Services.Interfaces
 {

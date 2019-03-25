@@ -2,10 +2,10 @@
 using System.Linq;
 using AutoMapper;
 using PFM.Services.Interfaces;
-using PFM.DTOs.Bank;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Core.Exceptions;
 using PFM.DataAccessLayer.Entities;
+using PFM.Services.DTOs.Bank;
 
 namespace PFM.Services
 {
