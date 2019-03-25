@@ -13,7 +13,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Tax.TaxDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Tax.TaxDetails>(model);
                 httpClient.Post($"/Tax/Create", dto);
             }
         }
@@ -30,7 +30,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Tax.TaxDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Tax.TaxDetails>(model);
                 httpClient.Put($"/Tax/Edit/{model.Id}", dto);
             }
         }
@@ -40,7 +40,7 @@ namespace PersonalFinanceManager.Services
             TaxEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PFM.DTOs.Tax.TaxDetails>($"/Tax/Get/{id}");
+                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.Tax.TaxDetails>($"/Tax/Get/{id}");
                 result = AutoMapper.Mapper.Map<TaxEditModel>(response);
             }
             return result;
@@ -51,7 +51,7 @@ namespace PersonalFinanceManager.Services
             IList<TaxListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PFM.DTOs.Tax.TaxList>($"/Tax/GetList/{userId}");
+                var response = httpClient.GetList<PersonalFinanceManager.DTOs.Tax.TaxList>($"/Tax/GetList/{userId}");
                 result = response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
             }
             return result;
@@ -63,7 +63,7 @@ namespace PersonalFinanceManager.Services
             using (var httpClient = new HttpClientExtended())
             {
                 var taxTypeId = (int)TaxType.IncomeTax;
-                var response = httpClient.GetList<PFM.DTOs.Tax.TaxList>($"/Tax/GetTaxesByType/{currentUser}/{taxTypeId}");
+                var response = httpClient.GetList<PersonalFinanceManager.DTOs.Tax.TaxList>($"/Tax/GetTaxesByType/{currentUser}/{taxTypeId}");
                 result = response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
             }
             return result;

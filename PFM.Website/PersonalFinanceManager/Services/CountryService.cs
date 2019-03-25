@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<CountryListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PFM.DTOs.Country.CountryList>($"/Country/GetList");
+                var response = httpClient.GetList<PersonalFinanceManager.DTOs.Country.CountryList>($"/Country/GetList");
                 result = response.Select(AutoMapper.Mapper.Map<CountryListModel>).ToList();
             }
             return result;
@@ -24,7 +24,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Country.CountryDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Country.CountryDetails>(model);
                 httpClient.Post($"/Country/Create", dto);
             }
         }
@@ -34,7 +34,7 @@ namespace PersonalFinanceManager.Services
             CountryEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PFM.DTOs.Country.CountryDetails>($"/Country/Get/{id}");
+                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.Country.CountryDetails>($"/Country/Get/{id}");
                 result = AutoMapper.Mapper.Map<CountryEditModel>(response);
             }
             return result;
@@ -44,7 +44,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Country.CountryDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Country.CountryDetails>(model);
                 httpClient.Put($"/Country/Edit/{model.Id}", dto);
             }
         }

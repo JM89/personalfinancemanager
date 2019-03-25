@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<SalaryListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PFM.DTOs.Salary.SalaryList>($"/Salary/GetList/{userId}");
+                var response = httpClient.GetList<PersonalFinanceManager.DTOs.Salary.SalaryList>($"/Salary/GetList/{userId}");
                 result = response.Select(AutoMapper.Mapper.Map<SalaryListModel>).ToList();
             }
             return result;
@@ -24,7 +24,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Salary.SalaryDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Salary.SalaryDetails>(model);
                 httpClient.Post($"/Salary/Create", dto);
             }
         }
@@ -42,7 +42,7 @@ namespace PersonalFinanceManager.Services
             SalaryEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PFM.DTOs.Salary.SalaryDetails>($"/Salary/Get/{id}");
+                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.Salary.SalaryDetails>($"/Salary/Get/{id}");
                 result = AutoMapper.Mapper.Map<SalaryEditModel>(response);
             }
             return result;
@@ -52,7 +52,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Salary.SalaryDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Salary.SalaryDetails>(model);
                 httpClient.Put($"/Salary/Edit/{model.Id}", dto);
             }
         }

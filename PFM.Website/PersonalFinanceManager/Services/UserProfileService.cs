@@ -11,7 +11,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.UserProfile.UserProfileDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.UserProfile.UserProfileDetails>(model);
                 httpClient.Post($"/UserProfile/Create", dto);
             }
         }
@@ -21,7 +21,7 @@ namespace PersonalFinanceManager.Services
             UserProfileEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PFM.DTOs.UserProfile.UserProfileDetails>($"/UserProfile/GetByUserId/{userId}");
+                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.UserProfile.UserProfileDetails>($"/UserProfile/GetByUserId/{userId}");
                 result = AutoMapper.Mapper.Map<UserProfileEditModel>(response);
             }
             return result;
@@ -31,7 +31,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.UserProfile.UserProfileDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.UserProfile.UserProfileDetails>(model);
                 httpClient.Put($"/UserProfile/Edit/{model.Id}", dto);
             }
         }
@@ -41,7 +41,7 @@ namespace PersonalFinanceManager.Services
             UserProfileEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PFM.DTOs.UserProfile.UserProfileDetails>($"/UserProfile/Get/{id}");
+                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.UserProfile.UserProfileDetails>($"/UserProfile/Get/{id}");
                 result = AutoMapper.Mapper.Map<UserProfileEditModel>(response);
             }
             return result;

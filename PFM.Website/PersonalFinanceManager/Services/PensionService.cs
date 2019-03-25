@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<PensionListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PFM.DTOs.Pension.PensionList>($"/Pension/GetList/{userId}");
+                var response = httpClient.GetList<PersonalFinanceManager.DTOs.Pension.PensionList>($"/Pension/GetList/{userId}");
                 result = response.Select(AutoMapper.Mapper.Map<PensionListModel>).ToList();
             }
             return result;
@@ -24,7 +24,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Pension.PensionDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Pension.PensionDetails>(model);
                 httpClient.Post($"/Pension/Create", dto);
             }
         }
@@ -34,7 +34,7 @@ namespace PersonalFinanceManager.Services
             PensionEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PFM.DTOs.Pension.PensionDetails>($"/Pension/Get/{id}");
+                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.Pension.PensionDetails>($"/Pension/Get/{id}");
                 result = AutoMapper.Mapper.Map<PensionEditModel>(response);
             }
             return result;
@@ -44,7 +44,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PFM.DTOs.Pension.PensionDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Pension.PensionDetails>(model);
                 httpClient.Put($"/Pension/Edit/{model.Id}", dto);
             }
         }

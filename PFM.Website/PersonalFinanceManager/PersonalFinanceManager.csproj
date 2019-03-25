@@ -110,12 +110,6 @@
       <HintPath>..\packages\Ninject.Web.Common.OwinHost.3.2.3.0\lib\net45-full\Ninject.Web.Common.OwinHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PFM.DTOs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PFM.DTOs.0.0.3\lib\netstandard2.0\PFM.DTOs.dll</HintPath>
-    </Reference>
-    <Reference Include="PFM.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PFM.Utils.0.0.1\lib\netstandard2.0\PFM.Utils.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -238,6 +232,52 @@
     <Compile Include="Controllers\ExpenditureTypeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PaymentMethodController.cs" />
+    <Compile Include="DTOs\AccountManagement\ImportMovementDetails.cs" />
+    <Compile Include="DTOs\AccountManagement\ImportMovementList.cs" />
+    <Compile Include="DTOs\AccountManagement\ImportTypes.cs" />
+    <Compile Include="DTOs\AccountManagement\MovementPropertyDefinition.cs" />
+    <Compile Include="DTOs\Account\AccountDetails.cs" />
+    <Compile Include="DTOs\Account\AccountList.cs" />
+    <Compile Include="DTOs\AtmWithdraw\AtmWithdrawDetails.cs" />
+    <Compile Include="DTOs\AtmWithdraw\AtmWithdrawList.cs" />
+    <Compile Include="DTOs\Bank\BankBranchDetails.cs" />
+    <Compile Include="DTOs\Bank\BankDetails.cs" />
+    <Compile Include="DTOs\Bank\BankList.cs" />
+    <Compile Include="DTOs\BudgetPlan\BudgetPlanDetails.cs" />
+    <Compile Include="DTOs\BudgetPlan\BudgetPlanExpenseType.cs" />
+    <Compile Include="DTOs\BudgetPlan\BudgetPlanList.cs" />
+    <Compile Include="DTOs\Country\CountryDetails.cs" />
+    <Compile Include="DTOs\Country\CountryList.cs" />
+    <Compile Include="DTOs\Currency\CurrencyDetails.cs" />
+    <Compile Include="DTOs\Currency\CurrencyList.cs" />
+    <Compile Include="DTOs\Dashboard\ExpenseSummary.cs" />
+    <Compile Include="DTOs\Dashboard\ExpenseSummaryByCategory.cs" />
+    <Compile Include="DTOs\Dashboard\ExpenseSummaryByCategoryAndByMonth.cs" />
+    <Compile Include="DTOs\Dashboard\ExpenseSummaryByMonth.cs" />
+    <Compile Include="DTOs\ExpenseType\ExpenseTypeDetails.cs" />
+    <Compile Include="DTOs\ExpenseType\ExpenseTypeList.cs" />
+    <Compile Include="DTOs\Expense\ExpenseDetails.cs" />
+    <Compile Include="DTOs\Expense\ExpenseList.cs" />
+    <Compile Include="DTOs\FrequenceOption\FrequenceOptionList.cs" />
+    <Compile Include="DTOs\Income\IncomeDetails.cs" />
+    <Compile Include="DTOs\Income\IncomeList.cs" />
+    <Compile Include="DTOs\PaymentMethod\PaymentMethodList.cs" />
+    <Compile Include="DTOs\Pension\PensionDetails.cs" />
+    <Compile Include="DTOs\Pension\PensionList.cs" />
+    <Compile Include="DTOs\Salary\SalaryDeductionDetails.cs" />
+    <Compile Include="DTOs\Salary\SalaryDetails.cs" />
+    <Compile Include="DTOs\Salary\SalaryList.cs" />
+    <Compile Include="DTOs\Saving\SavingDetails.cs" />
+    <Compile Include="DTOs\Saving\SavingList.cs" />
+    <Compile Include="DTOs\SearchParameters\ExpenseGetListSearchParameters.cs" />
+    <Compile Include="DTOs\Shared\ICanBeDeleted.cs" />
+    <Compile Include="DTOs\Shared\ICanBeEdited.cs" />
+    <Compile Include="DTOs\TaxType\TaxTypeList.cs" />
+    <Compile Include="DTOs\Tax\TaxDetails.cs" />
+    <Compile Include="DTOs\Tax\TaxList.cs" />
+    <Compile Include="DTOs\UserAccount\AuthenticatedUser.cs" />
+    <Compile Include="DTOs\UserAccount\User.cs" />
+    <Compile Include="DTOs\UserProfile\UserProfileDetails.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -376,6 +416,11 @@
     <Compile Include="Services\TaxTypeService.cs" />
     <Compile Include="Services\UserProfileService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\Helpers\DateTimeFormatHelper.cs" />
+    <Compile Include="Utils\Helpers\DateTimeUnitEnums.cs" />
+    <Compile Include="Utils\Helpers\DecimalFormatHelper.cs" />
+    <Compile Include="Utils\Helpers\EnumHelper.cs" />
+    <Compile Include="Utils\Helpers\Interval.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
