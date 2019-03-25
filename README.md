@@ -30,7 +30,6 @@ This project is made of 4 solutions:
 2. Create a Nuget Local package source and refence the shared libraries (rootproject/SharedLibs). Restore the missing packages.
 3. Change the appsettings.json & appsettings.Development.json to reference a valid DB server and JWT configurations. 
 4. In Package Manager Console, select DAL project and run the following commands to create the database, schema and insert metadata.
-	* enable-migration
 	* add-migration dbcreation
 	* update-database
 5. Set PFM.API project as startup project.
@@ -43,5 +42,5 @@ This project is made of 4 solutions:
 
 1. First "Register", then login with this new user account. 
 2. Set User Profile (top menu) 
-3. Configure your data: Country, Currency, Bank and Accounts (Configuration menu). 
+3. Configure your data: Country, Currency, Expense Types, Bank and Accounts (Configuration menu). 
 4. Start creating movements from the Account Management dashboard screen
