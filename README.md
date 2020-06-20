@@ -34,7 +34,7 @@ This project is made of 4 solutions:
 | Movement API | Code migrated & smoke-tested | ❌ |
 | Budget API | Not Started | ❌ |
 | Budget Synchroniser | Not Started | ❌ |
-| User Metadata API | Not Started | ❌ |
+| User Metadata API | Code migrated & smoke-tested | ❌ |
 | Authentication API | Tests in progress | ❌ |
 | Dashboard API | Not Started | ❌ |
 | Dashboard ETL | Not Started | ❌ |
