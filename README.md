@@ -26,6 +26,19 @@ This project is made of 4 solutions:
 
 ![Reboot.png](./Documentation/Pictures/PlanforReboot.png)
 
+|Project| Status | Integrated with website |
+|---|---|:-:|
+| Payment API | Code migrated & smoke-tested | ❌ |
+| Bank Account API | Code migrated & smoke-tested | ❌ |
+| Bank Account Updater | Not Started | ❌ |
+| Movement API | Code migrated & test in progress | ❌ |
+| Budget API | Not Started | ❌ |
+| Budget Synchroniser | Not Started | ❌ |
+| User Metadata API | Not Started | ❌ |
+| Authentication API | Tests in progress | ❌ |
+| Dashboard API | Not Started | ❌ |
+| Dashboard ETL | Not Started | ❌ |
+
 ## Getting Started
 
 ### Debug the application
