@@ -20,7 +20,11 @@ This project is made of 4 solutions:
 * **PFM.CommonLibraries**: NET Standard 2.0 Library for sharing common code between the two main solutions.
 * **PFM.IntegrationTests**: Automation test solution, runnable by a CI tool
 
-![General Architecture.png](https://github.com/JM89/personalfinancemanager/blob/master/Documentation/Pictures/GeneralArchitecture.png)
+![General Architecture.png](./Documentation/Pictures/GeneralArchitecture.png)
+
+### Plan for PFM Reboot
+
+![Reboot.png](./Documentation/Pictures/PlanforReboot.png)
 
 ## Getting Started
 
