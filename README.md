@@ -31,7 +31,7 @@ This project is made of 4 solutions:
 | Payment API | Code migrated & smoke-tested | ❌ |
 | Bank Account API | Code migrated & smoke-tested | ❌ |
 | Bank Account Updater | Not Started | ❌ |
-| Movement API | Code migrated & test in progress | ❌ |
+| Movement API | Code migrated & smoke-tested | ❌ |
 | Budget API | Not Started | ❌ |
 | Budget Synchroniser | Not Started | ❌ |
 | User Metadata API | Not Started | ❌ |
