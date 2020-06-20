@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+
+  db-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: db-server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=VerySecret1234!
+    ports:
+      - "1433:1433"
+
+  pfm-auth-api:
+    image: jm89/pfm-authentication-api:api-v2-latest
+    container_name: pfm-auth-api
+    environment:
+      - ASPNETCORE_URLS=http://+:5050
+      - AWS_ACCESS_KEY_ID=xx
+      - AWS_SECRET_ACCESS_KEY=xx
+      - AWS_DEFAULT_REGION=eu-west-2
+      - APP_AppSettings:AwsEndpointUrl=http://pfm-auth-secrets:4584
+    ports:
+      - "5050:5050"
+      
+  pfm-auth-secrets:
+    image: localstack/localstack
+    container_name: pfm-auth-secrets
+    environment:
+      - SERVICES=secretsmanager
+      - DEFAULT_REGION=eu-west-2
+      - HOSTNAME=pfm-auth-secrets
+    ports:
+      - "4584:4584"
+
+  pfm-bank-account-api:
+    build:
+      context: ../pfm-bank-account-api
+      dockerfile: Dockerfile
+    container_name: pfm-bank-account-api
+    environment:
+      - ASPNETCORE_URLS=http://+:5051
+      - APP_AppSettings:AppId=6e16247f-d0f1-48d9-8f92-11623ae57dc8
+      - APP_AppSettings:AuthorisationServer=http://pfm-auth-api:5050
+      - APP_ConnectionStrings:PFMConnection=Server=db-server,1433;Database=PFM.BankAccount.Db;User Id=sa;Password=VerySecret1234!;
+    ports:
+      - "5051:5051"
+    depends_on: 
+      - pfm-auth-api
+      - db-server
