@@ -12,8 +12,10 @@ services:
       - "1433:1433"
 
   pfm-auth-api:
-    image: jm89/pfm-authentication-api:api-v2-latest
-    container_name: pfm-auth-api
+    build: 
+      context: ../pfm-authentication-api
+      dockerfile: Dockerfile
+    container_name: authentication-api
     environment:
       - ASPNETCORE_URLS=http://+:5050
       - AWS_ACCESS_KEY_ID=xx
@@ -37,7 +39,7 @@ services:
     build:
       context: ../pfm-bank-account-api
       dockerfile: Dockerfile
-    container_name: pfm-bank-account-api
+    container_name: bank-account-api
     environment:
       - ASPNETCORE_URLS=http://+:5051
       - APP_AppSettings:AppId=6e16247f-d0f1-48d9-8f92-11623ae57dc8
