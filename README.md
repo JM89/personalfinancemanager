@@ -30,7 +30,7 @@ This project is made of 4 solutions:
 |---|---|:-:|
 | Payment API | Code migrated & smoke-tested | ❌ |
 | Bank Account API | Code migrated & smoke-tested | ❌ |
-| Bank Account Updater | Not Started | ❌ |
+| Bank Account Updater | In Progress | ❌ |
 | Movement API | Code migrated & smoke-tested | ❌ |
 | Budget API | Not Started | ❌ |
 | Budget Synchroniser | Not Started | ❌ |
