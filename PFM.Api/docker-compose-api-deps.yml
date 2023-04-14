@@ -1,0 +1,19 @@
+version: "3.8"
+
+networks:
+  api-local-network:
+    name: api-local-network
+    driver: bridge
+
+services:
+
+  db-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: db-server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=VerySecret1234!
+    ports:
+      - "1433:1433"
+    networks:
+      - api-local-network
