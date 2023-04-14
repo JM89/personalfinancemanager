@@ -21,7 +21,7 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup Nuget
-        uses: Nuget/setup-nuget@v1.0.2
+        uses: Nuget/setup-nuget@v1.2.0
       - name: Install dependencies
         run: nuget restore PersonalFinanceManager.sln
       - name: Build
