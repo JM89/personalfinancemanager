@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOTNET_ENV: '2.0.x'
+  DOTNET_ENV: '2.1.x'
   WORKDIR: PFM.Api/
 
 jobs:
