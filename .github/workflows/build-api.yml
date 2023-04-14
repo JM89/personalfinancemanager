@@ -3,7 +3,7 @@ name: Build and Tests PFM API
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
   workflow_dispatch:
 
@@ -26,6 +26,8 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
+        working-directory: ${{ env.WORKDIR }}/src
         run: dotnet build --configuration Release --no-restore
       - name: Test
+        working-directory: ${{ env.WORKDIR }}/test
         run: dotnet test --no-restore --verbosity normal
