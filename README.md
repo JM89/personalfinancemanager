@@ -43,17 +43,7 @@ This project is made of 4 solutions:
 
 ### Debug the application
 
-1. Open the solution PFM.API and restore Nuget packages. 
-2. Create a Nuget Local package source and refence the shared libraries (rootproject/SharedLibs). Restore the missing packages.
-3. Change the appsettings.json & appsettings.Development.json to reference a valid DB server and JWT configurations. 
-4. In Package Manager Console, select DAL project and run the following commands to create the database, schema and insert metadata.
-	* add-migration dbcreation
-	* update-database
-5. Set PFM.API project as startup project.
-6. Run the API
-7. Open the solution PFM.Website and restore Nuget packages. 
-8. Change the web.config to reference the API.
-9. Run the Website. 
+Check the documentation [here](./PFM.Api/README.md).
 
 ### Start using the website
 
