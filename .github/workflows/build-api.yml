@@ -9,10 +9,14 @@ on:
 
 env:
   DOTNET_ENV: '2.0.x'
+  WORKDIR: ./PFM.API
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET Core SDK ${{ env.DOTNET_ENV }}
