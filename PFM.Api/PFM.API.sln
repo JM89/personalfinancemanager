@@ -1,15 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2000
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.Api", "PFM.Api\PFM.Api.csproj", "{58CE1239-BCE2-4F6A-B595-CCCB44E8A3B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.Api", "src\PFM.Api\PFM.Api.csproj", "{58CE1239-BCE2-4F6A-B595-CCCB44E8A3B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.Services", "PFM.Services\PFM.Services.csproj", "{8330FD38-51C7-4FA1-8168-BF5117DCD79D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.Services", "src\PFM.Services\PFM.Services.csproj", "{8330FD38-51C7-4FA1-8168-BF5117DCD79D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.DataAccessLayer", "PFM.DataAccessLayer\PFM.DataAccessLayer.csproj", "{3C0AB2B0-F26E-4D6F-8134-16A932544167}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.DataAccessLayer", "src\PFM.DataAccessLayer\PFM.DataAccessLayer.csproj", "{3C0AB2B0-F26E-4D6F-8134-16A932544167}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFM.UnitTests", "PFM.UnitTests\PFM.UnitTests.csproj", "{301FBC24-E53A-4378-9309-0DA5E2521679}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.UnitTests", "test\PFM.UnitTests\PFM.UnitTests.csproj", "{301FBC24-E53A-4378-9309-0DA5E2521679}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A2778004-ECF3-488C-AE9D-BC14AA293936}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{5708C995-834F-4239-93B8-9AD8C6B24A68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +40,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{58CE1239-BCE2-4F6A-B595-CCCB44E8A3B0} = {A2778004-ECF3-488C-AE9D-BC14AA293936}
+		{8330FD38-51C7-4FA1-8168-BF5117DCD79D} = {A2778004-ECF3-488C-AE9D-BC14AA293936}
+		{3C0AB2B0-F26E-4D6F-8134-16A932544167} = {A2778004-ECF3-488C-AE9D-BC14AA293936}
+		{301FBC24-E53A-4378-9309-0DA5E2521679} = {5708C995-834F-4239-93B8-9AD8C6B24A68}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA670247-C5F2-432F-9500-B1566565C984}
