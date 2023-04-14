@@ -9,7 +9,7 @@ on:
 
 env:
   DOTNET_ENV: '2.0.x'
-  WORKDIR: ./PFM.API
+  WORKDIR: PFM.Api/
 
 jobs:
   build:
