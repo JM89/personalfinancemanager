@@ -1,6 +1,6 @@
 # PFM API
 
-This API has a currently a monolithic architecture.  
+This API has currently a monolithic architecture.  
 
 ## Pre-requisites
 
