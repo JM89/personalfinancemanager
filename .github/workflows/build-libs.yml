@@ -1,10 +1,11 @@
 name: Build & Publish PFM Common Libraries
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Create Git Release"]
+    type:
+      - complete
 
 env:
   DOTNET_ENV: '2.1.x'
