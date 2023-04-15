@@ -11,10 +11,10 @@ This API has currently a monolithic architecture.
 
 ### Run the dependencies
 
-To start the dependencies of the api, just run the following command from the PFM.Api folder:
+To start the dependencies of the api, just run the following command from the root folder:
 
 ```shell
-docker-compose -f docker-compose-api-deps.yml -f docker-compose-api-init.yml up --build
+sh ./run-locally.sh
 ```
 
 This will start:

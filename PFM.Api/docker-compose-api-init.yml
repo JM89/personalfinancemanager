@@ -1,15 +1,15 @@
 version: "3.8"
 
 networks:
-  api-local-network:
-    name: api-local-network
+  local-network:
+    name: local-network
     external: true
 
 services:
 
   main-db:
     build:
-      context: ./infra/main_db_init
+      context: ./setup/main_db
       dockerfile: dockerfile
     environment:
       DB_SERVER_NAME: db-server
@@ -17,4 +17,4 @@ services:
       DB_SA_PASSWORD: VerySecret1234!
     container_name: main-db
     networks:
-      - api-local-network
+      - local-network
