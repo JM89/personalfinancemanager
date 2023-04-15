@@ -13,7 +13,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.Account.AccountDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Account.AccountDetails>(model);
                 httpClient.Post($"/BankAccount/Create/{userId}", dto);
             }
         }
@@ -23,7 +23,7 @@ namespace PersonalFinanceManager.Services
             IList<AccountListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PersonalFinanceManager.Api.Contracts.Account.AccountList>($"/BankAccount/GetList/{userId}");
+                var response = httpClient.GetList<PFM.Api.Contracts.Account.AccountList>($"/BankAccount/GetList/{userId}");
                 result = response.Select(AutoMapper.Mapper.Map<AccountListModel>).ToList();
             }
             return result;
@@ -34,7 +34,7 @@ namespace PersonalFinanceManager.Services
             AccountEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PersonalFinanceManager.Api.Contracts.Account.AccountDetails>($"/BankAccount/Get/{id}");
+                var response = httpClient.GetSingle<PFM.Api.Contracts.Account.AccountDetails>($"/BankAccount/Get/{id}");
                 result = AutoMapper.Mapper.Map<AccountEditModel>(response);
             }
             return result;
@@ -44,7 +44,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.Account.AccountDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Account.AccountDetails>(model);
                 httpClient.Put($"/BankAccount/Edit/{model.Id}/{userId}", dto);
             }
         }

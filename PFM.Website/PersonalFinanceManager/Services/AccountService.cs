@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using PersonalFinanceManager.Models.AtmWithdraw;
-using PersonalFinanceManager.Services.Interfaces;
-using System;
+﻿using PersonalFinanceManager.Models.AspNetUserAccount;
 using PersonalFinanceManager.Services.HttpClientWrapper;
-using System.Linq;
-using PersonalFinanceManager.Models.AspNetUserAccount;
+using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Services
 {
@@ -15,8 +11,8 @@ namespace PersonalFinanceManager.Services
             AuthenticatedUser result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.UserAccount.User>(user);
-                result = httpClient.Post<PersonalFinanceManager.Api.Contracts.UserAccount.User, AuthenticatedUser>($"/Account/Login", dto, new HttpClientRequestOptions() {
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.UserAccount.User>(user);
+                result = httpClient.Post<PFM.Api.Contracts.UserAccount.User, AuthenticatedUser>($"/Account/Login", dto, new HttpClientRequestOptions() {
                     AuthenticationTokenRequired = false
                 });
             }
@@ -28,8 +24,8 @@ namespace PersonalFinanceManager.Services
             string result = "";
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.UserAccount.User>(user);
-                result = httpClient.Post<PersonalFinanceManager.Api.Contracts.UserAccount.User, string>($"/Account/Register", dto, new HttpClientRequestOptions()
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.UserAccount.User>(user);
+                result = httpClient.Post<PFM.Api.Contracts.UserAccount.User, string>($"/Account/Register", dto, new HttpClientRequestOptions()
                 {
                     AuthenticationTokenRequired = false
                 });

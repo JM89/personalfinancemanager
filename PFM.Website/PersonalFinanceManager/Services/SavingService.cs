@@ -13,7 +13,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.Saving.SavingDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
                 httpClient.Post($"/Saving/Create", dto);
             }
         }
@@ -30,7 +30,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.Saving.SavingDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
                 httpClient.Put($"/Saving/Edit/{model.Id}", dto);
             }
         }
@@ -40,7 +40,7 @@ namespace PersonalFinanceManager.Services
             SavingEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PersonalFinanceManager.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");
+                var response = httpClient.GetSingle<PFM.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");
                 result = AutoMapper.Mapper.Map<SavingEditModel>(response);
             }
             return result;
@@ -51,7 +51,7 @@ namespace PersonalFinanceManager.Services
             IList<SavingListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PersonalFinanceManager.Api.Contracts.Saving.SavingList>($"/Saving/GetList/{accountId}");
+                var response = httpClient.GetList<PFM.Api.Contracts.Saving.SavingList>($"/Saving/GetList/{accountId}");
                 result = response.Select(AutoMapper.Mapper.Map<SavingListModel>).ToList();
             }
             return result;

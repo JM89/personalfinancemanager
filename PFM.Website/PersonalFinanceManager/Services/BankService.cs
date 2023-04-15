@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<BankListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PersonalFinanceManager.Api.Contracts.Bank.BankList>($"/Bank/GetList");
+                var response = httpClient.GetList<PFM.Api.Contracts.Bank.BankList>($"/Bank/GetList");
                 result = response.Select(AutoMapper.Mapper.Map<BankListModel>).ToList();
             }
             return result;
@@ -24,7 +24,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.Bank.BankDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Bank.BankDetails>(model);
                 httpClient.Post($"/Bank/Create", dto);
             }
         }
@@ -34,7 +34,7 @@ namespace PersonalFinanceManager.Services
             BankEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PersonalFinanceManager.Api.Contracts.Bank.BankDetails>($"/Bank/Get/{id}");
+                var response = httpClient.GetSingle<PFM.Api.Contracts.Bank.BankDetails>($"/Bank/Get/{id}");
                 result = AutoMapper.Mapper.Map<BankEditModel>(response);
             }
             return result;
@@ -44,7 +44,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.Bank.BankDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Bank.BankDetails>(model);
                 httpClient.Put($"/Bank/Edit/{model.Id}", dto);
             }
         }

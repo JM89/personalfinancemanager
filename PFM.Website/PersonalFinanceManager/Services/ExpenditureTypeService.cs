@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<ExpenditureTypeListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PersonalFinanceManager.Api.Contracts.ExpenseType.ExpenseTypeList>($"/ExpenseType/GetList");
+                var response = httpClient.GetList<PFM.Api.Contracts.ExpenseType.ExpenseTypeList>($"/ExpenseType/GetList");
                 result = response.Select(AutoMapper.Mapper.Map<ExpenditureTypeListModel>).ToList();
             }
             return result;
@@ -25,7 +25,7 @@ namespace PersonalFinanceManager.Services
             ExpenditureTypeEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PersonalFinanceManager.Api.Contracts.ExpenseType.ExpenseTypeDetails>($"/ExpenseType/Get/{id}");
+                var response = httpClient.GetSingle<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>($"/ExpenseType/Get/{id}");
                 result = AutoMapper.Mapper.Map<ExpenditureTypeEditModel>(response);
             }
             return result;
@@ -35,7 +35,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
                 httpClient.Post($"/ExpenseType/Create", dto);
             }
         }
@@ -44,7 +44,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
                 httpClient.Put($"/ExpenseType/Edit/{model.Id}", dto);
             }
         }
