@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>JM89</Authors>
+    <PackageDescription>Contracts shared between the PFM API and Website.</PackageDescription>
   </PropertyGroup>
 
 </Project>
