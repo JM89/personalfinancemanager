@@ -10,6 +10,7 @@ on:
 env:
   DOTNET_ENV: '2.1.x'
   WORKDIR: PFM.Api/
+  GITHUB_ORG: 'JM89'
 
 jobs:
   build:
@@ -37,6 +38,9 @@ jobs:
         run: |
           echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
 
+      - name: Log in to access GitHub Packages 
+        run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" 
+
       - name: Setup .NET Core SDK ${{ env.DOTNET_ENV }}
         uses: actions/setup-dotnet@v3
         with:
@@ -52,3 +56,4 @@ jobs:
       - name: Pack API Contracts
         working-directory: ${{ env.WORKDIR }}/src/PFM.Api.Contracts
         run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.fullSemVer }}
+      
