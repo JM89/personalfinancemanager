@@ -9,18 +9,6 @@ This API has currently a monolithic architecture.
 
 ## Getting Started
 
-### Run the dependencies
-
-To start the dependencies of the api, just run the following command from the PFM.Api folder:
-
-```shell
-docker-compose -f docker-compose-api-deps.yml -f docker-compose-api-init.yml up --build
-```
-
-This will start:
-- [x] A SQL Server instance
-- [x] A SQL script to build the main PFM DB with seed data (run once)
-
 ### Debug the API
 
 Open the solution and make sure you set PFM.Api as the start up project. 

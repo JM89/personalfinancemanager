@@ -13,7 +13,7 @@ The detailed specifications are detailed [here](https://github.com/JM89/personal
 
 ## General Architecture & Technologies
 
-This project is made of 4 solutions:
+This project was originally made of 4 solutions:
 
 * **PFM.Api**: ASP.NET Core 2.0 API, intented to run as a self-hosted API (Windows Service).
 * **PFM.Website**: ASP.NET MVC Website, which would run on IIS
@@ -22,7 +22,7 @@ This project is made of 4 solutions:
 
 ![General Architecture.png](./Documentation/Pictures/GeneralArchitecture.png)
 
-### Plan for PFM Reboot
+### Plan for PFM Reboot (Jun 20, 2020)
 
 ![Reboot.png](./Documentation/Pictures/PlanforReboot.png)
 
@@ -39,7 +39,47 @@ This project is made of 4 solutions:
 | Dashboard API | Not Started | ❌ |
 | Dashboard ETL | Not Started | ❌ |
 
+### Phased Approach Refactoring (April 14, 2023)
+
+The system is greatly outdated. As the previous attempt to rework the whole system was not successful, an interactive approach is adopted for this new phase of development.
+
+At the start of the phase, the simplified architecture is:
+
+![](./Documentation/Pictures/Architecture/Architecture-Current-04-2023.PNG)
+
+The plan is to consolidate the existing setup to reduce the risk of regressions; and to integrate with the PFM authentication API:
+![](./Documentation/Pictures/Architecture/Architecture-Proposal-04-2023.PNG)
+
+**Actions:**
+- [x] Upgrade PFM.Api to .NET Core 2.1
+- [x] Upgrade PFM.Website to .NET Framework 4.8
+- [x] Add CI Support (GitHub Action)
+- [x] Simplify local setup/development using SQL Server (Docker)
+- [x] Build & Publish API.Contracts (GitHub Packages)
+- [ ] Support SEQ Logging in PFM.Api
+- [ ] PFM.Auth.API Auth DB setup
+- [ ] PFM.Auth.API code import in the PFM repository
+- [ ] PFM.API forwarding Login/Register requests to the PFM.Auth.Api
+
 ## Getting Started
+
+### Shared and specific infrastructure
+
+Some infrastructure resources are shared accross different projects (e.g. SQL server, SEQ, AWS), some are specifics to each apps (e.g. creation DB, a SQS queue). The resources available in the PFM.Infra folder, contains the shared resources. 
+
+It includes:
+- [x] SQL Server instance: a single container is used for several isolated DB, to reduce the setup time, space and memory in local machine. 
+- [x] SEQ for logging purpose
+- [x] Localstack for AWS resources.
+
+To get started, run the following command:
+
+```shell
+sh ./run-locally.sh
+```
+
+The command will also start all the application-specific docker-compose files supported: 
+- [x] PFM.API database initialization script (db, security, schema, seed data)
 
 ### Debug the application
 
