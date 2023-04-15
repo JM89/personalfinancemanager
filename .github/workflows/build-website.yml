@@ -9,6 +9,7 @@ on:
 
 env:
   WORKDIR: PFM.Website/
+  GITHUB_ORG: JM89
 
 jobs:
   build:
@@ -22,7 +23,10 @@ jobs:
         uses: microsoft/setup-msbuild@v1
       - name: Setup Nuget
         uses: Nuget/setup-nuget@v1.2.0
+      - name: Log in to access GitHub Packages 
+        run: nuget sources Add -Name "${{ env.GITHUB_ORG }} - GitHub Packages" -Source "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" -UserName ${{ env.GITHUB_ORG }} -Password ${{ secrets.PAT_READ_PACKAGES }} 
       - name: Install dependencies
         run: nuget restore PersonalFinanceManager.sln
       - name: Build
         run: msbuild PersonalFinanceManager.sln
+

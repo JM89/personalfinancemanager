@@ -9,12 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PFM.Api.Contracts\PFM.Api.Contracts.csproj" />
     <ProjectReference Include="..\PFM.DataAccessLayer\PFM.DataAccessLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Core\Automapper\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Utils\" />
   </ItemGroup>
 

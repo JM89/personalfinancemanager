@@ -1,5 +1,8 @@
 ## Changelog
 
+### Global
+- N/A
+
 ### PFM API
 - N/A
 

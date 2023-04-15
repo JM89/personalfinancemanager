@@ -48,7 +48,7 @@ namespace PersonalFinanceManager.Services.Automapper
             CreateMap<PersonalFinanceManager.DTOs.FrequenceOption.FrequenceOptionList, Models.FrequenceOption.FrequenceOptionListModel>();
             CreateMap<PersonalFinanceManager.DTOs.Income.IncomeDetails, Models.Income.IncomeEditModel>();
             CreateMap<PersonalFinanceManager.DTOs.Income.IncomeList, Models.Income.IncomeListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.PaymentMethod.PaymentMethodList, Models.PaymentMethod.PaymentMethodListModel>();
+            CreateMap<PFM.Services.DTOs.PaymentMethod.PaymentMethodList, Models.PaymentMethod.PaymentMethodListModel>();
             CreateMap<PersonalFinanceManager.DTOs.Pension.PensionDetails, Models.Pension.PensionEditModel>();
             CreateMap<PersonalFinanceManager.DTOs.Pension.PensionList, Models.Pension.PensionListModel>();
             CreateMap<PersonalFinanceManager.DTOs.Salary.SalaryDetails, Models.Salary.SalaryEditModel>();
