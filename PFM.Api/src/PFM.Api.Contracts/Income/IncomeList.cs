@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PFM.Services.DTOs.Income
+namespace PFM.Api.Contracts.Income
 {
     public class IncomeList
     {

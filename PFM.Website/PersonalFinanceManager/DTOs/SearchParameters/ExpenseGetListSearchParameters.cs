@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.DTOs.SearchParameters
+namespace PersonalFinanceManager.Api.Contracts.SearchParameters
 {
     public class ExpenseGetListSearchParameters
     {

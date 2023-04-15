@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.DTOs.Account;
+using PFM.Api.Contracts.Account;
 
 namespace PFM.Services.Interfaces
 {

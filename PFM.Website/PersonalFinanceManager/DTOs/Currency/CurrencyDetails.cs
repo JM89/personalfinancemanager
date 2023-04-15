@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManager.DTOs.Currency
+﻿namespace PersonalFinanceManager.Api.Contracts.Currency
 {
     public class CurrencyDetails
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PFM.Services.DTOs.SearchParameters
+namespace PFM.Api.Contracts.SearchParameters
 {
     public class ExpenseGetListSearchParameters
     {

@@ -6,9 +6,9 @@ using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.SearchParameters;
-using PFM.Services.DTOs.BudgetPlan;
+using PFM.Api.Contracts.BudgetPlan;
 using PFM.Services.Utils.Helpers;
-using PFM.Services.DTOs.ExpenseType;
+using PFM.Api.Contracts.ExpenseType;
 
 namespace PFM.Services
 {

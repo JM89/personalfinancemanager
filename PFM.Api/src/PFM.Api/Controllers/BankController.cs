@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PFM.Services.DTOs.Bank;
+using PFM.Api.Contracts.Bank;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

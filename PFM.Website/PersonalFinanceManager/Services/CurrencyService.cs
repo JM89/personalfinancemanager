@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<CurrencyListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PersonalFinanceManager.DTOs.Currency.CurrencyList>($"/Currency/GetList");
+                var response = httpClient.GetList<PersonalFinanceManager.Api.Contracts.Currency.CurrencyList>($"/Currency/GetList");
                 result = response.Select(AutoMapper.Mapper.Map<CurrencyListModel>).ToList();
             }
             return result;
@@ -25,7 +25,7 @@ namespace PersonalFinanceManager.Services
             CurrencyEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.Currency.CurrencyDetails>($"/Currency/Get/{id}");
+                var response = httpClient.GetSingle<PersonalFinanceManager.Api.Contracts.Currency.CurrencyDetails>($"/Currency/Get/{id}");
                 result = AutoMapper.Mapper.Map<CurrencyEditModel>(response);
             }
             return result;
@@ -35,7 +35,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Currency.CurrencyDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.Currency.CurrencyDetails>(model);
                 httpClient.Post($"/Currency/Create", dto);
             }
         }
@@ -44,7 +44,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Currency.CurrencyDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.Currency.CurrencyDetails>(model);
                 httpClient.Put($"/Currency/Edit/{model.Id}", dto);
             }
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PFM.Services.DTOs.BudgetPlan
+namespace PFM.Api.Contracts.BudgetPlan
 {
     public class BudgetPlanList
     {

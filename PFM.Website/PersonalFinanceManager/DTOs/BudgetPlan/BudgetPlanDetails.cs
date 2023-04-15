@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PersonalFinanceManager.DTOs.BudgetPlan
+namespace PersonalFinanceManager.Api.Contracts.BudgetPlan
 {
     public class BudgetPlanDetails
     {

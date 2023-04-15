@@ -1,4 +1,4 @@
-﻿using PFM.Services.DTOs.UserProfile;
+﻿using PFM.Api.Contracts.UserProfile;
 
 namespace PFM.Services.Interfaces
 {

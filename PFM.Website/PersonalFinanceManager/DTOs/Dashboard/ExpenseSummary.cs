@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using PersonalFinanceManager.DTOs.Account;
+using PersonalFinanceManager.Api.Contracts.Account;
 
-namespace PersonalFinanceManager.DTOs.Dashboard
+namespace PersonalFinanceManager.Api.Contracts.Dashboard
 {
     public class ExpenseSummary
     {

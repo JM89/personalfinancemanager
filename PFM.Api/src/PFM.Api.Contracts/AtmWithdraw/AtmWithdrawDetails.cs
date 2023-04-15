@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PFM.Services.DTOs.AtmWithdraw
+namespace PFM.Api.Contracts.AtmWithdraw
 {
     public class AtmWithdrawDetails
     {

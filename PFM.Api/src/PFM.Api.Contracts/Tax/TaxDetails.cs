@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PFM.Services.DTOs.Tax
+namespace PFM.Api.Contracts.Tax
 {
     public class TaxDetails
     {

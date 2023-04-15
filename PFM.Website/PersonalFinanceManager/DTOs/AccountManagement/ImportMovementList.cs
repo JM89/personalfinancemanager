@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PersonalFinanceManager.DTOs.AccountManagement
+namespace PersonalFinanceManager.Api.Contracts.AccountManagement
 {
     public class ImportMovementList
     {

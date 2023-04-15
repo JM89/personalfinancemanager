@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<BudgetPlanListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PersonalFinanceManager.DTOs.BudgetPlan.BudgetPlanList>($"/BudgetPlan/GetList/{accountId}");
+                var response = httpClient.GetList<PersonalFinanceManager.Api.Contracts.BudgetPlan.BudgetPlanList>($"/BudgetPlan/GetList/{accountId}");
                 result = response.Select(AutoMapper.Mapper.Map<BudgetPlanListModel>).ToList();
             }
             return result;
@@ -25,7 +25,7 @@ namespace PersonalFinanceManager.Services
             BudgetPlanEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/GetCurrent/{accountId}");
+                var response = httpClient.GetSingle<PersonalFinanceManager.Api.Contracts.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/GetCurrent/{accountId}");
                 result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
             }
             return result;
@@ -36,7 +36,7 @@ namespace PersonalFinanceManager.Services
             BudgetPlanEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/Get/{id}");
+                var response = httpClient.GetSingle<PersonalFinanceManager.Api.Contracts.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/Get/{id}");
                 result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
             }
             return result;
@@ -46,7 +46,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.BudgetPlan.BudgetPlanDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.BudgetPlan.BudgetPlanDetails>(model);
                 httpClient.Post($"/BudgetPlan/Create/{accountId}", dto);
             }
         }
@@ -55,7 +55,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.BudgetPlan.BudgetPlanDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.BudgetPlan.BudgetPlanDetails>(model);
                 httpClient.Put($"/BudgetPlan/Edit/{accountId}", dto);
             }
         }
@@ -82,7 +82,7 @@ namespace PersonalFinanceManager.Services
             using (var httpClient = new HttpClientExtended())
             {
                 var url = budgetPlanId.HasValue ? $"/BudgetPlan/BuildEmpty/{accountId}/{budgetPlanId}" : $"/BudgetPlan/BuildEmpty/{accountId}";
-                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.BudgetPlan.BudgetPlanDetails>(url);
+                var response = httpClient.GetSingle<PersonalFinanceManager.Api.Contracts.BudgetPlan.BudgetPlanDetails>(url);
                 result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
             }
             return result;

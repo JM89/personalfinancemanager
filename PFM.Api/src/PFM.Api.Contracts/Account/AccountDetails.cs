@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PFM.Services.DTOs.Account
+namespace PFM.Api.Contracts.Account
 {
     public class AccountDetails
     {

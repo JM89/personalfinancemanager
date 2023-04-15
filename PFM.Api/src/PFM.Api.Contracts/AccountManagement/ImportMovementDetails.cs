@@ -1,9 +1,9 @@
-﻿using PFM.Services.DTOs.AtmWithdraw;
-using PFM.Services.DTOs.Expense;
-using PFM.Services.DTOs.Income;
+﻿using PFM.Api.Contracts.AtmWithdraw;
+using PFM.Api.Contracts.Expense;
+using PFM.Api.Contracts.Income;
 using System.Collections.Generic;
 
-namespace PFM.Services.DTOs.AccountManagement
+namespace PFM.Api.Contracts.AccountManagement
 {
     public class ImportMovementDetails
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PersonalFinanceManager.DTOs.Salary
+namespace PersonalFinanceManager.Api.Contracts.Salary
 {
     public class SalaryDetails
     {

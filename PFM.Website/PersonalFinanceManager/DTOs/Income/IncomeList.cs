@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PersonalFinanceManager.DTOs.Income
+namespace PersonalFinanceManager.Api.Contracts.Income
 {
     public class IncomeList
     {

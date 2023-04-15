@@ -1,6 +1,6 @@
-﻿using PFM.Services.DTOs.ExpenseType;
+﻿using PFM.Api.Contracts.ExpenseType;
 
-namespace PFM.Services.DTOs.BudgetPlan
+namespace PFM.Api.Contracts.BudgetPlan
 {
     public class BudgetPlanExpenseType
     {

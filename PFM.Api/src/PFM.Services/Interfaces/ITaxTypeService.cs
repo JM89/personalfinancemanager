@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.DTOs.TaxType;
+using PFM.Api.Contracts.TaxType;
 
 namespace PFM.Services.Interfaces
 {

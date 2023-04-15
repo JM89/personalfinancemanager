@@ -1,8 +1,8 @@
-﻿using PFM.Services.DTOs.PaymentMethod;
+﻿using PFM.Api.Contracts.PaymentMethod;
 using System;
 using System.Collections.Generic;
 
-namespace PersonalFinanceManager.DTOs.Expense
+namespace PersonalFinanceManager.Api.Contracts.Expense
 {
     public class ExpenseDetails
     {

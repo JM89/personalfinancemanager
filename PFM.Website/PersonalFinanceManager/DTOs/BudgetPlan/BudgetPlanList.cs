@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PersonalFinanceManager.DTOs.BudgetPlan
+namespace PersonalFinanceManager.Api.Contracts.BudgetPlan
 {
     public class BudgetPlanList
     {

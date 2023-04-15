@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PFM.Services.DTOs.BudgetPlan
+namespace PFM.Api.Contracts.BudgetPlan
 {
     public class BudgetPlanDetails
     {

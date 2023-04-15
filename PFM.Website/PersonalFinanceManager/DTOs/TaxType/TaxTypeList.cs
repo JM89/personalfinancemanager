@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManager.DTOs.TaxType
+﻿namespace PersonalFinanceManager.Api.Contracts.TaxType
 {
     public class TaxTypeList
     {

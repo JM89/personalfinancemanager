@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.Dashboard
+﻿namespace PFM.Api.Contracts.Dashboard
 {
     public class ExpenseSummaryByCategoryAndByMonth
     {

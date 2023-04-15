@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.UserProfile
+﻿namespace PFM.Api.Contracts.UserProfile
 {
     public class UserProfileDetails
     {

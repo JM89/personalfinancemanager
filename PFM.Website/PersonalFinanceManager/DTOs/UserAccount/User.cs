@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PersonalFinanceManager.DTOs.UserAccount
+namespace PersonalFinanceManager.Api.Contracts.UserAccount
 {
     public class User
     {

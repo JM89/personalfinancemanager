@@ -1,6 +1,6 @@
-﻿using PFM.Services.DTOs.Shared;
+﻿using PFM.Api.Contracts.Shared;
 
-namespace PFM.Services.DTOs.Currency
+namespace PFM.Api.Contracts.Currency
 {
     public class CurrencyList : ICanBeDeleted
     {

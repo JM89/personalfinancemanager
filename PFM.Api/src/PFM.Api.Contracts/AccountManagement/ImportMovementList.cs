@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PFM.Services.DTOs.AccountManagement
+namespace PFM.Api.Contracts.AccountManagement
 {
     public class ImportMovementList
     {

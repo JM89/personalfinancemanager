@@ -1,6 +1,6 @@
-﻿using PersonalFinanceManager.DTOs.ExpenseType;
+﻿using PersonalFinanceManager.Api.Contracts.ExpenseType;
 
-namespace PersonalFinanceManager.DTOs.BudgetPlan
+namespace PersonalFinanceManager.Api.Contracts.BudgetPlan
 {
     public class BudgetPlanExpenseType
     {

@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.ExpenseType
+﻿namespace PFM.Api.Contracts.ExpenseType
 {
     public class ExpenseTypeDetails
     {

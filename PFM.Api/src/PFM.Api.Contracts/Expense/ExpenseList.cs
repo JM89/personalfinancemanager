@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PFM.Services.DTOs.Expense
+namespace PFM.Api.Contracts.Expense
 {
     public class ExpenseList
     {

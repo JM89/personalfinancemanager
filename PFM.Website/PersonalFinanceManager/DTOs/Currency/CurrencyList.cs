@@ -1,6 +1,6 @@
-﻿using PersonalFinanceManager.DTOs.Shared;
+﻿using PersonalFinanceManager.Api.Contracts.Shared;
 
-namespace PersonalFinanceManager.DTOs.Currency
+namespace PersonalFinanceManager.Api.Contracts.Currency
 {
     public class CurrencyList : ICanBeDeleted
     {

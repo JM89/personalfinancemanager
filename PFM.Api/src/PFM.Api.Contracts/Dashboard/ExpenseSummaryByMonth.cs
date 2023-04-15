@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PFM.Services.DTOs.Dashboard
+namespace PFM.Api.Contracts.Dashboard
 {
     public class ExpenseSummaryByMonth
     {

@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.Salary
+﻿namespace PFM.Api.Contracts.Salary
 {
     public class SalaryDeductionDetails
     {

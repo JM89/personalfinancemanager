@@ -1,6 +1,6 @@
-﻿using PFM.Services.DTOs.Shared;
+﻿using PFM.Api.Contracts.Shared;
 
-namespace PFM.Services.DTOs.Country
+namespace PFM.Api.Contracts.Country
 {
     public class CountryList : ICanBeDeleted
     {

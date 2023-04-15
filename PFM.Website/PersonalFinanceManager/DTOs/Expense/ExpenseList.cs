@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PersonalFinanceManager.DTOs.Expense
+namespace PersonalFinanceManager.Api.Contracts.Expense
 {
     public class ExpenseList
     {

@@ -1,6 +1,6 @@
-﻿using PersonalFinanceManager.DTOs.Shared;
+﻿using PersonalFinanceManager.Api.Contracts.Shared;
 
-namespace PersonalFinanceManager.DTOs.Country
+namespace PersonalFinanceManager.Api.Contracts.Country
 {
     public class CountryList : ICanBeDeleted
     {

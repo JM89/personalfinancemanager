@@ -1,6 +1,6 @@
-﻿using PersonalFinanceManager.DTOs.Shared;
+﻿using PersonalFinanceManager.Api.Contracts.Shared;
 
-namespace PersonalFinanceManager.DTOs.Bank
+namespace PersonalFinanceManager.Api.Contracts.Bank
 {
     public class BankList : ICanBeDeleted
     {

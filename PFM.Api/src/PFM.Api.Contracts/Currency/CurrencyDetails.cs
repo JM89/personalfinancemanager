@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.Currency
+﻿namespace PFM.Api.Contracts.Currency
 {
     public class CurrencyDetails
     {

@@ -11,53 +11,53 @@ namespace PFM.Services.Core.Automapper
     {
         public EntityToModelMapping()
         {
-            CreateMap<DataAccessLayer.Entities.Expense, DTOs.Expense.ExpenseList>();
-            CreateMap<DataAccessLayer.Entities.Expense, DTOs.Expense.ExpenseDetails>();
+            CreateMap<DataAccessLayer.Entities.Expense, Api.Contracts.Expense.ExpenseList>();
+            CreateMap<DataAccessLayer.Entities.Expense, Api.Contracts.Expense.ExpenseDetails>();
             
-            CreateMap<DataAccessLayer.Entities.PaymentMethod, DTOs.PaymentMethod.PaymentMethodList>();
+            CreateMap<DataAccessLayer.Entities.PaymentMethod, Api.Contracts.PaymentMethod.PaymentMethodList>();
 
-            CreateMap<DataAccessLayer.Entities.AtmWithdraw, DTOs.AtmWithdraw.AtmWithdrawDetails>();
-            CreateMap<DataAccessLayer.Entities.AtmWithdraw, DTOs.AtmWithdraw.AtmWithdrawList>();
+            CreateMap<DataAccessLayer.Entities.AtmWithdraw, Api.Contracts.AtmWithdraw.AtmWithdrawDetails>();
+            CreateMap<DataAccessLayer.Entities.AtmWithdraw, Api.Contracts.AtmWithdraw.AtmWithdrawList>();
 
-            CreateMap<DataAccessLayer.Entities.ExpenseType, DTOs.ExpenseType.ExpenseTypeList>();
-            CreateMap<DataAccessLayer.Entities.ExpenseType, DTOs.ExpenseType.ExpenseTypeDetails>();
+            CreateMap<DataAccessLayer.Entities.ExpenseType, Api.Contracts.ExpenseType.ExpenseTypeList>();
+            CreateMap<DataAccessLayer.Entities.ExpenseType, Api.Contracts.ExpenseType.ExpenseTypeDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Country, DTOs.Country.CountryList>();
-            CreateMap<DataAccessLayer.Entities.Country, DTOs.Country.CountryDetails>();
+            CreateMap<DataAccessLayer.Entities.Country, Api.Contracts.Country.CountryList>();
+            CreateMap<DataAccessLayer.Entities.Country, Api.Contracts.Country.CountryDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Income, DTOs.Income.IncomeList>();
-            CreateMap<DataAccessLayer.Entities.Income, DTOs.Income.IncomeDetails>();
+            CreateMap<DataAccessLayer.Entities.Income, Api.Contracts.Income.IncomeList>();
+            CreateMap<DataAccessLayer.Entities.Income, Api.Contracts.Income.IncomeDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Bank, DTOs.Bank.BankList>();
-            CreateMap<DataAccessLayer.Entities.Bank, DTOs.Bank.BankDetails>();
-            CreateMap<DataAccessLayer.Entities.BankBranch, DTOs.Bank.BankBranchDetails>();
+            CreateMap<DataAccessLayer.Entities.Bank, Api.Contracts.Bank.BankList>();
+            CreateMap<DataAccessLayer.Entities.Bank, Api.Contracts.Bank.BankDetails>();
+            CreateMap<DataAccessLayer.Entities.BankBranch, Api.Contracts.Bank.BankBranchDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Currency, DTOs.Currency.CurrencyList>();
-            CreateMap<DataAccessLayer.Entities.Currency, DTOs.Currency.CurrencyDetails>();
+            CreateMap<DataAccessLayer.Entities.Currency, Api.Contracts.Currency.CurrencyList>();
+            CreateMap<DataAccessLayer.Entities.Currency, Api.Contracts.Currency.CurrencyDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Account, DTOs.Account.AccountList>();
-            CreateMap<DataAccessLayer.Entities.Account, DTOs.Account.AccountDetails>();
+            CreateMap<DataAccessLayer.Entities.Account, Api.Contracts.Account.AccountList>();
+            CreateMap<DataAccessLayer.Entities.Account, Api.Contracts.Account.AccountDetails>();
 
-            CreateMap<DataAccessLayer.Entities.BudgetPlan, DTOs.BudgetPlan.BudgetPlanList>();
-            CreateMap<DataAccessLayer.Entities.BudgetPlan, DTOs.BudgetPlan.BudgetPlanDetails>();
+            CreateMap<DataAccessLayer.Entities.BudgetPlan, Api.Contracts.BudgetPlan.BudgetPlanList>();
+            CreateMap<DataAccessLayer.Entities.BudgetPlan, Api.Contracts.BudgetPlan.BudgetPlanDetails>();
 
-            CreateMap<DataAccessLayer.Entities.UserProfile, DTOs.UserProfile.UserProfileDetails>();
+            CreateMap<DataAccessLayer.Entities.UserProfile, Api.Contracts.UserProfile.UserProfileDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Saving, DTOs.Saving.SavingList>();
-            CreateMap<DataAccessLayer.Entities.Saving, DTOs.Saving.SavingDetails>();
+            CreateMap<DataAccessLayer.Entities.Saving, Api.Contracts.Saving.SavingList>();
+            CreateMap<DataAccessLayer.Entities.Saving, Api.Contracts.Saving.SavingDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Salary, DTOs.Salary.SalaryList>();
-            CreateMap<DataAccessLayer.Entities.Salary, DTOs.Salary.SalaryDetails>();
-            CreateMap<DataAccessLayer.Entities.SalaryDeduction, DTOs.Salary.SalaryDeductionDetails>();
+            CreateMap<DataAccessLayer.Entities.Salary, Api.Contracts.Salary.SalaryList>();
+            CreateMap<DataAccessLayer.Entities.Salary, Api.Contracts.Salary.SalaryDetails>();
+            CreateMap<DataAccessLayer.Entities.SalaryDeduction, Api.Contracts.Salary.SalaryDeductionDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Pension, DTOs.Pension.PensionList>();
-            CreateMap<DataAccessLayer.Entities.Pension, DTOs.Pension.PensionDetails>();
+            CreateMap<DataAccessLayer.Entities.Pension, Api.Contracts.Pension.PensionList>();
+            CreateMap<DataAccessLayer.Entities.Pension, Api.Contracts.Pension.PensionDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Tax, DTOs.Tax.TaxList>();
-            CreateMap<DataAccessLayer.Entities.Tax, DTOs.Tax.TaxDetails>();
+            CreateMap<DataAccessLayer.Entities.Tax, Api.Contracts.Tax.TaxList>();
+            CreateMap<DataAccessLayer.Entities.Tax, Api.Contracts.Tax.TaxDetails>();
 
-            CreateMap<DataAccessLayer.Entities.TaxType, DTOs.TaxType.TaxTypeList>();
-            CreateMap<DataAccessLayer.Entities.FrequenceOption, DTOs.FrequenceOption.FrequenceOptionList>();
+            CreateMap<DataAccessLayer.Entities.TaxType, Api.Contracts.TaxType.TaxTypeList>();
+            CreateMap<DataAccessLayer.Entities.FrequenceOption, Api.Contracts.FrequenceOption.FrequenceOptionList>();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.DTOs.Shared
+namespace PersonalFinanceManager.Api.Contracts.Shared
 {
     public interface ICanBeDeleted
     {

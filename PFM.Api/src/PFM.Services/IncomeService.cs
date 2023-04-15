@@ -6,7 +6,7 @@ using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Helpers;
 using PFM.DataAccessLayer.Enumerations;
-using PFM.Services.DTOs.Income;
+using PFM.Api.Contracts.Income;
 
 namespace PFM.Services
 {

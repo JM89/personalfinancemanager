@@ -1,7 +1,7 @@
-﻿using PFM.Services.DTOs.Shared;
+﻿using PFM.Api.Contracts.Shared;
 using System;
 
-namespace PFM.Services.DTOs.AtmWithdraw
+namespace PFM.Api.Contracts.AtmWithdraw
 {
     public class AtmWithdrawList: ICanBeDeleted, ICanBeEdited
     {

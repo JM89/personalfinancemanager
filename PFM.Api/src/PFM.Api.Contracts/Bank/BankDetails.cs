@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PFM.Services.DTOs.Bank
+namespace PFM.Api.Contracts.Bank
 {
     public class BankDetails
     {

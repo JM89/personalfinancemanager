@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManager.DTOs.Country
+﻿namespace PersonalFinanceManager.Api.Contracts.Country
 {
     public class CountryDetails
     {

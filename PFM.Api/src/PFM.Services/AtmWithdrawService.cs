@@ -6,7 +6,7 @@ using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Enumerations;
 using AutoMapper;
-using PFM.Services.DTOs.AtmWithdraw;
+using PFM.Api.Contracts.AtmWithdraw;
 
 namespace PFM.Services
 {

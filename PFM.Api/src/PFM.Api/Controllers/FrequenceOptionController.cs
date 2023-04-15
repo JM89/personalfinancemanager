@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PFM.Services.DTOs.FrequenceOption;
+using PFM.Api.Contracts.FrequenceOption;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PFM.Services.DTOs.Salary;
+using PFM.Api.Contracts.Salary;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

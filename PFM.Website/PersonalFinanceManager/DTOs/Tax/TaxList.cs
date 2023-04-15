@@ -1,7 +1,7 @@
 ﻿using System;
-using PersonalFinanceManager.DTOs.Shared;
+using PersonalFinanceManager.Api.Contracts.Shared;
 
-namespace PersonalFinanceManager.DTOs.Tax
+namespace PersonalFinanceManager.Api.Contracts.Tax
 {
     public class TaxList : ICanBeDeleted
     {

@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.TaxType
+﻿namespace PFM.Api.Contracts.TaxType
 {
     public class TaxTypeList
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PFM.Services.DTOs.Pension
+namespace PFM.Api.Contracts.Pension
 {
     public class PensionList
     {

@@ -1,6 +1,6 @@
-﻿using PersonalFinanceManager.DTOs.Shared;
+﻿using PersonalFinanceManager.Api.Contracts.Shared;
 
-namespace PersonalFinanceManager.DTOs.Account
+namespace PersonalFinanceManager.Api.Contracts.Account
 {
     public class AccountList
     {

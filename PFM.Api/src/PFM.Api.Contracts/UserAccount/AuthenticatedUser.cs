@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PFM.Services.DTOs.UserAccount
+namespace PFM.Api.Contracts.UserAccount
 {
     public class AuthenticatedUser
     {

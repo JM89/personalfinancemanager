@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalFinanceManager.DTOs.AccountManagement
+namespace PersonalFinanceManager.Api.Contracts.AccountManagement
 {
     public enum ImportTypes
     {

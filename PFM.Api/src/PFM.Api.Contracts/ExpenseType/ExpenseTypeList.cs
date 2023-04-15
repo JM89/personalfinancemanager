@@ -1,6 +1,6 @@
-﻿using PFM.Services.DTOs.Shared;
+﻿using PFM.Api.Contracts.Shared;
 
-namespace PFM.Services.DTOs.ExpenseType
+namespace PFM.Api.Contracts.ExpenseType
 {
     public class ExpenseTypeList : ICanBeDeleted
     {

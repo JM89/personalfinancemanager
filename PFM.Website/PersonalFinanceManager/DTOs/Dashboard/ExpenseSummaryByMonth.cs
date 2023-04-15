@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PersonalFinanceManager.DTOs.Expense;
+using PersonalFinanceManager.Api.Contracts.Expense;
 
-namespace PersonalFinanceManager.DTOs.Dashboard
+namespace PersonalFinanceManager.Api.Contracts.Dashboard
 {
     public class ExpenseSummaryByMonth
     {

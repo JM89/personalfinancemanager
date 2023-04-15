@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using PFM.Api.Configuration;
-using PFM.Services.DTOs.UserAccount;
+using PFM.Api.Contracts.UserAccount;
 
 namespace PFM.Api.Controllers
 {

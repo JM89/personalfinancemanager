@@ -4,7 +4,7 @@ using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.Enumerations;
-using PFM.Services.DTOs.PaymentMethod;
+using PFM.Api.Contracts.PaymentMethod;
 
 namespace PFM.Services
 {

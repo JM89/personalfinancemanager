@@ -11,45 +11,45 @@ namespace PFM.Services.Core.Automapper
     {
         public ModelToEntityMapping()
         {
-            CreateMap<DTOs.Expense.ExpenseDetails, DataAccessLayer.Entities.Expense>();
-            CreateMap<DTOs.Expense.ExpenseList, DataAccessLayer.Entities.Expense>();
+            CreateMap<Api.Contracts.Expense.ExpenseDetails, DataAccessLayer.Entities.Expense>();
+            CreateMap<Api.Contracts.Expense.ExpenseList, DataAccessLayer.Entities.Expense>();
 
-            CreateMap<DTOs.Bank.BankDetails, DataAccessLayer.Entities.Bank>();
-            CreateMap<DTOs.Bank.BankBranchDetails, DataAccessLayer.Entities.BankBranch>();
+            CreateMap<Api.Contracts.Bank.BankDetails, DataAccessLayer.Entities.Bank>();
+            CreateMap<Api.Contracts.Bank.BankBranchDetails, DataAccessLayer.Entities.BankBranch>();
 
-            CreateMap<DTOs.AtmWithdraw.AtmWithdrawList, DataAccessLayer.Entities.AtmWithdraw>();
-            CreateMap<DTOs.AtmWithdraw.AtmWithdrawDetails, DataAccessLayer.Entities.AtmWithdraw>();
+            CreateMap<Api.Contracts.AtmWithdraw.AtmWithdrawList, DataAccessLayer.Entities.AtmWithdraw>();
+            CreateMap<Api.Contracts.AtmWithdraw.AtmWithdrawDetails, DataAccessLayer.Entities.AtmWithdraw>();
 
-            CreateMap<DTOs.PaymentMethod.PaymentMethodList, DataAccessLayer.Entities.PaymentMethod>();
+            CreateMap<Api.Contracts.PaymentMethod.PaymentMethodList, DataAccessLayer.Entities.PaymentMethod>();
 
-            CreateMap<DTOs.Country.CountryList, DataAccessLayer.Entities.Country>();
-            CreateMap<DTOs.Country.CountryDetails, DataAccessLayer.Entities.Country>();
+            CreateMap<Api.Contracts.Country.CountryList, DataAccessLayer.Entities.Country>();
+            CreateMap<Api.Contracts.Country.CountryDetails, DataAccessLayer.Entities.Country>();
 
-            CreateMap<DTOs.Income.IncomeList, DataAccessLayer.Entities.Income>();
-            CreateMap<DTOs.Income.IncomeDetails, DataAccessLayer.Entities.Income>();
+            CreateMap<Api.Contracts.Income.IncomeList, DataAccessLayer.Entities.Income>();
+            CreateMap<Api.Contracts.Income.IncomeDetails, DataAccessLayer.Entities.Income>();
 
-            CreateMap<DTOs.ExpenseType.ExpenseTypeList, DataAccessLayer.Entities.ExpenseType>();
-            CreateMap<DTOs.ExpenseType.ExpenseTypeDetails, DataAccessLayer.Entities.ExpenseType>();
+            CreateMap<Api.Contracts.ExpenseType.ExpenseTypeList, DataAccessLayer.Entities.ExpenseType>();
+            CreateMap<Api.Contracts.ExpenseType.ExpenseTypeDetails, DataAccessLayer.Entities.ExpenseType>();
 
-            CreateMap<DTOs.Currency.CurrencyList, DataAccessLayer.Entities.Currency>();
-            CreateMap<DTOs.Currency.CurrencyDetails, DataAccessLayer.Entities.Currency>();
+            CreateMap<Api.Contracts.Currency.CurrencyList, DataAccessLayer.Entities.Currency>();
+            CreateMap<Api.Contracts.Currency.CurrencyDetails, DataAccessLayer.Entities.Currency>();
 
-            CreateMap<DTOs.Account.AccountList, DataAccessLayer.Entities.Account>();
-            CreateMap<DTOs.Account.AccountDetails, DataAccessLayer.Entities.Account>();
+            CreateMap<Api.Contracts.Account.AccountList, DataAccessLayer.Entities.Account>();
+            CreateMap<Api.Contracts.Account.AccountDetails, DataAccessLayer.Entities.Account>();
 
-            CreateMap<DTOs.BudgetPlan.BudgetPlanList, DataAccessLayer.Entities.BudgetPlan>();
-            CreateMap<DTOs.BudgetPlan.BudgetPlanDetails, DataAccessLayer.Entities.BudgetPlan>();
+            CreateMap<Api.Contracts.BudgetPlan.BudgetPlanList, DataAccessLayer.Entities.BudgetPlan>();
+            CreateMap<Api.Contracts.BudgetPlan.BudgetPlanDetails, DataAccessLayer.Entities.BudgetPlan>();
 
-            CreateMap<DTOs.UserProfile.UserProfileDetails, DataAccessLayer.Entities.UserProfile>();
+            CreateMap<Api.Contracts.UserProfile.UserProfileDetails, DataAccessLayer.Entities.UserProfile>();
 
-            CreateMap<DTOs.Saving.SavingDetails, DataAccessLayer.Entities.Saving>();
+            CreateMap<Api.Contracts.Saving.SavingDetails, DataAccessLayer.Entities.Saving>();
 
-            CreateMap<DTOs.Pension.PensionDetails, DataAccessLayer.Entities.Pension>();
+            CreateMap<Api.Contracts.Pension.PensionDetails, DataAccessLayer.Entities.Pension>();
 
-            CreateMap<DTOs.Tax.TaxDetails, DataAccessLayer.Entities.Tax>();
+            CreateMap<Api.Contracts.Tax.TaxDetails, DataAccessLayer.Entities.Tax>();
 
-            CreateMap<DTOs.Salary.SalaryDetails, DataAccessLayer.Entities.Salary>();
-            CreateMap<DTOs.Salary.SalaryDeductionDetails, DataAccessLayer.Entities.SalaryDeduction>();
+            CreateMap<Api.Contracts.Salary.SalaryDetails, DataAccessLayer.Entities.Salary>();
+            CreateMap<Api.Contracts.Salary.SalaryDeductionDetails, DataAccessLayer.Entities.SalaryDeduction>();
         }
     }
 }

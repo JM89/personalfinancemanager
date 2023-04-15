@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PersonalFinanceManager.DTOs.Account
+namespace PersonalFinanceManager.Api.Contracts.Account
 {
     public class AccountDetails
     {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using PersonalFinanceManager.DTOs.AtmWithdraw;
-using PersonalFinanceManager.DTOs.Expense;
-using PersonalFinanceManager.DTOs.Income;
+using PersonalFinanceManager.Api.Contracts.AtmWithdraw;
+using PersonalFinanceManager.Api.Contracts.Expense;
+using PersonalFinanceManager.Api.Contracts.Income;
 
-namespace PersonalFinanceManager.DTOs.AccountManagement
+namespace PersonalFinanceManager.Api.Contracts.AccountManagement
 {
     public class ImportMovementDetails
     {

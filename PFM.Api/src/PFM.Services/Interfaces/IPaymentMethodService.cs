@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.DTOs.PaymentMethod;
+using PFM.Api.Contracts.PaymentMethod;
 
 namespace PFM.Services.Interfaces
 {

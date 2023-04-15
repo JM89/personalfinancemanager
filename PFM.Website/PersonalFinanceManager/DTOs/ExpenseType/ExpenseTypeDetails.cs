@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManager.DTOs.ExpenseType
+﻿namespace PersonalFinanceManager.Api.Contracts.ExpenseType
 {
     public class ExpenseTypeDetails
     {

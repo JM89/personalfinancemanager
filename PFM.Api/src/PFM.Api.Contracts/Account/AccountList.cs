@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.Account
+﻿namespace PFM.Api.Contracts.Account
 {
     public class AccountList
     {

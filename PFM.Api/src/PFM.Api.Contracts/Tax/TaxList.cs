@@ -1,7 +1,7 @@
 ﻿using System;
-using PFM.Services.DTOs.Shared;
+using PFM.Api.Contracts.Shared;
 
-namespace PFM.Services.DTOs.Tax
+namespace PFM.Api.Contracts.Tax
 {
     public class TaxList : ICanBeDeleted
     {

@@ -11,7 +11,7 @@ namespace PFM.Services.Core.Automapper
     {
         public SearchParametersMapping()
         {
-            CreateMap<DTOs.SearchParameters.ExpenseGetListSearchParameters, DataAccessLayer.SearchParameters.ExpenseGetListSearchParameters>();
+            CreateMap<Api.Contracts.SearchParameters.ExpenseGetListSearchParameters, DataAccessLayer.SearchParameters.ExpenseGetListSearchParameters>();
         }
     }
 }

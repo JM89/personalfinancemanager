@@ -1,7 +1,7 @@
-﻿using PersonalFinanceManager.DTOs.Shared;
+﻿using PersonalFinanceManager.Api.Contracts.Shared;
 using System;
 
-namespace PersonalFinanceManager.DTOs.AtmWithdraw
+namespace PersonalFinanceManager.Api.Contracts.AtmWithdraw
 {
     public class AtmWithdrawList: ICanBeDeleted, ICanBeEdited
     {

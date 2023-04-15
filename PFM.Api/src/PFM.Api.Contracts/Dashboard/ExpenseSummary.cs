@@ -1,7 +1,7 @@
-﻿using PFM.Services.DTOs.Account;
+﻿using PFM.Api.Contracts.Account;
 using System.Collections.Generic;
 
-namespace PFM.Services.DTOs.Dashboard
+namespace PFM.Api.Contracts.Dashboard
 {
     public class ExpenseSummary
     {

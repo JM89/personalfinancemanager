@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PersonalFinanceManager.DTOs.AtmWithdraw
+namespace PersonalFinanceManager.Api.Contracts.AtmWithdraw
 {
     public class AtmWithdrawDetails
     {

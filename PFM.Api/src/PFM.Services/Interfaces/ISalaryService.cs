@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.DTOs.Salary;
+using PFM.Api.Contracts.Salary;
 
 namespace PFM.Services.Interfaces
 {

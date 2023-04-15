@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.Bank
+﻿namespace PFM.Api.Contracts.Bank
 {
     public class BankBranchDetails
     {

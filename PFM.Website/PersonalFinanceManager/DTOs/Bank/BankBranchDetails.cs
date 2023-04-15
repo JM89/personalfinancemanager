@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManager.DTOs.Bank
+﻿namespace PersonalFinanceManager.Api.Contracts.Bank
 {
     public class BankBranchDetails
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.DTOs.Expense;
+using PFM.Api.Contracts.Expense;
 
-namespace PFM.Services.DTOs.Dashboard
+namespace PFM.Api.Contracts.Dashboard
 {
     public class ExpenseSummaryByCategory
     {

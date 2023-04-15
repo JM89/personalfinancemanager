@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PFM.Services.DTOs.AccountManagement
+namespace PFM.Api.Contracts.AccountManagement
 {
     public enum ImportTypes
     {

@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManager.DTOs.FrequenceOption
+﻿namespace PersonalFinanceManager.Api.Contracts.FrequenceOption
 {
     public class FrequenceOptionList
     {

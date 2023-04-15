@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PFM.Services.DTOs.Saving
+namespace PFM.Api.Contracts.Saving
 {
     public class SavingDetails
     {

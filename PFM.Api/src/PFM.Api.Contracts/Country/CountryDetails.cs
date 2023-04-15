@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.Country
+﻿namespace PFM.Api.Contracts.Country
 {
     public class CountryDetails
     {

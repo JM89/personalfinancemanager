@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.FrequenceOption
+﻿namespace PFM.Api.Contracts.FrequenceOption
 {
     public class FrequenceOptionList
     {

@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManager.DTOs.UserProfile
+﻿namespace PersonalFinanceManager.Api.Contracts.UserProfile
 {
     public class UserProfileDetails
     {

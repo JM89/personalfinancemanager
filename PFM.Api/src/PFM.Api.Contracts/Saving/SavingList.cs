@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PFM.Services.DTOs.Saving
+namespace PFM.Api.Contracts.Saving
 {
     public class SavingList
     {

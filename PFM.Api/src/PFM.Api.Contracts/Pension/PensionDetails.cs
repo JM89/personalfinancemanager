@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PFM.Services.DTOs.Pension
+namespace PFM.Api.Contracts.Pension
 {
     public class PensionDetails
     {

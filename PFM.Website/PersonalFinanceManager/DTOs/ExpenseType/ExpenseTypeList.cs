@@ -1,6 +1,6 @@
-﻿using PersonalFinanceManager.DTOs.Shared;
+﻿using PersonalFinanceManager.Api.Contracts.Shared;
 
-namespace PersonalFinanceManager.DTOs.ExpenseType
+namespace PersonalFinanceManager.Api.Contracts.ExpenseType
 {
     public class ExpenseTypeList : ICanBeDeleted
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PFM.Services.DTOs.UserProfile;
+using PFM.Api.Contracts.UserProfile;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

@@ -15,8 +15,8 @@ namespace PersonalFinanceManager.Services
             AuthenticatedUser result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.UserAccount.User>(user);
-                result = httpClient.Post<PersonalFinanceManager.DTOs.UserAccount.User, AuthenticatedUser>($"/Account/Login", dto, new HttpClientRequestOptions() {
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.UserAccount.User>(user);
+                result = httpClient.Post<PersonalFinanceManager.Api.Contracts.UserAccount.User, AuthenticatedUser>($"/Account/Login", dto, new HttpClientRequestOptions() {
                     AuthenticationTokenRequired = false
                 });
             }
@@ -28,8 +28,8 @@ namespace PersonalFinanceManager.Services
             string result = "";
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.UserAccount.User>(user);
-                result = httpClient.Post<PersonalFinanceManager.DTOs.UserAccount.User, string>($"/Account/Register", dto, new HttpClientRequestOptions()
+                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.Api.Contracts.UserAccount.User>(user);
+                result = httpClient.Post<PersonalFinanceManager.Api.Contracts.UserAccount.User, string>($"/Account/Register", dto, new HttpClientRequestOptions()
                 {
                     AuthenticationTokenRequired = false
                 });

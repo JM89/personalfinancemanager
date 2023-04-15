@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PersonalFinanceManager.DTOs.Saving
+namespace PersonalFinanceManager.Api.Contracts.Saving
 {
     public class SavingList
     {

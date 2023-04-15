@@ -1,4 +1,4 @@
-﻿using PFM.Services.DTOs.Income;
+﻿using PFM.Api.Contracts.Income;
 using System.Collections.Generic;
 
 namespace PFM.Services.Interfaces
