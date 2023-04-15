@@ -39,7 +39,7 @@ This project was originally made of 4 solutions:
 | Dashboard API | Not Started | ❌ |
 | Dashboard ETL | Not Started | ❌ |
 
-### Refactoring Plan (April 14, 2023)
+### Phased Approach Refactoring (April 14, 2023)
 
 The system is greatly outdated. As the previous attempt to rework the whole system was not successful, an interactive approach is adopted for this new phase of development.
 
