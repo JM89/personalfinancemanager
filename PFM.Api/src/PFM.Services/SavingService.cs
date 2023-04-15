@@ -6,7 +6,7 @@ using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.MovementStrategy;
-using PFM.Services.DTOs.Saving;
+using PFM.Api.Contracts.Saving;
 
 namespace PFM.Services
 {

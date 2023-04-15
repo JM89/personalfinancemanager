@@ -1,4 +1,4 @@
-﻿namespace PFM.Services.DTOs.PaymentMethod
+﻿namespace PFM.Api.Contracts.PaymentMethod
 {
     public class PaymentMethodList
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using PFM.Services.Core;
-using PFM.Services.DTOs.BudgetPlan;
-using PFM.Services.DTOs.Dashboard;
-using PFM.Services.DTOs.Expense;
+using PFM.Api.Contracts.BudgetPlan;
+using PFM.Api.Contracts.Dashboard;
+using PFM.Api.Contracts.Expense;
 
 namespace PFM.Services.Interfaces
 {
@@ -22,6 +22,6 @@ namespace PFM.Services.Interfaces
 
         ExpenseSummary GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan);
 
-        IList<ExpenseList> GetExpenses(DTOs.SearchParameters.ExpenseGetListSearchParameters search);
+        IList<ExpenseList> GetExpenses(Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search);
     }
 }

@@ -4,7 +4,7 @@ using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.Entities;
-using PFM.Services.DTOs.Salary;
+using PFM.Api.Contracts.Salary;
 
 namespace PFM.Services
 {

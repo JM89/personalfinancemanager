@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PFM.Services.DTOs.Tax;
+using PFM.Api.Contracts.Tax;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

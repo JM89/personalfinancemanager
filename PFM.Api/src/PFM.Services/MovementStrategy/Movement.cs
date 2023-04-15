@@ -1,7 +1,7 @@
 ﻿using System;
 using PFM.DataAccessLayer.Enumerations;
-using PFM.Services.DTOs.Expense;
-using PFM.Services.DTOs.Saving;
+using PFM.Api.Contracts.Expense;
+using PFM.Api.Contracts.Saving;
 
 namespace PFM.Services.MovementStrategy
 {

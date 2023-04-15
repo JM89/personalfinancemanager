@@ -5,7 +5,7 @@ using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Core.Exceptions;
 using PFM.DataAccessLayer.Entities;
-using PFM.Services.DTOs.Bank;
+using PFM.Api.Contracts.Bank;
 
 namespace PFM.Services
 {

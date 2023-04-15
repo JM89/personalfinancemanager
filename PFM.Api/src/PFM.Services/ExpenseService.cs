@@ -5,11 +5,11 @@ using PFM.Services.MovementStrategy;
 using System;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.Entities;
-using PFM.Services.DTOs.Dashboard;
-using PFM.Services.DTOs.BudgetPlan;
-using PFM.Services.DTOs.Expense;
+using PFM.Api.Contracts.Dashboard;
+using PFM.Api.Contracts.BudgetPlan;
+using PFM.Api.Contracts.Expense;
 using PFM.Services.Utils.Helpers;
-using PFM.Services.DTOs.Account;
+using PFM.Api.Contracts.Account;
 
 namespace PFM.Services.Interfaces.Services
 {
@@ -114,7 +114,7 @@ namespace PFM.Services.Interfaces.Services
             _ExpenseRepository.Update(Expense);
         }
 
-        public IList<ExpenseList> GetExpenses(PFM.Services.DTOs.SearchParameters.ExpenseGetListSearchParameters search)
+        public IList<ExpenseList> GetExpenses(PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
         {
             var searchParameters = Mapper.Map<PFM.DataAccessLayer.SearchParameters.ExpenseGetListSearchParameters>(search);
             var Expenses = _ExpenseRepository.GetByParameters(searchParameters).ToList();
@@ -150,7 +150,7 @@ namespace PFM.Services.Interfaces.Services
             var currentMonthName = currentMonthInterval.GetSingleMonthName();
 
             // Retrieve both current month expenses and over 12 months expenses
-            var expenses = GetExpenses(new PFM.Services.DTOs.SearchParameters.ExpenseGetListSearchParameters
+            var expenses = GetExpenses(new PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters
             {
                 AccountId = accountId,
                 StartDate = over12MonthsInterval.StartDate,

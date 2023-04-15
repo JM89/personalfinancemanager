@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<AtmWithdrawListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PersonalFinanceManager.DTOs.AtmWithdraw.AtmWithdrawList>($"/AtmWithdraw/GetList/{accountId}");
+                var response = httpClient.GetList<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawList>($"/AtmWithdraw/GetList/{accountId}");
                 result = response.Select(AutoMapper.Mapper.Map<AtmWithdrawListModel>).ToList();
             }
             return result;
@@ -24,7 +24,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = models.Select(AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.AtmWithdraw.AtmWithdrawDetails>).ToList();
+                var dto = models.Select(AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>).ToList();
                 httpClient.Post($"/AtmWithdraw/CreateAtmWithdraws", dto);
             }
         }
@@ -33,7 +33,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.AtmWithdraw.AtmWithdrawDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>(model);
                 httpClient.Post($"/AtmWithdraw/Create", dto);
             }
         }
@@ -43,7 +43,7 @@ namespace PersonalFinanceManager.Services
             AtmWithdrawEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.AtmWithdraw.AtmWithdrawDetails>($"/AtmWithdraw/Get/{id}");
+                var response = httpClient.GetSingle<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>($"/AtmWithdraw/Get/{id}");
                 result = AutoMapper.Mapper.Map<AtmWithdrawEditModel>(response);
             }
             return result;
@@ -53,7 +53,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.AtmWithdraw.AtmWithdrawDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>(model);
                 httpClient.Put($"/AtmWithdraw/Edit/{model.Id}", dto);
             }
         }

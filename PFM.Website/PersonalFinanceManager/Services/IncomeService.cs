@@ -13,7 +13,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = models.Select(AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Income.IncomeDetails>).ToList();
+                var dto = models.Select(AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>).ToList();
                 httpClient.Post($"/Income/CreateIncomes", dto);
             }
         }
@@ -22,7 +22,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Income.IncomeDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>(model);
                 httpClient.Post($"/Income/Create", dto);
             }
         }
@@ -32,7 +32,7 @@ namespace PersonalFinanceManager.Services
             IList<IncomeListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PersonalFinanceManager.DTOs.Income.IncomeList>($"/Income/GetList/{accountId}");
+                var response = httpClient.GetList<PFM.Api.Contracts.Income.IncomeList>($"/Income/GetList/{accountId}");
                 result = response.Select(AutoMapper.Mapper.Map<IncomeListModel>).ToList();
             }
             return result;
@@ -43,7 +43,7 @@ namespace PersonalFinanceManager.Services
             IncomeEditModel result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetSingle<PersonalFinanceManager.DTOs.Income.IncomeDetails>($"/Income/Get/{id}");
+                var response = httpClient.GetSingle<PFM.Api.Contracts.Income.IncomeDetails>($"/Income/Get/{id}");
                 result = AutoMapper.Mapper.Map<IncomeEditModel>(response);
             }
             return result;
@@ -53,7 +53,7 @@ namespace PersonalFinanceManager.Services
         {
             using (var httpClient = new HttpClientExtended())
             {
-                var dto = AutoMapper.Mapper.Map<PersonalFinanceManager.DTOs.Income.IncomeDetails>(model);
+                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>(model);
                 httpClient.Put($"/Income/Edit/{model.Id}", dto);
             }
         }

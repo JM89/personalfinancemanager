@@ -6,61 +6,61 @@ namespace PersonalFinanceManager.Services.Automapper
     {
         public DTOToModelMapping()
         {
-            CreateMap<PersonalFinanceManager.DTOs.UserProfile.UserProfileDetails, Models.UserProfile.UserProfileEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Currency.CurrencyDetails, Models.Currency.CurrencyEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Currency.CurrencyList, Models.Currency.CurrencyListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Account.AccountDetails, Models.Account.AccountEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Account.AccountList, Models.Account.AccountListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.AccountManagement.ImportMovementDetails, Models.AccountManagement.ImportMovementEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.AccountManagement.ImportMovementList, Models.AccountManagement.ImportMovementModel>();
-            CreateMap<PersonalFinanceManager.DTOs.AccountManagement.ImportTypes, Models.AccountManagement.ImportTypes>();
-            CreateMap<PersonalFinanceManager.DTOs.AccountManagement.MovementPropertyDefinition, Models.AccountManagement.MovementPropertyDefinition>();
-            CreateMap<PersonalFinanceManager.DTOs.AtmWithdraw.AtmWithdrawDetails, Models.AtmWithdraw.AtmWithdrawEditModel>()
+            CreateMap<PFM.Api.Contracts.UserProfile.UserProfileDetails, Models.UserProfile.UserProfileEditModel>();
+            CreateMap<PFM.Api.Contracts.Currency.CurrencyDetails, Models.Currency.CurrencyEditModel>();
+            CreateMap<PFM.Api.Contracts.Currency.CurrencyList, Models.Currency.CurrencyListModel>();
+            CreateMap<PFM.Api.Contracts.Account.AccountDetails, Models.Account.AccountEditModel>();
+            CreateMap<PFM.Api.Contracts.Account.AccountList, Models.Account.AccountListModel>();
+            CreateMap<PFM.Api.Contracts.AccountManagement.ImportMovementDetails, Models.AccountManagement.ImportMovementEditModel>();
+            CreateMap<PFM.Api.Contracts.AccountManagement.ImportMovementList, Models.AccountManagement.ImportMovementModel>();
+            CreateMap<PFM.Api.Contracts.AccountManagement.ImportTypes, Models.AccountManagement.ImportTypes>();
+            CreateMap<PFM.Api.Contracts.AccountManagement.MovementPropertyDefinition, Models.AccountManagement.MovementPropertyDefinition>();
+            CreateMap<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails, Models.AtmWithdraw.AtmWithdrawEditModel>()
                 .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense));
-            CreateMap<PersonalFinanceManager.DTOs.AtmWithdraw.AtmWithdrawList, Models.AtmWithdraw.AtmWithdrawListModel>()
+            CreateMap<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawList, Models.AtmWithdraw.AtmWithdrawListModel>()
                  .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense)); 
-            CreateMap<PersonalFinanceManager.DTOs.Bank.BankBranchDetails, Models.Bank.BankBrandEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Bank.BankDetails, Models.Bank.BankEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Bank.BankList, Models.Bank.BankListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.BudgetPlan.BudgetPlanDetails, Models.BudgetPlan.BudgetPlanEditModel>()
+            CreateMap<PFM.Api.Contracts.Bank.BankBranchDetails, Models.Bank.BankBrandEditModel>();
+            CreateMap<PFM.Api.Contracts.Bank.BankDetails, Models.Bank.BankEditModel>();
+            CreateMap<PFM.Api.Contracts.Bank.BankList, Models.Bank.BankListModel>();
+            CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails, Models.BudgetPlan.BudgetPlanEditModel>()
                 .ForMember(dest => dest.ExpenditureTypes, src => src.MapFrom(opts => opts.ExpenseTypes))
                 .ForMember(dest => dest.ExpenditureAverageMonthValue, src => src.MapFrom(opts => opts.ExpenseAverageMonthValue))
                 .ForMember(dest => dest.ExpenditurePreviousMonthValue, src => src.MapFrom(opts => opts.ExpensePreviousMonthValue))
                 .ForMember(dest => dest.ExpenditureCurrentBudgetPlanValue, src => src.MapFrom(opts => opts.ExpenseCurrentBudgetPlanValue));
-            CreateMap<PersonalFinanceManager.DTOs.BudgetPlan.BudgetPlanExpenseType, Models.BudgetPlan.BudgetPlanExpenditureType>()
+            CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanExpenseType, Models.BudgetPlan.BudgetPlanExpenditureType>()
                  .ForMember(dest => dest.ExpenditureType, src => src.MapFrom(opts => opts.ExpenseType));
-            CreateMap<PersonalFinanceManager.DTOs.BudgetPlan.BudgetPlanList, Models.BudgetPlan.BudgetPlanListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Country.CountryDetails, Models.Country.CountryEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Country.CountryList, Models.Country.CountryListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Dashboard.ExpenseSummary, Models.Dashboard.ExpenseSummaryModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Dashboard.ExpenseSummaryByCategory, Models.Dashboard.ExpenseSummaryByCategoryModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Dashboard.ExpenseSummaryByCategoryAndByMonth, Models.Dashboard.ExpenseSummaryByCategoryAndByMonthModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Dashboard.ExpenseSummaryByMonth, Models.Dashboard.ExpenseSummaryByMonthModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Expense.ExpenseDetails, Models.Expenditure.ExpenditureEditModel>()
+            CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanList, Models.BudgetPlan.BudgetPlanListModel>();
+            CreateMap<PFM.Api.Contracts.Country.CountryDetails, Models.Country.CountryEditModel>();
+            CreateMap<PFM.Api.Contracts.Country.CountryList, Models.Country.CountryListModel>();
+            CreateMap<PFM.Api.Contracts.Dashboard.ExpenseSummary, Models.Dashboard.ExpenseSummaryModel>();
+            CreateMap<PFM.Api.Contracts.Dashboard.ExpenseSummaryByCategory, Models.Dashboard.ExpenseSummaryByCategoryModel>();
+            CreateMap<PFM.Api.Contracts.Dashboard.ExpenseSummaryByCategoryAndByMonth, Models.Dashboard.ExpenseSummaryByCategoryAndByMonthModel>();
+            CreateMap<PFM.Api.Contracts.Dashboard.ExpenseSummaryByMonth, Models.Dashboard.ExpenseSummaryByMonthModel>();
+            CreateMap<PFM.Api.Contracts.Expense.ExpenseDetails, Models.Expenditure.ExpenditureEditModel>()
                 .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense))
                 .ForMember(dest => dest.TypeExpenditureId, src => src.MapFrom(opts => opts.ExpenseTypeId)); 
-            CreateMap<PersonalFinanceManager.DTOs.Expense.ExpenseList, Models.Expenditure.ExpenditureListModel>()
+            CreateMap<PFM.Api.Contracts.Expense.ExpenseList, Models.Expenditure.ExpenditureListModel>()
                 .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense))
                 .ForMember(dest => dest.TypeExpenditureId, src => src.MapFrom(opts => opts.ExpenseTypeId))
                 .ForMember(dest => dest.TypeExpenditureName, src => src.MapFrom(opts => opts.ExpenseTypeName));
-            CreateMap<PersonalFinanceManager.DTOs.ExpenseType.ExpenseTypeDetails, Models.ExpenditureType.ExpenditureTypeEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.ExpenseType.ExpenseTypeList, Models.ExpenditureType.ExpenditureTypeListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.FrequenceOption.FrequenceOptionList, Models.FrequenceOption.FrequenceOptionListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Income.IncomeDetails, Models.Income.IncomeEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Income.IncomeList, Models.Income.IncomeListModel>();
-            CreateMap<PFM.Services.DTOs.PaymentMethod.PaymentMethodList, Models.PaymentMethod.PaymentMethodListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Pension.PensionDetails, Models.Pension.PensionEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Pension.PensionList, Models.Pension.PensionListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Salary.SalaryDetails, Models.Salary.SalaryEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Salary.SalaryDeductionDetails, Models.Salary.SalaryDeductionEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Salary.SalaryList, Models.Salary.SalaryListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Saving.SavingDetails, Models.Saving.SavingEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Saving.SavingList, Models.Saving.SavingListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Tax.TaxDetails, Models.Tax.TaxEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.Tax.TaxList, Models.Tax.TaxListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.TaxType.TaxTypeList, Models.TaxType.TaxTypeListModel>();
-            CreateMap<PersonalFinanceManager.DTOs.UserProfile.UserProfileDetails, Models.UserProfile.UserProfileEditModel>();
-            CreateMap<PersonalFinanceManager.DTOs.UserAccount.AuthenticatedUser, Models.AspNetUserAccount.AuthenticatedUser>();
+            CreateMap<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails, Models.ExpenditureType.ExpenditureTypeEditModel>();
+            CreateMap<PFM.Api.Contracts.ExpenseType.ExpenseTypeList, Models.ExpenditureType.ExpenditureTypeListModel>();
+            CreateMap<PFM.Api.Contracts.FrequenceOption.FrequenceOptionList, Models.FrequenceOption.FrequenceOptionListModel>();
+            CreateMap<PFM.Api.Contracts.Income.IncomeDetails, Models.Income.IncomeEditModel>();
+            CreateMap<PFM.Api.Contracts.Income.IncomeList, Models.Income.IncomeListModel>();
+            CreateMap<PFM.Api.Contracts.PaymentMethod.PaymentMethodList, Models.PaymentMethod.PaymentMethodListModel>();
+            CreateMap<PFM.Api.Contracts.Pension.PensionDetails, Models.Pension.PensionEditModel>();
+            CreateMap<PFM.Api.Contracts.Pension.PensionList, Models.Pension.PensionListModel>();
+            CreateMap<PFM.Api.Contracts.Salary.SalaryDetails, Models.Salary.SalaryEditModel>();
+            CreateMap<PFM.Api.Contracts.Salary.SalaryDeductionDetails, Models.Salary.SalaryDeductionEditModel>();
+            CreateMap<PFM.Api.Contracts.Salary.SalaryList, Models.Salary.SalaryListModel>();
+            CreateMap<PFM.Api.Contracts.Saving.SavingDetails, Models.Saving.SavingEditModel>();
+            CreateMap<PFM.Api.Contracts.Saving.SavingList, Models.Saving.SavingListModel>();
+            CreateMap<PFM.Api.Contracts.Tax.TaxDetails, Models.Tax.TaxEditModel>();
+            CreateMap<PFM.Api.Contracts.Tax.TaxList, Models.Tax.TaxListModel>();
+            CreateMap<PFM.Api.Contracts.TaxType.TaxTypeList, Models.TaxType.TaxTypeListModel>();
+            CreateMap<PFM.Api.Contracts.UserProfile.UserProfileDetails, Models.UserProfile.UserProfileEditModel>();
+            CreateMap<PFM.Api.Contracts.UserAccount.AuthenticatedUser, Models.AspNetUserAccount.AuthenticatedUser>();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Services
             IList<FrequenceOptionListModel> result = null;
             using (var httpClient = new HttpClientExtended())
             {
-                var response = httpClient.GetList<PersonalFinanceManager.DTOs.FrequenceOption.FrequenceOptionList>($"/FrequenceOption/GetList");
+                var response = httpClient.GetList<PFM.Api.Contracts.FrequenceOption.FrequenceOptionList>($"/FrequenceOption/GetList");
                 result = response.Select(AutoMapper.Mapper.Map<FrequenceOptionListModel>).ToList();
             }
             return result;

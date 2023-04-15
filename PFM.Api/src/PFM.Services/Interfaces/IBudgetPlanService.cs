@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PFM.Services.DTOs.BudgetPlan;
+using PFM.Api.Contracts.BudgetPlan;
 
 namespace PFM.Services.Interfaces
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PFM.DataAccessLayer.Entities;
-using PFM.Services.DTOs.ExpenseType;
+using PFM.Api.Contracts.ExpenseType;
 using PFM.Services.Utils.Helpers;
 using PFM.UnitTests.Fixture;
 using PFM.UnitTests.Helpers;

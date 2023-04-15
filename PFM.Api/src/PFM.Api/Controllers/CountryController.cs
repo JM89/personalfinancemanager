@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PFM.Services.DTOs.Country;
+using PFM.Api.Contracts.Country;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
