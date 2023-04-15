@@ -57,3 +57,7 @@ jobs:
         working-directory: ${{ env.WORKDIR }}/src/PFM.Api.Contracts
         run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.fullSemVer }}
       
+      - name: Publish API Contracts
+        working-directory: ${{ env.WORKDIR }}/src/PFM.Api.Contracts
+        run: dotnet nuget push "bin/Release/PFM.Api.Contracts.${{ steps.gitversion.outputs.fullSemVer }}.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "${{ env.GITHUB_ORG }} - GitHub Packages" 
+      
