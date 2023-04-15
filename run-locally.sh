@@ -1,3 +1,4 @@
+docker-compose -f ./PFM.Infra/docker-compose-infra.yml down
 docker container prune -f
 docker volume prune -f
 docker network create -d bridge local-network

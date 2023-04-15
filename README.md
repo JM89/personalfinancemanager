@@ -41,6 +41,24 @@ This project is made of 4 solutions:
 
 ## Getting Started
 
+### Shared and specific infrastructure
+
+Some infrastructure resources are shared accross different projects (e.g. SQL server, SEQ, AWS), some are specifics to each apps (e.g. creation DB, a SQS queue). The resources available in the PFM.Infra folder, contains the shared resources. 
+
+It includes:
+- [x] SQL Server instance: a single container is used for several isolated DB, to reduce the setup time, space and memory in local machine. 
+- [x] SEQ for logging purpose
+- [x] Localstack for AWS resources.
+
+To get started, run the following command:
+
+```shell
+sh ./run-locally.sh
+```
+
+The command will also start all the application-specific docker-compose files supported: 
+- [x] PFM.API database initialization script (db, security, schema, seed data)
+
 ### Debug the application
 
 Check the documentation [here](./PFM.Api/README.md).

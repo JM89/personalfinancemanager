@@ -7,6 +7,7 @@ networks:
 
 services:
 
+  # Simulating a centralized SQL Server instance
   db-server:
     image: mcr.microsoft.com/mssql/server:2017-latest
     container_name: db-server
@@ -20,3 +21,33 @@ services:
       - "1433:1433"
     networks:
       - local-network
+
+  # Simulating a logging system
+  seq:
+    container_name: seq
+    image: datalust/seq:2022.1
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5341:5341"
+      - "80:80"
+
+  # Simulating AWS cloud 
+  localstack:
+    container_name: localstack
+    build:
+      dockerfile: Dockerfile
+      context: ./PFM.Infra/localstack
+    environment:
+      - SERVICES=s3,ssm
+      - DEBUG=${DEBUG-}
+      - TERRAFORM_ENVIRONMENT=local
+      - AWS_DEFAULT_REGION=eu-west-2
+      - DEFAULT_REGION=eu-west-2
+      - HOSTNAME=localstack
+      - LAMBDA_EXECUTOR=docker
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    ports:
+      - "4566:4566"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
