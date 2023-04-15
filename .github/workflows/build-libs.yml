@@ -48,3 +48,7 @@ jobs:
       - name: Build API Contracts
         working-directory: ${{ env.WORKDIR }}/src/PFM.Api.Contracts
         run: dotnet build --configuration Release --no-restore
+
+      - name: Pack API Contracts
+        working-directory: ${{ env.WORKDIR }}/src/PFM.Api.Contracts
+        run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.fullSemVer }}
