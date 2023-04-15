@@ -1,4 +1,4 @@
-﻿using PersonalFinanceManager.DTOs.PaymentMethod;
+﻿using PFM.Services.DTOs.PaymentMethod;
 using System;
 using System.Collections.Generic;
 
