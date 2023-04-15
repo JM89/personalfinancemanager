@@ -7,8 +7,6 @@ on:
   workflow_dispatch:
   pull_request:
 
-env:
-
 jobs:
   build:
     runs-on: ubuntu-latest
