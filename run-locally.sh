@@ -6,3 +6,6 @@ docker-compose -f ./PFM.Infra/docker-compose-infra.yml up --build -d
 cd ./PFM.Api
 docker-compose -f docker-compose-api-init.yml up --build -d
 cd ..
+cd ./PFM.Auth.Api
+docker-compose -f docker-compose-api-init.yml up --build -d
+cd ..
