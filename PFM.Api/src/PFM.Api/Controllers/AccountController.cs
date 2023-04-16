@@ -1,16 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Authorization;
 using PFM.Api.Configuration;
 using PFM.Api.Contracts.UserAccount;
-using Microsoft.Extensions.Logging;
-using SerilogTimings;
 using Serilog.Context;
-using System;
-using Microsoft.AspNetCore.Http;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PFM.Api.Controllers
 {
@@ -35,41 +31,23 @@ namespace PFM.Api.Controllers
         [HttpPost("Login")]
         public async Task<object> Login([FromBody]User model)
         {
-            try
+            using (LogContext.PushProperty("UserName", model.Email))
             {
-                ObjectResult response = null;
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
-                using (var op = Operation.Begin("User login"))
-                using (LogContext.PushProperty("UserName", model.Email))
+                if (result.Succeeded)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+                    var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                    var token = TokenFactory.GenerateJwtToken(model.Email, appUser, _configuration);
 
-                    if (result.Succeeded)
+                    return new AuthenticatedUser()
                     {
-                        var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                        var token = TokenFactory.GenerateJwtToken(model.Email, appUser, _configuration);
-
-                        response = Ok(new AuthenticatedUser()
-                        {
-                            Token = token,
-                            UserId = appUser.Id
-                        });
-                    }
-                    else
-                    {
-                        _logger.Warning("User authentication failed");
-                        response = BadRequest("Authentication Failed.");
-                    }
-
-                    op.Complete();
-
-                    return response;
+                        Token = token,
+                        UserId = appUser.Id
+                    };
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Unhandled Exception");
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                _logger.Warning("User authentication failed");
+                return BadRequest("Authentication Failed.");
             }
         }
 
@@ -77,39 +55,23 @@ namespace PFM.Api.Controllers
         [HttpPost("Register")]
         public async Task<object> Register([FromBody]User model)
         {
-            try
+            using (LogContext.PushProperty("UserName", model.Email))
             {
-                ObjectResult response = null;
-
-                using (var op = Operation.Begin("User registration"))
-                using (LogContext.PushProperty("UserName", model.Email))
+                var user = new IdentityUser
                 {
-                    var user = new IdentityUser
-                    {
-                        UserName = model.Email,
-                        Email = model.Email
-                    };
-                    var result = await _userManager.CreateAsync(user, model.Password);
+                    UserName = model.Email,
+                    Email = model.Email
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
 
-                    if (result.Succeeded)
-                    {
-                        await _signInManager.SignInAsync(user, false);
-                        response = Ok(TokenFactory.GenerateJwtToken(model.Email, user, _configuration));
-                    }
-                    else
-                    {
-                        _logger.Warning("User registration failed");
-                        response = BadRequest(result.Errors);
-                    }
-
-                    op.Complete();
-                    return response;
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, false);
+                    return TokenFactory.GenerateJwtToken(model.Email, user, _configuration);
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Unhandled Exception");
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+
+                _logger.Warning("User registration failed");
+                return BadRequest(result.Errors);
             }
         }
     }

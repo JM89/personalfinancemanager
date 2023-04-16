@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PFM.Api.Middlewares;
 using PFM.DataAccessLayer;
 using PFM.Services.Core.Automapper;
 using Serilog;
@@ -104,6 +105,9 @@ namespace PFM.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<TimedOperationMiddleware>();
+            app.UseMiddleware<UnhandledExceptionMiddleware>();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
