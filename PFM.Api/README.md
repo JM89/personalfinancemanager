@@ -2,11 +2,6 @@
 
 This API has currently a monolithic architecture.  
 
-## Pre-requisites
-
-- [x] .NET Core 2.1 SDK
-- [x] Docker
-
 ## Getting Started
 
 ### Debug the API

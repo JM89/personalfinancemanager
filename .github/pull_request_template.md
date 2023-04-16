@@ -6,6 +6,9 @@
 ### PFM API
 - N/A
 
+### PFM Auth API
+- N/A
+
 ### PFM Website
 - N/A
 

@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.Authentication.Api", "src\PFM.Authentication.Api\PFM.Authentication.Api.csproj", "{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C5CB1B98-256E-4DE0-91F5-4B814E2B0719}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{735DF6D6-1AEA-4726-9DD7-486DCA2A4EDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Docker|Any CPU = Docker|Any CPU
+		Docker|x64 = Docker|x64
+		Docker|x86 = Docker|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Debug|x64.Build.0 = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Debug|x86.Build.0 = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Docker|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Docker|Any CPU.Build.0 = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Docker|x64.ActiveCfg = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Docker|x64.Build.0 = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Docker|x86.ActiveCfg = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Docker|x86.Build.0 = Debug|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Release|x64.ActiveCfg = Release|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Release|x64.Build.0 = Release|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Release|x86.ActiveCfg = Release|Any CPU
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FFD7938F-9D1E-4896-A8D2-7EFC383903F3} = {C5CB1B98-256E-4DE0-91F5-4B814E2B0719}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F6FDFF34-70DA-4E4B-8C91-E3F48EA1C165}
+	EndGlobalSection
+EndGlobal
