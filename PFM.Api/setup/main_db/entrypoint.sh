@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COUNT_ATTEMPT=5
+COUNT_ATTEMPT=20
 
 echo "Attempt to connect to the DB server: $DB_SERVER_NAME,$DB_SERVER_PORT"
 for ((n=$COUNT_ATTEMPT;n>0;n--)) ; do
