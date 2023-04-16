@@ -35,10 +35,12 @@ namespace PFM.Api.Controllers
         [HttpPost("Login")]
         public async Task<object> Login([FromBody]User model)
         {
-            using (Operation.Time("User login"))
-            using (LogContext.PushProperty("UserName", model.Email))
+            try
             {
-                try
+                ObjectResult response = null;
+
+                using (var op = Operation.Begin("User login"))
+                using (LogContext.PushProperty("UserName", model.Email))
                 {
                     var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
@@ -46,21 +48,28 @@ namespace PFM.Api.Controllers
                     {
                         var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
                         var token = TokenFactory.GenerateJwtToken(model.Email, appUser, _configuration);
-                        return new AuthenticatedUser()
+
+                        response = Ok(new AuthenticatedUser()
                         {
                             Token = token,
                             UserId = appUser.Id
-                        };
+                        });
+                    }
+                    else
+                    {
+                        _logger.Warning("User authentication failed");
+                        response = BadRequest("Authentication Failed.");
                     }
 
-                    _logger.Warning("User authentication failed");
-                    return BadRequest("Authentication Failed.");
+                    op.Complete();
+
+                    return response;
                 }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, "Unhandled Exception");
-                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unhandled Exception");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -70,7 +79,9 @@ namespace PFM.Api.Controllers
         {
             try
             {
-                using (Operation.Time("User registration"))
+                ObjectResult response = null;
+
+                using (var op = Operation.Begin("User registration"))
                 using (LogContext.PushProperty("UserName", model.Email))
                 {
                     var user = new IdentityUser
@@ -83,11 +94,16 @@ namespace PFM.Api.Controllers
                     if (result.Succeeded)
                     {
                         await _signInManager.SignInAsync(user, false);
-                        return TokenFactory.GenerateJwtToken(model.Email, user, _configuration);
+                        response = Ok(TokenFactory.GenerateJwtToken(model.Email, user, _configuration));
+                    }
+                    else
+                    {
+                        _logger.Warning("User registration failed");
+                        response = BadRequest(result.Errors);
                     }
 
-                    _logger.Warning("User registration failed");
-                    return BadRequest(result.Errors);
+                    op.Complete();
+                    return response;
                 }
             }
             catch (Exception ex)

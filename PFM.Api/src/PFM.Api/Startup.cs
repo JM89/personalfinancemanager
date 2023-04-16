@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using PFM.DataAccessLayer;
 using PFM.Services.Core.Automapper;
@@ -31,6 +30,7 @@ namespace PFM.Api
 
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
+                .Enrich.FromLogContext()
                 .CreateLogger();
         }
 
