@@ -80,11 +80,16 @@ sh ./run-locally.sh
 ```
 
 The command will also start all the application-specific docker-compose files supported: 
-- [x] PFM.API database initialization script (db, security, schema, seed data)
+- [x] PFM_MAIN_DB database initialization script as a strong dependency for PFM.Api (db, security, schema, seed data)
+- [x] PFM_AUTH_DB database initialization script as a strong dependency for PFM.Auth.Api (db, security, schema)
 
-### Debug the application
+### Debug the main API
 
 Check the documentation [here](./PFM.Api/README.md).
+
+### Debug the Auth API
+
+Check the documentation [here](./PFM.Auth.Api/README.md).
 
 ### Start using the website
 
