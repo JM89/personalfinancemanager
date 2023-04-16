@@ -20,16 +20,18 @@ namespace PFM.Authentication.Api.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly ISecretManagerService _secretManagerService;
+        private readonly Serilog.ILogger _logger;
 
         private const string PasswordSalt = "pfm/pwdsalt";
 
         private readonly AppSettings _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings, IUserRepository userRepository, ISecretManagerService secretManagerService)
+        public UserService(IOptions<AppSettings> appSettings, IUserRepository userRepository, ISecretManagerService secretManagerService, Serilog.ILogger logger)
         {
             _appSettings = appSettings.Value;
             _userRepository = userRepository;
             _secretManagerService = secretManagerService;
+            _logger = logger;
         }
 
         public async Task<UserResponse> AuthenticateAsync(string username, string password)
@@ -95,7 +97,7 @@ namespace PFM.Authentication.Api.Services
             }
             catch(Exception ex)
             {
-                // TODO: add logging
+                _logger.Error(ex, $"Unhandled Exception: {ex.Message}");
                 throw;  
             }
 

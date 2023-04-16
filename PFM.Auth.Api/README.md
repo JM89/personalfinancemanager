@@ -7,7 +7,7 @@
 :warning: outdated!
 
 ```
-aws secretsmanager create-secret --name "pfm/pwdsalt" --description "Password Salt" --secret-string "{PasswordSalt: \"SOME SALT\"}" --endpoint http://localhost:4566 --region eu-west-1
+aws secretsmanager create-secret --name "pfm/pwdsalt" --description "Password Salt" --secret-string "{PasswordSalt: \"SOME SALT\"}" --endpoint http://localhost:4566 --region eu-west-2
 ```
 
 ### Debug the API

@@ -7,9 +7,11 @@ namespace PFM.Authentication.Api.Repositories.Implementations
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(PFMContext db) : base(db)
-        {
+        private readonly Serilog.ILogger _logger;
 
+        public UserRepository(PFMContext db, Serilog.ILogger logger) : base(db)
+        {
+            _logger = logger;
         }
 
         public User GetUserByName(string username)
@@ -22,7 +24,7 @@ namespace PFM.Authentication.Api.Repositories.Implementations
             }
             catch(Exception ex)
             {
-                // TODO: add logging
+                _logger.Error(ex, $"Unhandled Exception: {ex.Message}");
                 throw ;
             }            
         }

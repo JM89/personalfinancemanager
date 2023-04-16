@@ -6,11 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PFM.Authentication.Api.Helpers;
+using PFM.Authentication.Api.Middlewares;
 using PFM.Authentication.Api.Repositories;
 using PFM.Authentication.Api.Repositories.Implementations;
 using PFM.Authentication.Api.Repositories.Interfaces;
 using PFM.Authentication.Api.Services;
 using PFM.Authentication.Api.Services.Interfaces;
+using Serilog;
 using System.Text;
 
 namespace PFM.Authentication.Api
@@ -20,6 +22,11 @@ namespace PFM.Authentication.Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .Enrich.FromLogContext()
+                .CreateLogger();
         }
 
         public IConfiguration Configuration { get; }
@@ -27,6 +34,8 @@ namespace PFM.Authentication.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(Log.Logger);
+
             services.AddCors();
             services.AddControllers();
 
@@ -76,7 +85,10 @@ namespace PFM.Authentication.Api
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
+            app.UseMiddleware<TimedOperationMiddleware>();
+            app.UseMiddleware<UnhandledExceptionMiddleware>();
+
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
