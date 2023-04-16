@@ -1,0 +1,22 @@
+version: "3.3"
+
+services:
+
+  aws:
+    image: localstack/localstack:0.11.2
+    container_name: aws
+    environment:
+      - SERVICES=secretsmanager
+      - DEFAULT_REGION=eu-west-2
+      - HOSTNAME=localstack
+    ports:
+      - "4584:4584"
+
+  auth-db-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: auth-db-server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=VerySecret1234!
+    ports:
+      - "1434:1433"
