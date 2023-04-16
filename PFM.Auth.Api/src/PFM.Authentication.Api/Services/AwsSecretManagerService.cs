@@ -18,11 +18,11 @@ namespace PFM.Authentication.Api.Services
 
         public AwsSecretManagerService(AppSettings appSettings)
         {
-            var config = new AmazonSecretsManagerConfig { ServiceURL = appSettings.AwsEndpointUrl };
-            if (!string.IsNullOrEmpty(appSettings.AwsRegion))
+            var config = new AmazonSecretsManagerConfig();
+            if (!string.IsNullOrEmpty(appSettings.AwsEndpointUrl))
             {
-                var awsRegion = RegionEndpoint.GetBySystemName(appSettings.AwsRegion);
-                config.RegionEndpoint = awsRegion;
+                config.ServiceURL = appSettings.AwsEndpointUrl;
+                config.AuthenticationRegion = appSettings.AwsRegion;
             }
             _client = new AmazonSecretsManagerClient(config);
         }

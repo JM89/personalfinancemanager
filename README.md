@@ -59,7 +59,7 @@ The plan is to consolidate the existing setup to reduce the risk of regressions;
 - [x] Support SEQ Logging in PFM.Api
 - [x] PFM.Auth.API code import in the PFM repository
 - [x] PFM.Auth.API Auth DB setup
-- [ ] Support SEQ Logging in PFM.Auth.API
+- [x] Support SEQ Logging in PFM.Auth.API
 - [ ] PFM.API forwarding Login/Register requests to the PFM.Auth.Api
 
 ## Getting Started
