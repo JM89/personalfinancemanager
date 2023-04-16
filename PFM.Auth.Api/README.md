@@ -2,90 +2,21 @@
 
 ## Getting Started
 
-Prerequisites:
-- docker is up and running
-- docker-compose is installed
-- awscli is installed and configured
+### Add a secret salt for your user passwords
 
-### Step 1: Start the dependencies
-
-The docker compose will start: 
-- a MySQL DB Server: Available on localhost,1433 or 192.168.99.100,1433 depending on your docker setup.
-- Local Stack for secretsmanager used by PFM Authentication API
-
-```bash
-docker-compose up
-```
-
-### Step 2: Publish database
-
-Right click on PFM.Authentication.Db and publish.
-
-### Step 3: Add a secret salt for your user passwords
+:warning: outdated!
 
 ```
-aws secretsmanager create-secret --name "pfm/pwdsalt" --description "Password Salt" --secret-string "{PasswordSalt: \"SOME SALT\"}" --endpoint http://localhost:4584 --region us-east-1
+aws secretsmanager create-secret --name "pfm/pwdsalt" --description "Password Salt" --secret-string "{PasswordSalt: \"SOME SALT\"}" --endpoint http://localhost:4566 --region eu-west-1
 ```
 
-## Build pfm-authentication-api docker image
+### Debug the API
 
-Prerequisites:
-- have a repository where to store the docker image
+Open the solution and make sure you set PFM.Auth.Api as the start up project. 
 
-### Step 1: Docker Build
+There is currently no support for Swagger.
 
-```
-docker build . -t jm89/pfm-authentication-api:api-latest
-```
-
-### Step 2: Docker Run
-
-```
-docker run -p 5000:5000 -e ASPNETCORE_URLS="http://+:5000" jm89/pfm-authentication-api:api-latest
-```
-
-And check that you can ping the API:
-
-```
-curl -kv http://localhost:5000
-```
-
-### Step 3: Docker Push
-
-```
-docker login --password "<password>" --username "jm89"
-```
-
-```
-docker push jm89/pfm-authentication-api:api-latest 
-```
-
-## Work in progress
-
-### Code Improvements
-
-- [ ] Add Swagger Documentation
-
-### Security
-
-- [ ] Add monitoring on the AllowAnonymous methods
-
-### Tests
-
-- [ ] Add unit tests
-
-## Functional Requirements
-
-|Use Case| Name| Description|
-|---|---|---|
-|[U_01](https://github.com/JM89/personalfinancemanager/wiki/U_01---User-Registration)| User Registering|Register a new user so he can start to use the application|
-|[U_02](https://github.com/JM89/personalfinancemanager/wiki/U_02---User-Authentication)| User Authentication|Be able to log in a user so he can start to use the application|
-|A_01| API Registration | Be able to register and validate APIs  with protected API Keys |
-
-
-### Available endpoints
-
-#### User endpoints
+### Test the API
 
 ```
 POST http://localhost:4000/users/authenticate
@@ -127,3 +58,45 @@ POST http://localhost:4000/apikeys/register
 	"AppId": "6a38d6d7-47a3-4fee-9614-35c28e8fc601"
 }
 ```
+
+## Publish the pfm-authentication-api docker image
+
+Prerequisites:
+- have a repository where to store the docker image
+
+### Step 1: Docker Build
+
+```
+docker build . -t jm89/pfm-authentication-api:api-latest
+```
+
+### Step 2: Docker Run
+
+```
+docker run -p 5000:5000 -e ASPNETCORE_URLS="http://+:5000" jm89/pfm-authentication-api:api-latest
+```
+
+And check that you can ping the API:
+
+```
+curl -kv http://localhost:5000
+```
+
+### Step 3: Docker Push
+
+```
+docker login --password "<password>" --username "jm89"
+```
+
+```
+docker push jm89/pfm-authentication-api:api-latest 
+```
+
+## Functional Requirements
+
+|Use Case| Name| Description|
+|---|---|---|
+|[U_01](https://github.com/JM89/personalfinancemanager/wiki/U_01---User-Registration)| User Registering|Register a new user so he can start to use the application|
+|[U_02](https://github.com/JM89/personalfinancemanager/wiki/U_02---User-Authentication)| User Authentication|Be able to log in a user so he can start to use the application|
+|A_01| API Registration | Be able to register and validate APIs  with protected API Keys |
+
