@@ -22,10 +22,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Do not publish libraries if no changes mades
         uses: dorny/paths-filter@v2
         id: changes
         with:
+          base: main
           filters: |
             libs-have-changed:
               - '${{ env.WORKDIR }}src/PFM.Api.Contracts/**'
