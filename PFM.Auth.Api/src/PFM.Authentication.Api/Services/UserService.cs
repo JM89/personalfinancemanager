@@ -9,11 +9,13 @@ using PFM.Authentication.Api.Services.Interfaces;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("PFM.Authentication.Api.Tests")]
 namespace PFM.Authentication.Api.Services
 {
     internal class UserService : IUserService
@@ -68,12 +70,12 @@ namespace PFM.Authentication.Api.Services
             };
         }
 
-        public async Task<bool> CreateAsync(UserRequest userRequest)
+        public async Task<User> CreateAsync(UserRequest userRequest)
         {
             var usernameAlreadyInUse = _userRepository.GetUserByName(userRequest.Username);
             if (usernameAlreadyInUse != null)
             {
-                return false;
+                return null;
             }
 
             var user = new User()
@@ -85,10 +87,10 @@ namespace PFM.Authentication.Api.Services
             };
 
             _userRepository.Create(user);
-            return true;
+            return user;
         }
 
-        private async Task<byte[]> GenerateSaltedHashAsync(string password)
+        public async Task<byte[]> GenerateSaltedHashAsync(string password)
         {
             SecretPasswordSaltModel result = null;
             try
