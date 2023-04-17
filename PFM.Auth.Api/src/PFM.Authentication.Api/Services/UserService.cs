@@ -110,21 +110,10 @@ namespace PFM.Authentication.Api.Services
             var plainText = Encoding.ASCII.GetBytes(password);
             var salt = Encoding.ASCII.GetBytes(saltStr);
 
-            HashAlgorithm algorithm = new SHA256Managed();
-
-            byte[] plainTextWithSaltBytes =
-              new byte[plainText.Length + salt.Length];
-
-            for (int i = 0; i < plainText.Length; i++)
+            using (var alg = SHA512.Create())
             {
-                plainTextWithSaltBytes[i] = plainText[i];
+                return alg.ComputeHash(new byte[plainText.Length + salt.Length]);
             }
-            for (int i = 0; i < salt.Length; i++)
-            {
-                plainTextWithSaltBytes[plainText.Length + i] = salt[i];
-            }
-
-            return algorithm.ComputeHash(plainTextWithSaltBytes);
         }
 
         public Task<UserResponse> GetAuthenticatedUser(ClaimsIdentity identity)
