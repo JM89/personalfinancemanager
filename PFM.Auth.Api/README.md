@@ -8,6 +8,8 @@ Open the solution and make sure you set PFM.Auth.Api as the start up project.
 
 There is currently no support for Swagger.
 
+The application can be found [here](http://localhost/#/events?filter=Application%20%3D%20'PFM.Auth.Api').
+
 ### Test the API
 
 ```
@@ -49,39 +51,6 @@ POST http://localhost:4000/apikeys/register
 {
 	"AppId": "6a38d6d7-47a3-4fee-9614-35c28e8fc601"
 }
-```
-
-## Publish the pfm-authentication-api docker image
-
-Prerequisites:
-- have a repository where to store the docker image
-
-### Step 1: Docker Build
-
-```
-docker build . -t jm89/pfm-authentication-api:api-latest
-```
-
-### Step 2: Docker Run
-
-```
-docker run -p 5000:5000 -e ASPNETCORE_URLS="http://+:5000" jm89/pfm-authentication-api:api-latest
-```
-
-And check that you can ping the API:
-
-```
-curl -kv http://localhost:5000
-```
-
-### Step 3: Docker Push
-
-```
-docker login --password "<password>" --username "jm89"
-```
-
-```
-docker push jm89/pfm-authentication-api:api-latest 
 ```
 
 ## Functional Requirements
