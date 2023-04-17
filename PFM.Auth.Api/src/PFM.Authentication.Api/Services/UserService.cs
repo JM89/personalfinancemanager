@@ -75,7 +75,7 @@ namespace PFM.Authentication.Api.Services
             var usernameAlreadyInUse = _userRepository.GetUserByName(userRequest.Username);
             if (usernameAlreadyInUse != null)
             {
-                return null;
+                return usernameAlreadyInUse;
             }
 
             var user = new User()
