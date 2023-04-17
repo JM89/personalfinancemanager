@@ -5,6 +5,7 @@ branches:
     mode: ContinuousDeployment
     increment: Minor
     is-release-branch: true
+    tag: ''
   pull-request:
     mode: ContinuousDeployment
     tag: '-pr'
