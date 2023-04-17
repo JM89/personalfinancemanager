@@ -14,11 +14,13 @@ env:
   GITHUB_ORG: 'JM89'
 
 jobs:
-  check-if-changed:
+  check-if-publish-required:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ${{ env.WORKDIR }}
+    outputs:
+      should-publish: ${{ steps.check-if-publish-required.outputs.libs-have-changed }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -32,7 +34,7 @@ jobs:
             changes:
               - '${{ env.WORKDIR }}/src/PFM.Api.Contracts/**'
   build:
-    if: steps.check-if-changed.outputs.libs-have-changed == 'true'
+    if: ${{needs.check-if-publish-required.outputs.should-publish}} == 'true'
     needs: check-if-changed
     runs-on: ubuntu-latest
     defaults:
