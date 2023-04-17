@@ -8,7 +8,7 @@ on:
     types: [completed]
 
 env:
-  DOTNET_ENV: '2.1.x'
+  DOTNET_ENV: '2.0.x'
   WORKDIR: PFM.Auth.Api/
   GITHUB_ORG: 'JM89'
   TARGET_LIB: PFM.Authentication.Api.Contracts
