@@ -16,13 +16,21 @@ env:
 jobs:
   check-if-changed:
     runs-on: ubuntu-latest
-    - name: Do not publish libraries if no changes mades
-      uses: dorny/paths-filter@v2
-      id: changes
-      with:
-        libs-have-changed: |
-          changes:
-            - '${{ env.WORKDIR }}/src/PFM.Api.Contracts/**'
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Do not publish libraries if no changes mades
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          libs-have-changed: |
+            changes:
+              - '${{ env.WORKDIR }}/src/PFM.Api.Contracts/**'
   build:
     if: steps.check-if-changed.outputs.libs-have-changed == 'true'
     needs: check-if-changed
