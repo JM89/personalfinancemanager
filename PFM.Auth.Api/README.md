@@ -51,39 +51,6 @@ POST http://localhost:4000/apikeys/register
 }
 ```
 
-## Publish the pfm-authentication-api docker image
-
-Prerequisites:
-- have a repository where to store the docker image
-
-### Step 1: Docker Build
-
-```
-docker build . -t jm89/pfm-authentication-api:api-latest
-```
-
-### Step 2: Docker Run
-
-```
-docker run -p 5000:5000 -e ASPNETCORE_URLS="http://+:5000" jm89/pfm-authentication-api:api-latest
-```
-
-And check that you can ping the API:
-
-```
-curl -kv http://localhost:5000
-```
-
-### Step 3: Docker Push
-
-```
-docker login --password "<password>" --username "jm89"
-```
-
-```
-docker push jm89/pfm-authentication-api:api-latest 
-```
-
 ## Functional Requirements
 
 |Use Case| Name| Description|

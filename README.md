@@ -80,8 +80,11 @@ sh ./run-locally.sh
 ```
 
 The command will also start all the application-specific docker-compose files supported: 
-- [x] PFM_MAIN_DB database initialization script as a strong dependency for PFM.Api (db, security, schema, seed data)
-- [x] PFM_AUTH_DB database initialization script as a strong dependency for PFM.Auth.Api (db, security, schema)
+- [x] PFM.Api dependencies:
+    - [x] PFM_MAIN_DB database initialization script (db, security, schema, seed data)
+- [x] PFM.Auth.Api dependencies: 
+    - [x] PFM_AUTH_DB database initialization script (db, security, schema)
+    - [x] Password Salt Secret in localstack (secret manager)
 
 ### Debug the main API
 
