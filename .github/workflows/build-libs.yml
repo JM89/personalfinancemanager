@@ -2,6 +2,7 @@ name: Build & Publish PFM Common Libraries
 
 on:
   workflow_dispatch:
+  pull_request:
   workflow_run:
     workflows: [Create Git Release]
     types: [completed]
@@ -12,7 +13,18 @@ env:
   GITHUB_ORG: 'JM89'
 
 jobs:
+  check-if-changed:
+    runs-on: ubuntu-latest
+    - name: Do not publish libraries if no changes mades
+      uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        libs-have-changed: |
+          changes:
+            - '${{ env.WORKDIR }}/src/PFM.Api.Contracts/**'
   build:
+    if: steps.check-if-changed.outputs.libs-have-changed == 'true'
+    needs: check-if-changed
     runs-on: ubuntu-latest
     defaults:
       run:
