@@ -1,3 +1,1 @@
 increment: Minor
-mode: ContinuousDeployment
-continuous-delivery-fallback-tag: ''
