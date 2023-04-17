@@ -17,7 +17,7 @@ jobs:
       run:
         working-directory: ${{ env.WORKDIR }}
     outputs:
-      should-push: ${{ steps.changes.outputs.code-has-changed }}
+      should-push: ${{ steps.changes.outputs.code-changes }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,8 +29,8 @@ jobs:
         with:
           base: main
           filters: |
-            libs-have-changed:
-              - '${{ env.WORKDIR }}src/PFM.Api.Contracts/**'
+            code-changes:
+              - '${{ env.WORKDIR }}**'
   build:
     if: needs.check-if-docker-push-required.outputs.should-push == 'true'
     needs: check-if-docker-push-required
