@@ -39,7 +39,7 @@ namespace PFM.Authentication.Api.Controllers
         {
             var result = await _userService.CreateAsync(model);
 
-            if (result)
+            if (result != null)
             {
                 return await Authenticate(model);
             }
