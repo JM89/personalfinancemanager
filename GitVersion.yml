@@ -1,12 +1,9 @@
-mode: ContinuousDeployment
-continuous-delivery-fallback-tag: ''
+mode: Mainline
 branches:
   main:
-    mode: ContinuousDeployment
-    increment: Minor
-    is-release-branch: true
     tag: ''
-  pull-request:
-    mode: ContinuousDeployment
-    tag: '-pr'
-    is-release-branch: false
+    increment: Minor
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+ignore:
+  sha: []
