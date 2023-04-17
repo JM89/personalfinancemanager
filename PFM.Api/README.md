@@ -10,6 +10,8 @@ Open the solution and make sure you set PFM.Api as the start up project.
 
 The API should open in the browser directly: http://localhost:52688/swagger/index.html.
 
+The application can be found [here](http://localhost/#/events?filter=Application%20%3D%20'PFM.Api').
+
 ### Test the API
 
 All actions require to be authenticated. 
