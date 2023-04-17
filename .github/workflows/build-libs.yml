@@ -35,7 +35,7 @@ jobs:
               - '${{ env.WORKDIR }}/src/PFM.Api.Contracts/**'
   build:
     if: ${{needs.check-if-publish-required.outputs.should-publish}} == 'true'
-    needs: check-if-changed
+    needs: check-if-publish-required
     runs-on: ubuntu-latest
     defaults:
       run:
