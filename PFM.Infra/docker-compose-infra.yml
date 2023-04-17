@@ -31,6 +31,8 @@ services:
     ports:
       - "5341:5341"
       - "80:80"
+    networks:
+      - local-network
 
   # Simulating AWS cloud 
   localstack:
@@ -39,7 +41,7 @@ services:
       dockerfile: Dockerfile
       context: ./PFM.Infra/localstack
     environment:
-      - SERVICES=s3,ssm
+      - SERVICES=ssm
       - DEBUG=${DEBUG-}
       - TERRAFORM_ENVIRONMENT=local
       - AWS_DEFAULT_REGION=eu-west-2
@@ -51,3 +53,5 @@ services:
       - "4566:4566"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - local-network
