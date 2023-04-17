@@ -1,4 +1,4 @@
-name: Build & Publish PFM Common Libraries
+name: Publish PFM Common Libraries
 
 on:
   workflow_dispatch:
@@ -54,7 +54,9 @@ jobs:
       - name: Determine Version
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0
-          
+        with: 
+          useConfigFile: true  
+        
       - name: Display GitVersion outputs (step output)
         run: |
           echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
