@@ -41,7 +41,7 @@ This project was originally made of 4 solutions:
 
 ### Phased Approach Refactoring (April 14, 2023)
 
-The system is greatly outdated. As the previous attempt to rework the whole system was not successful, an interactive approach is adopted for this new phase of development.
+The system is greatly outdated. As the previous attempt to rework the whole system was not successful, an iterative approach is adopted for this new phase of development.
 
 At the start of the phase, the simplified architecture is:
 

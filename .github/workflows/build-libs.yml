@@ -2,11 +2,9 @@ name: Build & Publish PFM Common Libraries
 
 on:
   workflow_dispatch:
-  # TMP FOR TESTING PURPOSE
-  pull_request:
-  # workflow_run:
-  #   workflows: [Create Git Release]
-  #   types: [completed]
+  workflow_run:
+    workflows: [Create Git Release]
+    types: [completed]
 
 env:
   DOTNET_ENV: '2.1.x'
@@ -14,7 +12,26 @@ env:
   GITHUB_ORG: 'JM89'
 
 jobs:
+  check-if-publish-required:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    outputs:
+      should-publish: ${{ steps.changes.outputs.libs-have-changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Do not publish libraries if no changes mades
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            libs-have-changed:
+              - '${{ env.WORKDIR }}src/PFM.Api.Contracts/**'
   build:
+    if: needs.check-if-publish-required.outputs.should-publish == 'true'
+    needs: check-if-publish-required
     runs-on: ubuntu-latest
     defaults:
       run:
