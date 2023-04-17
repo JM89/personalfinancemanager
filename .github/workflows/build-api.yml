@@ -10,6 +10,7 @@ on:
 env:
   DOTNET_ENV: '2.1.x'
   WORKDIR: PFM.Api/
+  GITHUB_ORG: 'JM89'
 
 jobs:
   build:
@@ -22,7 +23,9 @@ jobs:
       - name: Setup .NET Core SDK ${{ env.DOTNET_ENV }}
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ env.DOTNET_ENV }}
+          dotnet-version: ${{ env.DOTNET_ENV }}     
+      - name: Log in to access GitHub Packages 
+        run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.GITHUB_TOKEN }} "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" --store-password-in-clear-text
       - name: Install dependencies
         run: dotnet restore
       - name: Build
