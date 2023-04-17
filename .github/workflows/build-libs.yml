@@ -30,8 +30,8 @@ jobs:
         uses: dorny/paths-filter@v2
         id: changes
         with:
-          libs-have-changed: |
-            changes:
+          filters: |
+            libs-have-changed:
               - '${{ env.WORKDIR }}/src/PFM.Api.Contracts/**'
   build:
     if: ${{needs.check-if-publish-required.outputs.should-publish}} == 'true'
