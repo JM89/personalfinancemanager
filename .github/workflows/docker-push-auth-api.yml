@@ -1,0 +1,53 @@
+name: Docker build & Push PFM Auth API
+
+on:
+  workflow_dispatch:
+  pull_request:
+  # workflow_run:
+  #   workflows: [Create Git Release]
+  #   types: [completed]
+
+env:
+  WORKDIR: PFM.Auth.Api/
+
+jobs:
+  check-if-docker-push-required:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    outputs:
+      should-push: ${{ steps.changes.outputs.code-has-changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Do not publish libraries if no changes mades
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          base: main
+          filters: |
+            libs-have-changed:
+              - '${{ env.WORKDIR }}src/PFM.Api.Contracts/**'
+  build:
+    if: needs.check-if-docker-push-required.outputs.should-push == 'true'
+    needs: check-if-docker-push-required
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: .
+          file: ./Dockerfile
+          tag: ghcr.io/jm89/pfm-authentication-api:latest
+          push: false
+
