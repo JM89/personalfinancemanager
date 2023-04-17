@@ -18,3 +18,14 @@ services:
     container_name: auth-db
     networks:
       - local-network
+
+  pwdsalt-secret:
+    build:
+      context: ./setup/pwdsalt_secret
+      dockerfile: dockerfile
+    environment:
+      AWS_ENDPOINT: http://localstack:4566
+      AWS_REGION: eu-west-2
+    container_name: pwdsalt-secret
+    networks:
+      - local-network
