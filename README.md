@@ -13,11 +13,11 @@ The detailed specifications are detailed [here](https://github.com/JM89/personal
 
 ## General Architecture & Technologies
 
-:warning: The system is greatly outdated. As the previous attempt to rework the whole system was not successful, an iterative approach is adopted for this new phase of development. The evolution of the architecture is detailed in this wiki page: [System Architecture Evolution](https://github.com/JM89/personalfinancemanager/wiki/System-Architecture-Evolution). 
-
 ### Overview
 
 ![Architecture-C4-Container.png](/Documentation/Pictures/Architecture/Architecture-C4-Container.png)
+
+The evolution of the architecture is documented in this wiki page: [System Architecture Evolution](https://github.com/JM89/personalfinancemanager/wiki/System-Architecture-Evolution). 
 
 ## Getting Started
 
