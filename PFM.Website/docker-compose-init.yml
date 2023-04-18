@@ -1,0 +1,26 @@
+version: "3.8"
+
+networks:
+  local-network:
+    name: local-network
+    external: true
+
+services:
+
+  pfm-api:
+    build:
+      context: ../PFM.Api
+      dockerfile: Dockerfile
+      args:
+        - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    environment:
+      ASPNETCORE_URLS: https://+:4431
+      ASPNETCORE_ENVIRONMENT: Development
+      APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
+      APP_ConnectionStrings__PFMConnection: Server=db-server,1433;Database=PFM_MAIN_DB;User Id=PFM_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
+      APP_AuthApi__EndpointUrl: http://pfm-auth-api:5000
+    container_name: pfm-api
+    ports:
+      - "4431:4431"
+    networks:
+      - local-network

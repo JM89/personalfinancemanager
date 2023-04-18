@@ -93,6 +93,9 @@
     <Reference Include="PFM.Api.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PFM.Api.Contracts.1.0.0\lib\netstandard2.0\PFM.Api.Contracts.dll</HintPath>
     </Reference>
+    <Reference Include="PFM.Authentication.Api.Contracts, Version=1.23.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PFM.Authentication.Api.Contracts.1.23.0\lib\netstandard2.0\PFM.Authentication.Api.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />

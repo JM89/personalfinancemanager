@@ -45,7 +45,7 @@ namespace PersonalFinanceManager.Controllers
                 options.ExpiresUtc = DateTime.UtcNow.AddMinutes(30);
                 var claims = new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, result.UserId),
+                    new Claim(ClaimTypes.NameIdentifier, result.Username),
                     new Claim("AccessToken", string.Format("Bearer {0}", result.Token)),
                 };
                 var identity = new ClaimsIdentity(claims, "ApplicationCookie");

@@ -21,6 +21,14 @@ The evolution of the architecture is documented in this wiki page: [System Archi
 
 ## Getting Started
 
+### Secrets
+
+To run from local machine, you will need a GitHub token to access the private GitHub packages. 
+
+In the `./PFM.Infra/configs`, you will find an .env-example file. If you copy this file and name it `.env` in the same location, the `run-locally.sh` script will pick it up automatically. 
+
+:warning: This file is part of gitignore. It will contains sensitive data, do not commit the .env file. 
+
 ### Shared and specific infrastructure
 
 Some infrastructure resources are shared accross different projects (e.g. SQL server, SEQ, AWS), some are specifics to each apps (e.g. creation DB, a SQS queue). The resources available in the PFM.Infra folder, contains the shared resources. 
@@ -52,3 +60,16 @@ Check the documentation [here](./PFM.Auth.Api/README.md).
 2. Set User Profile (top menu) 
 3. Configure your data: Country, Currency, Expense Types, Bank and Accounts (Configuration menu). 
 4. Start creating movements from the Account Management dashboard screen
+
+## Useful Links
+
+|Resources|Docker|Debug Mode|Internal Docker|
+|---|---|---|---|
+|App - PFM.Website|N/A|http://localhost:54401/|N/A|
+|App - PFM.Api - Endpoints|http://localhost:5001/api|https://localhost:7098/api|https://pfm-api:5001/api|
+|App - PFM.Api - Swagger|http://localhost:5001/swagger/index.html|https://localhost:7098/swagger/index.html|N/A|
+|App - PFM.Auth.Api|http://localhost:5000|https://localhost:4000|https://pfm-auth-api:5000|
+|SEQ - Log Ingest|http://localhost:5341|http://localhost:5341|http://seq:5341|
+|SEQ - UI|http://localhost:80|http://localhost:80|http://seq:80|
+|SQL Server|localhost,1433|localhost,1433|db-server,1433|
+|Localstack|http://localhost:4566|http://localhost:4566|http://localstack:4566|

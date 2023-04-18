@@ -5,6 +5,9 @@ using System.Web.Routing;
 using PersonalFinanceManager.Services.Automapper;
 using System.Web.Helpers;
 using System.Security.Claims;
+using System.Net.Security;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace PersonalFinanceManager
 {
@@ -22,6 +25,15 @@ namespace PersonalFinanceManager
                 cfg.AddProfile<DTOToModelMapping>();
             });
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                ServicePointManager.ServerCertificateValidationCallback =
+                   delegate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+                   {
+                       return true;
+                   };
+            }
         }
 
         protected virtual void Application_BeginRequest()

@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\PFM.Services\PFM.Services.csproj" />
+    <ProjectReference Include="..\PFM.Services\PFM.Services.csproj" />
   </ItemGroup>
 
 </Project>
