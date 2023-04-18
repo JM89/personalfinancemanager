@@ -1,5 +1,11 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PFM.Api.Extensions;
 using PFM.Api.Middlewares;
+using PFM.DataAccessLayer;
+using PFM.Services.Core.Automapper;
 
 namespace PFM.Api
 {
@@ -18,6 +24,11 @@ namespace PFM.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerDefinition();
 
+            builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
+
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacModule()));
+
             var app = builder.Build();
 
             app.UseMiddleware<TimedOperationMiddleware>();
@@ -34,6 +45,14 @@ namespace PFM.Api
             app.UseAuthorization();
 
             app.MapControllers();
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<ModelToEntityMapping>();
+                cfg.AddProfile<EntityToModelMapping>();
+                cfg.AddProfile<EntityToEntityMapping>();
+                cfg.AddProfile<SearchParametersMapping>();
+            });
 
             app.Run();
         }
