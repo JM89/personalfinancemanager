@@ -5,9 +5,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Saving")]
-    public class SavingController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class SavingController : ControllerBase
     {
         private readonly ISavingService _SavingService;
 

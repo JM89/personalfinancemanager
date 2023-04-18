@@ -5,9 +5,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/BudgetPlan")]
-    public class BudgetPlanController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class BudgetPlanController : ControllerBase
     {
         private readonly IBudgetPlanService _BudgetPlanService;
 

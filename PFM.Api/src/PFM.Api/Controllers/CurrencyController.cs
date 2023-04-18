@@ -5,9 +5,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Currency")]
-    public class CurrencyController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class CurrencyController : ControllerBase
     {
         private readonly ICurrencyService _currencyService;
 

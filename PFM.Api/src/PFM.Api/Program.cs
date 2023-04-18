@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.WindowsServices;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using PFM.Api.Extensions;
+using PFM.Api.Middlewares;
+using PFM.DataAccessLayer;
+using PFM.Services.Core.Automapper;
 
 namespace PFM.Api
 {
@@ -16,26 +13,48 @@ namespace PFM.Api
     {
         public static void Main(string[] args)
         {
-            var isService = !(Debugger.IsAttached || args.Contains("--console"));
-            var builder = WebHost.CreateDefaultBuilder(args.Where(arg => arg != "--console").ToArray()).UseStartup<Startup>();
+            var builder = WebApplication.CreateBuilder(args);
 
-            if (isService)
+            builder.Services.AddControllers();
+
+            builder.Services.AddAuthenticationAndAuthorization(builder.Configuration);
+
+            builder.Services.AddMonitoring(builder.Configuration);
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerDefinition();
+
+            builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
+
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacModule()));
+
+            var app = builder.Build();
+
+            app.UseMiddleware<TimedOperationMiddleware>();
+            app.UseMiddleware<UnhandledExceptionMiddleware>();
+
+            if (app.Environment.IsDevelopment())
             {
-                var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
-                var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-                builder.UseContentRoot(pathToContentRoot);
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
-            var host = builder.Build();
+            app.UseHttpsRedirection();
 
-            if (isService)
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            Mapper.Initialize(cfg =>
             {
-                host.RunAsService();
-            }
-            else
-            {
-                host.Run();
-            }
+                cfg.AddProfile<ModelToEntityMapping>();
+                cfg.AddProfile<EntityToModelMapping>();
+                cfg.AddProfile<EntityToEntityMapping>();
+                cfg.AddProfile<SearchParametersMapping>();
+            });
+
+            app.Run();
         }
     }
 }

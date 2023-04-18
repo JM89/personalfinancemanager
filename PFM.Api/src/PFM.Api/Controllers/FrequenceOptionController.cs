@@ -5,9 +5,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/FrequenceOption")]
-    public class FrequenceOptionController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class FrequenceOptionController : ControllerBase
     {
         private readonly IFrequenceOptionService _FrequenceOptionService;
 

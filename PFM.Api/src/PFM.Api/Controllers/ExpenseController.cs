@@ -7,9 +7,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Expense")]
-    public class ExpenseController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ExpenseController : ControllerBase
     {
         private readonly IExpenseService _ExpenseService;
 
