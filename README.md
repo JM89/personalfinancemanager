@@ -62,6 +62,7 @@ The plan is to consolidate the existing setup to reduce the risk of regressions;
 - [x] Support SEQ Logging in PFM.Auth.API
 - [x] PFM.API forwarding Login/Register requests to the PFM.Auth.Api
 - [ ] Enhance error handling between PFM.Auth.Api & PFM.Api
+- [ ] Review PFM.Auth.Api to align with OAuth2 (Expiry rules)
 
 ## Getting Started
 

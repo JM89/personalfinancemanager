@@ -21,6 +21,7 @@ namespace PFM.Authentication.Api.Services
     internal class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserTokenRepository _userTokenRepository;
         private readonly ISecretManagerService _secretManagerService;
         private readonly Serilog.ILogger _logger;
 
@@ -28,10 +29,11 @@ namespace PFM.Authentication.Api.Services
 
         private readonly AppSettings _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings, IUserRepository userRepository, ISecretManagerService secretManagerService, Serilog.ILogger logger)
+        public UserService(IOptions<AppSettings> appSettings, IUserRepository userRepository, IUserTokenRepository userTokenRepository, ISecretManagerService secretManagerService, Serilog.ILogger logger)
         {
             _appSettings = appSettings.Value;
             _userRepository = userRepository;
+            _userTokenRepository = userTokenRepository;
             _secretManagerService = secretManagerService;
             _logger = logger;
         }
@@ -128,6 +130,14 @@ namespace PFM.Authentication.Api.Services
                 LastName = authenticatedUser.LastName,
                 Username = authenticatedUser.Username
             });
+        }
+
+        public Task<bool> ValidateToken(ClaimsIdentity identity, string token)
+        {
+            int userId = Convert.ToInt32(identity.Name);
+            var authenticatedUser = _userRepository.GetById(userId);
+
+            return Task.FromResult(_userTokenRepository.ValidateToken(authenticatedUser.Username, token));
         }
     }
 }

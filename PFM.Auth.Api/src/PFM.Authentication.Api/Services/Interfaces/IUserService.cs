@@ -10,5 +10,6 @@ namespace PFM.Authentication.Api.Services.Interfaces
         Task<UserResponse> AuthenticateAsync(string username, string password);
         Task<User> CreateAsync(UserRequest user);
         Task<UserResponse> GetAuthenticatedUser(ClaimsIdentity identity);
+        Task<bool> ValidateToken(ClaimsIdentity identity, string token);
     }
 }
