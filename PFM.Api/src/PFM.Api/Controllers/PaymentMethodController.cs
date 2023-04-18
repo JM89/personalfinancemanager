@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.PaymentMethod;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/PaymentMethod")]
-    public class PaymentMethodController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PaymentMethodController : ControllerBase
     {
         private readonly IPaymentMethodService _PaymentMethodService;
 

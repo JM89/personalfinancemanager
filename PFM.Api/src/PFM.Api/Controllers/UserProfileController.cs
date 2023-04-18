@@ -4,9 +4,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/UserProfile")]
-    public class UserProfileController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UserProfileController : ControllerBase
     {
         private readonly IUserProfileService _UserProfileService;
 

@@ -5,9 +5,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Income")]
-    public class IncomeController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class IncomeController : ControllerBase
     {
         private readonly IIncomeService _IncomeService;
 

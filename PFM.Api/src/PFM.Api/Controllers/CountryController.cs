@@ -5,9 +5,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Country")]
-    public class CountryController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class CountryController : ControllerBase
     {
         private readonly ICountryService _CountryService;
 

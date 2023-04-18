@@ -3,13 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.UserAccount;
 using PFM.Services.ExternalServices.AuthApi;
 using Serilog.Context;
-using System.Threading.Tasks;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Account")]
-    public class AccountController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AccountController : ControllerBase
     {
         private readonly Serilog.ILogger _logger;
         private readonly IAuthApi _authApi;

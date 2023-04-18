@@ -5,9 +5,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Tax")]
-    public class TaxController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class TaxController : ControllerBase
     {
         private readonly ITaxService _TaxService;
 

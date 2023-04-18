@@ -7,7 +7,7 @@ on:
     types: [completed]
 
 env:
-  DOTNET_ENV: '2.1.x'
+  DOTNET_ENV: '7.0.x'
   WORKDIR: PFM.Api/
   GITHUB_ORG: 'JM89'
 

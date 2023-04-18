@@ -1,17 +1,11 @@
 ﻿using Autofac;
-using PFM.DataAccessLayer.Repositories.Implementations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services;
 using PFM.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
-namespace PFM.Api.Configuration
+namespace PFM.Api.Extensions
 {
-    public class DefaultModule: Autofac.Module
+    public class AutoFacModule: Autofac.Module
     {
         private ContainerBuilder _builder;
 

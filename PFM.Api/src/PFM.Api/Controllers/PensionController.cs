@@ -5,9 +5,9 @@ using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Pension")]
-    public class PensionController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PensionController : ControllerBase
     {
         private readonly IPensionService _PensionService;
 
