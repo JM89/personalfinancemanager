@@ -15,6 +15,10 @@ The detailed specifications are detailed [here](https://github.com/JM89/personal
 
 :warning: The system is greatly outdated. As the previous attempt to rework the whole system was not successful, an iterative approach is adopted for this new phase of development. The evolution of the architecture is detailed in this wiki page: [System Architecture Evolution](https://github.com/JM89/personalfinancemanager/wiki/System-Architecture-Evolution). 
 
+### Overview
+
+![Architecture-C4-Container.png](/Documentation/Pictures/Architecture/Architecture-C4-Container.png)
+
 ## Getting Started
 
 ### Shared and specific infrastructure
@@ -32,13 +36,7 @@ To get started, run the following command:
 sh ./run-locally.sh
 ```
 
-The command will also start all the application-specific docker-compose files supported: 
-- [x] PFM.Auth.Api dependencies: 
-    - [x] PFM_AUTH_DB database initialization script (db, security, schema)
-    - [x] Password Salt Secret in localstack (secret manager)
-- [x] PFM.Api dependencies:
-    - [x] PFM_MAIN_DB database initialization script (db, security, schema, seed data)
-    - [x] PFM.Auth.Api execution
+The command will also start all the application-specific docker-compose files.
 
 ### Debug the main API
 
