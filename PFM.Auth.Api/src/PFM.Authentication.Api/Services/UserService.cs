@@ -62,6 +62,9 @@ namespace PFM.Authentication.Api.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            _userTokenRepository.SaveToken(new UserToken() { Token = token.ToString(), Username = username });
+
             return new UserResponse()
             {
                 Id = user.Id,
@@ -137,7 +140,9 @@ namespace PFM.Authentication.Api.Services
             int userId = Convert.ToInt32(identity.Name);
             var authenticatedUser = _userRepository.GetById(userId);
 
-            return Task.FromResult(_userTokenRepository.ValidateToken(authenticatedUser.Username, token));
+            var userToken = new UserToken() { Username = authenticatedUser.Username, Token = token  };
+
+            return Task.FromResult(_userTokenRepository.ValidateToken(userToken));
         }
     }
 }

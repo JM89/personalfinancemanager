@@ -1,7 +1,11 @@
-﻿namespace PFM.Authentication.Api.Repositories.Interfaces
+﻿using PFM.Authentication.Api.Entities;
+
+namespace PFM.Authentication.Api.Repositories.Interfaces
 {
     public interface IUserTokenRepository
     {
-        bool ValidateToken(string username, string token);
+        bool ValidateToken(UserToken userToken);
+
+        bool SaveToken(UserToken userToken);
     }
 }

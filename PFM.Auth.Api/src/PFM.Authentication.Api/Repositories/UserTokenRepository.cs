@@ -14,11 +14,11 @@ namespace PFM.Authentication.Api.Repositories.Implementations
             _logger = logger;
         }
 
-        public bool ValidateToken(string username, string token)
+        public bool ValidateToken(UserToken userToken)
         {
             try
             {
-                var row_count = _db.Set<UserToken>().Count(x => x.Username == username && x.Token == token);
+                var row_count = _db.Set<UserToken>().Count(x => x.Username == userToken.Username && x.Token == userToken.Token);
 
                 return row_count == 1;
             }
@@ -27,6 +27,21 @@ namespace PFM.Authentication.Api.Repositories.Implementations
                 _logger.Error(ex, $"Unhandled Exception: {ex.Message}");
                 throw ;
             }            
+        }
+
+        public bool SaveToken(UserToken userToken)
+        {
+            try
+            {
+                var result = _db.Set<UserToken>().Count(x => x.Username == x.Username) == 0 ? Create(userToken) : Update(userToken);
+
+                return result != null;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Unhandled Exception: {ex.Message}");
+                throw;
+            }
         }
     }
 }
