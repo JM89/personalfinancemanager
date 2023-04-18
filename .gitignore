@@ -7,7 +7,7 @@ PersonalFinanceManager.csproj.user
 /PersonalFinanceManager.DataAccess/Migrations/201611050727411_InitialCreate.resx
 .vs
 ReleaseFolder
-/log
+general.log
 /packages
 /PFM.Website/packages
 .sonarqube
