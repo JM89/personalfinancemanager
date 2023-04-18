@@ -15,14 +15,15 @@ namespace PFM.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Configuration.AddEnvironmentVariables(prefix: "APP_");
+
             builder.Services.AddControllers();
 
-            builder.Services.AddAuthenticationAndAuthorization(builder.Configuration);
-
-            builder.Services.AddMonitoring(builder.Configuration);
-
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerDefinition();
+            builder.Services
+                .AddAuthenticationAndAuthorization(builder.Configuration)
+                .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName)
+                .AddEndpointsApiExplorer()
+                .AddSwaggerDefinition();
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
 
