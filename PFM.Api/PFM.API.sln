@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A2778004-ECF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{5708C995-834F-4239-93B8-9AD8C6B24A68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFM.Api.Contracts", "src\PFM.Api.Contracts\PFM.Api.Contracts.csproj", "{21255CEF-0816-45DE-B356-0544DE9D212A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.Api.Contracts", "src\PFM.Api.Contracts\PFM.Api.Contracts.csproj", "{21255CEF-0816-45DE-B356-0544DE9D212A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
