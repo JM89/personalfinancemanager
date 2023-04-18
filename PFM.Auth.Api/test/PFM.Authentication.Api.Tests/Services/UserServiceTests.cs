@@ -14,6 +14,7 @@ namespace PFM.Authentication.Api.Tests.Services
     public class UserServiceTests
     {
         private Mock<IUserRepository> _userRepository;
+        private Mock<IUserTokenRepository> _userTokenRepository;
         private Mock<ISecretManagerService> _secretManagerService;
         private Mock<Serilog.ILogger> _logger;
         private Mock<IOptions<AppSettings>> _appSettings;
@@ -22,11 +23,12 @@ namespace PFM.Authentication.Api.Tests.Services
         public UserServiceTests()
         {
             _userRepository = new Mock<IUserRepository>();
+            _userTokenRepository = new Mock<IUserTokenRepository>();
             _secretManagerService = new Mock<ISecretManagerService>();
             _secretManagerService.Setup(x => x.GetSecrets<SecretPasswordSaltModel>("pfm/pwdsalt")).ReturnsAsync(new SecretPasswordSaltModel() { PasswordSalt = "Salt" });
             _logger = new Mock<Serilog.ILogger>();
             _appSettings = new Mock<IOptions<AppSettings>>();
-            _service = new UserService(_appSettings.Object, _userRepository.Object, _secretManagerService.Object, _logger.Object);
+            _service = new UserService(_appSettings.Object, _userRepository.Object, _userTokenRepository.Object, _secretManagerService.Object, _logger.Object);
         }
 
         [Fact]

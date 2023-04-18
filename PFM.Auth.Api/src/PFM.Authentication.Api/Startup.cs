@@ -69,6 +69,7 @@ namespace PFM.Authentication.Api
             services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("PFMConnection")));
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserTokenRepository, UserTokenRepository>();
             services.AddSingleton<ISecretManagerService, AwsSecretManagerService>();
         }
 

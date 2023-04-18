@@ -5,15 +5,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PFM.Api.Filters;
 using PFM.Api.Middlewares;
 using PFM.DataAccessLayer;
 using PFM.Services.Core.Automapper;
+using PFM.Services.ExternalServices.AuthApi;
+using Refit;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -42,16 +43,15 @@ namespace PFM.Api
         {
             services.AddSingleton(Log.Logger);
 
+            services.AddRefitClient<IAuthApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["AuthApi:EndpointUrl"]));
+
             services.AddMvc(o => {
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
-                o.Filters.Add(new AuthorizeFilter(policy));
+                o.Filters.Add(new DelegateToAuthApiAuthorizeFilter(policy, Log.Logger, services.BuildServiceProvider().GetService<IAuthApi>()));
             });
 
             services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("PFMConnection")));
-
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<PFMContext>()
-                .AddDefaultTokenProviders();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services
@@ -60,7 +60,6 @@ namespace PFM.Api
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
                 })
                 .AddJwtBearer(cfg =>
                 {

@@ -21,6 +21,7 @@ namespace PFM.Authentication.Api.Services
     internal class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserTokenRepository _userTokenRepository;
         private readonly ISecretManagerService _secretManagerService;
         private readonly Serilog.ILogger _logger;
 
@@ -28,10 +29,11 @@ namespace PFM.Authentication.Api.Services
 
         private readonly AppSettings _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings, IUserRepository userRepository, ISecretManagerService secretManagerService, Serilog.ILogger logger)
+        public UserService(IOptions<AppSettings> appSettings, IUserRepository userRepository, IUserTokenRepository userTokenRepository, ISecretManagerService secretManagerService, Serilog.ILogger logger)
         {
             _appSettings = appSettings.Value;
             _userRepository = userRepository;
+            _userTokenRepository = userTokenRepository;
             _secretManagerService = secretManagerService;
             _logger = logger;
         }
@@ -60,13 +62,18 @@ namespace PFM.Authentication.Api.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            var accessToken = tokenHandler.WriteToken(token);
+
+            _userTokenRepository.SaveToken(new UserToken() { Token = accessToken, Username = username });
+
             return new UserResponse()
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Username = user.Username,
-                Token = tokenHandler.WriteToken(token)
+                Token = accessToken
             };
         }
 
@@ -75,7 +82,7 @@ namespace PFM.Authentication.Api.Services
             var usernameAlreadyInUse = _userRepository.GetUserByName(userRequest.Username);
             if (usernameAlreadyInUse != null)
             {
-                return null;
+                return usernameAlreadyInUse;
             }
 
             var user = new User()
@@ -128,6 +135,16 @@ namespace PFM.Authentication.Api.Services
                 LastName = authenticatedUser.LastName,
                 Username = authenticatedUser.Username
             });
+        }
+
+        public Task<bool> ValidateToken(ClaimsIdentity identity, string token)
+        {
+            int userId = Convert.ToInt32(identity.Name);
+            var authenticatedUser = _userRepository.GetById(userId);
+
+            var userToken = new UserToken() { Username = authenticatedUser.Username, Token = token  };
+
+            return Task.FromResult(_userTokenRepository.ValidateToken(userToken));
         }
     }
 }

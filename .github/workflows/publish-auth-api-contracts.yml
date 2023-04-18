@@ -1,0 +1,86 @@
+name: Publish PFM Auth API Contracts
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [Create Git Release]
+    types: [completed]
+
+env:
+  DOTNET_ENV: '2.0.x'
+  WORKDIR: PFM.Auth.Api/
+  GITHUB_ORG: 'JM89'
+  TARGET_LIB: PFM.Authentication.Api.Contracts
+
+jobs:
+  check-if-publish-required:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    outputs:
+      should-publish: ${{ steps.changes.outputs.libs-have-changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Do not publish libraries if no changes mades
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          base: main
+          filters: |
+            libs-have-changed:
+              - '${{ env.WORKDIR }}src/${{ env.TARGET_LIB }}/**'
+  build:
+    if: needs.check-if-publish-required.outputs.should-publish == 'true'
+    needs: check-if-publish-required
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.11
+        with:
+          versionSpec: '5.x'
+
+      - name: Execute GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.11
+        with:
+          useConfigFile: true
+        
+      - name: Display GitVersion outputs (step output)
+        run: |
+          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+
+      - name: Log in to access GitHub Packages 
+        run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.GITHUB_TOKEN }} "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" --store-password-in-clear-text
+
+      - name: Setup .NET Core SDK ${{ env.DOTNET_ENV }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_ENV }}
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build API Contracts
+        working-directory: ${{ env.WORKDIR }}/src/${{ env.TARGET_LIB }}
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack API Contracts
+        working-directory: ${{ env.WORKDIR }}/src/${{ env.TARGET_LIB }}
+        run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.fullSemVer }}
+      
+      - name: Publish API Contracts
+        working-directory: ${{ env.WORKDIR }}/src/${{ env.TARGET_LIB }}
+        run: dotnet nuget push "bin/Release/${{ env.TARGET_LIB }}.${{ steps.gitversion.outputs.fullSemVer }}.nupkg" --api-key ${{ secrets.PAT_WRITE_PACKAGES }} --source "${{ env.GITHUB_ORG }} - GitHub Packages" --skip-duplicate
+      

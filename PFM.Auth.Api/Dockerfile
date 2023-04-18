@@ -5,6 +5,7 @@ EXPOSE 5000
 
 # Copy everything else and build
 COPY src/PFM.Authentication.Api/. ./
+COPY src/PFM.Authentication.Api.Contracts/. ./
 RUN dotnet build ./PFM.Authentication.Api.csproj -c Release 
 RUN dotnet publish ./PFM.Authentication.Api.csproj -c Release -o out
 

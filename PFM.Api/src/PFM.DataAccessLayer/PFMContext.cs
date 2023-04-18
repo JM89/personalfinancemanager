@@ -1,13 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using PFM.DataAccessLayer.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PFM.DataAccessLayer
 {
-    public class PFMContext: IdentityDbContext
+    public class PFMContext: DbContext
     {
         public DbSet<Country> Countries { get; set; }
         public DbSet<Bank> Banks { get; set; }
