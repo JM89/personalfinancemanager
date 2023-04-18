@@ -43,10 +43,7 @@ namespace PFM.Api
         {
             services.AddSingleton(Log.Logger);
 
-            var refitSettings = new RefitSettings();
-
-            services
-                .AddRefitClient<IAuthApi>(refitSettings)
+            services.AddRefitClient<IAuthApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["AuthApi:EndpointUrl"]));
 
             services.AddMvc(o => {
