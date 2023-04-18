@@ -13,56 +13,7 @@ The detailed specifications are detailed [here](https://github.com/JM89/personal
 
 ## General Architecture & Technologies
 
-This project was originally made of 4 solutions:
-
-* **PFM.Api**: ASP.NET Core 2.0 API, intented to run as a self-hosted API (Windows Service).
-* **PFM.Website**: ASP.NET MVC Website, which would run on IIS
-* **PFM.CommonLibraries**: NET Standard 2.0 Library for sharing common code between the two main solutions.
-* **PFM.IntegrationTests**: Automation test solution, runnable by a CI tool
-
-![General Architecture.png](./Documentation/Pictures/GeneralArchitecture.png)
-
-### Plan for PFM Reboot (Jun 20, 2020)
-
-![Reboot.png](./Documentation/Pictures/PlanforReboot.png)
-
-|Project| Status | Integrated with website |
-|---|---|:-:|
-| Payment API | Code migrated & smoke-tested | ❌ |
-| Bank Account API | Code migrated & smoke-tested | ❌ |
-| Bank Account Updater | In Progress | ❌ |
-| Movement API | Code migrated & smoke-tested | ❌ |
-| Budget API | Not Started | ❌ |
-| Budget Synchroniser | Not Started | ❌ |
-| User Metadata API | Code migrated & smoke-tested | ❌ |
-| Authentication API | Tests in progress | ❌ |
-| Dashboard API | Not Started | ❌ |
-| Dashboard ETL | Not Started | ❌ |
-
-### Phased Approach Refactoring (April 14, 2023)
-
-The system is greatly outdated. As the previous attempt to rework the whole system was not successful, an iterative approach is adopted for this new phase of development.
-
-At the start of the phase, the simplified architecture is:
-
-![](./Documentation/Pictures/Architecture/Architecture-Current-04-2023.PNG)
-
-The plan is to consolidate the existing setup to reduce the risk of regressions; and to integrate with the PFM authentication API:
-![](./Documentation/Pictures/Architecture/Architecture-Proposal-04-2023.PNG)
-
-**Actions:**
-- [x] Upgrade PFM.Api to .NET Core 2.1
-- [x] Upgrade PFM.Website to .NET Framework 4.8
-- [x] Add CI Support (GitHub Action)
-- [x] Simplify local setup/development using SQL Server (Docker)
-- [x] Build & Publish API.Contracts (GitHub Packages)
-- [x] Support SEQ Logging in PFM.Api
-- [x] PFM.Auth.API code import in the PFM repository
-- [x] PFM.Auth.API Auth DB setup
-- [x] Support SEQ Logging in PFM.Auth.API
-- [x] PFM.API forwarding Login/Register requests to the PFM.Auth.Api
-- [ ] Enhance error handling between PFM.Auth.Api & PFM.Api
-- [ ] Review PFM.Auth.Api to align with OAuth2 (Expiry rules)
+:warning: The system is greatly outdated. As the previous attempt to rework the whole system was not successful, an iterative approach is adopted for this new phase of development. The evolution of the architecture is detailed in this wiki page: [System Architecture Evolution](https://github.com/JM89/personalfinancemanager/wiki/System-Architecture-Evolution). 
 
 ## Getting Started
 
