@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PFM.Api.Configuration;
 using PFM.Api.Contracts.UserAccount;
+using PFM.Services.ExternalServices.AuthApi;
 using Serilog.Context;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,13 +20,15 @@ namespace PFM.Api.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly Serilog.ILogger _logger;
+        private readonly IAuthApi _authApi;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, Serilog.ILogger logger)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, Serilog.ILogger logger, IAuthApi authApi)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _logger = logger;
+            _authApi = authApi;
         }
 
         [AllowAnonymous]
@@ -33,21 +37,16 @@ namespace PFM.Api.Controllers
         {
             using (LogContext.PushProperty("UserName", model.Email))
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+                var request = new Authentication.Api.DTOs.UserRequest() { Username = model.Email, Password = model.Password };
+                var result = await _authApi.Login(request);
 
-                if (result.Succeeded)
+                if (result != null)
                 {
-                    var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                    var token = TokenFactory.GenerateJwtToken(model.Email, appUser, _configuration);
-
-                    return new AuthenticatedUser()
-                    {
-                        Token = token,
-                        UserId = appUser.Id
-                    };
+                    return Ok(result);
                 }
+
                 _logger.Warning("User authentication failed");
-                return BadRequest("Authentication Failed.");
+                return BadRequest("User authentication failed");
             }
         }
 
@@ -57,21 +56,16 @@ namespace PFM.Api.Controllers
         {
             using (LogContext.PushProperty("UserName", model.Email))
             {
-                var user = new IdentityUser
-                {
-                    UserName = model.Email,
-                    Email = model.Email
-                };
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var request = new Authentication.Api.DTOs.UserRequest() { Username = model.Email, Password = model.Password, FirstName = "", LastName = "" };
+                var result = await _authApi.Register(request);
 
-                if (result.Succeeded)
+                if (result != null)
                 {
-                    await _signInManager.SignInAsync(user, false);
-                    return TokenFactory.GenerateJwtToken(model.Email, user, _configuration);
+                    return Ok(result);
                 }
 
                 _logger.Warning("User registration failed");
-                return BadRequest(result.Errors);
+                return BadRequest("User registration failed");
             }
         }
     }

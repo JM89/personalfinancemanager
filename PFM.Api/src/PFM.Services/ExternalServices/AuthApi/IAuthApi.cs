@@ -6,10 +6,10 @@ namespace PFM.Services.ExternalServices.AuthApi
 {
     public interface IAuthApi
     {
-        [Get("/users/register")]
+        [Post("/users/register")]
         Task<UserResponse> Register(UserRequest model);
 
-        [Get("/users/login")]
+        [Post("/users/authenticate")]
         Task<UserResponse> Login(UserRequest model);
     }
 }
