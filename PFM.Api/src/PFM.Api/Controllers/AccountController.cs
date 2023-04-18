@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using PFM.Api.Configuration;
 using PFM.Api.Contracts.UserAccount;
 using PFM.Services.ExternalServices.AuthApi;
 using Serilog.Context;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PFM.Api.Controllers
@@ -16,17 +11,11 @@ namespace PFM.Api.Controllers
     [Route("api/Account")]
     public class AccountController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IConfiguration _configuration;
         private readonly Serilog.ILogger _logger;
         private readonly IAuthApi _authApi;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, Serilog.ILogger logger, IAuthApi authApi)
+        public AccountController(Serilog.ILogger logger, IAuthApi authApi)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
             _logger = logger;
             _authApi = authApi;
         }

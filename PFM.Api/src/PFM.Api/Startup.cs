@@ -51,10 +51,6 @@ namespace PFM.Api
 
             services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("PFMConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<PFMContext>()
-                .AddDefaultTokenProviders();
-
             services
                 .AddRefitClient<IAuthApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["AuthApi:EndpointUrl"]));
