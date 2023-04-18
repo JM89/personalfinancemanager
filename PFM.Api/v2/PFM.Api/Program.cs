@@ -1,6 +1,3 @@
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
 using PFM.Api.Extensions;
 using PFM.Api.Middlewares;
 
@@ -14,7 +11,7 @@ namespace PFM.Api
 
             builder.Services.AddControllers();
 
-            builder.Services.AddAuthenticationAndAuthorization();
+            builder.Services.AddAuthenticationAndAuthorization(builder.Configuration);
 
             builder.Services.AddMonitoring(builder.Configuration);
 

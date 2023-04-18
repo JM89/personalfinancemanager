@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
+using PFM.Api.Filters;
+using PFM.Services.ExternalServices.AuthApi;
+using Refit;
 using Serilog;
 
 namespace PFM.Api.Extensions
@@ -28,8 +32,16 @@ namespace PFM.Api.Extensions
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services)
+        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddRefitClient<IAuthApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(configuration["AuthApi:EndpointUrl"]));
+
+            services.AddMvc(o => {
+                var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
+                o.Filters.Add(new DelegateToAuthApiAuthorizeFilter(policy, Log.Logger, services.BuildServiceProvider().GetService<IAuthApi>()));
+            });
+
             services
                 .AddAuthentication(options =>
                 {
