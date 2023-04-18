@@ -65,11 +65,9 @@ Check the documentation [here](./PFM.Auth.Api/README.md).
 
 |Resources|Docker|Debug Mode|Internal Docker|
 |---|---|---|---|
-|App - PFM.Website|N/A|http://localhost:54401/|N/A|
-|App - PFM.Api - Endpoints|http://localhost:5001/api|https://localhost:7098/api|https://pfm-api:5001/api|
-|App - PFM.Api - Swagger|http://localhost:5001/swagger/index.html|https://localhost:7098/swagger/index.html|N/A|
-|App - PFM.Auth.Api|http://localhost:5000|https://localhost:4000|https://pfm-auth-api:5000|
-|SEQ - Log Ingest|http://localhost:5341|http://localhost:5341|http://seq:5341|
-|SEQ - UI|http://localhost:80|http://localhost:80|http://seq:80|
+|App - PFM.Website|:heavy_minus_sign:|[Website](http://localhost:54401)|:heavy_minus_sign:|
+|App - PFM.Api|[Api Endpoints](https://localhost:4431/api)<br/>[Swagger](https://localhost:4431/swagger/index.html)|[Api Endpoints](https://localhost:7098/api)<br/>[Swagger](https://localhost:7098/swagger/index.html)|[Api Endpoints](https://pfm-api:4431/api)|
+|App - PFM.Auth.Api|[Api Endpoints](http://localhost:5000)|[Api Endpoints](http://localhost:4000)|[Api Endpoints](http://pfm-auth-api:5000)|
+|SEQ|[Log Ingest](http://localhost:5341)<br/>[UI](http://localhost:80)|[Log Ingest](http://localhost:5341)<br/>[UI](http://localhost:80)|[Log Ingest](http://seq:5341)|
 |SQL Server|localhost,1433|localhost,1433|db-server,1433|
-|Localstack|http://localhost:4566|http://localhost:4566|http://localstack:4566|
+|Localstack|[Endpoints](http://localhost:4566)|[Endpoints](http://localhost:4566)|[Endpoints](http://localstack:4566)|
