@@ -63,7 +63,9 @@ namespace PFM.Authentication.Api.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            _userTokenRepository.SaveToken(new UserToken() { Token = token.ToString(), Username = username });
+            var accessToken = tokenHandler.WriteToken(token);
+
+            _userTokenRepository.SaveToken(new UserToken() { Token = accessToken, Username = username });
 
             return new UserResponse()
             {
@@ -71,7 +73,7 @@ namespace PFM.Authentication.Api.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Username = user.Username,
-                Token = tokenHandler.WriteToken(token)
+                Token = accessToken
             };
         }
 

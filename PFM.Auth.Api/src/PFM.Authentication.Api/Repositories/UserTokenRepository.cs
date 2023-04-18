@@ -18,9 +18,9 @@ namespace PFM.Authentication.Api.Repositories.Implementations
         {
             try
             {
-                var row_count = _db.Set<UserToken>().Count(x => x.Username == userToken.Username && x.Token == userToken.Token);
+                var userTokens = _db.Set<UserToken>().Where(x => x.Username == userToken.Username && x.Token == userToken.Token);
 
-                return row_count == 1;
+                return userTokens.Any();
             }
             catch(Exception ex)
             {
@@ -33,9 +33,15 @@ namespace PFM.Authentication.Api.Repositories.Implementations
         {
             try
             {
-                var result = _db.Set<UserToken>().Count(x => x.Username == x.Username) == 0 ? Create(userToken) : Update(userToken);
+                var existingUserToken = _db.Set<UserToken>().SingleOrDefault(x => x.Username == x.Username);
 
-                return result != null;
+                if (existingUserToken != null)
+                {
+                    existingUserToken.Token = userToken.Token;
+                    return Update(existingUserToken) != null;
+                }
+
+                return Create(userToken) != null;
             }
             catch (Exception ex)
             {
