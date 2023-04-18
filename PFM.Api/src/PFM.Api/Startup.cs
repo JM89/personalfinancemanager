@@ -14,6 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 using PFM.Api.Middlewares;
 using PFM.DataAccessLayer;
 using PFM.Services.Core.Automapper;
+using PFM.Services.ExternalServices.AuthApi;
+using Refit;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -52,6 +54,10 @@ namespace PFM.Api
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<PFMContext>()
                 .AddDefaultTokenProviders();
+
+            services
+                .AddRefitClient<IAuthApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["AuthApi:EndpointUrl"]));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services

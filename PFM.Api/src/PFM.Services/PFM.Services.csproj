@@ -2,10 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="PFM.Authentication.Api.Contracts" Version="1.22.1-PullRequest0067.4" />
+    <PackageReference Include="Refit" Version="6.3.2" />
   </ItemGroup>
 
   <ItemGroup>
