@@ -26,18 +26,14 @@ namespace PersonalFinanceManager.Services
 
         public IList<AccountListModel> GetAccountsByUser(string userId)
         {
-            IList<AccountListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Account.AccountList>($"/BankAccount/GetList/{userId}");
-            result = response.Select(AutoMapper.Mapper.Map<AccountListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<AccountListModel>).ToList();
         }
         
         public AccountEditModel GetById(int id)
         {
-            AccountEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Account.AccountDetails>($"/BankAccount/Get/{id}");
-            result = AutoMapper.Mapper.Map<AccountEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<AccountEditModel>(response);
         }
 
         public void EditBankAccount(AccountEditModel model, string userId)

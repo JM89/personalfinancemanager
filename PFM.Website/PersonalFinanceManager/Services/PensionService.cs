@@ -19,10 +19,8 @@ namespace PersonalFinanceManager.Services
 
         public IList<PensionListModel> GetPensions(string userId)
         {
-            IList<PensionListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Pension.PensionList>($"/Pension/GetList/{userId}");
-            result = response.Select(AutoMapper.Mapper.Map<PensionListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<PensionListModel>).ToList();
         }
 
         public void CreatePension(PensionEditModel model)
@@ -33,10 +31,8 @@ namespace PersonalFinanceManager.Services
 
         public PensionEditModel GetById(int id)
         {
-            PensionEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Pension.PensionDetails>($"/Pension/Get/{id}");
-            result = AutoMapper.Mapper.Map<PensionEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<PensionEditModel>(response);
         }
 
         public void EditPension(PensionEditModel model)

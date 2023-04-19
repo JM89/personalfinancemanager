@@ -24,10 +24,8 @@ namespace PersonalFinanceManager.Services
 
         public UserProfileEditModel GetByUserId(string userId)
         {
-            UserProfileEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.UserProfile.UserProfileDetails>($"/UserProfile/GetByUserId/{userId}");
-            result = AutoMapper.Mapper.Map<UserProfileEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<UserProfileEditModel>(response);
         }
 
         public void EditUserProfile(UserProfileEditModel model)
@@ -38,10 +36,8 @@ namespace PersonalFinanceManager.Services
 
         public UserProfileEditModel GetById(int id)
         {
-            UserProfileEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.UserProfile.UserProfileDetails>($"/UserProfile/Get/{id}");
-            result = AutoMapper.Mapper.Map<UserProfileEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<UserProfileEditModel>(response);
         }
     }
 }

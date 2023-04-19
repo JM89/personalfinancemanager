@@ -19,10 +19,8 @@ namespace PersonalFinanceManager.Services
 
         public IList<FrequenceOptionListModel> GetFrequencyOptions()
         {
-            IList<FrequenceOptionListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.FrequenceOption.FrequenceOptionList>($"/FrequenceOption/GetList");
-            result = response.Select(AutoMapper.Mapper.Map<FrequenceOptionListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<FrequenceOptionListModel>).ToList();
         }
     }
 }

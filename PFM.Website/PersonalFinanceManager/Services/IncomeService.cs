@@ -31,18 +31,14 @@ namespace PersonalFinanceManager.Services
 
         public IList<IncomeListModel> GetIncomes(int accountId)
         {
-            IList<IncomeListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Income.IncomeList>($"/Income/GetList/{accountId}");
-            result = response.Select(AutoMapper.Mapper.Map<IncomeListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<IncomeListModel>).ToList();
         }
 
         public IncomeEditModel GetById(int id)
         {
-            IncomeEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Income.IncomeDetails>($"/Income/Get/{id}");
-            result = AutoMapper.Mapper.Map<IncomeEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<IncomeEditModel>(response);
         }
 
         public void EditIncome(IncomeEditModel model)

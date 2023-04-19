@@ -19,10 +19,8 @@ namespace PersonalFinanceManager.Services
 
         public IList<SalaryListModel> GetSalaries(string userId)
         {
-            IList<SalaryListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Salary.SalaryList>($"/Salary/GetList/{userId}");
-            result = response.Select(AutoMapper.Mapper.Map<SalaryListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<SalaryListModel>).ToList();
         }
 
         public void CreateSalary(SalaryEditModel model)
@@ -38,10 +36,8 @@ namespace PersonalFinanceManager.Services
 
         public SalaryEditModel GetById(int id)
         {
-            SalaryEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Salary.SalaryDetails>($"/Salary/Get/{id}");
-            result = AutoMapper.Mapper.Map<SalaryEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<SalaryEditModel>(response);
         }
 
         public void EditSalary(SalaryEditModel model)

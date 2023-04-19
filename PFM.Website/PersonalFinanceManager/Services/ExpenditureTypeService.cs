@@ -19,18 +19,14 @@ namespace PersonalFinanceManager.Services
 
         public IList<ExpenditureTypeListModel> GetExpenditureTypes()
         {
-            IList<ExpenditureTypeListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.ExpenseType.ExpenseTypeList>($"/ExpenseType/GetList");
-            result = response.Select(AutoMapper.Mapper.Map<ExpenditureTypeListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<ExpenditureTypeListModel>).ToList();
         }
 
         public ExpenditureTypeEditModel GetById(int id)
         {
-            ExpenditureTypeEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>($"/ExpenseType/Get/{id}");
-            result = AutoMapper.Mapper.Map<ExpenditureTypeEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<ExpenditureTypeEditModel>(response);
         }
 
         public void CreateExpenditureType(ExpenditureTypeEditModel model)

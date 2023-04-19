@@ -44,10 +44,8 @@ namespace PersonalFinanceManager.Services
 
         public ExpenditureEditModel GetById(int id)
         {
-            ExpenditureEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Expense.ExpenseDetails>($"/Expense/Get/{id}");
-            result = AutoMapper.Mapper.Map<ExpenditureEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<ExpenditureEditModel>(response);
         }
 
         public void ChangeDebitStatus(int id, bool debitStatus)
@@ -57,20 +55,16 @@ namespace PersonalFinanceManager.Services
 
         public IList<ExpenditureListModel> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search)
         {
-            IList<ExpenditureListModel> result = null;
             var searchParameters = AutoMapper.Mapper.Map<PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters>(search);
             var response = _httpClientExtended.GetListBySearchParameters<PFM.Api.Contracts.Expense.ExpenseList, PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters>("/Expense/GetExpenses", searchParameters);
-            result = response.Select(AutoMapper.Mapper.Map<ExpenditureListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<ExpenditureListModel>).ToList();
         }
 
         public ExpenseSummaryModel GetExpenseSummary(int accountId, BudgetPlanEditModel model)
         {
-            ExpenseSummaryModel result = null;
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails>(model);
             var response = _httpClientExtended.Post<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails, PFM.Api.Contracts.Dashboard.ExpenseSummary>($"/Expense/GetExpenseSummary/{accountId}", dto);
-            result = AutoMapper.Mapper.Map<ExpenseSummaryModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<ExpenseSummaryModel>(response);
         }
     }
 }

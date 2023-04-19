@@ -19,10 +19,8 @@ namespace PersonalFinanceManager.Services
 
         public IList<PaymentMethodListModel> GetPaymentMethods()
         {
-            IList<PaymentMethodListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.PaymentMethod.PaymentMethodList>($"/PaymentMethod/GetList");
-            result = response.Select(AutoMapper.Mapper.Map<PaymentMethodListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<PaymentMethodListModel>).ToList();
         }
     }
 }

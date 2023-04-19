@@ -19,26 +19,20 @@ namespace PersonalFinanceManager.Services
 
         public IList<BudgetPlanListModel> GetBudgetPlans(int accountId)
         {
-            IList<BudgetPlanListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.BudgetPlan.BudgetPlanList>($"/BudgetPlan/GetList/{accountId}");
-            result = response.Select(AutoMapper.Mapper.Map<BudgetPlanListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<BudgetPlanListModel>).ToList();
         }
         
         public BudgetPlanEditModel GetCurrent(int accountId)
         {
-            BudgetPlanEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/GetCurrent/{accountId}");
-            result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
         }
 
         public BudgetPlanEditModel GetById(int id)
         {
-            BudgetPlanEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails>($"/BudgetPlan/Get/{id}");
-            result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
         }
 
         public void CreateBudgetPlan(BudgetPlanEditModel model, int accountId)
@@ -65,11 +59,9 @@ namespace PersonalFinanceManager.Services
 
         public BudgetPlanEditModel BuildBudgetPlan(int accountId, int? budgetPlanId = null)
         {
-            BudgetPlanEditModel result = null;
             var url = budgetPlanId.HasValue ? $"/BudgetPlan/BuildEmpty/{accountId}/{budgetPlanId}" : $"/BudgetPlan/BuildEmpty/{accountId}";
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails>(url);
-            result = AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<BudgetPlanEditModel>(response);
         }
     }
 }

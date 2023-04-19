@@ -18,20 +18,17 @@ namespace PersonalFinanceManager.Services
 
         public UserResponse Login(LoginViewModel user)
         {
-            UserResponse result = null;
             var dto = new UserRequest() { Username = user.Email, Password = user.Password };
-            result = _httpClientExtended.Post<UserRequest, UserResponse>($"/Account/Login", dto, new HttpClientRequestOptions()
+            return _httpClientExtended.Post<UserRequest, UserResponse>($"/Account/Login", dto, new HttpClientRequestOptions()
             {
                 AuthenticationTokenRequired = false
             });
-            return result;
         }
 
         public string Register(RegisterViewModel user)
         {
-            UserResponse result = null;
             var dto = new UserRequest() { Username = user.Email, Password = user.Password, FirstName = "", LastName = "" };
-            result = _httpClientExtended.Post<UserRequest, UserResponse>($"/Account/Register", dto, new HttpClientRequestOptions()
+            var result = _httpClientExtended.Post<UserRequest, UserResponse>($"/Account/Register", dto, new HttpClientRequestOptions()
             {
                 AuthenticationTokenRequired = false
             });

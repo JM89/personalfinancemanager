@@ -19,10 +19,8 @@ namespace PersonalFinanceManager.Services
 
         public IList<CountryListModel> GetCountries()
         {
-            IList<CountryListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Country.CountryList>($"/Country/GetList");
-            result = response.Select(AutoMapper.Mapper.Map<CountryListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<CountryListModel>).ToList();
         }
 
         public void CreateCountry(CountryEditModel model)
@@ -33,10 +31,8 @@ namespace PersonalFinanceManager.Services
 
         public CountryEditModel GetById(int id)
         {
-            CountryEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Country.CountryDetails>($"/Country/Get/{id}");
-            result = AutoMapper.Mapper.Map<CountryEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<CountryEditModel>(response);
         }
 
         public void EditCountry(CountryEditModel model)

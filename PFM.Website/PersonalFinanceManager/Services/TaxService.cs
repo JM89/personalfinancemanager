@@ -37,27 +37,21 @@ namespace PersonalFinanceManager.Services
 
         public TaxEditModel GetById(int id)
         {
-            TaxEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Tax.TaxDetails>($"/Tax/Get/{id}");
-            result = AutoMapper.Mapper.Map<TaxEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<TaxEditModel>(response);
         }
 
         public IList<TaxListModel> GetTaxes(string userId)
         {
-            IList<TaxListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Tax.TaxList>($"/Tax/GetList/{userId}");
-            result = response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
         }
 
         public IList<TaxListModel> GetTaxesByType(string currentUser, TaxType incomeTax)
         {
-            IList<TaxListModel> result = null;
             var taxTypeId = (int)TaxType.IncomeTax;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Tax.TaxList>($"/Tax/GetTaxesByType/{currentUser}/{taxTypeId}");
-            result = response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
         }
     }
 }

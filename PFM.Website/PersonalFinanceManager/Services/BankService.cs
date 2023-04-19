@@ -19,10 +19,8 @@ namespace PersonalFinanceManager.Services
 
         public IList<BankListModel> GetBanks()
         {
-            IList<BankListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Bank.BankList>($"/Bank/GetList");
-            result = response.Select(AutoMapper.Mapper.Map<BankListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<BankListModel>).ToList();
         }
 
         public void CreateBank(BankEditModel model)
@@ -33,10 +31,8 @@ namespace PersonalFinanceManager.Services
 
         public BankEditModel GetById(int id)
         {
-            BankEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Bank.BankDetails>($"/Bank/Get/{id}");
-            result = AutoMapper.Mapper.Map<BankEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<BankEditModel>(response);
         }
 
         public void EditBank(BankEditModel model)

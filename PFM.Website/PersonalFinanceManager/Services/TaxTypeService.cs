@@ -19,10 +19,8 @@ namespace PersonalFinanceManager.Services
 
         public IList<TaxTypeListModel> GetTaxTypes()
         {
-            IList<TaxTypeListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.TaxType.TaxTypeList>($"/TaxType/GetList");
-            result = response.Select(AutoMapper.Mapper.Map<TaxTypeListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<TaxTypeListModel>).ToList();
         }
     }
 }

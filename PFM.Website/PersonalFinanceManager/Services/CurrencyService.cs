@@ -19,18 +19,14 @@ namespace PersonalFinanceManager.Services
 
         public IList<CurrencyListModel> GetCurrencies()
         {
-            IList<CurrencyListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Currency.CurrencyList>($"/Currency/GetList");
-            result = response.Select(AutoMapper.Mapper.Map<CurrencyListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<CurrencyListModel>).ToList();
         }
 
         public CurrencyEditModel GetById(int id)
         {
-            CurrencyEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Currency.CurrencyDetails>($"/Currency/Get/{id}");
-            result = AutoMapper.Mapper.Map<CurrencyEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<CurrencyEditModel>(response);
         }
 
         public void CreateCurrency(CurrencyEditModel model)

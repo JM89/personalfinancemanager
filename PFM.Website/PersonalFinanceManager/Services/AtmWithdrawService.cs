@@ -19,10 +19,8 @@ namespace PersonalFinanceManager.Services
 
         public IList<AtmWithdrawListModel> GetAtmWithdrawsByAccountId(int accountId)
         {
-            IList<AtmWithdrawListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawList>($"/AtmWithdraw/GetList/{accountId}");
-            result = response.Select(AutoMapper.Mapper.Map<AtmWithdrawListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<AtmWithdrawListModel>).ToList();
         }
 
         public void CreateAtmWithdraws(List<AtmWithdrawEditModel> models)
@@ -39,10 +37,8 @@ namespace PersonalFinanceManager.Services
 
         public AtmWithdrawEditModel GetById(int id)
         {
-            AtmWithdrawEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>($"/AtmWithdraw/Get/{id}");
-            result = AutoMapper.Mapper.Map<AtmWithdrawEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<AtmWithdrawEditModel>(response);
         }
 
         public void EditAtmWithdraw(AtmWithdrawEditModel model)

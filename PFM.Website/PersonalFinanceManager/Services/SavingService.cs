@@ -37,18 +37,14 @@ namespace PersonalFinanceManager.Services
 
         public SavingEditModel GetById(int id)
         {
-            SavingEditModel result = null;
             var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");
-            result = AutoMapper.Mapper.Map<SavingEditModel>(response);
-            return result;
+            return AutoMapper.Mapper.Map<SavingEditModel>(response);
         }
 
         public IList<SavingListModel> GetSavingsByAccountId(int accountId)
         {
-            IList<SavingListModel> result = null;
             var response = _httpClientExtended.GetList<PFM.Api.Contracts.Saving.SavingList>($"/Saving/GetList/{accountId}");
-            result = response.Select(AutoMapper.Mapper.Map<SavingListModel>).ToList();
-            return result;
+            return response.Select(AutoMapper.Mapper.Map<SavingListModel>).ToList();
         }
     }
 }
