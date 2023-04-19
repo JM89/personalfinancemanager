@@ -9,9 +9,16 @@ namespace PersonalFinanceManager.Services
 {
     public class TaxService : ITaxService
     {
+        private readonly Serilog.ILogger _logger;
+
+        public TaxService(Serilog.ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public void CreateTax(TaxEditModel model)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Tax.TaxDetails>(model);
                 httpClient.Post($"/Tax/Create", dto);
@@ -20,7 +27,7 @@ namespace PersonalFinanceManager.Services
 
         public void DeleteTax(int id)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 httpClient.Delete($"/Tax/Delete/{id}");
             }
@@ -28,7 +35,7 @@ namespace PersonalFinanceManager.Services
 
         public void EditTax(TaxEditModel model)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Tax.TaxDetails>(model);
                 httpClient.Put($"/Tax/Edit/{model.Id}", dto);
@@ -38,7 +45,7 @@ namespace PersonalFinanceManager.Services
         public TaxEditModel GetById(int id)
         {
             TaxEditModel result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var response = httpClient.GetSingle<PFM.Api.Contracts.Tax.TaxDetails>($"/Tax/Get/{id}");
                 result = AutoMapper.Mapper.Map<TaxEditModel>(response);
@@ -49,7 +56,7 @@ namespace PersonalFinanceManager.Services
         public IList<TaxListModel> GetTaxes(string userId)
         {
             IList<TaxListModel> result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var response = httpClient.GetList<PFM.Api.Contracts.Tax.TaxList>($"/Tax/GetList/{userId}");
                 result = response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
@@ -60,7 +67,7 @@ namespace PersonalFinanceManager.Services
         public IList<TaxListModel> GetTaxesByType(string currentUser, TaxType incomeTax)
         {
             IList<TaxListModel> result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var taxTypeId = (int)TaxType.IncomeTax;
                 var response = httpClient.GetList<PFM.Api.Contracts.Tax.TaxList>($"/Tax/GetTaxesByType/{currentUser}/{taxTypeId}");

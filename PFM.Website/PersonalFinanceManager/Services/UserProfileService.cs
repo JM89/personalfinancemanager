@@ -7,9 +7,16 @@ namespace PersonalFinanceManager.Services
 {
     public class UserProfileService : IUserProfileService
     {
+        private readonly Serilog.ILogger _logger;
+
+        public UserProfileService(Serilog.ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public void CreateUserProfile(UserProfileEditModel model)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.UserProfile.UserProfileDetails>(model);
                 httpClient.Post($"/UserProfile/Create", dto);
@@ -19,7 +26,7 @@ namespace PersonalFinanceManager.Services
         public UserProfileEditModel GetByUserId(string userId)
         {
             UserProfileEditModel result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var response = httpClient.GetSingle<PFM.Api.Contracts.UserProfile.UserProfileDetails>($"/UserProfile/GetByUserId/{userId}");
                 result = AutoMapper.Mapper.Map<UserProfileEditModel>(response);
@@ -29,7 +36,7 @@ namespace PersonalFinanceManager.Services
 
         public void EditUserProfile(UserProfileEditModel model)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.UserProfile.UserProfileDetails>(model);
                 httpClient.Put($"/UserProfile/Edit/{model.Id}", dto);
@@ -39,7 +46,7 @@ namespace PersonalFinanceManager.Services
         public UserProfileEditModel GetById(int id)
         {
             UserProfileEditModel result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var response = httpClient.GetSingle<PFM.Api.Contracts.UserProfile.UserProfileDetails>($"/UserProfile/Get/{id}");
                 result = AutoMapper.Mapper.Map<UserProfileEditModel>(response);

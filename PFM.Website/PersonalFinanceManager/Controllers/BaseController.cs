@@ -1,22 +1,22 @@
-﻿using log4net;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
+using PersonalFinanceManager.Services.Exceptions;
 using PersonalFinanceManager.Services.Interfaces;
 using System;
 using System.Linq;
 using System.Web.Mvc;
-using PersonalFinanceManager.Services.Exceptions;
 
 namespace PersonalFinanceManager.Controllers
 {
     public class BaseController : Controller
     {
-        private readonly ILog _log = LogManager.GetLogger(typeof(BaseController));
+        private readonly Serilog.ILogger _log;
 
         private readonly IBankAccountService _bankAccountService;
 
-        public BaseController(IBankAccountService bankAccountService)
+        public BaseController(IBankAccountService bankAccountService, Serilog.ILogger logger)
         {
             this._bankAccountService = bankAccountService;
+            this._log = logger;
         }
 
         protected override void OnException(ExceptionContext filterContext)

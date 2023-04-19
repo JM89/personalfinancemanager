@@ -3,6 +3,7 @@ using Ninject.Web.Common.OwinHost;
 using Owin;
 using PersonalFinanceManager.App_Start;
 using PersonalFinanceManager.Services.Core;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,19 +1,25 @@
-﻿using System.Collections.Generic;
-using PersonalFinanceManager.Models.Expenditure;
-using PersonalFinanceManager.Services.Interfaces;
-using System;
+﻿using PersonalFinanceManager.Models.BudgetPlan;
 using PersonalFinanceManager.Models.Dashboard;
-using PersonalFinanceManager.Models.BudgetPlan;
-using System.Linq;
+using PersonalFinanceManager.Models.Expenditure;
 using PersonalFinanceManager.Services.HttpClientWrapper;
+using PersonalFinanceManager.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PersonalFinanceManager.Services
 {
     public class ExpenditureService : IExpenditureService
     {
+        private readonly Serilog.ILogger _logger;
+
+        public ExpenditureService(Serilog.ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public void CreateExpenditures(List<ExpenditureEditModel> models)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = models.Select(AutoMapper.Mapper.Map<PFM.Api.Contracts.Expense.ExpenseDetails>).ToList();
                 httpClient.Post($"/Expense/CreateExpenses", dto);
@@ -22,7 +28,7 @@ namespace PersonalFinanceManager.Services
 
         public void CreateExpenditure(ExpenditureEditModel model)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Expense.ExpenseDetails>(model);
                 httpClient.Post($"/Expense/Create", dto);
@@ -31,7 +37,7 @@ namespace PersonalFinanceManager.Services
         
         public void EditExpenditure(ExpenditureEditModel model)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Expense.ExpenseDetails>(model);
                 httpClient.Put($"/Expense/Edit/{model.Id}", dto);
@@ -40,7 +46,7 @@ namespace PersonalFinanceManager.Services
 
         public void DeleteExpenditure(int id)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 httpClient.Delete($"/Expense/Delete/{id}");
             }
@@ -49,7 +55,7 @@ namespace PersonalFinanceManager.Services
         public ExpenditureEditModel GetById(int id)
         {
             ExpenditureEditModel result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var response = httpClient.GetSingle<PFM.Api.Contracts.Expense.ExpenseDetails>($"/Expense/Get/{id}");
                 result = AutoMapper.Mapper.Map<ExpenditureEditModel>(response);
@@ -59,7 +65,7 @@ namespace PersonalFinanceManager.Services
 
         public void ChangeDebitStatus(int id, bool debitStatus)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 httpClient.Post($"/Expense/ChangeDebitStatus/{id}/{debitStatus}");
             }
@@ -68,7 +74,7 @@ namespace PersonalFinanceManager.Services
         public IList<ExpenditureListModel> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search)
         {
             IList<ExpenditureListModel> result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var searchParameters = AutoMapper.Mapper.Map<PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters>(search);
                 var response = httpClient.GetListBySearchParameters<PFM.Api.Contracts.Expense.ExpenseList, PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters>("/Expense/GetExpenses", searchParameters);
@@ -80,7 +86,7 @@ namespace PersonalFinanceManager.Services
         public ExpenseSummaryModel GetExpenseSummary(int accountId, BudgetPlanEditModel model)
         {
             ExpenseSummaryModel result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails>(model);
                 var response = httpClient.Post<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails, PFM.Api.Contracts.Dashboard.ExpenseSummary>($"/Expense/GetExpenseSummary/{accountId}", dto);

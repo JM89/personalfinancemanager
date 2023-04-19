@@ -12,7 +12,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IIncomeService _incomeService;
 
-        public IncomeController(IIncomeService incomeService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public IncomeController(IIncomeService incomeService, IBankAccountService bankAccountService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._incomeService = incomeService;
         }

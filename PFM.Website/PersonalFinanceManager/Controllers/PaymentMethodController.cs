@@ -8,7 +8,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IPaymentMethodService _paymentMethodService;
 
-        public PaymentMethodController(IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public PaymentMethodController(IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._paymentMethodService = paymentMethodService;
         }

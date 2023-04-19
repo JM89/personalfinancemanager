@@ -15,7 +15,7 @@ namespace PersonalFinanceManager.Controllers
         private readonly ICurrencyService _currencyService;
         private readonly IBankService _bankService;
 
-        public BankAccountController(IBankAccountService bankAccountService, ICurrencyService currencyService, IBankService bankService): base(bankAccountService)
+        public BankAccountController(IBankAccountService bankAccountService, ICurrencyService currencyService, IBankService bankService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._bankAccountService = bankAccountService;
             this._currencyService = currencyService;

@@ -21,7 +21,7 @@ namespace PersonalFinanceManager.Controllers
         private readonly IPaymentMethodService _paymentMethodService;
 
         public AccountManagementController(IExpenditureService expenditureService, IBankAccountService bankAccountService, IBudgetPlanService budgetPlanService, IExpenditureTypeService expenditureTypeService, 
-            IPaymentMethodService paymentMethodService, IIncomeService incomeService, IAtmWithdrawService atmWithdrawService) : base(bankAccountService)
+            IPaymentMethodService paymentMethodService, IIncomeService incomeService, IAtmWithdrawService atmWithdrawService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._budgetPlanService = budgetPlanService;
             this._expenditureService = expenditureService;

@@ -12,7 +12,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IAtmWithdrawService _atmWithdrawService;
 
-        public AtmWithdrawController(IAtmWithdrawService atmWithdrawService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public AtmWithdrawController(IAtmWithdrawService atmWithdrawService, IBankAccountService bankAccountService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._atmWithdrawService = atmWithdrawService;
         }
