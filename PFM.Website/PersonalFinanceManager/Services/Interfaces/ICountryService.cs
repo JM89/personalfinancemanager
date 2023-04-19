@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PersonalFinanceManager.Models.Country;
 using PersonalFinanceManager.Services.Core;
 
@@ -6,14 +7,14 @@ namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface ICountryService : IBaseService
     {
-        IList<CountryListModel> GetCountries();
+        Task<IList<CountryListModel>> GetCountries();
 
-        void CreateCountry(CountryEditModel countryEditModel);
+        Task<bool> CreateCountry(CountryEditModel countryEditModel);
 
-        CountryEditModel GetById(int id);
+        Task<CountryEditModel> GetById(int id);
 
-        void EditCountry(CountryEditModel countryEditModel);
+        Task<bool> EditCountry(CountryEditModel countryEditModel);
 
-        void DeleteCountry(int id);
+        Task<bool> DeleteCountry(int id);
     }
 }

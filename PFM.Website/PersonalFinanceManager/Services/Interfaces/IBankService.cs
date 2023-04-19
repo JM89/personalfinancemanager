@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PersonalFinanceManager.Models.Bank;
 using PersonalFinanceManager.Services.Core;
 
@@ -6,14 +7,14 @@ namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IBankService : IBaseService
     {
-        IList<BankListModel> GetBanks();
+        Task<IList<BankListModel>> GetBanks();
 
-        void CreateBank(BankEditModel bankEditModel);
+        Task<bool> CreateBank(BankEditModel bankEditModel);
 
-        BankEditModel GetById(int id);
+        Task<BankEditModel> GetById(int id);
 
-        void EditBank(BankEditModel bankEditModel);
+        Task<bool> EditBank(BankEditModel bankEditModel);
 
-        void DeleteBank(int id);
+        Task<bool> DeleteBank(int id);
     }
 }

@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,33 +18,33 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public IList<PensionListModel> GetPensions(string userId)
+        public async Task<IList<PensionListModel>> GetPensions(string userId)
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.Pension.PensionList>($"/Pension/GetList/{userId}");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Pension.PensionList>($"/Pension/GetList/{userId}");
             return response.Select(AutoMapper.Mapper.Map<PensionListModel>).ToList();
         }
 
-        public void CreatePension(PensionEditModel model)
+        public async Task<bool> CreatePension(PensionEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Pension.PensionDetails>(model);
-            _httpClientExtended.Post($"/Pension/Create", dto);
+            return await _httpClientExtended.Post($"/Pension/Create", dto);
         }
 
-        public PensionEditModel GetById(int id)
+        public async Task<PensionEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Pension.PensionDetails>($"/Pension/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Pension.PensionDetails>($"/Pension/Get/{id}");
             return AutoMapper.Mapper.Map<PensionEditModel>(response);
         }
 
-        public void EditPension(PensionEditModel model)
+        public async Task<bool> EditPension(PensionEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Pension.PensionDetails>(model);
-            _httpClientExtended.Put($"/Pension/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/Pension/Edit/{model.Id}", dto);
         }
 
-        public void DeletePension(int id)
+        public async Task<bool> DeletePension(int id)
         {
-            _httpClientExtended.Delete($"/Pension/Delete/{id}");
+            return await _httpClientExtended.Delete($"/Pension/Delete/{id}");
         }
     }
 }

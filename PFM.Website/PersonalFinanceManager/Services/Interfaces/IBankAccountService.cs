@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
-using PersonalFinanceManager.Models.Account;
+﻿using PersonalFinanceManager.Models.Account;
 using PersonalFinanceManager.Services.Core;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IBankAccountService : IBaseService
     {
-        void CreateBankAccount(AccountEditModel accountEditModel, string userId);
+        Task<bool> CreateBankAccount(AccountEditModel accountEditModel, string userId);
 
-        IList<AccountListModel> GetAccountsByUser(string userId);
+        Task<IList<AccountListModel>> GetAccountsByUser(string userId);
 
-        AccountEditModel GetById(int id);
+        Task<AccountEditModel> GetById(int id);
 
-        void EditBankAccount(AccountEditModel accountEditModel, string userId);
+        Task<bool> EditBankAccount(AccountEditModel accountEditModel, string userId);
 
-        void DeleteBankAccount(int id);
+        Task<bool> DeleteBankAccount(int id);
 
-        void SetAsFavorite(int id);
+        Task<bool> SetAsFavorite(int id);
     }
 }

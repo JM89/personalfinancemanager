@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,38 +18,38 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public IList<SalaryListModel> GetSalaries(string userId)
+        public async Task<IList<SalaryListModel>> GetSalaries(string userId)
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.Salary.SalaryList>($"/Salary/GetList/{userId}");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Salary.SalaryList>($"/Salary/GetList/{userId}");
             return response.Select(AutoMapper.Mapper.Map<SalaryListModel>).ToList();
         }
 
-        public void CreateSalary(SalaryEditModel model)
+        public async Task<bool> CreateSalary(SalaryEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Salary.SalaryDetails>(model);
-            _httpClientExtended.Post($"/Salary/Create", dto);
+            return await _httpClientExtended.Post($"/Salary/Create", dto);
         }
 
-        public void CopySalary(int sourceId)
+        public async Task<bool> CopySalary(int sourceId)
         {
-            _httpClientExtended.Post($"/Salary/CopySalary/{sourceId}");
+            return await _httpClientExtended.Post($"/Salary/CopySalary/{sourceId}");
         }
 
-        public SalaryEditModel GetById(int id)
+        public async Task<SalaryEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Salary.SalaryDetails>($"/Salary/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Salary.SalaryDetails>($"/Salary/Get/{id}");
             return AutoMapper.Mapper.Map<SalaryEditModel>(response);
         }
 
-        public void EditSalary(SalaryEditModel model)
+        public async Task<bool> EditSalary(SalaryEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Salary.SalaryDetails>(model);
-            _httpClientExtended.Put($"/Salary/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/Salary/Edit/{model.Id}", dto);
         }
 
-        public void DeleteSalary(int id)
+        public async Task<bool> DeleteSalary(int id)
         {
-            _httpClientExtended.Delete($"/Salary/Delete/{id}");
+            return await _httpClientExtended.Delete($"/Salary/Delete/{id}");
         }
     }
 }

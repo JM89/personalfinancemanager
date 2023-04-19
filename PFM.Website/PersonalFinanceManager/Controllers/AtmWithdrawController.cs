@@ -1,9 +1,10 @@
-﻿using System;
+﻿using PersonalFinanceManager.Models.AtmWithdraw;
+using PersonalFinanceManager.Services.Interfaces;
+using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using PersonalFinanceManager.Models.AtmWithdraw;
-using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -21,24 +22,24 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of ATM withdraws.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var accountId = GetCurrentAccount();
+            var accountId = await GetCurrentAccount();
 
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
-            var model = _atmWithdrawService.GetAtmWithdrawsByAccountId(accountId).OrderByDescending(x => x.DateExpenditure).ThenByDescending(x => x.Id).ToList();
+            var model = (await _atmWithdrawService.GetAtmWithdrawsByAccountId(accountId)).OrderByDescending(x => x.DateExpenditure).ThenByDescending(x => x.Id).ToList();
 
             return View(model);
         }
-        
+
         /// <summary>
         /// Initialize the Create form.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
             var atmWithdrawModel = new AtmWithdrawEditModel();
 
@@ -53,14 +54,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(AtmWithdrawEditModel atmWithdrawEditModel)
+        public async Task<ActionResult> Create(AtmWithdrawEditModel atmWithdrawEditModel)
         {
             if (ModelState.IsValid)
             {
-                var accountId = GetCurrentAccount();
+                var accountId = await GetCurrentAccount();
                 atmWithdrawEditModel.AccountId = accountId;
 
-                _atmWithdrawService.CreateAtmWithdraw(atmWithdrawEditModel);
+                await _atmWithdrawService.CreateAtmWithdraw(atmWithdrawEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -73,16 +74,16 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id">ATM Withdraw id</param>
         /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var atmWithdrawModel = _atmWithdrawService.GetById(id.Value);
+            var atmWithdrawModel = await _atmWithdrawService.GetById(id.Value);
             
             if (atmWithdrawModel == null)
             {
@@ -99,14 +100,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(AtmWithdrawEditModel atmWithdrawEditModel)
+        public async Task<ActionResult> Edit(AtmWithdrawEditModel atmWithdrawEditModel)
         {
             if (ModelState.IsValid)
             {
-                var accountId = GetCurrentAccount();
+                var accountId = await GetCurrentAccount();
                 atmWithdrawEditModel.AccountId = accountId;
 
-                _atmWithdrawService.EditAtmWithdraw(atmWithdrawEditModel);
+                await _atmWithdrawService.EditAtmWithdraw(atmWithdrawEditModel);
                 
                 return RedirectToAction("Index");
             }
@@ -118,9 +119,9 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Close(int id)
+        public async Task<ActionResult> Close(int id)
         {
-            _atmWithdrawService.CloseAtmWithdraw(id);
+            await _atmWithdrawService.CloseAtmWithdraw(id);
 
             return RedirectToAction("Index");
         }
@@ -132,33 +133,33 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            _atmWithdrawService.DeleteAtmWithdraw(id);
+            await _atmWithdrawService.DeleteAtmWithdraw(id);
 
             return Content(Url.Action("Index"));
         }
 
-        public ActionResult UndoDebit(int? id)
+        public async Task<ActionResult> UndoDebit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _atmWithdrawService.ChangeDebitStatus(id.Value, false);
+            await _atmWithdrawService.ChangeDebitStatus(id.Value, false);
 
             return RedirectToAction("Index");
         }
 
-        public ActionResult Debit(int? id)
+        public async Task<ActionResult> Debit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _atmWithdrawService.ChangeDebitStatus(id.Value, true);
+            await _atmWithdrawService.ChangeDebitStatus(id.Value, true);
 
             var accountId = GetCurrentAccount();
 

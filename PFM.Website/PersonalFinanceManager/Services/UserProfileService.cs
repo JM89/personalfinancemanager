@@ -2,6 +2,7 @@
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Models.UserProfile;
 using PersonalFinanceManager.Services.HttpClientWrapper;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -16,27 +17,27 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public void CreateUserProfile(UserProfileEditModel model)
+        public async Task<bool> CreateUserProfile(UserProfileEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.UserProfile.UserProfileDetails>(model);
-            _httpClientExtended.Post($"/UserProfile/Create", dto);
+            return await _httpClientExtended.Post($"/UserProfile/Create", dto);
         }
 
-        public UserProfileEditModel GetByUserId(string userId)
+        public async Task<UserProfileEditModel> GetByUserId(string userId)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.UserProfile.UserProfileDetails>($"/UserProfile/GetByUserId/{userId}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.UserProfile.UserProfileDetails>($"/UserProfile/GetByUserId/{userId}");
             return AutoMapper.Mapper.Map<UserProfileEditModel>(response);
         }
 
-        public void EditUserProfile(UserProfileEditModel model)
+        public async Task<bool> EditUserProfile(UserProfileEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.UserProfile.UserProfileDetails>(model);
-            _httpClientExtended.Put($"/UserProfile/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/UserProfile/Edit/{model.Id}", dto);
         }
 
-        public UserProfileEditModel GetById(int id)
+        public async Task<UserProfileEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.UserProfile.UserProfileDetails>($"/UserProfile/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.UserProfile.UserProfileDetails>($"/UserProfile/Get/{id}");
             return AutoMapper.Mapper.Map<UserProfileEditModel>(response);
         }
     }

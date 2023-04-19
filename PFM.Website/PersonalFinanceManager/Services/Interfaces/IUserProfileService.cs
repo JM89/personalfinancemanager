@@ -1,16 +1,17 @@
 ﻿using PersonalFinanceManager.Services.Core;
 using PersonalFinanceManager.Models.UserProfile;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IUserProfileService : IBaseService
     {
-        void CreateUserProfile(UserProfileEditModel userProfileEditModel);
+        Task<bool> CreateUserProfile(UserProfileEditModel userProfileEditModel);
 
-        UserProfileEditModel GetById(int id);
+        Task<UserProfileEditModel> GetById(int id);
 
-        void EditUserProfile(UserProfileEditModel userProfileEditModel);
+        Task<bool> EditUserProfile(UserProfileEditModel userProfileEditModel);
 
-        UserProfileEditModel GetByUserId(string userId);
+        Task<UserProfileEditModel> GetByUserId(string userId);
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace PersonalFinanceManager.Services.HttpClientWrapper
@@ -24,7 +25,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
             this._httpClient = httpClient;
         }
 
-        public IList<TResult> GetList<TResult>(string url, HttpClientRequestOptions opts = null)
+        public async Task<IList<TResult>> GetList<TResult>(string url, HttpClientRequestOptions opts = null)
         {
             if (opts == null)
             {
@@ -41,14 +42,11 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 }
 
                 var endpoint = _apiBaseUrl + url;
-                var call = _httpClient.GetAsync(endpoint);
-                call.Wait();
-                var httpResponse = call.Result;
+                var httpResponse = await _httpClient.GetAsync(endpoint);
                 if (httpResponse.IsSuccessStatusCode)
                 {
-                    var content = httpResponse.Content.ReadAsStringAsync();
-                    content.Wait();
-                    result = JsonConvert.DeserializeObject<IList<TResult>>(content.Result).ToList();
+                    var content = await httpResponse.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<IList<TResult>>(content).ToList();
                 }
                 else
                 {
@@ -63,7 +61,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
             return result;
         }
 
-        public TResult GetSingle<TResult>(string url, HttpClientRequestOptions opts = null)
+        public async Task<TResult> GetSingle<TResult>(string url, HttpClientRequestOptions opts = null)
         {
             if (opts == null)
             {
@@ -79,14 +77,11 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 }
 
                 var endpoint = _apiBaseUrl + url;
-                var call = _httpClient.GetAsync(endpoint);
-                call.Wait();
-                var httpResponse = call.Result;
+                var httpResponse = await _httpClient.GetAsync(endpoint);
                 if (httpResponse.IsSuccessStatusCode)
                 {
-                    var content = httpResponse.Content.ReadAsStringAsync();
-                    content.Wait();
-                    result = JsonConvert.DeserializeObject<TResult>(content.Result);
+                    var content = await httpResponse.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<TResult>(content);
                 }
                 else
                 {
@@ -101,12 +96,13 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
             return result;
         }
 
-        public IList<TResult> GetListBySearchParameters<TResult, TParams>(string url, TParams searchParameters, HttpClientRequestOptions opts = null)
+        public async Task<IList<TResult>> GetListBySearchParameters<TResult, TParams>(string url, TParams searchParameters, HttpClientRequestOptions opts = null)
         {
             if (opts == null)
             {
                 opts = new HttpClientRequestOptions();
             }
+
             IList<TResult> result = null;
 
             try 
@@ -118,14 +114,11 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 var endpoint = _apiBaseUrl + url;
                 var json = JsonConvert.SerializeObject(searchParameters);
                 var requestBody = new StringContent(json, Encoding.UTF8, "application/json");
-                var call = _httpClient.PostAsync(endpoint, requestBody);
-                call.Wait();
-                var httpResponse = call.Result;
+                var httpResponse = await _httpClient.PostAsync(endpoint, requestBody);
                 if (httpResponse.IsSuccessStatusCode)
                 {
-                    var content = httpResponse.Content.ReadAsStringAsync();
-                    content.Wait();
-                    result = JsonConvert.DeserializeObject<IList<TResult>>(content.Result).ToList();
+                    var content = await httpResponse.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<IList<TResult>>(content).ToList();
                 }
                 else
                 {
@@ -140,12 +133,12 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
             return result;
         }
 
-        public void Post<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null)
+        public async Task<bool> Post<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null)
         {
-            Post<TObject, object>(url, obj, opts);
+            return await Post<TObject, object>(url, obj, opts) != null;
         }
 
-        public TResult Post<TObject, TResult>(string url, TObject obj, HttpClientRequestOptions opts = null)
+        public async Task<TResult> Post<TObject, TResult>(string url, TObject obj, HttpClientRequestOptions opts = null)
         {
             if (opts == null)
             {
@@ -163,14 +156,11 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 var endpoint = _apiBaseUrl + url;
                 var json = JsonConvert.SerializeObject(obj);
                 var requestBody = new StringContent(json, Encoding.UTF8, "application/json");
-                var call = _httpClient.PostAsync(endpoint, requestBody);
-                call.Wait();
-                var httpResponse = call.Result;
+                var httpResponse = await _httpClient.PostAsync(endpoint, requestBody);
                 if (httpResponse.IsSuccessStatusCode)
                 {
-                    var content = httpResponse.Content.ReadAsStringAsync();
-                    content.Wait();
-                    result = JsonConvert.DeserializeObject<TResult>(content.Result);
+                    var content = await httpResponse.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<TResult>(content);
                 }
                 else
                 {
@@ -186,7 +176,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
             return result;
         }
 
-        public void Post(string url, HttpClientRequestOptions opts = null)
+        public async Task<bool> Post(string url, HttpClientRequestOptions opts = null)
         {
             if (opts == null)
             {
@@ -201,18 +191,17 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 }
                 var endpoint = _apiBaseUrl + url;
 
-                var call = _httpClient.PostAsync(endpoint, null);
-                call.Wait();
-                var httpResponse = call.Result;
+                var httpResponse = await _httpClient.PostAsync(endpoint, null);
                 if (httpResponse.IsSuccessStatusCode)
                 {
-                    var content = httpResponse.Content.ReadAsStringAsync();
-                    content.Wait();
+                    await httpResponse.Content.ReadAsStringAsync();
                 }
                 else
                 {
                     throw new ApiException(url, httpResponse.StatusCode.ToString());
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -221,7 +210,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
             }
         }
 
-        public void Put<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null)
+        public async Task<bool> Put<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null)
         {
             if (opts == null)
             {
@@ -238,18 +227,17 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
                 var json = JsonConvert.SerializeObject(obj);
                 var requestBody = new StringContent(json, Encoding.UTF8, "application/json");
-                var call = _httpClient.PutAsync(endpoint, requestBody);
-                call.Wait();
-                var httpResponse = call.Result;
+                var httpResponse = await _httpClient.PutAsync(endpoint, requestBody);
                 if (httpResponse.IsSuccessStatusCode)
                 {
-                    var content = httpResponse.Content.ReadAsStringAsync();
-                    content.Wait();
+                    await httpResponse.Content.ReadAsStringAsync();
                 }
                 else
                 {
                     throw new ApiException(url, httpResponse.StatusCode.ToString());
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -258,7 +246,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
             }
         }
 
-        public void Delete(string url, HttpClientRequestOptions opts = null)
+        public async Task<bool> Delete(string url, HttpClientRequestOptions opts = null)
         {
             if (opts == null)
             {
@@ -271,19 +259,19 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 {
                     _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
                 }
+
                 var endpoint = _apiBaseUrl + url;
-                var call = _httpClient.DeleteAsync(endpoint);
-                call.Wait();
-                var httpResponse = call.Result;
+                var httpResponse = await _httpClient.DeleteAsync(endpoint);
                 if (httpResponse.IsSuccessStatusCode)
                 {
-                    var content = httpResponse.Content.ReadAsStringAsync();
-                    content.Wait();
+                    await httpResponse.Content.ReadAsStringAsync();
                 }
                 else
                 {
                     throw new ApiException(url, httpResponse.StatusCode.ToString());
                 }
+
+                return true;
             }
             catch (Exception ex)
             {

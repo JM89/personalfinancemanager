@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,33 +18,33 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public IList<CountryListModel> GetCountries()
+        public async Task<IList<CountryListModel>> GetCountries()
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.Country.CountryList>($"/Country/GetList");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Country.CountryList>($"/Country/GetList");
             return response.Select(AutoMapper.Mapper.Map<CountryListModel>).ToList();
         }
 
-        public void CreateCountry(CountryEditModel model)
+        public async Task<bool> CreateCountry(CountryEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Country.CountryDetails>(model);
-            _httpClientExtended.Post($"/Country/Create", dto);
+            return await _httpClientExtended.Post($"/Country/Create", dto);
         }
 
-        public CountryEditModel GetById(int id)
+        public async Task<CountryEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Country.CountryDetails>($"/Country/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Country.CountryDetails>($"/Country/Get/{id}");
             return AutoMapper.Mapper.Map<CountryEditModel>(response);
         }
 
-        public void EditCountry(CountryEditModel model)
+        public async Task<bool> EditCountry(CountryEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Country.CountryDetails>(model);
-            _httpClientExtended.Put($"/Country/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/Country/Edit/{model.Id}", dto);
         }
 
-        public void DeleteCountry(int id)
+        public async Task<bool> DeleteCountry(int id)
         {
-            _httpClientExtended.Delete($"/Country/Delete/{id}");
+            return await _httpClientExtended.Delete($"/Country/Delete/{id}");
         }
     }
 }

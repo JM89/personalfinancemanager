@@ -1,22 +1,22 @@
-﻿using System.Collections.Generic;
-using PersonalFinanceManager.Models.AtmWithdraw;
-using PersonalFinanceManager.Models.Salary;
+﻿using PersonalFinanceManager.Models.Salary;
 using PersonalFinanceManager.Services.Core;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface ISalaryService : IBaseService
     {
-        IList<SalaryListModel> GetSalaries(string userId);
+        Task<IList<SalaryListModel>> GetSalaries(string userId);
 
-        void CreateSalary(SalaryEditModel salaryEditModel);
+        Task<bool> CreateSalary(SalaryEditModel salaryEditModel);
 
-        SalaryEditModel GetById(int id);
+        Task<SalaryEditModel> GetById(int id);
 
-        void EditSalary(SalaryEditModel salaryEditModel);
+        Task<bool> EditSalary(SalaryEditModel salaryEditModel);
 
-        void DeleteSalary(int id);
+        Task<bool> DeleteSalary(int id);
 
-        void CopySalary(int sourceId);
+        Task<bool> CopySalary(int sourceId);
     }
 }

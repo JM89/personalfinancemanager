@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,9 +18,9 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public IList<PaymentMethodListModel> GetPaymentMethods()
+        public async Task<IList<PaymentMethodListModel>> GetPaymentMethods()
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.PaymentMethod.PaymentMethodList>($"/PaymentMethod/GetList");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.PaymentMethod.PaymentMethodList>($"/PaymentMethod/GetList");
             return response.Select(AutoMapper.Mapper.Map<PaymentMethodListModel>).ToList();
         }
     }

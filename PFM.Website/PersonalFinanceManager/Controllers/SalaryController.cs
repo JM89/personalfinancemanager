@@ -1,11 +1,12 @@
-﻿using System;
+﻿using PersonalFinanceManager.Models.Salary;
+using PersonalFinanceManager.Models.TaxType;
+using PersonalFinanceManager.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using PersonalFinanceManager.Models.Salary;
-using PersonalFinanceManager.Models.TaxType;
-using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -29,9 +30,9 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of salaries.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var model = _salaryService.GetSalaries(CurrentUser).OrderByDescending(x => x.StartDate).ToList();
+            var model = (await _salaryService.GetSalaries(CurrentUser)).OrderByDescending(x => x.StartDate).ToList();
 
             return View(model);
         }
@@ -40,10 +41,10 @@ namespace PersonalFinanceManager.Controllers
         /// Initialize the Create form.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             var salaryModel = new SalaryEditModel { StartDate = DateTime.Now, SalaryDeductions = new List<SalaryDeductionEditModel>() };
-            PopulateDropDownLists(salaryModel);
+            await PopulateDropDownLists(salaryModel);
             return View(salaryModel);
         }
 
@@ -53,15 +54,15 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SalaryEditModel salaryEditModel)
+        public async Task<ActionResult> Create(SalaryEditModel salaryEditModel)
         {
-            PopulateDropDownLists(salaryEditModel);
+            await PopulateDropDownLists(salaryEditModel);
 
             if (ModelState.IsValid)
             {
                 salaryEditModel.UserId = CurrentUser;
 
-                _salaryService.CreateSalary(salaryEditModel);
+                await _salaryService.CreateSalary(salaryEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -74,15 +75,15 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id">Salary id</param>
         /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var salaryModel = _salaryService.GetById(id.Value);
-            PopulateDropDownLists(salaryModel);
+            var salaryModel = await _salaryService.GetById(id.Value);
+            await PopulateDropDownLists(salaryModel);
 
             if (salaryModel == null)
             {
@@ -99,15 +100,15 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SalaryEditModel salaryEditModel)
+        public async Task<ActionResult> Edit(SalaryEditModel salaryEditModel)
         {
-            PopulateDropDownLists(salaryEditModel);
+            await PopulateDropDownLists(salaryEditModel);
 
             if (ModelState.IsValid)
             {
                 salaryEditModel.UserId = CurrentUser;
 
-                _salaryService.EditSalary(salaryEditModel);
+                await _salaryService.EditSalary(salaryEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -121,18 +122,18 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            _salaryService.DeleteSalary(id);
+            await _salaryService.DeleteSalary(id);
 
             return Content(Url.Action("Index"));
         }
 
-        private void PopulateDropDownLists(SalaryEditModel salaryModel)
+        private async Task PopulateDropDownLists(SalaryEditModel salaryModel)
         {
-            salaryModel.AvailableCurrencies = _currencyService.GetCurrencies().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            salaryModel.AvailableCountries = _countryService.GetCountries().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            salaryModel.AvailableTaxes = _taxService.GetTaxesByType(CurrentUser, TaxType.IncomeTax).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Code }).ToList();
+            salaryModel.AvailableCurrencies = (await _currencyService.GetCurrencies()).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            salaryModel.AvailableCountries = (await _countryService.GetCountries()).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            salaryModel.AvailableTaxes = (await _taxService.GetTaxesByType(CurrentUser, TaxType.IncomeTax)).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Code }).ToList();
         }
 
         /// <summary>
@@ -140,9 +141,9 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="sourceId"></param>
         /// <returns></returns>
-        public ActionResult Copy(int sourceId)
+        public async Task<ActionResult> Copy(int sourceId)
         {
-            _salaryService.CopySalary(sourceId);
+            await _salaryService.CopySalary(sourceId);
 
             return RedirectToAction("Index");
         }

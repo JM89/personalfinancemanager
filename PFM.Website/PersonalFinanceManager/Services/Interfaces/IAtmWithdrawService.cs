@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PersonalFinanceManager.Models.AtmWithdraw;
 using PersonalFinanceManager.Services.Core;
 
@@ -6,20 +7,20 @@ namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IAtmWithdrawService : IBaseService
     {
-        void CreateAtmWithdraws(List<AtmWithdrawEditModel> atmWithdrawEditModel);
+        Task<bool> CreateAtmWithdraws(List<AtmWithdrawEditModel> atmWithdrawEditModel);
 
-        IList<AtmWithdrawListModel> GetAtmWithdrawsByAccountId(int accountId);
+        Task<IList<AtmWithdrawListModel>> GetAtmWithdrawsByAccountId(int accountId);
 
-        void CreateAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel);
+        Task<bool> CreateAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel);
 
-        AtmWithdrawEditModel GetById(int id);
+        Task<AtmWithdrawEditModel> GetById(int id);
 
-        void EditAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel);
+        Task<bool> EditAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel);
 
-        void CloseAtmWithdraw(int id);
+        Task<bool> CloseAtmWithdraw(int id);
 
-        void DeleteAtmWithdraw(int id);
+        Task<bool> DeleteAtmWithdraw(int id);
 
-        void ChangeDebitStatus(int id, bool debitStatus);
+        Task<bool> ChangeDebitStatus(int id, bool debitStatus);
     }
 }

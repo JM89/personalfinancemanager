@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using AutoMapper;
-using PersonalFinanceManager.Services.Interfaces;
+﻿using Microsoft.AspNet.Identity;
 using PersonalFinanceManager.Models.UserProfile;
-using Microsoft.AspNet.Identity;
+using PersonalFinanceManager.Services.Interfaces;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -28,9 +22,9 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet, ActionName("ViewDetails")]
-        public ActionResult ViewDetails()
+        public async Task<ActionResult> ViewDetails()
         {
-            var userProfileModel = _userProfileService.GetByUserId(User.Identity.GetUserId());
+            var userProfileModel = await _userProfileService.GetByUserId(User.Identity.GetUserId());
 
             return View("View", userProfileModel);
         }
@@ -52,12 +46,12 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(UserProfileEditModel userProfileEditModel)
+        public async Task<ActionResult> Create(UserProfileEditModel userProfileEditModel)
         {
             if (ModelState.IsValid)
             {
                 userProfileEditModel.User_Id = User.Identity.GetUserId();
-                _userProfileService.CreateUserProfile(userProfileEditModel);
+                await _userProfileService.CreateUserProfile(userProfileEditModel);
 
                 return RedirectToAction("ViewDetails");
             }
@@ -70,14 +64,14 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id">Country id</param>
         /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var userProfileModel = _userProfileService.GetById(id.Value);
+            var userProfileModel = await _userProfileService.GetById(id.Value);
             
             if (userProfileModel == null)
             {
@@ -94,11 +88,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(UserProfileEditModel userProfileEditModel)
+        public async Task<ActionResult> Edit(UserProfileEditModel userProfileEditModel)
         {
             if (ModelState.IsValid)
             {
-                _userProfileService.EditUserProfile(userProfileEditModel);
+                await _userProfileService.EditUserProfile(userProfileEditModel);
                 
                 return RedirectToAction("ViewDetails");
             }

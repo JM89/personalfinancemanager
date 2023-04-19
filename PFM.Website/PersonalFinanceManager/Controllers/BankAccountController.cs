@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using PersonalFinanceManager.Models.Account;
@@ -26,9 +27,9 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of accounts of an authenticated user as a Json object, for the menu. 
         /// </summary>
         /// <returns></returns>
-        public JsonResult GetAccounts()
+        public async Task<JsonResult> GetAccounts()
         {
-            var accountsMenu = _bankAccountService.GetAccountsByUser(User.Identity.GetUserId());
+            var accountsMenu = await _bankAccountService.GetAccountsByUser(User.Identity.GetUserId());
 
             if (!accountsMenu.Any())
             {
@@ -49,9 +50,9 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of accounts of an authenticated user.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var model = _bankAccountService.GetAccountsByUser(User.Identity.GetUserId()).OrderBy(x => x.Name);
+            var model = (await _bankAccountService.GetAccountsByUser(User.Identity.GetUserId())).OrderBy(x => x.Name);
 
             return View(model);
         }
@@ -60,21 +61,21 @@ namespace PersonalFinanceManager.Controllers
         /// Populate the list of currencies and banks for the Create / Edit form. 
         /// </summary>
         /// <param name="accountModel"></param>
-        private void PopulateDropDownLists(AccountEditModel accountModel)
+        private async Task PopulateDropDownLists(AccountEditModel accountModel)
         {
-            accountModel.AvailableCurrencies = _currencyService.GetCurrencies().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            accountModel.AvailableBanks = _bankService.GetBanks().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            accountModel.AvailableCurrencies = (await _currencyService.GetCurrencies()).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            accountModel.AvailableBanks = (await _bankService.GetBanks()).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
         }
 
         /// <summary>
         /// Initialize the Create form.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             var accountModel = new AccountEditModel();
 
-            PopulateDropDownLists(accountModel);
+            await PopulateDropDownLists(accountModel);
 
             return View(accountModel);
         }
@@ -85,16 +86,16 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(AccountEditModel accountEditModel)
+        public async Task<ActionResult> Create(AccountEditModel accountEditModel)
         {
             if (ModelState.IsValid)
             {
-                _bankAccountService.CreateBankAccount(accountEditModel, User.Identity.GetUserId());
+                await _bankAccountService.CreateBankAccount(accountEditModel, User.Identity.GetUserId());
 
                 return RedirectToAction("Index");
             }
 
-            PopulateDropDownLists(accountEditModel);
+            await PopulateDropDownLists(accountEditModel);
 
             return View(accountEditModel);
         }
@@ -104,21 +105,21 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id">Account id</param>
         /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var accountModel = _bankAccountService.GetById(id.Value);
+            var accountModel = await _bankAccountService.GetById(id.Value);
             
             if (accountModel == null)
             {
                 return HttpNotFound();
             }
 
-            PopulateDropDownLists(accountModel);
+            await PopulateDropDownLists(accountModel);
 
             return View(accountModel);
         }
@@ -130,11 +131,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(AccountEditModel accountEditModel)
+        public async Task<ActionResult> Edit(AccountEditModel accountEditModel)
         {
             if (ModelState.IsValid)
             {
-                _bankAccountService.EditBankAccount(accountEditModel, User.Identity.GetUserId());
+                await _bankAccountService.EditBankAccount(accountEditModel, User.Identity.GetUserId());
                 
                 return RedirectToAction("Index");
             }
@@ -148,21 +149,21 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            _bankAccountService.DeleteBankAccount(id);
+            await _bankAccountService.DeleteBankAccount(id);
 
             return Content(Url.Action("Index"));
         }
 
-        public ActionResult SetAsFavorite(int? id)
+        public async Task<ActionResult> SetAsFavorite(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _bankAccountService.SetAsFavorite(id.Value);
+            await _bankAccountService.SetAsFavorite(id.Value);
 
             return RedirectToAction("Index");
         }

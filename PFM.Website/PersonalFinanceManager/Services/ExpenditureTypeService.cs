@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,33 +18,33 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public IList<ExpenditureTypeListModel> GetExpenditureTypes()
+        public async Task<IList<ExpenditureTypeListModel>> GetExpenditureTypes()
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.ExpenseType.ExpenseTypeList>($"/ExpenseType/GetList");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.ExpenseType.ExpenseTypeList>($"/ExpenseType/GetList");
             return response.Select(AutoMapper.Mapper.Map<ExpenditureTypeListModel>).ToList();
         }
 
-        public ExpenditureTypeEditModel GetById(int id)
+        public async Task<ExpenditureTypeEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>($"/ExpenseType/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>($"/ExpenseType/Get/{id}");
             return AutoMapper.Mapper.Map<ExpenditureTypeEditModel>(response);
         }
 
-        public void CreateExpenditureType(ExpenditureTypeEditModel model)
+        public async Task<bool> CreateExpenditureType(ExpenditureTypeEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
-            _httpClientExtended.Post($"/ExpenseType/Create", dto);
+            return await _httpClientExtended.Post($"/ExpenseType/Create", dto);
         }
 
-        public void EditExpenditureType(ExpenditureTypeEditModel model)
+        public async Task<bool> EditExpenditureType(ExpenditureTypeEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
-            _httpClientExtended.Put($"/ExpenseType/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/ExpenseType/Edit/{model.Id}", dto);
         }
 
-        public void DeleteExpenditureType(int id)
+        public async Task<bool> DeleteExpenditureType(int id)
         {
-            _httpClientExtended.Delete($"/ExpenseType/Delete/{id}");
+            return await _httpClientExtended.Delete($"/ExpenseType/Delete/{id}");
         }
     }
 }

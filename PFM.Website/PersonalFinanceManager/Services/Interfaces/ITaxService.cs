@@ -1,22 +1,23 @@
-﻿using System.Collections.Generic;
-using PersonalFinanceManager.Models.Tax;
+﻿using PersonalFinanceManager.Models.Tax;
 using PersonalFinanceManager.Models.TaxType;
 using PersonalFinanceManager.Services.Core;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface ITaxService : IBaseService
     {
-        IList<TaxListModel> GetTaxes(string userId);
+        Task<IList<TaxListModel>> GetTaxes(string userId);
 
-        void CreateTax(TaxEditModel taxEditModel);
+        Task<bool> CreateTax(TaxEditModel taxEditModel);
 
-        TaxEditModel GetById(int id);
+        Task<TaxEditModel> GetById(int id);
 
-        void EditTax(TaxEditModel taxEditModel);
+        Task<bool> EditTax(TaxEditModel taxEditModel);
 
-        void DeleteTax(int id);
+        Task<bool> DeleteTax(int id);
 
-        IList<TaxListModel> GetTaxesByType(string currentUser, TaxType incomeTax);
+        Task<IList<TaxListModel>> GetTaxesByType(string currentUser, TaxType incomeTax);
     }
 }

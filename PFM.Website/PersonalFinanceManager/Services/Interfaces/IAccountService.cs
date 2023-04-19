@@ -1,12 +1,13 @@
 ﻿using PersonalFinanceManager.Models.AspNetUserAccount;
 using PFM.Authentication.Api.DTOs;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IAccountService
     {
-        UserResponse Login(LoginViewModel user);
+        Task<UserResponse> Login(LoginViewModel user);
 
-        string Register(RegisterViewModel user);
+        Task<string> Register(RegisterViewModel user);
     }
 }

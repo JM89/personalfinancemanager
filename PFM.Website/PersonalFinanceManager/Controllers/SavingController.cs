@@ -5,6 +5,7 @@ using System.Net;
 using System.Web.Mvc;
 using PersonalFinanceManager.Services.Interfaces;
 using PersonalFinanceManager.Models.Saving;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -24,13 +25,13 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of ATM withdraws.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var accountId = GetCurrentAccount();
+            var accountId = await GetCurrentAccount();
 
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
-            var model = _savingService.GetSavingsByAccountId(accountId).OrderByDescending(x => x.DateSaving).ThenByDescending(x => x.Id).ToList();
+            var model = (await _savingService.GetSavingsByAccountId(accountId)).OrderByDescending(x => x.DateSaving).ThenByDescending(x => x.Id).ToList();
 
             return View(model);
         }
@@ -39,15 +40,15 @@ namespace PersonalFinanceManager.Controllers
         /// Initialize the Create form.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
             var savingModel = new SavingEditModel();
 
             savingModel.DateSaving = DateTime.Today;
 
-            PopulateDropDownLists(savingModel);
+            await PopulateDropDownLists(savingModel);
 
             return View(savingModel);
         }
@@ -58,14 +59,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SavingEditModel savingEditModel)
+        public async Task<ActionResult> Create(SavingEditModel savingEditModel)
         {
             if (ModelState.IsValid)
             {
-                var accountId = GetCurrentAccount();
+                var accountId = await GetCurrentAccount();
                 savingEditModel.AccountId = accountId;
 
-                _savingService.CreateSaving(savingEditModel);
+                await _savingService.CreateSaving(savingEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -78,17 +79,17 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id">Saving id</param>
         /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var savingModel = _savingService.GetById(id.Value);
-            PopulateDropDownLists(savingModel);
+            var savingModel = await _savingService.GetById(id.Value);
+            await PopulateDropDownLists(savingModel);
 
             if (savingModel == null)
             {
@@ -105,26 +106,28 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SavingEditModel savingEditModel)
+        public async Task<ActionResult> Edit(SavingEditModel savingEditModel)
         {
-            PopulateDropDownLists(savingEditModel);
+            await PopulateDropDownLists(savingEditModel);
 
             if (ModelState.IsValid)
             {
-                var accountId = GetCurrentAccount();
+                var accountId = await GetCurrentAccount();
                 savingEditModel.AccountId = accountId;
 
-                _savingService.EditSaving(savingEditModel);
+                await _savingService.EditSaving(savingEditModel);
                 
                 return RedirectToAction("Index");
             }
             return View(savingEditModel);
         }
 
-        private void PopulateDropDownLists(SavingEditModel savingModel)
+        private async Task PopulateDropDownLists(SavingEditModel savingModel)
         {
-            savingModel.AvailableInternalAccounts = _bankAccountService.GetAccountsByUser(CurrentUser)
-                .Where(x => x.Id != GetCurrentAccount() && x.IsSavingAccount)
+            var accountId = await GetCurrentAccount();
+
+            savingModel.AvailableInternalAccounts = (await _bankAccountService.GetAccountsByUser(CurrentUser))
+                .Where(x => x.Id != accountId && x.IsSavingAccount)
                 .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
         }
 
@@ -135,9 +138,9 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            _savingService.DeleteSaving(id);
+            await _savingService.DeleteSaving(id);
 
             return Content(Url.Action("Index"));
         }        

@@ -1,19 +1,20 @@
-﻿using System.Collections.Generic;
-using PersonalFinanceManager.Models.ExpenditureType;
+﻿using PersonalFinanceManager.Models.ExpenditureType;
 using PersonalFinanceManager.Services.Core;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IExpenditureTypeService : IBaseService
     {
-        IList<ExpenditureTypeListModel> GetExpenditureTypes();
+        Task<IList<ExpenditureTypeListModel>> GetExpenditureTypes();
 
-        ExpenditureTypeEditModel GetById(int id);
+        Task<ExpenditureTypeEditModel> GetById(int id);
 
-        void CreateExpenditureType(ExpenditureTypeEditModel expenditureTypeEditModel);
+        Task<bool> CreateExpenditureType(ExpenditureTypeEditModel expenditureTypeEditModel);
 
-        void EditExpenditureType(ExpenditureTypeEditModel expenditureTypeEditModel);
+        Task<bool> EditExpenditureType(ExpenditureTypeEditModel expenditureTypeEditModel);
 
-        void DeleteExpenditureType(int id);
+        Task<bool> DeleteExpenditureType(int id);
     }
 }

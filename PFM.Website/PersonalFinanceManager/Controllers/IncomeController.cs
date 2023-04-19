@@ -1,9 +1,10 @@
-﻿using System;
+﻿using PersonalFinanceManager.Models.Income;
+using PersonalFinanceManager.Services.Interfaces;
+using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using PersonalFinanceManager.Models.Income;
-using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -21,13 +22,13 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of incomes.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var accountId = GetCurrentAccount();
+            var accountId = await GetCurrentAccount();
 
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
-            var model = _incomeService.GetIncomes(accountId).OrderByDescending(x => x.DateIncome).ThenByDescending(x => x.Id).ToList();
+            var model = (await _incomeService.GetIncomes(accountId)).OrderByDescending(x => x.DateIncome).ThenByDescending(x => x.Id).ToList();
 
             return View(model);
         }
@@ -36,9 +37,9 @@ namespace PersonalFinanceManager.Controllers
         /// Initialize the Create form.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
             var incomeModel = new IncomeEditModel();
 
@@ -53,14 +54,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IncomeEditModel incomeEditModel)
+        public async Task<ActionResult> Create(IncomeEditModel incomeEditModel)
         {
             if (ModelState.IsValid)
             {
-                var accountId = GetCurrentAccount();
+                var accountId = await GetCurrentAccount();
                 incomeEditModel.AccountId = accountId;
 
-                _incomeService.CreateIncome(incomeEditModel);
+                await _incomeService.CreateIncome(incomeEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -73,9 +74,9 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id">Income id</param>
         /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
             if (id == null)
             {
@@ -99,14 +100,14 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(IncomeEditModel incomeEditModel)
+        public async Task<ActionResult> Edit(IncomeEditModel incomeEditModel)
         {
             if (ModelState.IsValid)
             {
-                var accountId = GetCurrentAccount();
+                var accountId = await GetCurrentAccount();
                 incomeEditModel.AccountId = accountId;
 
-                _incomeService.EditIncome(incomeEditModel);
+                await _incomeService.EditIncome(incomeEditModel);
                 
                 return RedirectToAction("Index");
             }
@@ -120,9 +121,9 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            _incomeService.DeleteIncome(id);
+            await _incomeService.DeleteIncome(id);
 
             return Content(Url.Action("Index"));
         }

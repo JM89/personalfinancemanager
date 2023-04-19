@@ -5,6 +5,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -19,51 +20,51 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public void CreateExpenditures(List<ExpenditureEditModel> models)
+        public async Task<bool> CreateExpenditures(List<ExpenditureEditModel> models)
         {
             var dto = models.Select(AutoMapper.Mapper.Map<PFM.Api.Contracts.Expense.ExpenseDetails>).ToList();
-            _httpClientExtended.Post($"/Expense/CreateExpenses", dto);
+            return await _httpClientExtended.Post($"/Expense/CreateExpenses", dto);
         }
 
-        public void CreateExpenditure(ExpenditureEditModel model)
+        public async Task<bool> CreateExpenditure(ExpenditureEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Expense.ExpenseDetails>(model);
-            _httpClientExtended.Post($"/Expense/Create", dto);
+            return await _httpClientExtended.Post($"/Expense/Create", dto);
         }
         
-        public void EditExpenditure(ExpenditureEditModel model)
+        public async Task<bool> EditExpenditure(ExpenditureEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Expense.ExpenseDetails>(model);
-            _httpClientExtended.Put($"/Expense/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/Expense/Edit/{model.Id}", dto);
         }
 
-        public void DeleteExpenditure(int id)
+        public async Task<bool> DeleteExpenditure(int id)
         {
-            _httpClientExtended.Delete($"/Expense/Delete/{id}");
+            return await _httpClientExtended.Delete($"/Expense/Delete/{id}");
         }
 
-        public ExpenditureEditModel GetById(int id)
+        public async Task<ExpenditureEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Expense.ExpenseDetails>($"/Expense/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Expense.ExpenseDetails>($"/Expense/Get/{id}");
             return AutoMapper.Mapper.Map<ExpenditureEditModel>(response);
         }
 
-        public void ChangeDebitStatus(int id, bool debitStatus)
+        public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            _httpClientExtended.Post($"/Expense/ChangeDebitStatus/{id}/{debitStatus}");
+            return await _httpClientExtended.Post($"/Expense/ChangeDebitStatus/{id}/{debitStatus}");
         }
 
-        public IList<ExpenditureListModel> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search)
+        public async Task<IList<ExpenditureListModel>> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search)
         {
             var searchParameters = AutoMapper.Mapper.Map<PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters>(search);
-            var response = _httpClientExtended.GetListBySearchParameters<PFM.Api.Contracts.Expense.ExpenseList, PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters>("/Expense/GetExpenses", searchParameters);
+            var response = await _httpClientExtended.GetListBySearchParameters<PFM.Api.Contracts.Expense.ExpenseList, PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters>("/Expense/GetExpenses", searchParameters);
             return response.Select(AutoMapper.Mapper.Map<ExpenditureListModel>).ToList();
         }
 
-        public ExpenseSummaryModel GetExpenseSummary(int accountId, BudgetPlanEditModel model)
+        public async Task<ExpenseSummaryModel> GetExpenseSummary(int accountId, BudgetPlanEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails>(model);
-            var response = _httpClientExtended.Post<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails, PFM.Api.Contracts.Dashboard.ExpenseSummary>($"/Expense/GetExpenseSummary/{accountId}", dto);
+            var response = await _httpClientExtended.Post<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails, PFM.Api.Contracts.Dashboard.ExpenseSummary>($"/Expense/GetExpenseSummary/{accountId}", dto);
             return AutoMapper.Mapper.Map<ExpenseSummaryModel>(response);
         }
     }

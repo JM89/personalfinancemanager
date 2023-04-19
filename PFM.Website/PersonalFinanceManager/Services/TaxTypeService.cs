@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,9 +18,9 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public IList<TaxTypeListModel> GetTaxTypes()
+        public async Task<IList<TaxTypeListModel>> GetTaxTypes()
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.TaxType.TaxTypeList>($"/TaxType/GetList");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.TaxType.TaxTypeList>($"/TaxType/GetList");
             return response.Select(AutoMapper.Mapper.Map<TaxTypeListModel>).ToList();
         }
     }

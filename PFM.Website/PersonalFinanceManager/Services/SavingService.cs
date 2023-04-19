@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using PersonalFinanceManager.Services.Interfaces;
-using PersonalFinanceManager.Models.Saving;
+﻿using PersonalFinanceManager.Models.Saving;
 using PersonalFinanceManager.Services.HttpClientWrapper;
+using PersonalFinanceManager.Services.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -18,32 +18,32 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public void CreateSaving(SavingEditModel model)
+        public async Task<bool> CreateSaving(SavingEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
-            _httpClientExtended.Post($"/Saving/Create", dto);
+            return await _httpClientExtended.Post($"/Saving/Create", dto);
         }
 
-        public void DeleteSaving(int id)
+        public async Task<bool> DeleteSaving(int id)
         {
-            _httpClientExtended.Delete($"/Saving/Delete/{id}");
+            return await _httpClientExtended.Delete($"/Saving/Delete/{id}");
         }
 
-        public void EditSaving(SavingEditModel model)
+        public async Task<bool> EditSaving(SavingEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
-            _httpClientExtended.Put($"/Saving/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/Saving/Edit/{model.Id}", dto);
         }
 
-        public SavingEditModel GetById(int id)
+        public async Task<SavingEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");
             return AutoMapper.Mapper.Map<SavingEditModel>(response);
         }
 
-        public IList<SavingListModel> GetSavingsByAccountId(int accountId)
+        public async Task<IList<SavingListModel>> GetSavingsByAccountId(int accountId)
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.Saving.SavingList>($"/Saving/GetList/{accountId}");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Saving.SavingList>($"/Saving/GetList/{accountId}");
             return response.Select(AutoMapper.Mapper.Map<SavingListModel>).ToList();
         }
     }

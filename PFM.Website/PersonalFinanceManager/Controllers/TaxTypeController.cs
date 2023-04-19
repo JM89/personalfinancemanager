@@ -1,5 +1,6 @@
-﻿using System.Web.Mvc;
-using PersonalFinanceManager.Services.Interfaces;
+﻿using PersonalFinanceManager.Services.Interfaces;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -25,9 +26,9 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of tax types.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var model = _taxTypeService.GetTaxTypes();
+            var model = await _taxTypeService.GetTaxTypes();
             return View(model);
         }
     }

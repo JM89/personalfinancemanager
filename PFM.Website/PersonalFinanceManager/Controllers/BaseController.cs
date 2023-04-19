@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.Exceptions;
 using PersonalFinanceManager.Services.Interfaces;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace PersonalFinanceManager.Controllers
@@ -51,15 +52,13 @@ namespace PersonalFinanceManager.Controllers
 
         protected string CurrentUser => User.Identity.GetUserId();
 
-        protected bool HasAccount => _bankAccountService.GetAccountsByUser(CurrentUser).Any();
-
-        protected int GetCurrentAccount()
+        protected async Task<int> GetCurrentAccount()
         {
             if (Session["CurrentAccount"] != null)
             {
                 return (int)Session["CurrentAccount"];
             }
-            var firstAccount = _bankAccountService.GetAccountsByUser(CurrentUser).FirstOrDefault();
+            var firstAccount = (await _bankAccountService.GetAccountsByUser(CurrentUser)).FirstOrDefault();
 
             if (firstAccount != null)
             {
@@ -68,11 +67,11 @@ namespace PersonalFinanceManager.Controllers
             throw new ArgumentException("User has no account yet");
         }
 
-        protected void AccountBasicInfo()
+        protected async Task AccountBasicInfo()
         {
-            int accountId = GetCurrentAccount();
+            int accountId = await GetCurrentAccount();
 
-            var account = _bankAccountService.GetById(accountId);
+            var account = await _bankAccountService.GetById(accountId);
             var accountName = account.Name;
             var accountCurrentAmount = account.CurrencySymbol + account.CurrentBalance;
 

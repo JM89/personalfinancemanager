@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,39 +18,39 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public void CreateIncomes(List<IncomeEditModel> models)
+        public async Task<bool> CreateIncomes(List<IncomeEditModel> models)
         {
             var dto = models.Select(AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>).ToList();
-            _httpClientExtended.Post($"/Income/CreateIncomes", dto);
+            return await _httpClientExtended.Post($"/Income/CreateIncomes", dto);
         }
 
-        public void CreateIncome(IncomeEditModel model)
+        public async Task<bool> CreateIncome(IncomeEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>(model);
-            _httpClientExtended.Post($"/Income/Create", dto);
+            return await _httpClientExtended.Post($"/Income/Create", dto);
         }
 
-        public IList<IncomeListModel> GetIncomes(int accountId)
+        public async Task<IList<IncomeListModel>> GetIncomes(int accountId)
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.Income.IncomeList>($"/Income/GetList/{accountId}");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Income.IncomeList>($"/Income/GetList/{accountId}");
             return response.Select(AutoMapper.Mapper.Map<IncomeListModel>).ToList();
         }
 
-        public IncomeEditModel GetById(int id)
+        public async Task<IncomeEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Income.IncomeDetails>($"/Income/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Income.IncomeDetails>($"/Income/Get/{id}");
             return AutoMapper.Mapper.Map<IncomeEditModel>(response);
         }
 
-        public void EditIncome(IncomeEditModel model)
+        public async Task<bool> EditIncome(IncomeEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>(model);
-            _httpClientExtended.Put($"/Income/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/Income/Edit/{model.Id}", dto);
         }
 
-        public void DeleteIncome(int id)
+        public async Task<bool> DeleteIncome(int id)
         {
-            _httpClientExtended.Delete($"/Income/Delete/{id}");
+            return await _httpClientExtended.Delete($"/Income/Delete/{id}");
         }
     }
 }

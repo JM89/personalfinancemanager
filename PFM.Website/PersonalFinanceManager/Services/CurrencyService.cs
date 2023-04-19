@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,33 +18,33 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public IList<CurrencyListModel> GetCurrencies()
+        public async Task<IList<CurrencyListModel>> GetCurrencies()
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.Currency.CurrencyList>($"/Currency/GetList");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Currency.CurrencyList>($"/Currency/GetList");
             return response.Select(AutoMapper.Mapper.Map<CurrencyListModel>).ToList();
         }
 
-        public CurrencyEditModel GetById(int id)
+        public async Task<CurrencyEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Currency.CurrencyDetails>($"/Currency/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Currency.CurrencyDetails>($"/Currency/Get/{id}");
             return AutoMapper.Mapper.Map<CurrencyEditModel>(response);
         }
 
-        public void CreateCurrency(CurrencyEditModel model)
+        public async Task<bool> CreateCurrency(CurrencyEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Currency.CurrencyDetails>(model);
-            _httpClientExtended.Post($"/Currency/Create", dto);
+            return await _httpClientExtended.Post($"/Currency/Create", dto);
         }
 
-        public void EditCurrency(CurrencyEditModel model)
+        public async Task<bool> EditCurrency(CurrencyEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Currency.CurrencyDetails>(model);
-            _httpClientExtended.Put($"/Currency/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/Currency/Edit/{model.Id}", dto);
         }
 
-        public void DeleteCurrency(int id)
+        public async Task<bool> DeleteCurrency(int id)
         {
-            _httpClientExtended.Delete($"/Currency/Delete/{id}");
+            return await _httpClientExtended.Delete($"/Currency/Delete/{id}");
         }
     }
 }

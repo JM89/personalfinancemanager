@@ -1,28 +1,28 @@
-﻿using System.Collections.Generic;
-using PersonalFinanceManager.Models.BudgetPlan;
+﻿using PersonalFinanceManager.Models.BudgetPlan;
 using PersonalFinanceManager.Models.Dashboard;
 using PersonalFinanceManager.Models.Expenditure;
 using PersonalFinanceManager.Services.Core;
-using PersonalFinanceManager.Services.RequestObjects;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IExpenditureService : IBaseService
     {
-        void CreateExpenditures(List<ExpenditureEditModel> expenditureEditModel);
+        Task<bool> CreateExpenditures(List<ExpenditureEditModel> expenditureEditModel);
 
-        void CreateExpenditure(ExpenditureEditModel expenditureEditModel);
+        Task<bool> CreateExpenditure(ExpenditureEditModel expenditureEditModel);
 
-        void EditExpenditure(ExpenditureEditModel expenditureEditModel);
+        Task<bool> EditExpenditure(ExpenditureEditModel expenditureEditModel);
 
-        void DeleteExpenditure(int id);
+        Task<bool> DeleteExpenditure(int id);
 
-        ExpenditureEditModel GetById(int id);
+        Task<ExpenditureEditModel> GetById(int id);
 
-        void ChangeDebitStatus(int id, bool debitStatus);
+        Task<bool> ChangeDebitStatus(int id, bool debitStatus);
 
-        ExpenseSummaryModel GetExpenseSummary(int accountId, BudgetPlanEditModel budgetPlan);
+        Task<ExpenseSummaryModel> GetExpenseSummary(int accountId, BudgetPlanEditModel budgetPlan);
 
-        IList<ExpenditureListModel> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search);
+        Task<IList<ExpenditureListModel>> GetExpenditures(Models.SearchParameters.ExpenditureGetListSearchParameters search);
     }
 }

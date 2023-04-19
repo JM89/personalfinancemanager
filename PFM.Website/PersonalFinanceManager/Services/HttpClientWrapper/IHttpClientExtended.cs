@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.HttpClientWrapper
 {
     public interface IHttpClientExtended
     {
-        IList<TResult> GetList<TResult>(string url, HttpClientRequestOptions opts = null);
+        Task<IList<TResult>> GetList<TResult>(string url, HttpClientRequestOptions opts = null);
 
-        TResult GetSingle<TResult>(string url, HttpClientRequestOptions opts = null);
+        Task<TResult> GetSingle<TResult>(string url, HttpClientRequestOptions opts = null);
 
-        IList<TResult> GetListBySearchParameters<TResult, TParams>(string url, TParams searchParameters, HttpClientRequestOptions opts = null);
+        Task<IList<TResult>> GetListBySearchParameters<TResult, TParams>(string url, TParams searchParameters, HttpClientRequestOptions opts = null);
 
-        void Post<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null);
+        Task<bool> Post<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null);
 
-        TResult Post<TObject, TResult>(string url, TObject obj, HttpClientRequestOptions opts = null);
+        Task<TResult> Post<TObject, TResult>(string url, TObject obj, HttpClientRequestOptions opts = null);
 
-        void Post(string url, HttpClientRequestOptions opts = null);
+        Task<bool> Post(string url, HttpClientRequestOptions opts = null);
 
-        void Put<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null);
+        Task<bool> Put<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null);
 
-        void Delete(string url, HttpClientRequestOptions opts = null);
+        Task<bool> Delete(string url, HttpClientRequestOptions opts = null);
     }
 }

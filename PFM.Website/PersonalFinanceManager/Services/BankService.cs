@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,33 +18,33 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public IList<BankListModel> GetBanks()
+        public async Task<IList<BankListModel>> GetBanks()
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.Bank.BankList>($"/Bank/GetList");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Bank.BankList>($"/Bank/GetList");
             return response.Select(AutoMapper.Mapper.Map<BankListModel>).ToList();
         }
 
-        public void CreateBank(BankEditModel model)
+        public async Task<bool> CreateBank(BankEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Bank.BankDetails>(model);
-            _httpClientExtended.Post($"/Bank/Create", dto);
+            return await _httpClientExtended.Post($"/Bank/Create", dto);
         }
 
-        public BankEditModel GetById(int id)
+        public async Task<BankEditModel> GetById(int id)
         {
-            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Bank.BankDetails>($"/Bank/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Bank.BankDetails>($"/Bank/Get/{id}");
             return AutoMapper.Mapper.Map<BankEditModel>(response);
         }
 
-        public void EditBank(BankEditModel model)
+        public async Task<bool> EditBank(BankEditModel model)
         {
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Bank.BankDetails>(model);
-            _httpClientExtended.Put($"/Bank/Edit/{model.Id}", dto);
+            return await _httpClientExtended.Put($"/Bank/Edit/{model.Id}", dto);
         }
 
-        public void DeleteBank(int id)
+        public async Task<bool> DeleteBank(int id)
         {
-            _httpClientExtended.Delete($"/Bank/Delete/{id}");
+            return await _httpClientExtended.Delete($"/Bank/Delete/{id}");
         }
     }
 }

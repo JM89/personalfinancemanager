@@ -3,6 +3,7 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
@@ -17,9 +18,9 @@ namespace PersonalFinanceManager.Services
             _httpClientExtended = httpClientExtended;
         }
 
-        public IList<FrequenceOptionListModel> GetFrequencyOptions()
+        public async Task<IList<FrequenceOptionListModel>> GetFrequencyOptions()
         {
-            var response = _httpClientExtended.GetList<PFM.Api.Contracts.FrequenceOption.FrequenceOptionList>($"/FrequenceOption/GetList");
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.FrequenceOption.FrequenceOptionList>($"/FrequenceOption/GetList");
             return response.Select(AutoMapper.Mapper.Map<FrequenceOptionListModel>).ToList();
         }
     }

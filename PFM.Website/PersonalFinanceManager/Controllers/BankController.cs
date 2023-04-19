@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using PersonalFinanceManager.Models.Bank;
 using PersonalFinanceManager.Helpers;
 using PersonalFinanceManager.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -24,9 +25,9 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of banks.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var model = _bankService.GetBanks();
+            var model = await _bankService.GetBanks();
 
             return View(model);
         }
@@ -35,20 +36,20 @@ namespace PersonalFinanceManager.Controllers
         /// Populate the list of countries for the Create / Edit form. 
         /// </summary>
         /// <param name="bankModel"></param>
-        private void PopulateDropDownLists(BankEditModel bankModel)
+        private async Task PopulateDropDownLists(BankEditModel bankModel)
         {
-            bankModel.AvailableCountries = _countryService.GetCountries().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            bankModel.AvailableCountries = (await _countryService.GetCountries()).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
         }
 
         /// <summary>
         /// Initialize the Create form.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             var bankEditModel = new BankEditModel();
             bankEditModel.DisplayIconFlags = DisplayIcon.DisplayUploader;
-            PopulateDropDownLists(bankEditModel);
+            await PopulateDropDownLists(bankEditModel);
 
             return View(bankEditModel);
         }
@@ -59,9 +60,9 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BankEditModel bankEditModel, HttpPostedFileBase UploadImage)
+        public async Task<ActionResult> Create(BankEditModel bankEditModel, HttpPostedFileBase UploadImage)
         {
-            PopulateDropDownLists(bankEditModel);
+            await PopulateDropDownLists(bankEditModel);
 
             if (ModelState.IsValid)
             {
@@ -85,7 +86,7 @@ namespace PersonalFinanceManager.Controllers
 
                 bankEditModel.DisplayIconFlags = DisplayIcon.DisplayExistingIcon | DisplayIcon.DisplayIconPathPreview;
 
-                _bankService.CreateBank(bankEditModel);
+                await _bankService.CreateBank(bankEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -97,14 +98,14 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id">Bank id</param>
         /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var bankModel = _bankService.GetById(id.Value);
+            var bankModel = await _bankService.GetById(id.Value);
 
             if (bankModel == null)
             {
@@ -113,7 +114,7 @@ namespace PersonalFinanceManager.Controllers
 
             bankModel.DisplayIconFlags = DisplayIcon.DisplayExistingIcon | DisplayIcon.DisplayIconPathPreview;
 
-            PopulateDropDownLists(bankModel);
+            await PopulateDropDownLists(bankModel);
 
             return View(bankModel);
         }
@@ -125,9 +126,9 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(BankEditModel bankEditModel, HttpPostedFileBase UploadImage)
+        public async Task<ActionResult> Edit(BankEditModel bankEditModel, HttpPostedFileBase UploadImage)
         {
-            PopulateDropDownLists(bankEditModel);
+            await PopulateDropDownLists(bankEditModel);
 
             bankEditModel.DisplayIconFlags = DisplayIcon.DisplayExistingIcon | DisplayIcon.DisplayIconPathPreview;
 
@@ -141,7 +142,7 @@ namespace PersonalFinanceManager.Controllers
 
                 bankEditModel.DisplayIconFlags = DisplayIcon.DisplayExistingIcon | DisplayIcon.DisplayIconPathPreview;
 
-                _bankService.EditBank(bankEditModel);
+                await _bankService.EditBank(bankEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -155,9 +156,9 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            _bankService.DeleteBank(id);
+            await _bankService.DeleteBank(id);
 
             return Content(Url.Action("Index"));
         }
