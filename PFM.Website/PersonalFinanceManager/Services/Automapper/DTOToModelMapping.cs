@@ -60,7 +60,6 @@ namespace PersonalFinanceManager.Services.Automapper
             CreateMap<PFM.Api.Contracts.Tax.TaxList, Models.Tax.TaxListModel>();
             CreateMap<PFM.Api.Contracts.TaxType.TaxTypeList, Models.TaxType.TaxTypeListModel>();
             CreateMap<PFM.Api.Contracts.UserProfile.UserProfileDetails, Models.UserProfile.UserProfileEditModel>();
-            CreateMap<PFM.Api.Contracts.UserAccount.AuthenticatedUser, Models.AspNetUserAccount.AuthenticatedUser>();
         }
     }
 }

@@ -19,8 +19,8 @@ namespace PersonalFinanceManager.Services
             UserResponse result = null;
             using (var httpClient = new HttpClientExtended(_logger))
             {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.UserAccount.User>(user);
-                result = httpClient.Post<PFM.Api.Contracts.UserAccount.User, UserResponse>($"/Account/Login", dto, new HttpClientRequestOptions() {
+                var dto = new UserRequest() { Username = user.Email, Password = user.Password };
+                result = httpClient.Post<UserRequest, UserResponse>($"/Account/Login", dto, new HttpClientRequestOptions() {
                     AuthenticationTokenRequired = false
                 });
             }
@@ -29,16 +29,16 @@ namespace PersonalFinanceManager.Services
 
         public string Register(RegisterViewModel user)
         {
-            string result = "";
+            UserResponse result = null;
             using (var httpClient = new HttpClientExtended(_logger))
             {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.UserAccount.User>(user);
-                result = httpClient.Post<PFM.Api.Contracts.UserAccount.User, string>($"/Account/Register", dto, new HttpClientRequestOptions()
+                var dto = new UserRequest() { Username = user.Email, Password = user.Password, FirstName = "", LastName = "" };
+                result = httpClient.Post<UserRequest, UserResponse>($"/Account/Register", dto, new HttpClientRequestOptions()
                 {
                     AuthenticationTokenRequired = false
                 });
             }
-            return result;
+            return result.Token;
         }
     }
 }
