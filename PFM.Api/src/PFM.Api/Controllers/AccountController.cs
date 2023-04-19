@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PFM.Api.Contracts.UserAccount;
+using PFM.Authentication.Api.DTOs;
 using PFM.Services.ExternalServices.AuthApi;
 using Serilog.Context;
 
@@ -21,12 +21,11 @@ namespace PFM.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<object> Login([FromBody]User model)
+        public async Task<object> Login([FromBody]UserRequest model)
         {
-            using (LogContext.PushProperty("UserName", model.Email))
+            using (LogContext.PushProperty("UserName", model.Username))
             {
-                var request = new Authentication.Api.DTOs.UserRequest() { Username = model.Email, Password = model.Password };
-                var result = await _authApi.Login(request);
+                var result = await _authApi.Login(model);
 
                 if (result != null)
                 {
@@ -40,11 +39,11 @@ namespace PFM.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("Register")]
-        public async Task<object> Register([FromBody]User model)
+        public async Task<object> Register([FromBody] UserRequest model)
         {
-            using (LogContext.PushProperty("UserName", model.Email))
+            using (LogContext.PushProperty("UserName", model.Username))
             {
-                var request = new Authentication.Api.DTOs.UserRequest() { Username = model.Email, Password = model.Password, FirstName = "", LastName = "" };
+                var request = new UserRequest() { Username = model.Username, Password = model.Password, FirstName = "", LastName = "" };
                 var result = await _authApi.Register(request);
 
                 if (result != null)
