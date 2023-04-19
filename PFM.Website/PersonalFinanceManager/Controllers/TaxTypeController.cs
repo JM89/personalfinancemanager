@@ -16,7 +16,7 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="taxTypeService"></param>
         /// <param name="bankAccountService"></param>
-        public TaxTypeController(ITaxTypeService taxTypeService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public TaxTypeController(ITaxTypeService taxTypeService, IBankAccountService bankAccountService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._taxTypeService = taxTypeService;
         }

@@ -10,7 +10,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly ICurrencyService _currencyService;
 
-        public CurrencyController(ICurrencyService currencyService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public CurrencyController(ICurrencyService currencyService, IBankAccountService bankAccountService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._currencyService = currencyService;
         }

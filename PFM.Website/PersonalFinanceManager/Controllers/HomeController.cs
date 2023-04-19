@@ -24,7 +24,7 @@ namespace PersonalFinanceManager.Controllers
         private readonly ICurrencyService _currencyService;
 
         public HomeController(IExpenditureService expenditureService, IPaymentMethodService paymentMethodService, IBankAccountService bankAccountService, 
-            IUserProfileService userProfileService, ICurrencyService currencyService): base(bankAccountService)
+            IUserProfileService userProfileService, ICurrencyService currencyService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._expenditureService = expenditureService;
             this._paymentMethodService = paymentMethodService;

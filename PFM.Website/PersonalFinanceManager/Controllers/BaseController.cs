@@ -9,7 +9,7 @@ namespace PersonalFinanceManager.Controllers
 {
     public class BaseController : Controller
     {
-        protected readonly Serilog.ILogger _log;
+        private readonly Serilog.ILogger _log;
 
         private readonly IBankAccountService _bankAccountService;
 

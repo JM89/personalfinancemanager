@@ -14,7 +14,7 @@ namespace PersonalFinanceManager.Controllers
         private readonly ISavingService _savingService;
         private readonly IBankAccountService _bankAccountService;
 
-        public SavingController(ISavingService savingService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public SavingController(ISavingService savingService, IBankAccountService bankAccountService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._savingService = savingService;
             this._bankAccountService = bankAccountService;

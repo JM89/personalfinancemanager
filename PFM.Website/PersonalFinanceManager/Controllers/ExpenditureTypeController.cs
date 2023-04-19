@@ -10,7 +10,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IExpenditureTypeService _expenditureTypeService;
 
-        public ExpenditureTypeController(IExpenditureTypeService expenditureTypeService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public ExpenditureTypeController(IExpenditureTypeService expenditureTypeService, IBankAccountService bankAccountService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._expenditureTypeService = expenditureTypeService;
         }

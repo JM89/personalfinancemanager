@@ -18,7 +18,7 @@ namespace PersonalFinanceManager.Controllers
     {
         private readonly IBudgetPlanService _budgetPlanService;
 
-        public BudgetPlanController(IBudgetPlanService budgetPlanService, IBankAccountService bankAccountService) : base(bankAccountService)
+        public BudgetPlanController(IBudgetPlanService budgetPlanService, IBankAccountService bankAccountService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._budgetPlanService = budgetPlanService;
         }
