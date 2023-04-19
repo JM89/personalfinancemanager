@@ -3,72 +3,53 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class SalaryService : ISalaryService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public SalaryService(Serilog.ILogger logger)
+        public SalaryService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public IList<SalaryListModel> GetSalaries(string userId)
+        public async Task<IList<SalaryListModel>> GetSalaries(string userId)
         {
-            IList<SalaryListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.Salary.SalaryList>($"/Salary/GetList/{userId}");
-                result = response.Select(AutoMapper.Mapper.Map<SalaryListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Salary.SalaryList>($"/Salary/GetList/{userId}");
+            return response.Select(AutoMapper.Mapper.Map<SalaryListModel>).ToList();
         }
 
-        public void CreateSalary(SalaryEditModel model)
+        public async Task<bool> CreateSalary(SalaryEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Salary.SalaryDetails>(model);
-                httpClient.Post($"/Salary/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Salary.SalaryDetails>(model);
+            return await _httpClientExtended.Post($"/Salary/Create", dto);
         }
 
-        public void CopySalary(int sourceId)
+        public async Task<bool> CopySalary(int sourceId)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Post($"/Salary/CopySalary/{sourceId}");
-            }
+            return await _httpClientExtended.Post($"/Salary/CopySalary/{sourceId}");
         }
 
-        public SalaryEditModel GetById(int id)
+        public async Task<SalaryEditModel> GetById(int id)
         {
-            SalaryEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.Salary.SalaryDetails>($"/Salary/Get/{id}");
-                result = AutoMapper.Mapper.Map<SalaryEditModel>(response);
-            }
-            return result;
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Salary.SalaryDetails>($"/Salary/Get/{id}");
+            return AutoMapper.Mapper.Map<SalaryEditModel>(response);
         }
 
-        public void EditSalary(SalaryEditModel model)
+        public async Task<bool> EditSalary(SalaryEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Salary.SalaryDetails>(model);
-                httpClient.Put($"/Salary/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Salary.SalaryDetails>(model);
+            return await _httpClientExtended.Put($"/Salary/Edit/{model.Id}", dto);
         }
 
-        public void DeleteSalary(int id)
+        public async Task<bool> DeleteSalary(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/Salary/Delete/{id}");
-            }
+            return await _httpClientExtended.Delete($"/Salary/Delete/{id}");
         }
     }
 }

@@ -3,64 +3,48 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class BankService : IBankService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public BankService(Serilog.ILogger logger)
+        public BankService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public IList<BankListModel> GetBanks()
+        public async Task<IList<BankListModel>> GetBanks()
         {
-            IList<BankListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.Bank.BankList>($"/Bank/GetList");
-                result = response.Select(AutoMapper.Mapper.Map<BankListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Bank.BankList>($"/Bank/GetList");
+            return response.Select(AutoMapper.Mapper.Map<BankListModel>).ToList();
         }
 
-        public void CreateBank(BankEditModel model)
+        public async Task<bool> CreateBank(BankEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Bank.BankDetails>(model);
-                httpClient.Post($"/Bank/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Bank.BankDetails>(model);
+            return await _httpClientExtended.Post($"/Bank/Create", dto);
         }
 
-        public BankEditModel GetById(int id)
+        public async Task<BankEditModel> GetById(int id)
         {
-            BankEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.Bank.BankDetails>($"/Bank/Get/{id}");
-                result = AutoMapper.Mapper.Map<BankEditModel>(response);
-            }
-            return result;
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Bank.BankDetails>($"/Bank/Get/{id}");
+            return AutoMapper.Mapper.Map<BankEditModel>(response);
         }
 
-        public void EditBank(BankEditModel model)
+        public async Task<bool> EditBank(BankEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Bank.BankDetails>(model);
-                httpClient.Put($"/Bank/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Bank.BankDetails>(model);
+            return await _httpClientExtended.Put($"/Bank/Edit/{model.Id}", dto);
         }
 
-        public void DeleteBank(int id)
+        public async Task<bool> DeleteBank(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/Bank/Delete/{id}");
-            }
+            return await _httpClientExtended.Delete($"/Bank/Delete/{id}");
         }
     }
 }

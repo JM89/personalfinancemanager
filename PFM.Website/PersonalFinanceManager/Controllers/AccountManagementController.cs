@@ -1,11 +1,12 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using PersonalFinanceManager.Models.AccountManagement;
+﻿using PersonalFinanceManager.Models.AccountManagement;
 using PersonalFinanceManager.Models.SearchParameters;
 using PersonalFinanceManager.Services.Interfaces;
+using PFM.Utils.Helpers;
 using System;
 using System.Collections.Generic;
-using PFM.Utils.Helpers;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using WebGrease.Css.Extensions;
 
 namespace PersonalFinanceManager.Controllers
@@ -32,22 +33,24 @@ namespace PersonalFinanceManager.Controllers
             this._atmWithdrawService = atmWithdrawService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            if (!HasAccount)
+            if (!(await _bankAccountService.GetAccountsByUser(CurrentUser)).Any())
             {
                 return Redirect("/BankAccount/Index");
             }
 
+            var currentAccount = await GetCurrentAccount();
+
             // Get current budget plan if it exists
-            var budgetPlan = _budgetPlanService.GetCurrent(GetCurrentAccount());
+            var budgetPlan = await _budgetPlanService.GetCurrent(currentAccount);
 
             // Get the expense summary by category
-            var expenditureSummaryModel = _expenditureService.GetExpenseSummary(GetCurrentAccount(), budgetPlan);
+            var expenditureSummaryModel = await _expenditureService.GetExpenseSummary(currentAccount, budgetPlan);
 
             return View(expenditureSummaryModel);
         }
-
+         
 
         public JsonResult SaveCurrentAccount(int accountId, int indexAccountList)
         {
@@ -74,12 +77,12 @@ namespace PersonalFinanceManager.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ShowImportMovements()
+        public async Task<ActionResult> ShowImportMovements()
         {
-            var expenseTypes = _expenditureTypeService.GetExpenditureTypes();
-            var currentAccount = _bankAccountService.GetById(GetCurrentAccount());
-            var lastMovement = _expenditureService.GetExpenditures(new ExpenditureGetListSearchParameters() { AccountId = currentAccount.Id }).OrderByDescending(x => x.DateExpenditure).FirstOrDefault();
-            var paymentMethods = _paymentMethodService.GetPaymentMethods();
+            var expenseTypes = await _expenditureTypeService.GetExpenditureTypes();
+            var currentAccount = await _bankAccountService.GetById(await GetCurrentAccount());
+            var lastMovement = (await _expenditureService.GetExpenditures(new ExpenditureGetListSearchParameters() { AccountId = currentAccount.Id })).OrderByDescending(x => x.DateExpenditure).FirstOrDefault();
+            var paymentMethods = await _paymentMethodService.GetPaymentMethods();
             var importTypes = Enum.GetValues(typeof(ImportTypes)).Cast<ImportTypes>();
 
             var model = new ImportMovementModel
@@ -108,24 +111,24 @@ namespace PersonalFinanceManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ImportMovements(ImportMovementEditModel model)
+        public async Task<ActionResult> ImportMovements(ImportMovementEditModel model)
         {
             if (model.Expenses != null)
             {
                 model.Expenses.ForEach(x => { x.AccountId = model.AccountId; x.HasBeenAlreadyDebited = true; });
-                _expenditureService.CreateExpenditures(model.Expenses.ToList());
+                await _expenditureService.CreateExpenditures(model.Expenses.ToList());
             }
 
             if (model.Incomes != null)
             {
                 model.Incomes.ForEach(x => { x.AccountId = model.AccountId; });
-                _incomeService.CreateIncomes(model.Incomes.ToList());
+                await _incomeService.CreateIncomes(model.Incomes.ToList());
             }
             
             if (model.AtmWithdraws != null)
             {
                 model.AtmWithdraws.ForEach(x => { x.AccountId = model.AccountId; x.HasBeenAlreadyDebited = true; });
-                _atmWithdrawService.CreateAtmWithdraws(model.AtmWithdraws.ToList());
+                await _atmWithdrawService.CreateAtmWithdraws(model.AtmWithdraws.ToList());
             }
 
             return RedirectToAction("Index");

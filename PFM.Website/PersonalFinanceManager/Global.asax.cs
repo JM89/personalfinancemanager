@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using PersonalFinanceManager.Services.Automapper;
+using PersonalFinanceManager.Services.HttpClientWrapper;
+using System.Net;
+using System.Net.Security;
+using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using PersonalFinanceManager.Services.Automapper;
-using System.Web.Helpers;
-using System.Security.Claims;
-using System.Net.Security;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
 
 namespace PersonalFinanceManager
 {
@@ -19,11 +21,16 @@ namespace PersonalFinanceManager
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            var services = new ServiceCollection();
+            services.AddHttpClient<IHttpClientExtended, HttpClientExtended>();
+
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<ModelToDTOMapping>();
                 cfg.AddProfile<DTOToModelMapping>();
             });
+
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
 
             if (System.Diagnostics.Debugger.IsAttached)

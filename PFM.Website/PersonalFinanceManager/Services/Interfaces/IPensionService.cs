@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using PersonalFinanceManager.Models.AtmWithdraw;
-using PersonalFinanceManager.Models.Pension;
+﻿using PersonalFinanceManager.Models.Pension;
 using PersonalFinanceManager.Services.Core;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IPensionService : IBaseService
     {
-        IList<PensionListModel> GetPensions(string userId);
+        Task<IList<PensionListModel>> GetPensions(string userId);
 
-        void CreatePension(PensionEditModel pensionEditModel);
+        Task<bool> CreatePension(PensionEditModel pensionEditModel);
 
-        PensionEditModel GetById(int id);
+        Task<PensionEditModel> GetById(int id);
 
-        void EditPension(PensionEditModel pensionEditModel);
+        Task<bool> EditPension(PensionEditModel pensionEditModel);
 
-        void DeletePension(int id);
+        Task<bool> DeletePension(int id);
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Security.Claims;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.Owin.Security;
+﻿using Microsoft.Owin.Security;
 using PersonalFinanceManager.Models.AspNetUserAccount;
 using PersonalFinanceManager.Services.Interfaces;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -28,14 +29,14 @@ namespace PersonalFinanceManager.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var result = _accountService.Login(model);
+            var result = await _accountService.Login(model);
 
             if (result != null)
             {
@@ -73,11 +74,11 @@ namespace PersonalFinanceManager.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = _accountService.Register(model);
+                var result = await _accountService.Register(model);
 
                 if (result == null)
                 {

@@ -1,16 +1,10 @@
 ﻿using PersonalFinanceManager.Helpers;
 using PersonalFinanceManager.Models.BudgetPlan;
-using PersonalFinanceManager.Services;
 using PersonalFinanceManager.Services.Interfaces;
-using PersonalFinanceManager.Services.RequestObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using PersonalFinanceManager.Models.SearchParameters;
-using PFM.Utils.Helpers;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -23,9 +17,9 @@ namespace PersonalFinanceManager.Controllers
             this._budgetPlanService = budgetPlanService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var model = _budgetPlanService.GetBudgetPlans(GetCurrentAccount());
+            var model = await _budgetPlanService.GetBudgetPlans(await GetCurrentAccount());
 
             return View(model);
         }
@@ -34,21 +28,21 @@ namespace PersonalFinanceManager.Controllers
         /// Initialize the Create form.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            var budgetPlanEditModel = _budgetPlanService.BuildBudgetPlan(GetCurrentAccount());
+            var budgetPlanEditModel = await _budgetPlanService.BuildBudgetPlan(await GetCurrentAccount());
             return View(budgetPlanEditModel);
         }
 
         [HttpPost]
-        public ActionResult Create(BudgetPlanEditModel budgetPlanEditModel)
+        public async Task<ActionResult> Create(BudgetPlanEditModel budgetPlanEditModel)
         {
             var result = false;
             IList<JsonError> errorMessages = null;
 
             if (ModelState.IsValid)
             {
-                _budgetPlanService.CreateBudgetPlan(budgetPlanEditModel, GetCurrentAccount());
+                await _budgetPlanService.CreateBudgetPlan(budgetPlanEditModel, await GetCurrentAccount());
                 result = true;
             }
             else
@@ -65,9 +59,9 @@ namespace PersonalFinanceManager.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult View(int? id)
+        public async Task<ActionResult> View(int? id)
         {
-            var budgetPlanEditModel = _budgetPlanService.BuildBudgetPlan(GetCurrentAccount(), id);
+            var budgetPlanEditModel = await _budgetPlanService.BuildBudgetPlan(await GetCurrentAccount(), id);
             return View(budgetPlanEditModel);
         }
         
@@ -76,21 +70,21 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id">Budget id</param>
         /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
-            var budgetPlanEditModel = _budgetPlanService.BuildBudgetPlan(GetCurrentAccount(), id);
+            var budgetPlanEditModel = await _budgetPlanService.BuildBudgetPlan(await GetCurrentAccount(), id);
             return View(budgetPlanEditModel);
         }
 
         [HttpPost]
-        public ActionResult Edit(BudgetPlanEditModel budgetPlanEditModel)
+        public async Task<ActionResult> Edit(BudgetPlanEditModel budgetPlanEditModel)
         {
             var result = false;
             IList<JsonError> errorMessages = null;
 
             if (ModelState.IsValid)
             {
-                _budgetPlanService.EditBudgetPlan(budgetPlanEditModel, GetCurrentAccount());
+                await _budgetPlanService.EditBudgetPlan(budgetPlanEditModel, await GetCurrentAccount());
                 result = true;
             }
             else
@@ -108,26 +102,26 @@ namespace PersonalFinanceManager.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult StartBudgetPlan(int? id)
+        public async Task<ActionResult> StartBudgetPlan(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _budgetPlanService.StartBudgetPlan(id.Value, GetCurrentAccount());
+            await _budgetPlanService.StartBudgetPlan(id.Value, await GetCurrentAccount());
 
             return RedirectToAction("View", new { id=id });
         }
 
-        public ActionResult StopBudgetPlan(int? id)
+        public async Task<ActionResult> StopBudgetPlan(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _budgetPlanService.StopBudgetPlan(id.Value);
+            await _budgetPlanService.StopBudgetPlan(id.Value);
 
             return RedirectToAction("View", new { id = id });
         }

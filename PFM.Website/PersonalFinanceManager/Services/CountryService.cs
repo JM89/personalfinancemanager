@@ -3,64 +3,48 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class CountryService : ICountryService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public CountryService(Serilog.ILogger logger)
+        public CountryService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public IList<CountryListModel> GetCountries()
+        public async Task<IList<CountryListModel>> GetCountries()
         {
-            IList<CountryListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.Country.CountryList>($"/Country/GetList");
-                result = response.Select(AutoMapper.Mapper.Map<CountryListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Country.CountryList>($"/Country/GetList");
+            return response.Select(AutoMapper.Mapper.Map<CountryListModel>).ToList();
         }
 
-        public void CreateCountry(CountryEditModel model)
+        public async Task<bool> CreateCountry(CountryEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Country.CountryDetails>(model);
-                httpClient.Post($"/Country/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Country.CountryDetails>(model);
+            return await _httpClientExtended.Post($"/Country/Create", dto);
         }
 
-        public CountryEditModel GetById(int id)
+        public async Task<CountryEditModel> GetById(int id)
         {
-            CountryEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.Country.CountryDetails>($"/Country/Get/{id}");
-                result = AutoMapper.Mapper.Map<CountryEditModel>(response);
-            }
-            return result;
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Country.CountryDetails>($"/Country/Get/{id}");
+            return AutoMapper.Mapper.Map<CountryEditModel>(response);
         }
 
-        public void EditCountry(CountryEditModel model)
+        public async Task<bool> EditCountry(CountryEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Country.CountryDetails>(model);
-                httpClient.Put($"/Country/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Country.CountryDetails>(model);
+            return await _httpClientExtended.Put($"/Country/Edit/{model.Id}", dto);
         }
 
-        public void DeleteCountry(int id)
+        public async Task<bool> DeleteCountry(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/Country/Delete/{id}");
-            }
+            return await _httpClientExtended.Delete($"/Country/Delete/{id}");
         }
     }
 }

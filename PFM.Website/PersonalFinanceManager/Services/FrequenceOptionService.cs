@@ -3,27 +3,25 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class FrequenceOptionService : IFrequenceOptionService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public FrequenceOptionService(Serilog.ILogger logger)
+        public FrequenceOptionService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public IList<FrequenceOptionListModel> GetFrequencyOptions()
+        public async Task<IList<FrequenceOptionListModel>> GetFrequencyOptions()
         {
-            IList<FrequenceOptionListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.FrequenceOption.FrequenceOptionList>($"/FrequenceOption/GetList");
-                result = response.Select(AutoMapper.Mapper.Map<FrequenceOptionListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.FrequenceOption.FrequenceOptionList>($"/FrequenceOption/GetList");
+            return response.Select(AutoMapper.Mapper.Map<FrequenceOptionListModel>).ToList();
         }
     }
 }

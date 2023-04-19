@@ -12,6 +12,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PFM.Utils.Helpers;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -33,7 +34,7 @@ namespace PersonalFinanceManager.Controllers
             this._currencyService = currencyService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -42,14 +43,14 @@ namespace PersonalFinanceManager.Controllers
 
             var model = new HomePageModel();
 
-            var debitMvts = this._expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { UserId = CurrentUser });
+            var debitMvts = await _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { UserId = CurrentUser });
 
             if (debitMvts.Count != 0)
             {
                 var sumDebitMvt = debitMvts.Sum(x => x.Cost);
 
                 model.AmountDebitMovementPercentagePerPaymentMethods = new List<NumberOfMvtPerPaymentMethodModel>();
-                var paymentMethods = this._paymentMethodService.GetPaymentMethods();
+                var paymentMethods = await _paymentMethodService.GetPaymentMethods();
 
                 foreach (var paymentMethod in paymentMethods)
                 {
@@ -69,19 +70,19 @@ namespace PersonalFinanceManager.Controllers
 
             model.TotalNumberOfDebitMovements = debitMvts.Count();
 
-            var userProfile = _userProfileService.GetByUserId(User.Identity.GetUserId());
+            var userProfile = await _userProfileService.GetByUserId(User.Identity.GetUserId());
             if (userProfile.Id != 0)
             {
                 model.UserYearlyWages = userProfile.YearlyWages;
             }
 
-            var account = _bankAccountService.GetAccountsByUser(User.Identity.GetUserId()).SingleOrDefault(x => x.IsFavorite);
+            var account = (await _bankAccountService.GetAccountsByUser(User.Identity.GetUserId())).SingleOrDefault(x => x.IsFavorite);
             if (account != null)
             {
-                var fullAccountDetails = _bankAccountService.GetById(account.Id);
+                var fullAccountDetails = await _bankAccountService.GetById(account.Id);
                 model.FavoriteAccountCurrencySymbol = fullAccountDetails.CurrencySymbol;
 
-                var currencies = _currencyService.GetCurrencies().Where(x => x.Id != fullAccountDetails.CurrencyId).ToList();
+                var currencies = (await _currencyService.GetCurrencies()).Where(x => x.Id != fullAccountDetails.CurrencyId).ToList();
                 if (currencies.Any())
                 {
                     var rdn = new Random();
@@ -120,14 +121,14 @@ namespace PersonalFinanceManager.Controllers
             return View(model);
         }
 
-        public JsonResult GetDebitMovementsOverTime()
+        public async Task<JsonResult> GetDebitMovementsOverTime()
         {
             var interval = new Interval(DateTime.Now, DateTimeUnitEnums.Months, 6);
 
             var intervalsByMonth = interval.GetIntervalsByMonth();
 
             var dataSetActualExpenditures = new ChartDataset();
-            var expenditures = _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { UserId = CurrentUser, StartDate = interval.StartDate, EndDate=interval.EndDate });
+            var expenditures = await _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { UserId = CurrentUser, StartDate = interval.StartDate, EndDate=interval.EndDate });
             foreach (var intervalByMonth in intervalsByMonth)
             {
                 var expendituresByMonth = expenditures.Where(x => intervalByMonth.Value.IsBetween(x.DateExpenditure));
@@ -159,6 +160,5 @@ namespace PersonalFinanceManager.Controllers
 
             return View();
         }
-
     }
 }

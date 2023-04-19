@@ -3,89 +3,65 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class AtmWithdrawService : IAtmWithdrawService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public AtmWithdrawService(Serilog.ILogger logger)
+        public AtmWithdrawService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public IList<AtmWithdrawListModel> GetAtmWithdrawsByAccountId(int accountId)
+        public async Task<IList<AtmWithdrawListModel>> GetAtmWithdrawsByAccountId(int accountId)
         {
-            IList<AtmWithdrawListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawList>($"/AtmWithdraw/GetList/{accountId}");
-                result = response.Select(AutoMapper.Mapper.Map<AtmWithdrawListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawList>($"/AtmWithdraw/GetList/{accountId}");
+            return response.Select(AutoMapper.Mapper.Map<AtmWithdrawListModel>).ToList();
         }
 
-        public void CreateAtmWithdraws(List<AtmWithdrawEditModel> models)
+        public async Task<bool> CreateAtmWithdraws(List<AtmWithdrawEditModel> models)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = models.Select(AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>).ToList();
-                httpClient.Post($"/AtmWithdraw/CreateAtmWithdraws", dto);
-            }
+            var dto = models.Select(AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>).ToList();
+            return await _httpClientExtended.Post($"/AtmWithdraw/CreateAtmWithdraws", dto);
         }
 
-        public void CreateAtmWithdraw(AtmWithdrawEditModel model)
+        public async Task<bool> CreateAtmWithdraw(AtmWithdrawEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>(model);
-                httpClient.Post($"/AtmWithdraw/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>(model);
+            return await _httpClientExtended.Post($"/AtmWithdraw/Create", dto);
         }
 
-        public AtmWithdrawEditModel GetById(int id)
+        public async Task<AtmWithdrawEditModel> GetById(int id)
         {
-            AtmWithdrawEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>($"/AtmWithdraw/Get/{id}");
-                result = AutoMapper.Mapper.Map<AtmWithdrawEditModel>(response);
-            }
-            return result;
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>($"/AtmWithdraw/Get/{id}");
+            return AutoMapper.Mapper.Map<AtmWithdrawEditModel>(response);
         }
 
-        public void EditAtmWithdraw(AtmWithdrawEditModel model)
+        public async Task<bool> EditAtmWithdraw(AtmWithdrawEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>(model);
-                httpClient.Put($"/AtmWithdraw/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>(model);
+            return await _httpClientExtended.Put($"/AtmWithdraw/Edit/{model.Id}", dto);
         }
         
-        public void CloseAtmWithdraw(int id)
+        public async Task<bool> CloseAtmWithdraw(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Post($"/AtmWithdraw/CloseAtmWithdraw/{id}");
-            }
+            return await _httpClientExtended.Post($"/AtmWithdraw/CloseAtmWithdraw/{id}");
         }
 
-        public void DeleteAtmWithdraw(int id)
+        public async Task<bool> DeleteAtmWithdraw(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/AtmWithdraw/Delete/{id}");
-            }
+            return await _httpClientExtended.Delete($"/AtmWithdraw/Delete/{id}");
         }
 
-        public void ChangeDebitStatus(int id, bool debitStatus)
+        public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/AtmWithdraw/ChangeDebitStatus/{id}/{debitStatus}");
-            }
+            return await _httpClientExtended.Delete($"/AtmWithdraw/ChangeDebitStatus/{id}/{debitStatus}");
         }
     }
 }

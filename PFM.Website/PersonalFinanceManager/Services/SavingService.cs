@@ -1,67 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using PersonalFinanceManager.Services.Interfaces;
-using PersonalFinanceManager.Models.Saving;
+﻿using PersonalFinanceManager.Models.Saving;
 using PersonalFinanceManager.Services.HttpClientWrapper;
+using PersonalFinanceManager.Services.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class SavingService : ISavingService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public SavingService(Serilog.ILogger logger)
+        public SavingService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public void CreateSaving(SavingEditModel model)
+        public async Task<bool> CreateSaving(SavingEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
-                httpClient.Post($"/Saving/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
+            return await _httpClientExtended.Post($"/Saving/Create", dto);
         }
 
-        public void DeleteSaving(int id)
+        public async Task<bool> DeleteSaving(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/Saving/Delete/{id}");
-            }
+            return await _httpClientExtended.Delete($"/Saving/Delete/{id}");
         }
 
-        public void EditSaving(SavingEditModel model)
+        public async Task<bool> EditSaving(SavingEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
-                httpClient.Put($"/Saving/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
+            return await _httpClientExtended.Put($"/Saving/Edit/{model.Id}", dto);
         }
 
-        public SavingEditModel GetById(int id)
+        public async Task<SavingEditModel> GetById(int id)
         {
-            SavingEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");
-                result = AutoMapper.Mapper.Map<SavingEditModel>(response);
-            }
-            return result;
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");
+            return AutoMapper.Mapper.Map<SavingEditModel>(response);
         }
 
-        public IList<SavingListModel> GetSavingsByAccountId(int accountId)
+        public async Task<IList<SavingListModel>> GetSavingsByAccountId(int accountId)
         {
-            IList<SavingListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.Saving.SavingList>($"/Saving/GetList/{accountId}");
-                result = response.Select(AutoMapper.Mapper.Map<SavingListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Saving.SavingList>($"/Saving/GetList/{accountId}");
+            return response.Select(AutoMapper.Mapper.Map<SavingListModel>).ToList();
         }
     }
 }

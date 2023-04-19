@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PersonalFinanceManager.Models.BudgetPlan;
 using PersonalFinanceManager.Services.Core;
 
@@ -6,20 +7,20 @@ namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IBudgetPlanService : IBaseService
     {
-        IList<BudgetPlanListModel> GetBudgetPlans(int accountId);
+        Task<IList<BudgetPlanListModel>> GetBudgetPlans(int accountId);
 
-        BudgetPlanEditModel GetCurrent(int accountId);
+        Task<BudgetPlanEditModel> GetCurrent(int accountId);
 
-        BudgetPlanEditModel GetById(int id);
+        Task<BudgetPlanEditModel> GetById(int id);
 
-        void CreateBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId);
+        Task<bool> CreateBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId);
 
-        void EditBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId);
+        Task<bool> EditBudgetPlan(BudgetPlanEditModel budgetPlanEditModel, int accountId);
 
-        void StartBudgetPlan(int value, int accountId);
+        Task<bool> StartBudgetPlan(int value, int accountId);
 
-        void StopBudgetPlan(int value);
+        Task<bool> StopBudgetPlan(int value);
 
-        BudgetPlanEditModel BuildBudgetPlan(int accountId, int? budgetPlanId = null);
+        Task<BudgetPlanEditModel> BuildBudgetPlan(int accountId, int? budgetPlanId = null);
     }
 }

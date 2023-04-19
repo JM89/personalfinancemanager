@@ -3,64 +3,48 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class ExpenditureTypeService : IExpenditureTypeService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public ExpenditureTypeService(Serilog.ILogger logger)
+        public ExpenditureTypeService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public IList<ExpenditureTypeListModel> GetExpenditureTypes()
+        public async Task<IList<ExpenditureTypeListModel>> GetExpenditureTypes()
         {
-            IList<ExpenditureTypeListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.ExpenseType.ExpenseTypeList>($"/ExpenseType/GetList");
-                result = response.Select(AutoMapper.Mapper.Map<ExpenditureTypeListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.ExpenseType.ExpenseTypeList>($"/ExpenseType/GetList");
+            return response.Select(AutoMapper.Mapper.Map<ExpenditureTypeListModel>).ToList();
         }
 
-        public ExpenditureTypeEditModel GetById(int id)
+        public async Task<ExpenditureTypeEditModel> GetById(int id)
         {
-            ExpenditureTypeEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>($"/ExpenseType/Get/{id}");
-                result = AutoMapper.Mapper.Map<ExpenditureTypeEditModel>(response);
-            }
-            return result;
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>($"/ExpenseType/Get/{id}");
+            return AutoMapper.Mapper.Map<ExpenditureTypeEditModel>(response);
         }
 
-        public void CreateExpenditureType(ExpenditureTypeEditModel model)
+        public async Task<bool> CreateExpenditureType(ExpenditureTypeEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
-                httpClient.Post($"/ExpenseType/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
+            return await _httpClientExtended.Post($"/ExpenseType/Create", dto);
         }
 
-        public void EditExpenditureType(ExpenditureTypeEditModel model)
+        public async Task<bool> EditExpenditureType(ExpenditureTypeEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
-                httpClient.Put($"/ExpenseType/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>(model);
+            return await _httpClientExtended.Put($"/ExpenseType/Edit/{model.Id}", dto);
         }
 
-        public void DeleteExpenditureType(int id)
+        public async Task<bool> DeleteExpenditureType(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/ExpenseType/Delete/{id}");
-            }
+            return await _httpClientExtended.Delete($"/ExpenseType/Delete/{id}");
         }
     }
 }

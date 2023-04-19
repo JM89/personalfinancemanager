@@ -1,19 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using PersonalFinanceManager.Models.Saving;
 using PersonalFinanceManager.Services.Core;
-using PersonalFinanceManager.Models.Saving;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface ISavingService : IBaseService
     {
-        IList<SavingListModel> GetSavingsByAccountId(int accountId);
+        Task<IList<SavingListModel>> GetSavingsByAccountId(int accountId);
 
-        void CreateSaving(SavingEditModel savingEditModel);
+        Task<bool> CreateSaving(SavingEditModel savingEditModel);
 
-        SavingEditModel GetById(int id);
+        Task<SavingEditModel> GetById(int id);
 
-        void EditSaving(SavingEditModel savingEditModel);
+        Task<bool> EditSaving(SavingEditModel savingEditModel);
 
-        void DeleteSaving(int id);
+        Task<bool> DeleteSaving(int id);
     }
 }

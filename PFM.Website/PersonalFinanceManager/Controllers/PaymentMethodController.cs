@@ -1,5 +1,6 @@
-﻿using System.Web.Mvc;
-using PersonalFinanceManager.Services.Interfaces;
+﻿using PersonalFinanceManager.Services.Interfaces;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -17,9 +18,9 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of payment methods.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var model = _paymentMethodService.GetPaymentMethods();
+            var model = await _paymentMethodService.GetPaymentMethods();
 
             return View(model);
         }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using PersonalFinanceManager.Models.Expenditure;
+using PersonalFinanceManager.Services.Interfaces;
+using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using PersonalFinanceManager.Models.Expenditure;
-using PersonalFinanceManager.Services.Interfaces;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -15,25 +16,23 @@ namespace PersonalFinanceManager.Controllers
         private readonly IBankAccountService _bankAccountService;
         private readonly IPaymentMethodService _paymentMethodService;
         private readonly IAtmWithdrawService _atmWithdrawService;
-        private readonly IBudgetPlanService _budgetPlanService;
 
         public ExpenditureController(IExpenditureService expenditureService, IExpenditureTypeService expenditureTypeService, IBankAccountService bankAccountService,
-            IPaymentMethodService paymentMethodService, IAtmWithdrawService atmWithdrawService, IBudgetPlanService budgetPlanService, Serilog.ILogger logger) : base(bankAccountService, logger)
+            IPaymentMethodService paymentMethodService, IAtmWithdrawService atmWithdrawService, Serilog.ILogger logger) : base(bankAccountService, logger)
         {
             this._bankAccountService = bankAccountService;
             this._expenditureService = expenditureService;
             this._expenditureTypeService = expenditureTypeService;
             this._paymentMethodService = paymentMethodService;
             this._atmWithdrawService = atmWithdrawService;
-            this._budgetPlanService = budgetPlanService;
         }
 
         // GET: ExpenditureModels
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
-            var expenditures = _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { AccountId = GetCurrentAccount() })
+            var expenditures = (await _expenditureService.GetExpenditures(new Models.SearchParameters.ExpenditureGetListSearchParameters() { AccountId = await GetCurrentAccount() }))
                 .OrderByDescending(x => x.DateExpenditure)
                 .ThenByDescending(x => x.Id)
                 .ToList();
@@ -41,24 +40,27 @@ namespace PersonalFinanceManager.Controllers
             return View(expenditures);
         }
 
-        private void PopulateDropDownLists(ExpenditureEditModel expenditureModel)
+        private async Task PopulateDropDownLists(ExpenditureEditModel expenditureModel)
         {
-            expenditureModel.AvailableInternalAccounts = _bankAccountService.GetAccountsByUser(CurrentUser).Where(x => x.Id != GetCurrentAccount()).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            expenditureModel.AvailableExpenditureTypes = _expenditureTypeService.GetExpenditureTypes().Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).OrderBy(x => x.Text).ToList();
-            expenditureModel.AvailablePaymentMethods = _paymentMethodService.GetPaymentMethods().ToList();
-            expenditureModel.AvailableAtmWithdraws = _atmWithdrawService.GetAtmWithdrawsByAccountId(GetCurrentAccount()).Where(x => !x.IsClosed).OrderBy(x => x.DateExpenditure).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Description }).ToList();
+            var currentAccount = await GetCurrentAccount();
+
+            expenditureModel.AvailableInternalAccounts = (await _bankAccountService.GetAccountsByUser(CurrentUser)).Where(x => x.Id != currentAccount).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList();
+            expenditureModel.AvailableExpenditureTypes = (await _expenditureTypeService.GetExpenditureTypes()).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).OrderBy(x => x.Text).ToList();
+            expenditureModel.AvailablePaymentMethods = (await _paymentMethodService.GetPaymentMethods()).ToList();
+            expenditureModel.AvailableAtmWithdraws = (await _atmWithdrawService.GetAtmWithdrawsByAccountId(currentAccount)).Where(x => !x.IsClosed).OrderBy(x => x.DateExpenditure).Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Description }).ToList();
         }
 
         // GET: ExpenditureModels/Create
-        public ActionResult Create(DateTime? dateLastExpenditure = null)
+        public async Task<ActionResult> Create(DateTime? dateLastExpenditure = null)
         {
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
             ExpenditureEditModel expenditureModel = new ExpenditureEditModel
             {
                 DateExpenditure = dateLastExpenditure ?? DateTime.Today
             };
-            PopulateDropDownLists(expenditureModel);
+            
+            await PopulateDropDownLists(expenditureModel);
 
             return View(expenditureModel);
         }
@@ -66,14 +68,14 @@ namespace PersonalFinanceManager.Controllers
         // POST: ExpenditureModels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ExpenditureEditModel expenditureModel, bool stayHere)
+        public async Task<ActionResult> Create(ExpenditureEditModel expenditureModel, bool stayHere)
         {
             if (ModelState.IsValid)
             {
-                var accountId = GetCurrentAccount();
+                var accountId = await GetCurrentAccount();
 
                 expenditureModel.AccountId = accountId;
-                _expenditureService.CreateExpenditure(expenditureModel);
+                await _expenditureService.CreateExpenditure(expenditureModel);
 
                 if (stayHere)
                 {
@@ -84,75 +86,75 @@ namespace PersonalFinanceManager.Controllers
             }
             else
             {
-                PopulateDropDownLists(expenditureModel);
+                await PopulateDropDownLists(expenditureModel);
             }
 
             return View(expenditureModel);
         }
 
         // GET: BankAccount/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            AccountBasicInfo();
+            await AccountBasicInfo();
 
-            var expenditureModel = _expenditureService.GetById(id.Value);
+            var expenditureModel = await _expenditureService.GetById(id.Value);
 
             if (expenditureModel == null)
             {
                 return HttpNotFound();
             }
 
-            PopulateDropDownLists(expenditureModel);
+            await PopulateDropDownLists(expenditureModel);
 
             return View(expenditureModel);
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ExpenditureEditModel expenditureModel)
+        public async Task<ActionResult> Edit(ExpenditureEditModel expenditureModel)
         {
             if (ModelState.IsValid)
             {
-                var accountId = GetCurrentAccount();
+                var accountId = await GetCurrentAccount();
 
                 expenditureModel.AccountId = accountId;
 
-                _expenditureService.EditExpenditure(expenditureModel);
+                await _expenditureService.EditExpenditure(expenditureModel);
 
                 return RedirectToAction("Index", new { accountId });
             }
             return View(expenditureModel);
         }
 
-        public ActionResult UndoDebit(int? id)
+        public async Task<ActionResult> UndoDebit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _expenditureService.ChangeDebitStatus(id.Value, false);
+            await _expenditureService.ChangeDebitStatus(id.Value, false);
 
-            var accountId = GetCurrentAccount();
+            var accountId = await GetCurrentAccount();
 
             return RedirectToAction("Index", new { accountId });
         }
 
-        public ActionResult Debit(int? id)
+        public async Task<ActionResult> Debit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _expenditureService.ChangeDebitStatus(id.Value, true);
+            await _expenditureService.ChangeDebitStatus(id.Value, true);
 
-            var accountId = GetCurrentAccount();
+            var accountId = await GetCurrentAccount();
 
             return RedirectToAction("Index", new { accountId });
         }
@@ -160,9 +162,9 @@ namespace PersonalFinanceManager.Controllers
         // POST: ExpenditureModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            _expenditureService.DeleteExpenditure(id);
+            await _expenditureService.DeleteExpenditure(id);
 
             return Content(Url.Action("Index"));
         }

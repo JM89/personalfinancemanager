@@ -1,7 +1,8 @@
-﻿using System.Net;
-using System.Web.Mvc;
-using PersonalFinanceManager.Models.ExpenditureType;
+﻿using PersonalFinanceManager.Models.ExpenditureType;
 using PersonalFinanceManager.Services.Interfaces;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace PersonalFinanceManager.Controllers
 {
@@ -19,9 +20,9 @@ namespace PersonalFinanceManager.Controllers
         /// Return the list of expenditure types.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var model = _expenditureTypeService.GetExpenditureTypes();
+            var model = await _expenditureTypeService.GetExpenditureTypes();
 
             return View(model);
         }
@@ -41,11 +42,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ExpenditureTypeEditModel expenditureTypeModel)
+        public async Task<ActionResult> Create(ExpenditureTypeEditModel expenditureTypeModel)
         {
             if (ModelState.IsValid)
             {
-                _expenditureTypeService.CreateExpenditureType(expenditureTypeModel);
+                await _expenditureTypeService.CreateExpenditureType(expenditureTypeModel);
 
                 return RedirectToAction("Index");
             }
@@ -58,14 +59,14 @@ namespace PersonalFinanceManager.Controllers
         /// </summary>
         /// <param name="id">Expenditure Type id</param>
         /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var expenditureTypeModel = _expenditureTypeService.GetById(id.Value);
+            var expenditureTypeModel = await _expenditureTypeService.GetById(id.Value);
 
             if (expenditureTypeModel == null)
             {
@@ -81,11 +82,11 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ExpenditureTypeEditModel expenditureTypeEditModel)
+        public async Task<ActionResult> Edit(ExpenditureTypeEditModel expenditureTypeEditModel)
         {
             if (ModelState.IsValid)
             {
-                _expenditureTypeService.EditExpenditureType(expenditureTypeEditModel);
+                await _expenditureTypeService.EditExpenditureType(expenditureTypeEditModel);
 
                 return RedirectToAction("Index");
             }
@@ -99,9 +100,9 @@ namespace PersonalFinanceManager.Controllers
         /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            _expenditureTypeService.DeleteExpenditureType(id);
+            await _expenditureTypeService.DeleteExpenditureType(id);
 
             return Content(Url.Action("Index"));
         }

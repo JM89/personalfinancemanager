@@ -3,64 +3,48 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class PensionService : IPensionService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public PensionService(Serilog.ILogger logger)
+        public PensionService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public IList<PensionListModel> GetPensions(string userId)
+        public async Task<IList<PensionListModel>> GetPensions(string userId)
         {
-            IList<PensionListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.Pension.PensionList>($"/Pension/GetList/{userId}");
-                result = response.Select(AutoMapper.Mapper.Map<PensionListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Pension.PensionList>($"/Pension/GetList/{userId}");
+            return response.Select(AutoMapper.Mapper.Map<PensionListModel>).ToList();
         }
 
-        public void CreatePension(PensionEditModel model)
+        public async Task<bool> CreatePension(PensionEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Pension.PensionDetails>(model);
-                httpClient.Post($"/Pension/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Pension.PensionDetails>(model);
+            return await _httpClientExtended.Post($"/Pension/Create", dto);
         }
 
-        public PensionEditModel GetById(int id)
+        public async Task<PensionEditModel> GetById(int id)
         {
-            PensionEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.Pension.PensionDetails>($"/Pension/Get/{id}");
-                result = AutoMapper.Mapper.Map<PensionEditModel>(response);
-            }
-            return result;
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Pension.PensionDetails>($"/Pension/Get/{id}");
+            return AutoMapper.Mapper.Map<PensionEditModel>(response);
         }
 
-        public void EditPension(PensionEditModel model)
+        public async Task<bool> EditPension(PensionEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Pension.PensionDetails>(model);
-                httpClient.Put($"/Pension/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Pension.PensionDetails>(model);
+            return await _httpClientExtended.Put($"/Pension/Edit/{model.Id}", dto);
         }
 
-        public void DeletePension(int id)
+        public async Task<bool> DeletePension(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/Pension/Delete/{id}");
-            }
+            return await _httpClientExtended.Delete($"/Pension/Delete/{id}");
         }
     }
 }

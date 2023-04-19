@@ -4,76 +4,55 @@ using PersonalFinanceManager.Models.Tax;
 using PersonalFinanceManager.Services.HttpClientWrapper;
 using System.Linq;
 using PersonalFinanceManager.Models.TaxType;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class TaxService : ITaxService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public TaxService(Serilog.ILogger logger)
+        public TaxService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public void CreateTax(TaxEditModel model)
+        public async Task<bool> CreateTax(TaxEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Tax.TaxDetails>(model);
-                httpClient.Post($"/Tax/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Tax.TaxDetails>(model);
+            return await _httpClientExtended.Post($"/Tax/Create", dto);
         }
 
-        public void DeleteTax(int id)
+        public async Task<bool> DeleteTax(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/Tax/Delete/{id}");
-            }
+            return await _httpClientExtended.Delete($"/Tax/Delete/{id}");
         }
 
-        public void EditTax(TaxEditModel model)
+        public async Task<bool> EditTax(TaxEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Tax.TaxDetails>(model);
-                httpClient.Put($"/Tax/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Tax.TaxDetails>(model);
+            return await _httpClientExtended.Put($"/Tax/Edit/{model.Id}", dto);
         }
 
-        public TaxEditModel GetById(int id)
+        public async Task<TaxEditModel> GetById(int id)
         {
-            TaxEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.Tax.TaxDetails>($"/Tax/Get/{id}");
-                result = AutoMapper.Mapper.Map<TaxEditModel>(response);
-            }
-            return result;
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Tax.TaxDetails>($"/Tax/Get/{id}");
+            return AutoMapper.Mapper.Map<TaxEditModel>(response);
         }
 
-        public IList<TaxListModel> GetTaxes(string userId)
+        public async Task<IList<TaxListModel>> GetTaxes(string userId)
         {
-            IList<TaxListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.Tax.TaxList>($"/Tax/GetList/{userId}");
-                result = response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Tax.TaxList>($"/Tax/GetList/{userId}");
+            return response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
         }
 
-        public IList<TaxListModel> GetTaxesByType(string currentUser, TaxType incomeTax)
+        public async Task<IList<TaxListModel>> GetTaxesByType(string currentUser, TaxType incomeTax)
         {
-            IList<TaxListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var taxTypeId = (int)TaxType.IncomeTax;
-                var response = httpClient.GetList<PFM.Api.Contracts.Tax.TaxList>($"/Tax/GetTaxesByType/{currentUser}/{taxTypeId}");
-                result = response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
-            }
-            return result;
+            var taxTypeId = (int)TaxType.IncomeTax;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Tax.TaxList>($"/Tax/GetTaxesByType/{currentUser}/{taxTypeId}");
+            return response.Select(AutoMapper.Mapper.Map<TaxListModel>).ToList();
         }
     }
 }

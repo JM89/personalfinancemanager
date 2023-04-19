@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
-using PersonalFinanceManager.Models.Income;
+﻿using PersonalFinanceManager.Models.Income;
 using PersonalFinanceManager.Services.Core;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services.Interfaces
 {
     public interface IIncomeService : IBaseService
     {
-        void CreateIncomes(List<IncomeEditModel> incomeEditModel);
+        Task<bool> CreateIncomes(List<IncomeEditModel> incomeEditModel);
 
-        void CreateIncome(IncomeEditModel incomeEditModel);
+        Task<bool> CreateIncome(IncomeEditModel incomeEditModel);
 
-        IList<IncomeListModel> GetIncomes(int accountId);
+        Task<IList<IncomeListModel>> GetIncomes(int accountId);
 
-        IncomeEditModel GetById(int id);
+        Task<IncomeEditModel> GetById(int id);
 
-        void EditIncome(IncomeEditModel incomeEditModel);
+        Task<bool> EditIncome(IncomeEditModel incomeEditModel);
 
-        void DeleteIncome(int id);
+        Task<bool> DeleteIncome(int id);
     }
 }

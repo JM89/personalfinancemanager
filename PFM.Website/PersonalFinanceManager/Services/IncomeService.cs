@@ -3,73 +3,54 @@ using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PersonalFinanceManager.Services
 {
     public class IncomeService: IIncomeService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public IncomeService(Serilog.ILogger logger)
+        public IncomeService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
-        public void CreateIncomes(List<IncomeEditModel> models)
+        public async Task<bool> CreateIncomes(List<IncomeEditModel> models)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = models.Select(AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>).ToList();
-                httpClient.Post($"/Income/CreateIncomes", dto);
-            }
+            var dto = models.Select(AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>).ToList();
+            return await _httpClientExtended.Post($"/Income/CreateIncomes", dto);
         }
 
-        public void CreateIncome(IncomeEditModel model)
+        public async Task<bool> CreateIncome(IncomeEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>(model);
-                httpClient.Post($"/Income/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>(model);
+            return await _httpClientExtended.Post($"/Income/Create", dto);
         }
 
-        public IList<IncomeListModel> GetIncomes(int accountId)
+        public async Task<IList<IncomeListModel>> GetIncomes(int accountId)
         {
-            IList<IncomeListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.Income.IncomeList>($"/Income/GetList/{accountId}");
-                result = response.Select(AutoMapper.Mapper.Map<IncomeListModel>).ToList();
-            }
-            return result;
+            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Income.IncomeList>($"/Income/GetList/{accountId}");
+            return response.Select(AutoMapper.Mapper.Map<IncomeListModel>).ToList();
         }
 
-        public IncomeEditModel GetById(int id)
+        public async Task<IncomeEditModel> GetById(int id)
         {
-            IncomeEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.Income.IncomeDetails>($"/Income/Get/{id}");
-                result = AutoMapper.Mapper.Map<IncomeEditModel>(response);
-            }
-            return result;
+            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Income.IncomeDetails>($"/Income/Get/{id}");
+            return AutoMapper.Mapper.Map<IncomeEditModel>(response);
         }
 
-        public void EditIncome(IncomeEditModel model)
+        public async Task<bool> EditIncome(IncomeEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>(model);
-                httpClient.Put($"/Income/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>(model);
+            return await _httpClientExtended.Put($"/Income/Edit/{model.Id}", dto);
         }
 
-        public void DeleteIncome(int id)
+        public async Task<bool> DeleteIncome(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/Income/Delete/{id}");
-            }
+            return await _httpClientExtended.Delete($"/Income/Delete/{id}");
         }
     }
 }
