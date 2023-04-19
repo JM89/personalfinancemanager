@@ -8,36 +8,33 @@ namespace PersonalFinanceManager.Services
     public class AccountService : IAccountService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public AccountService(Serilog.ILogger logger)
+        public AccountService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
         public UserResponse Login(LoginViewModel user)
         {
             UserResponse result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
+            var dto = new UserRequest() { Username = user.Email, Password = user.Password };
+            result = _httpClientExtended.Post<UserRequest, UserResponse>($"/Account/Login", dto, new HttpClientRequestOptions()
             {
-                var dto = new UserRequest() { Username = user.Email, Password = user.Password };
-                result = httpClient.Post<UserRequest, UserResponse>($"/Account/Login", dto, new HttpClientRequestOptions() {
-                    AuthenticationTokenRequired = false
-                });
-            }
+                AuthenticationTokenRequired = false
+            });
             return result;
         }
 
         public string Register(RegisterViewModel user)
         {
             UserResponse result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
+            var dto = new UserRequest() { Username = user.Email, Password = user.Password, FirstName = "", LastName = "" };
+            result = _httpClientExtended.Post<UserRequest, UserResponse>($"/Account/Register", dto, new HttpClientRequestOptions()
             {
-                var dto = new UserRequest() { Username = user.Email, Password = user.Password, FirstName = "", LastName = "" };
-                result = httpClient.Post<UserRequest, UserResponse>($"/Account/Register", dto, new HttpClientRequestOptions()
-                {
-                    AuthenticationTokenRequired = false
-                });
-            }
+                AuthenticationTokenRequired = false
+            });
             return result.Token;
         }
     }

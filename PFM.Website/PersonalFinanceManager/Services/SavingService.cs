@@ -10,57 +10,44 @@ namespace PersonalFinanceManager.Services
     public class SavingService : ISavingService
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IHttpClientExtended _httpClientExtended;
 
-        public SavingService(Serilog.ILogger logger)
+        public SavingService(Serilog.ILogger logger, IHttpClientExtended httpClientExtended)
         {
             _logger = logger;
+            _httpClientExtended = httpClientExtended;
         }
 
         public void CreateSaving(SavingEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
-                httpClient.Post($"/Saving/Create", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
+            _httpClientExtended.Post($"/Saving/Create", dto);
         }
 
         public void DeleteSaving(int id)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                httpClient.Delete($"/Saving/Delete/{id}");
-            }
+            _httpClientExtended.Delete($"/Saving/Delete/{id}");
         }
 
         public void EditSaving(SavingEditModel model)
         {
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
-                httpClient.Put($"/Saving/Edit/{model.Id}", dto);
-            }
+            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
+            _httpClientExtended.Put($"/Saving/Edit/{model.Id}", dto);
         }
 
         public SavingEditModel GetById(int id)
         {
             SavingEditModel result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetSingle<PFM.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");
-                result = AutoMapper.Mapper.Map<SavingEditModel>(response);
-            }
+            var response = _httpClientExtended.GetSingle<PFM.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");
+            result = AutoMapper.Mapper.Map<SavingEditModel>(response);
             return result;
         }
 
         public IList<SavingListModel> GetSavingsByAccountId(int accountId)
         {
             IList<SavingListModel> result = null;
-            using (var httpClient = new HttpClientExtended(_logger))
-            {
-                var response = httpClient.GetList<PFM.Api.Contracts.Saving.SavingList>($"/Saving/GetList/{accountId}");
-                result = response.Select(AutoMapper.Mapper.Map<SavingListModel>).ToList();
-            }
+            var response = _httpClientExtended.GetList<PFM.Api.Contracts.Saving.SavingList>($"/Saving/GetList/{accountId}");
+            result = response.Select(AutoMapper.Mapper.Map<SavingListModel>).ToList();
             return result;
         }
     }

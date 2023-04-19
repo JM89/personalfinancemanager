@@ -1,7 +1,6 @@
-﻿using Ninject.Modules;
+﻿using Ninject.Extensions.Conventions;
+using Ninject.Modules;
 using PersonalFinanceManager.Services.Core;
-using Ninject.Extensions.Conventions;
-using Ninject.Web.Common;
 using Serilog;
 
 namespace PersonalFinanceManager.App_Start
