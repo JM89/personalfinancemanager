@@ -11,11 +11,7 @@ namespace PersonalFinanceManager
     public partial class Startup
     {
         public void Configuration(IAppBuilder app)
-        {
-            Log.Logger = new LoggerConfiguration()
-              .ReadFrom.AppSettings()
-              .CreateLogger();
-
+        {      
             ConfigureNinject(app);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
