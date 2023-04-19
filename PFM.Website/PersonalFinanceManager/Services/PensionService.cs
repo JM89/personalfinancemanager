@@ -1,18 +1,24 @@
-﻿using PersonalFinanceManager.Services.Interfaces;
-using PersonalFinanceManager.Models.Pension;
-using System.Collections.Generic;
-using System;
+﻿using PersonalFinanceManager.Models.Pension;
 using PersonalFinanceManager.Services.HttpClientWrapper;
+using PersonalFinanceManager.Services.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PersonalFinanceManager.Services
 {
     public class PensionService : IPensionService
     {
+        private readonly Serilog.ILogger _logger;
+
+        public PensionService(Serilog.ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public IList<PensionListModel> GetPensions(string userId)
         {
             IList<PensionListModel> result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var response = httpClient.GetList<PFM.Api.Contracts.Pension.PensionList>($"/Pension/GetList/{userId}");
                 result = response.Select(AutoMapper.Mapper.Map<PensionListModel>).ToList();
@@ -22,7 +28,7 @@ namespace PersonalFinanceManager.Services
 
         public void CreatePension(PensionEditModel model)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Pension.PensionDetails>(model);
                 httpClient.Post($"/Pension/Create", dto);
@@ -32,7 +38,7 @@ namespace PersonalFinanceManager.Services
         public PensionEditModel GetById(int id)
         {
             PensionEditModel result = null;
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var response = httpClient.GetSingle<PFM.Api.Contracts.Pension.PensionDetails>($"/Pension/Get/{id}");
                 result = AutoMapper.Mapper.Map<PensionEditModel>(response);
@@ -42,7 +48,7 @@ namespace PersonalFinanceManager.Services
 
         public void EditPension(PensionEditModel model)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Pension.PensionDetails>(model);
                 httpClient.Put($"/Pension/Edit/{model.Id}", dto);
@@ -51,7 +57,7 @@ namespace PersonalFinanceManager.Services
 
         public void DeletePension(int id)
         {
-            using (var httpClient = new HttpClientExtended())
+            using (var httpClient = new HttpClientExtended(_logger))
             {
                 httpClient.Delete($"/Pension/Delete/{id}");
             }
