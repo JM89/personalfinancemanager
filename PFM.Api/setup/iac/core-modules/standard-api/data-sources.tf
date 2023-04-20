@@ -19,3 +19,7 @@ data "aws_subnets" "public_subnets" {
     values = ["*public*"]
   }
 }
+
+data "aws_route53_zone" "public_zone" {
+  name = local.domain_name
+}

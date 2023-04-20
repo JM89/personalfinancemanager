@@ -70,9 +70,3 @@ variable "app_health_checks" {
   description = "Service Health check path"
   type        = string
 }
-
-variable "ssl_server_certificate" {
-  description = "ARN of the default SSL server certificate"
-  type = string
-  default = "arn:aws:iam::000000000000:server-certificate/test_cert"
-}

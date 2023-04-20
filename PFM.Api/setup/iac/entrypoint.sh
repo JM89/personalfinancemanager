@@ -24,3 +24,6 @@ sh tf-plan-apply.sh "repository" "local"
 
 echo "Run Network - IaC"
 sh tf-plan-apply.sh "network" "local"
+
+echo "Run Service - IaC"
+sh tf-plan-apply.sh "service" "local"

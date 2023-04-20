@@ -3,7 +3,7 @@ terraform {
     bucket                      = "pfm-api-terraform-state"
     key                         = "local/service/terraform.tfstate"
     region                      = "eu-west-2"
-    endpoint                    = "http://localhost:4566"
+    endpoint                    = "http://localstack:4566"
     skip_credentials_validation = true
     skip_metadata_api_check     = true
     force_path_style            = true
@@ -28,12 +28,13 @@ provider "aws" {
   }
 
   endpoints {
-    ecs        = "http://localhost:4566"
-    cloudwatch = "http://localhost:4566"
-    iam        = "http://localhost:4566"
-    ec2        = "http://localhost:4566"
-    logs       = "http://localhost:4566"
-    elb        = "http://localhost:4566"
-    elbv2      = "http://localhost:4566"
+    ecs        = "http://localstack:4566"
+    cloudwatch = "http://localstack:4566"
+    iam        = "http://localstack:4566"
+    ec2        = "http://localstack:4566"
+    logs       = "http://localstack:4566"
+    elbv2      = "http://localstack:4566"
+    route53    = "http://localstack:4566"
+    acm        = "http://localstack:4566"
   }
 }

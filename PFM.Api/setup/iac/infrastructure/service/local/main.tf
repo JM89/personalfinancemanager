@@ -9,6 +9,4 @@ module "standard_api" {
   app_image         = "localhost.localstack.cloud:4510/pfm-api:latest"
   app_port          = 4431
   app_health_checks = "/api/health-check"
-
-  ssl_server_certificate = var.ssl_server_certificate
 }

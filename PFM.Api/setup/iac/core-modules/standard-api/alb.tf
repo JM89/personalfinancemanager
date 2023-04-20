@@ -54,11 +54,29 @@ resource "aws_lb_listener" "alb_default_https_listener" {
   port              = local.default_https_port
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = var.ssl_server_certificate
+  certificate_arn   = aws_acm_certificate.alb_cert[0].arn
 
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.service_target_group[0].arn
   }
+}
+
+resource "aws_acm_certificate" "alb_cert" {
+  count             = var.create_resources && var.create_alb_resources ? 1 : 0
+  domain_name       = local.domain_name
+  validation_method = "DNS"
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_route53_record" "alb_dns_record" {
+  count   = var.create_resources && var.create_alb_resources ? 1 : 0
+  zone_id = data.aws_route53_zone.public_zone.id
+  name    = local.domain_name
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_lb.alb[0].dns_name]
 }
 
