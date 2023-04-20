@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket                      = "pfm-api-terraform-state"
-    key                         = "local/repository/terraform.tfstate"
+    key                         = "local/network/terraform.tfstate"
     region                      = "eu-west-2"
     endpoint                    = "http://localstack:4566"
     skip_credentials_validation = true
@@ -15,10 +15,6 @@ provider "aws" {
   secret_key = "XXX"
   region     = "eu-west-2"
 
-  skip_credentials_validation = true
-  skip_metadata_api_check     = true
-  skip_requesting_account_id  = true
-
   default_tags {
     tags = {
       "env" : "local",
@@ -27,7 +23,11 @@ provider "aws" {
     }
   }
 
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+
   endpoints {
-    ecr = "http://localstack:4566"
+    ec2 = "http://localstack:4566"
   }
 }

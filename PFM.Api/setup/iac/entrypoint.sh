@@ -21,3 +21,6 @@ aws s3api create-bucket --bucket pfm-api-terraform-state --endpoint-url $AWS_END
 
 echo "Run Repository - IaC"
 sh tf-plan-apply.sh "repository" "local"
+
+echo "Run Network - IaC"
+sh tf-plan-apply.sh "network" "local"

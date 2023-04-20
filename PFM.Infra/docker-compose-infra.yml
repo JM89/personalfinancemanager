@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile
       context: ./PFM.Infra/localstack
     environment:
-      - SERVICES=ssm,ecr,s3
+      - SERVICES=ssm,ecr,s3,ec2
       - DEBUG=${DEBUG-}
       - TERRAFORM_ENVIRONMENT=local
       - AWS_DEFAULT_REGION=eu-west-2

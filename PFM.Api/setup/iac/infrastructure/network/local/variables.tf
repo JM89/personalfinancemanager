@@ -4,8 +4,8 @@ variable "create_resources" {
   default     = true
 }
 
-variable "repository_name" {
-  description = "Name of the ECR repository"
+variable "vpc_name" {
+  description = "Name of the VPC"
   type        = string
   default     = "pfm-api"
 }

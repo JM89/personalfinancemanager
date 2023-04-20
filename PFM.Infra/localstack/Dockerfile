@@ -1,4 +1,4 @@
-FROM localstack/localstack:1.2.0
+FROM localstack/localstack:2.0.2
 
 RUN apt-get update && apt-get install wget
 
