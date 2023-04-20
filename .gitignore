@@ -15,5 +15,6 @@ bank_icons
 /*.user
 /*.suo
 *.user
+**idea
 
 **.env

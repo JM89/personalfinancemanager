@@ -8,31 +8,31 @@ networks:
 services:
 
   # Simulating a centralized SQL Server instance
-  db-server:
-    image: mcr.microsoft.com/mssql/server:2017-latest
-    container_name: db-server
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=VerySecret1234!
-      - MSSQL_ENABLE_HADR=0
-      - MSSQL_AGENT_ENABLED=false
-      - MSSQL_MEMORY_LIMIT_MB=4000
-    ports:
-      - "1433:1433"
-    networks:
-      - local-network
+  # db-server:
+  #   image: mcr.microsoft.com/mssql/server:2017-latest
+  #   container_name: db-server
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=VerySecret1234!
+  #     - MSSQL_ENABLE_HADR=0
+  #     - MSSQL_AGENT_ENABLED=false
+  #     - MSSQL_MEMORY_LIMIT_MB=4000
+  #   ports:
+  #     - "1433:1433"
+  #   networks:
+  #     - local-network
 
   # Simulating a logging system
-  seq:
-    container_name: seq
-    image: datalust/seq:2022.1
-    environment:
-      - ACCEPT_EULA=Y
-    ports:
-      - "5341:5341"
-      - "80:80"
-    networks:
-      - local-network
+  # seq:
+  #   container_name: seq
+  #   image: datalust/seq:2022.1
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #   ports:
+  #     - "5341:5341"
+  #     - "80:80"
+  #   networks:
+  #     - local-network
 
   # Simulating AWS cloud 
   localstack:
@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile
       context: ./PFM.Infra/localstack
     environment:
-      - SERVICES=ssm
+      - SERVICES=ssm,ecr,s3
       - DEBUG=${DEBUG-}
       - TERRAFORM_ENVIRONMENT=local
       - AWS_DEFAULT_REGION=eu-west-2
@@ -49,6 +49,7 @@ services:
       - HOSTNAME=localstack
       - LAMBDA_EXECUTOR=docker
       - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY:- }
     ports:
       - "4566:4566"
     volumes:

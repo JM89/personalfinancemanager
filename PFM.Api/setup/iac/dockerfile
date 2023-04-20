@@ -1,0 +1,7 @@
+FROM zenika/terraform-aws-cli:latest
+
+COPY entrypoint.sh ./
+COPY ./core-modules/ ./core-modules
+COPY ./infrastructure/ ./infrastructure
+
+ENTRYPOINT [ "bash", "./entrypoint.sh" ]
