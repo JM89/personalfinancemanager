@@ -1,8 +1,8 @@
 #!/bin/sh
 
-echo "Deploying in: $1"
+echo "Deploying $1 in $2"
 
-cd "$1"
+cd "infrastructure/$1/$2"
 
 echo "terraform init -reconfigure"
 terraform init -reconfigure

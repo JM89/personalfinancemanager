@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket                      = "terraform-state"
-    key                         = "pfm-api/local/terraform.tfstate"
+    bucket                      = "pfm-api-terraform-state"
+    key                         = "local/repository/terraform.tfstate"
     region                      = "eu-west-2"
     endpoint                    = "http://localstack:4566"
     skip_credentials_validation = true

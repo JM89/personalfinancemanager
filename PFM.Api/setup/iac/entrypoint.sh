@@ -17,10 +17,7 @@ done
 echo "Successful connection to endpoint: $AWS_ENDPOINT in region $AWS_REGION"
 
 echo "Add bucket for terraform code"
-aws s3api create-bucket --bucket terraform-state --endpoint-url $AWS_ENDPOINT --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION > /dev/null
+aws s3api create-bucket --bucket pfm-api-terraform-state --endpoint-url $AWS_ENDPOINT --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION > /dev/null
 
 echo "Run Repository - IaC"
-cd ./infrastructure/repository/
-bash tf-plan-apply.sh "local"
-
-
+sh tf-plan-apply.sh "repository" "local"
