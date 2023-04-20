@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile
       context: ./PFM.Infra/localstack
     environment:
-      - SERVICES=ssm,ecr,s3,ec2
+      - SERVICES=ssm,ecr,s3,ec2,ecs,cloudwatch,iam
       - DEBUG=${DEBUG-}
       - TERRAFORM_ENVIRONMENT=local
       - AWS_DEFAULT_REGION=eu-west-2
@@ -50,8 +50,11 @@ services:
       - LAMBDA_EXECUTOR=docker
       - DOCKER_HOST=unix:///var/run/docker.sock
       - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY:- }
+      - PORT_WEB_UI=8080
     ports:
       - "4566:4566"
+      - "4510:4510"
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
