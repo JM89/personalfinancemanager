@@ -6,8 +6,8 @@ resource "aws_security_group" "alb_sg" {
 
   ingress {
     description = "Allow HTTPS"
-    from_port   = 443
-    to_port     = 443
+    from_port   = local.default_https_port
+    to_port     = local.default_https_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

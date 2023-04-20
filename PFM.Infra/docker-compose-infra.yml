@@ -50,11 +50,9 @@ services:
       - LAMBDA_EXECUTOR=docker
       - DOCKER_HOST=unix:///var/run/docker.sock
       - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY:- }
-      - PORT_WEB_UI=8080
     ports:
       - "4566:4566"
       - "4510:4510"
-      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:

@@ -29,6 +29,6 @@ provider "aws" {
 
   endpoints {
     ec2     = "http://localstack:4566"
-    route53 = "http://localhost:4566"
+    route53 = "http://localstack:4566"
   }
 }
