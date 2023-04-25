@@ -32,4 +32,4 @@ jobs:
       - name: Build
         run: msbuild PersonalFinanceManager.sln /p:platform="Any CPU" /p:configuration="Release"
       - name: Run Tests
-        run: vstest.console.exe .\test\PersonalFinanceManager.ApiContractTests\bin\Release\PersonalFinanceManager.ApiContractTests.dll
+        run: vstest.console.exe test\PersonalFinanceManager.ApiContractTests\bin\Release\net6.0\PersonalFinanceManager.ApiContractTests.dll
