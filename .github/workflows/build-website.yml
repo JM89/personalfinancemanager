@@ -31,7 +31,8 @@ jobs:
         run: msbuild PersonalFinanceManager.sln
       - name: Test
         uses: microsoft/vstest-action@v1.0.0
+        working-directory: ${{ env.WORKDIR }}/test/PersonalFinanceManager.ApiContractTests/bin/Debug/net6.0
         with:
           testAssembly: PersonalFinanceManager.ApiContractTests.dll
-          searchFolder: ./test/PersonalFinanceManager.ApiContractTests/bin/Debug/net6.0/
+          searchFolder: .
           runInParallel: true
