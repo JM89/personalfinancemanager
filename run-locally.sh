@@ -1,3 +1,4 @@
+find . -iname "*.sh" -exec dos2unix {} \;
 docker-compose -f ./PFM.Infra/docker-compose-infra.yml down
 docker container prune -f
 docker volume prune -f

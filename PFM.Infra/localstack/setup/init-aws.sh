@@ -1,3 +1,3 @@
 #!/bin/sh
 
-echo "Add default configurations here"
+echo "Run init script"
