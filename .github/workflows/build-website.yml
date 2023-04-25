@@ -1,4 +1,4 @@
-name: Build PFM Website
+name: Build and Tests PFM Website
 
 on:
   push:
@@ -29,4 +29,9 @@ jobs:
         run: nuget restore PersonalFinanceManager.sln
       - name: Build
         run: msbuild PersonalFinanceManager.sln
-
+      - name: Test
+        uses: microsoft/vstest-action@v1.0.0
+        with:
+          testAssembly: PersonalFinanceManager.ApiContractTests.dll
+          searchFolder: .${{ env.WORKDIR }}\PersonalFinanceManager.ApiContractTests\bin\Debug\net6.0
+          runInParallel: true
