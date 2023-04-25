@@ -34,5 +34,5 @@ jobs:
         if: success() || failure()
         with:
           name: .NET Tests 
-          path: test/PFM.Authentication.Api.Tests/TestResults/test-results.trx
+          path: ./test/PFM.Authentication.Api.Tests/TestResults/test-results.trx
           reporter: 'dotnet-trx'
