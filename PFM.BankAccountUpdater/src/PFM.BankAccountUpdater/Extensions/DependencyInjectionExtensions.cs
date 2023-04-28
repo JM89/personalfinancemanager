@@ -1,10 +1,11 @@
 ﻿using EventStore.Client;
+using PFM.BankAccountUpdater.Events;
+using PFM.BankAccountUpdater.Events.Interface;
+using PFM.BankAccountUpdater.Events.Settings;
+using PFM.BankAccountUpdater.Handlers;
+using PFM.BankAccountUpdater.Handlers.EventTypes;
+using PFM.BankAccountUpdater.Handlers.Interfaces;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PFM.BankAccountUpdater.Extensions
 {
@@ -29,14 +30,28 @@ namespace PFM.BankAccountUpdater.Extensions
             return services;
         }
 
+        public static IServiceCollection AddEventHandlers(this IServiceCollection services)
+        {
+            var eventDispatcher = new EventDispatcher(Log.Logger);
+
+            eventDispatcher.Register<BankAccountCreated>(e => (new BankAccountCreatedHandler(Log.Logger)).HandleEvent(e));
+
+            services.AddSingleton<IEventDispatcher>(eventDispatcher);
+
+            return services;
+        }
+
         public static IServiceCollection AddEventConsumerConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
-            var eventStoreConnectionString = configuration.GetConnectionString("EventStoreConnection");
+            var eventStoreConnectionString = configuration.GetConnectionString("EventStoreConnection") ?? "";
             var settings = EventStoreClientSettings.Create(eventStoreConnectionString);
-            var client = new EventStoreClient(settings);
+            var client = new EventStorePersistentSubscriptionsClient(settings);
+            var subscriptionSettings = configuration.GetSection(nameof(EventStoreConsumerSettings)).Get<EventStoreConsumerSettings>() ?? new EventStoreConsumerSettings();
 
             services
-                .AddSingleton(client);
+                .AddSingleton(client)
+                .AddSingleton(subscriptionSettings)
+                .AddSingleton<IEventConsumer, EventConsumer>();
 
             return services;
         }

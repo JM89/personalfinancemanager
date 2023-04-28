@@ -13,6 +13,7 @@ namespace PFM.BankAccountUpdater
                 {
                     services
                         .AddMonitoring(build.Configuration, EnvironmentName)
+                        .AddEventHandlers()
                         .AddEventConsumerConfigurations(build.Configuration);
 
                     services.AddHostedService<Worker>();

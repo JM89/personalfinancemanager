@@ -1,21 +1,19 @@
+using PFM.BankAccountUpdater.Events.Interface;
+
 namespace PFM.BankAccountUpdater
 {
     public class Worker : BackgroundService
     {
-        private readonly Serilog.ILogger _logger;
+        private readonly IEventConsumer _eventConsumer;
 
-        public Worker(Serilog.ILogger logger)
+        public Worker(IEventConsumer eventConsumer)
         {
-            _logger = logger;
+            _eventConsumer = eventConsumer;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.Information("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
-            }
+            await _eventConsumer.StartAsync(stoppingToken);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EventStore.Client;
 using PFM.Services.Events.Interfaces;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace PFM.Services.Events
         {
             var eventData = new EventData(
                 Uuid.NewUuid(),
-                nameof(T),
+                typeof(T).Name,
                 JsonSerializer.SerializeToUtf8Bytes(evt)
             );
 
