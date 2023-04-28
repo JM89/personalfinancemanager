@@ -1,0 +1,16 @@
+{
+    "checkpoints": 1000,
+    "resolveLinktos": true,
+    "startFrom": 0,
+    "messageTimeoutMilliseconds": 10000,
+    "extraStatistics": false,
+    "maxRetryCount": 10,
+    "liveBufferSize": 500,
+    "bufferSize": 500,
+    "readBatchSize": 20,
+    "checkPointAfterMilliseconds": 1000,
+    "minCheckPointCount": 10,
+    "maxCheckPointCount": 500,
+    "maxSubscriberCount": 10,
+    "namedConsumerStrategy": "RoundRobin"
+}

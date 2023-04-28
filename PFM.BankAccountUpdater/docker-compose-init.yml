@@ -1,0 +1,18 @@
+version: "3.8"
+
+networks:
+  local-network:
+    name: local-network
+    external: true
+
+services:
+
+  evs-sub:
+    build:
+      context: ./setup/evs-sub
+      dockerfile: dockerfile
+    environment:
+      EVS_API_URL: http://eventstore:2113
+    container_name: evs-sub
+    networks:
+      - local-network
