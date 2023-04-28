@@ -47,7 +47,12 @@ namespace PFM.Services
 
                 added = _bankAccountRepository.GetById(added.Id, a => a.Currency, a => a.Bank);
 
-                var evt = new BankAccountCreated() { BankCode = added.Id.ToString(), CurrencyCode = added.Currency.Id.ToString(), CurrentBalance = added.CurrentBalance };
+                var evt = new BankAccountCreated() { 
+                    BankCode = added.Id.ToString(), 
+                    CurrencyCode = added.Currency.Id.ToString(), 
+                    CurrentBalance = added.CurrentBalance,
+                    UserId = added.User_Id
+                };
 
                 var published = await _eventPublisher.PublishAsync(evt, default);
                 

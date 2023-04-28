@@ -17,4 +17,4 @@ done
 echo "Successful connection to EVS server: $EVS_API_URL"
 
 echo "Creating subscription"
-curl -X PUT "$EVS_API_URL/subscriptions/BankAccount/Updater" -d @persistent-subscription.json -H "Content-Type: application/json"
+curl -X PUT "$EVS_API_URL/subscriptions/\$ce-BankAccount/Updater" -d @persistent-subscription.json -H "Content-Type: application/json"
