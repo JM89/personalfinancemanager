@@ -2,6 +2,6 @@
 {
     public interface IEventDispatcher
     {
-        void Dispatch<TEvent>(TEvent e);
+        void Dispatch(IEvent e);
     }
 }

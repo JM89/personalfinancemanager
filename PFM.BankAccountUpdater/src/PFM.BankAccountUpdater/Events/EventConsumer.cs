@@ -72,13 +72,13 @@ namespace PFM.BankAccountUpdater.Events
                 return;
             }
 
-            var receivedEvent = JsonSerializer.Deserialize(System.Text.Encoding.UTF8.GetString(evt.Event.Data.Span), type);
+            var receivedEvent = JsonSerializer.Deserialize(System.Text.Encoding.UTF8.GetString(evt.Event.Data.Span), type) as IEvent;
 
             _eventDispatcher.Dispatch(receivedEvent);
 
-            //await subscription.Ack(evt);
+            await subscription.Ack(evt);
         }
-
+         
         private void DoWhenConnectionDropped(PersistentSubscription subscription, SubscriptionDroppedReason dropReason, Exception? exception)
         {
             _logger.Error(exception, $"Subscription for stream {_settings.StreamName} and group {_settings.GroupName} dropped due to {dropReason}.");

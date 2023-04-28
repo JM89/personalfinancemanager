@@ -1,47 +1,37 @@
 ﻿using PFM.BankAccountUpdater.Handlers.Interfaces;
-using System.Collections.ObjectModel;
 
 namespace PFM.BankAccountUpdater.Handlers
 {
     public class EventDispatcher : IEventDispatcher
     {
-        private readonly Dictionary<Type, Collection<Delegate>> handlers;
+        private readonly Dictionary<Type, Action<IEvent>> handlers;
         private readonly Serilog.ILogger _logger;
 
         public EventDispatcher(Serilog.ILogger logger)
         {
-            handlers = new Dictionary<Type, Collection<Delegate>>();
+            handlers = new Dictionary<Type, Action<IEvent>>();
             _logger = logger;
         }
 
-        public void Register<TEvent>(Action<TEvent> handler)
-             where TEvent : IEvent
+        public EventDispatcher Register<TEvent>(Action<IEvent> handler)
+            where TEvent : IEvent
         {
-            Collection<Delegate> eventHandlers;
-            if (!handlers.TryGetValue(typeof(TEvent), out eventHandlers))
-            {
-                eventHandlers = new Collection<Delegate>();
-                handlers.Add(typeof(TEvent), eventHandlers);
-            }
-
-            eventHandlers.Add(handler);
+            handlers.Add(typeof(TEvent), handler);
+            return this;
         }
 
-        public void Dispatch<TEvent>(TEvent e)
+        public void Dispatch(IEvent e)
         {
-            Collection<Delegate> eventHandlers;
-            if (handlers.TryGetValue(typeof(TEvent), out eventHandlers))
+            Action<IEvent> handler;
+            if (handlers.TryGetValue(e.GetType(), out handler))
             {
-                foreach (var handler in eventHandlers.Cast<Action<TEvent>>())
+                try
                 {
-                    try
-                    {
-                        handler(e);
-                    }
-                    catch
-                    {
-                        _logger.Error("Unhandled exception");
-                    }
+                    handler(e);
+                }
+                catch
+                {
+                    _logger.Error("Unhandled exception");
                 }
             }
         }

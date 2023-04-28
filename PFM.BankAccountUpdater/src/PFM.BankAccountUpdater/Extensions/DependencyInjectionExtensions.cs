@@ -34,7 +34,7 @@ namespace PFM.BankAccountUpdater.Extensions
         {
             var eventDispatcher = new EventDispatcher(Log.Logger);
 
-            eventDispatcher.Register<BankAccountCreated>(e => (new BankAccountCreatedHandler(Log.Logger)).HandleEvent(e));
+            eventDispatcher.Register<BankAccountCreated>(e => (new BankAccountCreatedHandler(Log.Logger)).HandleEvent((BankAccountCreated)e));
 
             services.AddSingleton<IEventDispatcher>(eventDispatcher);
 
