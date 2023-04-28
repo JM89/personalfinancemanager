@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using EventStore.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using PFM.Api.Filters;
+using PFM.Services.Events;
+using PFM.Services.Events.Interfaces;
 using PFM.Services.ExternalServices.AuthApi;
 using Refit;
 using Serilog;
@@ -39,7 +42,8 @@ namespace PFM.Api.Extensions
             services.AddRefitClient<IAuthApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(configuration["AuthApi:EndpointUrl"]));
 
-            services.AddMvc(o => {
+            services.AddMvc(o =>
+            {
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
                 o.Filters.Add(new DelegateToAuthApiAuthorizeFilter(policy, Log.Logger, services.BuildServiceProvider().GetService<IAuthApi>()));
             });
@@ -66,7 +70,8 @@ namespace PFM.Api.Extensions
         /// <returns></returns>
         public static IServiceCollection AddSwaggerDefinition(this IServiceCollection services)
         {
-            services.AddSwaggerGen(options => {
+            services.AddSwaggerGen(options =>
+            {
                 options.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -92,6 +97,19 @@ namespace PFM.Api.Extensions
                     }
                 });
             });
+            return services;
+        }
+
+        public static IServiceCollection AddEventPublisherConfigurations(this IServiceCollection services, IConfiguration configuration)
+        {
+            var eventStoreConnectionString = configuration.GetConnectionString("EventStoreConnection");
+            var settings = EventStoreClientSettings.Create(eventStoreConnectionString);
+            var client = new EventStoreClient(settings);
+
+            services
+                .AddSingleton(client)
+                .AddSingleton<IEventPublisher, EventPublisher>();
+
             return services;
         }
     }

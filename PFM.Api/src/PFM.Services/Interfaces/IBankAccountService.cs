@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using PFM.Api.Contracts.Account;
+﻿using PFM.Api.Contracts.Account;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PFM.Services.Interfaces
 {
     public interface IBankAccountService : IBaseService
     {
-        void CreateBankAccount(AccountDetails accountDetails, string userId);
+        Task<bool> CreateBankAccount(AccountDetails accountDetails, string userId);
 
         IList<AccountList> GetAccountsByUser(string userId);
 
