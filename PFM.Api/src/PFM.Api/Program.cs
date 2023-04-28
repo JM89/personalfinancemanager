@@ -23,7 +23,8 @@ namespace PFM.Api
                 .AddAuthenticationAndAuthorization(builder.Configuration)
                 .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName)
                 .AddEndpointsApiExplorer()
-                .AddSwaggerDefinition();
+                .AddSwaggerDefinition()
+                .AddEventPublisherConfigurations(builder.Configuration);
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
 

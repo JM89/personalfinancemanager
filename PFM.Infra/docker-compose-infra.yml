@@ -55,3 +55,18 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - local-network
+
+  # Simulating Eventstore
+  eventstore:
+    image: eventstore/eventstore:21.10.8-buster-slim
+    container_name: eventstore
+    environment:
+      EVENTSTORE_INSECURE: True
+      EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: True
+      EVENTSTORE_RUN_PROJECTIONS: All
+      EVENTSTORE_START_STANDARD_PROJECTIONS: True
+    ports:
+      - "2112:2112"
+      - "2113:2113"
+    networks:
+      - local-network

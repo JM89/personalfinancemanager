@@ -5,6 +5,11 @@ using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.Entities;
 using PFM.Api.Contracts.Account;
+using PFM.Services.Events.Interfaces;
+using PFM.Services.Events.EventTypes;
+using System.Threading.Tasks;
+using System.Transactions;
+using System.Security.Principal;
 
 namespace PFM.Services
 {
@@ -15,26 +20,46 @@ namespace PFM.Services
         private readonly IIncomeRepository _incomeRepository;
         private readonly IAtmWithdrawRepository _atmWithdrawRepository;
         private readonly IBankBranchRepository _bankBranchRepository;
+        private readonly IEventPublisher _eventPublisher;
 
         public BankAccountService(IBankAccountRepository bankAccountRepository, IExpenseRepository expenditureRepository, IIncomeRepository incomeRepository,
-            IAtmWithdrawRepository atmWithdrawRepository, IBankBranchRepository bankBranchRepository)
+            IAtmWithdrawRepository atmWithdrawRepository, IBankBranchRepository bankBranchRepository, IEventPublisher eventPublisher)
         {
             this._bankAccountRepository = bankAccountRepository;
             this._expenditureRepository = expenditureRepository;
             this._incomeRepository = incomeRepository;
             this._atmWithdrawRepository = atmWithdrawRepository;
             this._bankBranchRepository = bankBranchRepository;
+            this._eventPublisher = eventPublisher;
         }
 
-        public void CreateBankAccount(AccountDetails accountDetails, string userId)
+        public async Task<bool> CreateBankAccount(AccountDetails accountDetails, string userId)
         {
-            var account = Mapper.Map<Account>(accountDetails);
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var account = Mapper.Map<Account>(accountDetails);
 
-            account.User_Id = userId;
-            account.CurrentBalance = account.InitialBalance;
-            account.IsFavorite = !_bankAccountRepository.GetList().Any(x => x.User_Id == userId);
+                account.User_Id = userId;
+                account.CurrentBalance = account.InitialBalance;
+                account.IsFavorite = !_bankAccountRepository.GetList().Any(x => x.User_Id == userId);
 
-            _bankAccountRepository.Create(account);
+                var added = _bankAccountRepository.Create(account);
+
+                added = _bankAccountRepository.GetById(added.Id, a => a.Currency, a => a.Bank);
+
+                var evt = new BankAccountCreated() { 
+                    BankCode = added.Id.ToString(), 
+                    CurrencyCode = added.Currency.Id.ToString(), 
+                    CurrentBalance = added.CurrentBalance,
+                    UserId = added.User_Id
+                };
+
+                var published = await _eventPublisher.PublishAsync(evt, default);
+                
+                scope.Complete();
+
+                return published;
+            }
         }
 
         public IList<AccountList> GetAccountsByUser(string userId)

@@ -16,7 +16,7 @@ namespace PFM.Services.Utils.Helpers
         {
             this.StartDate = new DateTime(startDate.Year, startDate.Month, 1); 
 
-            this.EndDate = new DateTime(endDate.Year, endDate.Month, 1).AddMonths(1).AddDays(-1);
+            this.EndDate = new DateTime(endDate.Year, endDate.Month, 1).AddMonths(1).AddSeconds(-1);
         } 
 
         public Interval(DateTime baseDate, DateTimeUnitEnums unit, int nb)
@@ -36,7 +36,7 @@ namespace PFM.Services.Utils.Helpers
             this.StartDate = new DateTime(baseStartDate.Year, baseStartDate.Month, 1);
 
             // Last date of the month
-            this.EndDate = new DateTime(baseDate.Year, baseDate.Month, 1).AddDays(-1);
+            this.EndDate = new DateTime(baseDate.Year, baseDate.Month, 1).AddSeconds(-1);
         }
 
         public IDictionary<string, Interval> GetIntervalsByMonth()
@@ -46,7 +46,7 @@ namespace PFM.Services.Utils.Helpers
             while (iterator <= EndDate)
             {
                 var nextMonth = iterator.AddMonths(1);
-                names.Add(DateTimeFormatHelper.GetMonthNameAndYear(iterator), new Interval(iterator, nextMonth.AddDays(-1)));
+                names.Add(DateTimeFormatHelper.GetMonthNameAndYear(iterator), new Interval(iterator, nextMonth.AddSeconds(-1)));
                 iterator = nextMonth;
             }
             return names;

@@ -28,3 +28,6 @@ echo "Run 03_create_main_db_schema.sql script"
 echo "Run 04_add_seed_data.sql script"
 /opt/mssql-tools/bin/sqlcmd -S "$DB_SERVER_NAME,$DB_SERVER_PORT" -U SA -P "$DB_SA_PASSWORD" -i scripts/04_add_seed_data.sql
 
+echo "Run 05_add_test_data.sql script"
+/opt/mssql-tools/bin/sqlcmd -S "$DB_SERVER_NAME,$DB_SERVER_PORT" -U SA -P "$DB_SA_PASSWORD" -i scripts/05_add_test_data.sql
+

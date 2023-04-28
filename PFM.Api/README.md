@@ -47,7 +47,16 @@ This project uses [Localstack Pro](https://localstack.cloud/pricing/) to run the
 
 To use the localstack, in the PFM.Infra/configs:
 1. Copy the `.env-example` and rename to `.env`. This file will contain sensitive data for local development and is ignored by git.  
-2. Run `sh run-locally-with-localstack-pro.sh` to start localstack and deploy the iac in this local environment. It may takes a few minutes to setup. (Repository: 1 resource, network: 32 resources, service: 15 resources).
+
+2. Run following commands to start localstack and deploy the iac in this local environment. It may takes a few minutes to setup. (Repository: 1 resource, network: 32 resources, service: 15 resources).
+
+```
+docker network create -d bridge local-network
+docker-compose -f ./PFM.Infra/docker-compose-localstack-pro.yml --env-file ./PFM.Infra/configs/.env up --build -d
+cd ./PFM.Api
+docker-compose -f ./PFM.Infra/docker-compose-iac.yml --env-file ./PFM.Infra/configs/.env up --build -d
+```
+
 3. Run docker push 
 
 ```shell

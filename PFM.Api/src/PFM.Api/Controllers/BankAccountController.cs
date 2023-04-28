@@ -29,9 +29,9 @@ namespace PFM.Api.Controllers
         }
         
         [HttpPost("Create/{userId}")]
-        public void Post(string userId, [FromBody]AccountDetails createdObj)
+        public async Task<bool> Post(string userId, [FromBody]AccountDetails createdObj)
         {
-            _BankAccountService.CreateBankAccount(createdObj, userId);
+            return await _BankAccountService.CreateBankAccount(createdObj, userId);
         }
         
         [HttpPut("Edit/{id}/{userId}")]

@@ -8,19 +8,19 @@ networks:
 services:
 
   # Simulating a centralized SQL Server instance
-  # db-server:
-  #   image: mcr.microsoft.com/mssql/server:2017-latest
-  #   container_name: db-server
-  #   environment:
-  #     - ACCEPT_EULA=Y
-  #     - SA_PASSWORD=VerySecret1234!
-  #     - MSSQL_ENABLE_HADR=0
-  #     - MSSQL_AGENT_ENABLED=false
-  #     - MSSQL_MEMORY_LIMIT_MB=4000
-  #   ports:
-  #     - "1433:1433"
-  #   networks:
-  #     - local-network
+  db-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: db-server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=VerySecret1234!
+      - MSSQL_ENABLE_HADR=0
+      - MSSQL_AGENT_ENABLED=false
+      - MSSQL_MEMORY_LIMIT_MB=4000
+    ports:
+      - "1433:1433"
+    networks:
+      - local-network
 
   # Simulating a logging system
   seq:
