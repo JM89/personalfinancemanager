@@ -2,9 +2,9 @@ namespace PFM.BankAccountUpdater
 {
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly Serilog.ILogger _logger;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(Serilog.ILogger logger)
         {
             _logger = logger;
         }
@@ -13,7 +13,7 @@ namespace PFM.BankAccountUpdater
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.Information("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
             }
         }
