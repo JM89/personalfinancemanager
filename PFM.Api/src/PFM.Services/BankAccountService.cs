@@ -47,7 +47,7 @@ namespace PFM.Services
                 added = _bankAccountRepository.GetById(added.Id, a => a.Currency, a => a.Bank);
 
                 var evt = new BankAccountCreated() { 
-                    BankCode = added.Id.ToString(), 
+                    BankCode = added.Bank.Id.ToString(), 
                     CurrencyCode = added.Currency.Id.ToString(), 
                     CurrentBalance = added.CurrentBalance,
                     UserId = added.User_Id
@@ -133,7 +133,7 @@ namespace PFM.Services
 
                 var evt = new BankAccountDeleted()
                 {
-                    BankCode = account.Id.ToString(),
+                    BankCode = account.Bank.Id.ToString(),
                     CurrencyCode = account.Currency.Id.ToString(),
                     CurrentBalance = account.CurrentBalance,
                     UserId = account.User_Id

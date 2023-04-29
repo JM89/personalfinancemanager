@@ -34,7 +34,7 @@ namespace PFM.Services.MovementStrategy
 
             var evt = new BankAccountDebited()
             {
-                BankCode = account.Id.ToString(),
+                BankCode = account.Bank.Id.ToString(),
                 CurrencyCode = account.Currency.Id.ToString(),
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance - movement.Amount,
@@ -68,7 +68,7 @@ namespace PFM.Services.MovementStrategy
 
             var evt = new BankAccountCredited()
             {
-                BankCode = account.Id.ToString(),
+                BankCode = account.Bank.Id.ToString(),
                 CurrencyCode = account.Currency.Id.ToString(),
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance + movement.Amount,
