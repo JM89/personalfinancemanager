@@ -18,6 +18,9 @@ namespace PFM.Services.Events.EventTypes
         public string StreamGroup => "BankAccount";
 
         public string UserId { get; set; }
-        public DateTime DateOperation { get; set; }
+        public DateTime OperationDate { get; set; }
+
+        public string OperationType { get; set; }
+        public string TargetBankAccount { get; set; }
     }
 }

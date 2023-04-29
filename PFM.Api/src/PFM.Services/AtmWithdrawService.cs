@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using PFM.Services.Interfaces;
-using PFM.Services.Helpers;
-using PFM.DataAccessLayer.Repositories.Interfaces;
+﻿using AutoMapper;
+using PFM.Api.Contracts.AtmWithdraw;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Enumerations;
-using AutoMapper;
-using PFM.Api.Contracts.AtmWithdraw;
+using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
+using PFM.Services.Helpers;
+using PFM.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Transactions;
 
 namespace PFM.Services
@@ -19,6 +21,8 @@ namespace PFM.Services
         private readonly IExpenseRepository _expenditureRepository;
         private readonly IHistoricMovementRepository _historicMovementRepository;
         private readonly IEventPublisher _eventPublisher;
+
+        private readonly string OperationType = "ATM Withdrawal";
 
         public AtmWithdrawService(IAtmWithdrawRepository atmWithdrawRepository, IBankAccountRepository bankAccountRepository, IExpenseRepository expenditureRepository,
             IHistoricMovementRepository historicMovementRepository, IEventPublisher eventPublisher)
@@ -49,12 +53,18 @@ namespace PFM.Services
             return mappedAtmWithdraws;
         }
 
-        public void CreateAtmWithdraws(List<AtmWithdrawDetails> atmWithdrawDetails)
+        public Task<bool> CreateAtmWithdraws(List<AtmWithdrawDetails> atmWithdrawDetails)
         {
-            atmWithdrawDetails.ForEach(CreateAtmWithdraw);
+            var resultBatch = true;
+            atmWithdrawDetails.ForEach(async (income) => {
+                var result = await CreateAtmWithdraw(income);
+                if (!result)
+                    resultBatch = false;
+            });
+            return Task.FromResult(resultBatch);
         }
 
-        public void CreateAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails)
+        public async Task<bool> CreateAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -63,13 +73,29 @@ namespace PFM.Services
                 atmWithdraw.IsClosed = false;
                 _atmWithdrawRepository.Create(atmWithdraw);
 
-                var account = _bankAccountRepository.GetById(atmWithdraw.AccountId);
+                var account = _bankAccountRepository.GetById(atmWithdraw.AccountId, a => a.Currency, a => a.Bank);
+
+                var evt = new BankAccountDebited()
+                {
+                    BankCode = account.Id.ToString(),
+                    CurrencyCode = account.Currency.Id.ToString(),
+                    PreviousBalance = account.CurrentBalance,
+                    CurrentBalance = account.CurrentBalance - atmWithdraw.InitialAmount,
+                    UserId = account.User_Id,
+                    OperationDate = atmWithdraw.DateExpense,
+                    OperationType = OperationType
+                };
+
                 MovementHelpers.Debit(_historicMovementRepository, atmWithdraw.InitialAmount, account.Id, ObjectType.Account, account.CurrentBalance);
 
                 account.CurrentBalance -= atmWithdraw.InitialAmount;
                 _bankAccountRepository.Update(account);
 
+                var published = await _eventPublisher.PublishAsync(evt, default);
+
                 scope.Complete();
+
+                return published;
             }
         }
 
@@ -85,7 +111,7 @@ namespace PFM.Services
             return Mapper.Map<AtmWithdrawDetails>(atmWithdraw);
         }
 
-        public void EditAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails)
+        public async Task<bool> EditAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -100,17 +126,48 @@ namespace PFM.Services
 
                 _atmWithdrawRepository.Update(atmWithdraw);
 
+                var published = true;
                 if (oldCost != atmWithdraw.InitialAmount)
                 {
-                    var account = _bankAccountRepository.GetById(atmWithdraw.AccountId);
+                    var account = _bankAccountRepository.GetById(atmWithdraw.AccountId, a => a.Currency, a => a.Bank);
                     MovementHelpers.Credit(_historicMovementRepository, oldCost, account.Id, ObjectType.Account, account.CurrentBalance);
+
+                    var evtCredited = new BankAccountCredited()
+                    {
+                        BankCode = account.Id.ToString(),
+                        CurrencyCode = account.Currency.Id.ToString(),
+                        PreviousBalance = account.CurrentBalance,
+                        CurrentBalance = account.CurrentBalance + oldCost,
+                        UserId = account.User_Id,
+                        OperationDate = atmWithdraw.DateExpense,
+                        OperationType = OperationType
+                    };
+
                     account.CurrentBalance += oldCost;
                     MovementHelpers.Debit(_historicMovementRepository, atmWithdraw.InitialAmount, account.Id, ObjectType.Account, account.CurrentBalance);
+
+                    var evtDebited = new BankAccountDebited()
+                    {
+                        BankCode = account.Id.ToString(),
+                        CurrencyCode = account.Currency.Id.ToString(),
+                        PreviousBalance = account.CurrentBalance,
+                        CurrentBalance = account.CurrentBalance - atmWithdraw.InitialAmount,
+                        UserId = account.User_Id,
+                        OperationDate = atmWithdraw.DateExpense,
+                        OperationType = OperationType
+                    };
+
                     account.CurrentBalance -= atmWithdraw.InitialAmount;
                     _bankAccountRepository.Update(account);
+
+                    published = await _eventPublisher.PublishAsync(evtDebited, default);
+                    if (published)
+                        published = await _eventPublisher.PublishAsync(evtCredited, default);
                 }
 
                 scope.Complete();
+
+                return published;
             }
         }
         
@@ -121,20 +178,36 @@ namespace PFM.Services
             _atmWithdrawRepository.Update(atmWithdraw);
         }
 
-        public void DeleteAtmWithdraw(int id)
+        public async Task<bool> DeleteAtmWithdraw(int id)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var atmWithdraw = _atmWithdrawRepository.GetById(id);
 
-                var account = _bankAccountRepository.GetById(atmWithdraw.AccountId);
-                MovementHelpers.Debit(_historicMovementRepository, atmWithdraw.InitialAmount, account.Id, ObjectType.Account, account.CurrentBalance);
+                var account = _bankAccountRepository.GetById(atmWithdraw.AccountId, a => a.Currency, a => a.Bank);
+                MovementHelpers.Credit(_historicMovementRepository, atmWithdraw.InitialAmount, account.Id, ObjectType.Account, account.CurrentBalance);
+
+                var evt = new BankAccountCredited()
+                {
+                    BankCode = account.Id.ToString(),
+                    CurrencyCode = account.Currency.Id.ToString(),
+                    PreviousBalance = account.CurrentBalance,
+                    CurrentBalance = account.CurrentBalance + atmWithdraw.InitialAmount,
+                    UserId = account.User_Id,
+                    OperationDate = atmWithdraw.DateExpense,
+                    OperationType = OperationType
+                };
+
                 account.CurrentBalance += atmWithdraw.InitialAmount;
                 _bankAccountRepository.Update(account);
 
                 _atmWithdrawRepository.Delete(atmWithdraw);
 
+                var published = await _eventPublisher.PublishAsync(evt, default);
+
                 scope.Complete();
+
+                return published;
             }
         }
 

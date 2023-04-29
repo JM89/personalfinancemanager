@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.AtmWithdraw;
 using PFM.Services.Interfaces;
 
@@ -29,27 +28,27 @@ namespace PFM.Api.Controllers
         }
         
         [HttpPost("Create")]
-        public void Post([FromBody]AtmWithdrawDetails createdObj)
+        public async Task<bool> Post([FromBody]AtmWithdrawDetails createdObj)
         {
-            _atmWithdrawService.CreateAtmWithdraw(createdObj);
+            return await _atmWithdrawService.CreateAtmWithdraw(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, [FromBody]AtmWithdrawDetails editedObj)
+        public async Task<bool> Put(int id, [FromBody]AtmWithdrawDetails editedObj)
         {
-            _atmWithdrawService.EditAtmWithdraw(editedObj);
+            return await _atmWithdrawService.EditAtmWithdraw(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            _atmWithdrawService.DeleteAtmWithdraw(id);
+            return await _atmWithdrawService.DeleteAtmWithdraw(id);
         }
 
         [HttpPost("CreateAtmWithdraws")]
-        public void CreateAtmWithdraws([FromBody]List<AtmWithdrawDetails> createdObj)
+        public async Task<bool> CreateAtmWithdraws([FromBody]List<AtmWithdrawDetails> createdObj)
         {
-            _atmWithdrawService.CreateAtmWithdraws(createdObj);
+            return await _atmWithdrawService.CreateAtmWithdraws(createdObj);
         }
 
         [HttpPost("CloseAtmWithdraw/{id}")]

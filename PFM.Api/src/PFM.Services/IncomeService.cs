@@ -21,6 +21,8 @@ namespace PFM.Services
         private readonly IHistoricMovementRepository _historicMovementRepository;
         private readonly IEventPublisher _eventPublisher;
 
+        private readonly string OperationType = "Income";
+
         public IncomeService(IIncomeRepository incomeRepository, IBankAccountRepository bankAccountRepository,
             IHistoricMovementRepository historicMovementRepository, IEventPublisher eventPublisher)
         {
@@ -58,7 +60,8 @@ namespace PFM.Services
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance + incomeDetails.Cost,
                     UserId = account.User_Id,
-                    DateOperation = income.DateIncome
+                    OperationDate = income.DateIncome,
+                    OperationType = OperationType
                 };
 
                 account.CurrentBalance += incomeDetails.Cost;
@@ -120,7 +123,8 @@ namespace PFM.Services
                         PreviousBalance = account.CurrentBalance,
                         CurrentBalance = account.CurrentBalance - oldCost,
                         UserId = account.User_Id,
-                        DateOperation = income.DateIncome
+                        OperationDate = income.DateIncome,
+                        OperationType = OperationType
                     };
 
                     account.CurrentBalance -= oldCost;
@@ -133,7 +137,8 @@ namespace PFM.Services
                         PreviousBalance = account.CurrentBalance,
                         CurrentBalance = account.CurrentBalance + income.Cost,
                         UserId = account.User_Id,
-                        DateOperation = income.DateIncome
+                        OperationDate = income.DateIncome,
+                        OperationType = OperationType
                     };
 
                     account.CurrentBalance += income.Cost;
@@ -166,7 +171,8 @@ namespace PFM.Services
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance - income.Cost,
                     UserId = account.User_Id,
-                    DateOperation = income.DateIncome
+                    OperationDate = income.DateIncome,
+                    OperationType = OperationType
                 };
 
                 account.CurrentBalance -= income.Cost;
