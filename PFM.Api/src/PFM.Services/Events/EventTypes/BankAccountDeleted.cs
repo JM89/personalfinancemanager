@@ -1,6 +1,6 @@
 ﻿namespace PFM.Services.Events.EventTypes
 {
-    internal class BankAccountUpdated : BankAccountCreated
+    internal class BankAccountDeleted : BankAccountCreated
     {
         
     }

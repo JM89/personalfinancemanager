@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using PFM.Services.Interfaces;
-using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DataAccessLayer.Entities;
+﻿using AutoMapper;
 using PFM.Api.Contracts.Account;
-using PFM.Services.Events.Interfaces;
+using PFM.DataAccessLayer.Entities;
+using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Events.EventTypes;
+using PFM.Services.Events.Interfaces;
+using PFM.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
-using System.Security.Principal;
 
 namespace PFM.Services
 {
@@ -108,18 +107,54 @@ namespace PFM.Services
             return mappedAccount;
         }
 
-        public void EditBankAccount(AccountDetails accountDetails, string userId)
+        public async Task<bool> EditBankAccount(AccountDetails accountDetails, string userId)
         {
-            var account = _bankAccountRepository.GetListAsNoTracking().SingleOrDefault(x => x.Id == accountDetails.Id);
-            account = Mapper.Map<Account>(accountDetails);
-            account.User_Id = userId;
-            _bankAccountRepository.Update(account);
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var account = _bankAccountRepository.GetListAsNoTracking().SingleOrDefault(x => x.Id == accountDetails.Id);
+                account = Mapper.Map<Account>(accountDetails);
+                account.User_Id = userId;
+                _bankAccountRepository.Update(account);
+
+                var updated = _bankAccountRepository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
+
+                var evt = new BankAccountUpdated()
+                {
+                    BankCode = updated.Id.ToString(),
+                    CurrencyCode = updated.Currency.Id.ToString(),
+                    CurrentBalance = updated.CurrentBalance,
+                    UserId = updated.User_Id
+                };
+
+                var published = await _eventPublisher.PublishAsync(evt, default);
+
+                scope.Complete();
+
+                return published;
+            }
         }
 
-        public void DeleteBankAccount(int id)
+        public async Task<bool> DeleteBankAccount(int id)
         {
-            var account = _bankAccountRepository.GetById(id);
-            _bankAccountRepository.Delete(account);
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var account = _bankAccountRepository.GetById(id, a => a.Currency, a => a.Bank);
+                _bankAccountRepository.Delete(account);
+
+                var evt = new BankAccountDeleted()
+                {
+                    BankCode = account.Id.ToString(),
+                    CurrencyCode = account.Currency.Id.ToString(),
+                    CurrentBalance = account.CurrentBalance,
+                    UserId = account.User_Id
+                };
+
+                var published = await _eventPublisher.PublishAsync(evt, default);
+
+                scope.Complete();
+
+                return published;
+            }
         }
         
         public void SetAsFavorite(int id)
