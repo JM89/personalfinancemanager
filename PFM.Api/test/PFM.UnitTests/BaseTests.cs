@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Moq;
+﻿using Moq;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.SearchParameters;
@@ -15,7 +14,6 @@ namespace PFM.UnitTests
         protected Mock<IBankAccountRepository> MockBankAccountRepository;
         protected Mock<IAtmWithdrawRepository> MockAtmWithdrawRepository;
         protected Mock<IIncomeRepository> MockIncomeRepository;
-        protected Mock<IHistoricMovementRepository> MockHistoricMovementRepository;
         protected Mock<IExpenseTypeRepository> MockExpenseTypeRepository;
         protected Mock<ISavingRepository> MockSavingRepository;
         protected Mock<IEventPublisher> MockEventPublisher;
@@ -43,8 +41,6 @@ namespace PFM.UnitTests
             MockIncomeRepository = new Mock<IIncomeRepository>();
             MockIncomeRepository.Setup(x => x.GetList2()).Returns(incomes);
 
-            MockHistoricMovementRepository = new Mock<IHistoricMovementRepository>();
-
             MockExpenseTypeRepository = new Mock<IExpenseTypeRepository>();
             MockExpenseTypeRepository
                 .Setup(x => x.GetList2())
@@ -61,7 +57,6 @@ namespace PFM.UnitTests
                 MockBankAccountRepository.Object,
                 MockAtmWithdrawRepository.Object,
                 MockIncomeRepository.Object,
-                MockHistoricMovementRepository.Object,
                 MockExpenseTypeRepository.Object,
                 MockSavingRepository.Object,
                 MockEventPublisher.Object);

@@ -1,9 +1,7 @@
 ﻿using PFM.DataAccessLayer.Entities;
-using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
-using PFM.Services.Helpers;
 using System;
 using System.Threading.Tasks;
 
@@ -13,8 +11,8 @@ namespace PFM.Services.MovementStrategy
     {
         private readonly string OperationType = "Internal Transfer";
 
-        public InternalTransferMovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
-            : base(movement, bankAccountRepository, historicMovementRepository, incomeRepository, atmWithdrawRepository, eventPublisher)
+        public InternalTransferMovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+            : base(movement, bankAccountRepository, incomeRepository, atmWithdrawRepository, eventPublisher)
         { }
 
         public override async Task<bool> Debit()
@@ -33,8 +31,6 @@ namespace PFM.Services.MovementStrategy
 
         private async Task<bool> Debit(Account account, Account internalAccount, Movement movement)
         {
-            MovementHelpers.Debit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance, internalAccount.Id, ObjectType.Account, internalAccount.CurrentBalance);
-
             var evtDebited = new BankAccountDebited()
             {
                 BankCode = account.Bank.Id.ToString(),
@@ -102,8 +98,6 @@ namespace PFM.Services.MovementStrategy
 
         private async Task<bool> Credit(Account account, Account internalAccount, Movement movement)
         {
-            MovementHelpers.Credit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance, internalAccount.Id, ObjectType.Account, internalAccount.CurrentBalance);
-
             var evtCredited = new BankAccountCredited()
             {
                 BankCode = account.Bank.Id.ToString(),
@@ -158,7 +152,7 @@ namespace PFM.Services.MovementStrategy
                 {
                     await Credit(account, internalAccount, CurrentMovement);
 
-                    var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository, HistoricMovementRepository, IncomeRepository, AtmWithdrawRepository, EventPublisher);
+                    var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository, IncomeRepository, AtmWithdrawRepository, EventPublisher);
                     await strategy.Debit();
                 }
                 else

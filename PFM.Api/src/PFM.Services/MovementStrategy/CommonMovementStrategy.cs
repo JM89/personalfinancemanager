@@ -3,7 +3,6 @@ using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
-using PFM.Services.Helpers;
 using System;
 using System.Threading.Tasks;
 
@@ -11,8 +10,8 @@ namespace PFM.Services.MovementStrategy
 {
     public class CommonMovementStrategy : MovementStrategy
     {
-        public CommonMovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
-            : base(movement, bankAccountRepository, historicMovementRepository, incomeRepository, atmWithdrawRepository, eventPublisher)
+        public CommonMovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+            : base(movement, bankAccountRepository, incomeRepository, atmWithdrawRepository, eventPublisher)
         { }
 
         public override async Task<bool> Debit()
@@ -30,8 +29,6 @@ namespace PFM.Services.MovementStrategy
 
         private async Task<bool> Debit(Account account, Movement movement)
         {
-            MovementHelpers.Debit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance);
-
             var evt = new BankAccountDebited()
             {
                 BankCode = account.Bank.Id.ToString(),
@@ -64,8 +61,6 @@ namespace PFM.Services.MovementStrategy
 
         private async Task<bool> Credit(Account account, Movement movement)
         {
-            MovementHelpers.Credit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance);
-
             var evt = new BankAccountCredited()
             {
                 BankCode = account.Bank.Id.ToString(),
@@ -92,8 +87,7 @@ namespace PFM.Services.MovementStrategy
                 {
                     await Credit(account, CurrentMovement);
 
-                    var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository,
-                        HistoricMovementRepository, IncomeRepository, AtmWithdrawRepository, EventPublisher);
+                    var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository, IncomeRepository, AtmWithdrawRepository, EventPublisher);
 
                     await strategy.Debit();
                 }

@@ -241,33 +241,7 @@ BEGIN
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
 GO
-/****** Object:  Table [dbo].[HistoricMovements]    Script Date: 14/04/2023 18:02:54 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
-IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'HistoricMovements'))
-BEGIN
-	CREATE TABLE [dbo].[HistoricMovements](
-		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[SourceId] [int] NOT NULL,
-		[SourceType] [int] NOT NULL,
-		[SourceOldAmount] [decimal](9, 2) NOT NULL,
-		[SourceNewAmount] [decimal](9, 2) NOT NULL,
-		[DestinationId] [int] NULL,
-		[DestinationType] [int] NOT NULL,
-		[DestinationOldAmount] [decimal](9, 2) NOT NULL,
-		[DestinationNewAmount] [decimal](9, 2) NOT NULL,
-		[Date] [datetime2](7) NOT NULL,
-		[Cost] [decimal](9, 2) NOT NULL,
-	CONSTRAINT [PK_HistoricMovements] PRIMARY KEY CLUSTERED 
-	(
-		[Id] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY]
-END
-GO
 /****** Object:  Table [dbo].[Incomes]    Script Date: 14/04/2023 18:02:54 ******/
 SET ANSI_NULLS ON
 GO

@@ -5,7 +5,6 @@ using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
-using PFM.Services.Helpers;
 using PFM.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,17 +17,14 @@ namespace PFM.Services
     {
         private readonly IIncomeRepository _incomeRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
-        private readonly IHistoricMovementRepository _historicMovementRepository;
         private readonly IEventPublisher _eventPublisher;
 
         private readonly string OperationType = "Income";
 
-        public IncomeService(IIncomeRepository incomeRepository, IBankAccountRepository bankAccountRepository,
-            IHistoricMovementRepository historicMovementRepository, IEventPublisher eventPublisher)
+        public IncomeService(IIncomeRepository incomeRepository, IBankAccountRepository bankAccountRepository,IEventPublisher eventPublisher)
         {
             this._incomeRepository = incomeRepository;
             this._bankAccountRepository = bankAccountRepository;
-            this._historicMovementRepository = historicMovementRepository;
             this._eventPublisher = eventPublisher;
         }
 
@@ -51,7 +47,6 @@ namespace PFM.Services
                 _incomeRepository.Create(income);
 
                 var account = _bankAccountRepository.GetById(income.AccountId, a => a.Currency, a => a.Bank);
-                MovementHelpers.Credit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
 
                 var evt = new BankAccountCredited()
                 {
@@ -114,7 +109,6 @@ namespace PFM.Services
                 if (oldCost != income.Cost)
                 {
                     var account = _bankAccountRepository.GetById(income.AccountId, a => a.Currency, a => a.Bank);
-                    MovementHelpers.Debit(_historicMovementRepository, oldCost, account.Id, ObjectType.Account, account.CurrentBalance);
 
                     var evtDebited = new BankAccountDebited()
                     {
@@ -128,7 +122,6 @@ namespace PFM.Services
                     };
 
                     account.CurrentBalance -= oldCost;
-                    MovementHelpers.Credit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
 
                     var evtCredited = new BankAccountCredited()
                     {
@@ -162,7 +155,6 @@ namespace PFM.Services
                 var income = _incomeRepository.GetById(id);
 
                 var account = _bankAccountRepository.GetById(income.AccountId, a => a.Currency, a => a.Bank);
-                MovementHelpers.Debit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
 
                 var evt = new BankAccountDebited()
                 {

@@ -17,17 +17,15 @@ namespace PFM.Services
     {
         private readonly ISavingRepository _savingRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
-        private readonly IHistoricMovementRepository _historicMovementRepository;
         private readonly IIncomeRepository _incomeRepository;
         private readonly IAtmWithdrawRepository _atmWithdrawRepository;
         private readonly IEventPublisher _eventPublisher;
 
-        public SavingService(ISavingRepository savingRepository, IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository,
+        public SavingService(ISavingRepository savingRepository, IBankAccountRepository bankAccountRepository, 
              IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
         {
             this._savingRepository = savingRepository;
             this._bankAccountRepository = bankAccountRepository;
-            this._historicMovementRepository = historicMovementRepository;
             this._incomeRepository = incomeRepository;
             this._atmWithdrawRepository = atmWithdrawRepository;
             this._eventPublisher = eventPublisher;
@@ -41,7 +39,7 @@ namespace PFM.Services
 
                 var movement = new Movement(savingDetails);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var result  = await strategy.Debit();
 
                 if (!movement.TargetIncomeId.HasValue)
@@ -66,7 +64,7 @@ namespace PFM.Services
 
                 _savingRepository.Delete(saving);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(savingDetails), _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(savingDetails), _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var result = await strategy.Credit();
 
                 scope.Complete();
@@ -88,7 +86,7 @@ namespace PFM.Services
                 saving.GeneratedIncomeId = (int?)null;
                 _savingRepository.Update(saving);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var newMovement = new Movement(savingDetails);
 
                 var result = await strategy.UpdateDebit(newMovement);

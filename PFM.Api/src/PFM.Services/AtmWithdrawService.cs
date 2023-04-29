@@ -5,7 +5,6 @@ using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
-using PFM.Services.Helpers;
 using PFM.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,18 +18,16 @@ namespace PFM.Services
         private readonly IAtmWithdrawRepository _atmWithdrawRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IExpenseRepository _expenditureRepository;
-        private readonly IHistoricMovementRepository _historicMovementRepository;
         private readonly IEventPublisher _eventPublisher;
 
         private readonly string OperationType = "ATM Withdrawal";
 
         public AtmWithdrawService(IAtmWithdrawRepository atmWithdrawRepository, IBankAccountRepository bankAccountRepository, IExpenseRepository expenditureRepository,
-            IHistoricMovementRepository historicMovementRepository, IEventPublisher eventPublisher)
+            IEventPublisher eventPublisher)
         {
             this._atmWithdrawRepository = atmWithdrawRepository;
             this._bankAccountRepository = bankAccountRepository;
             this._expenditureRepository = expenditureRepository;
-            this._historicMovementRepository = historicMovementRepository;
             this._eventPublisher = eventPublisher;
         }
               
@@ -86,8 +83,6 @@ namespace PFM.Services
                     OperationType = OperationType
                 };
 
-                MovementHelpers.Debit(_historicMovementRepository, atmWithdraw.InitialAmount, account.Id, ObjectType.Account, account.CurrentBalance);
-
                 account.CurrentBalance -= atmWithdraw.InitialAmount;
                 _bankAccountRepository.Update(account);
 
@@ -130,7 +125,6 @@ namespace PFM.Services
                 if (oldCost != atmWithdraw.InitialAmount)
                 {
                     var account = _bankAccountRepository.GetById(atmWithdraw.AccountId, a => a.Currency, a => a.Bank);
-                    MovementHelpers.Credit(_historicMovementRepository, oldCost, account.Id, ObjectType.Account, account.CurrentBalance);
 
                     var evtCredited = new BankAccountCredited()
                     {
@@ -144,7 +138,6 @@ namespace PFM.Services
                     };
 
                     account.CurrentBalance += oldCost;
-                    MovementHelpers.Debit(_historicMovementRepository, atmWithdraw.InitialAmount, account.Id, ObjectType.Account, account.CurrentBalance);
 
                     var evtDebited = new BankAccountDebited()
                     {
@@ -185,7 +178,6 @@ namespace PFM.Services
                 var atmWithdraw = _atmWithdrawRepository.GetById(id);
 
                 var account = _bankAccountRepository.GetById(atmWithdraw.AccountId, a => a.Currency, a => a.Bank);
-                MovementHelpers.Credit(_historicMovementRepository, atmWithdraw.InitialAmount, account.Id, ObjectType.Account, account.CurrentBalance);
 
                 var evt = new BankAccountCredited()
                 {
