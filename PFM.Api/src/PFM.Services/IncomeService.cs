@@ -40,6 +40,7 @@ namespace PFM.Services
             });
             return Task.FromResult(resultBatch); 
         }
+
         public async Task<bool> CreateIncome(IncomeDetails incomeDetails)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))

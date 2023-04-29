@@ -10,6 +10,9 @@ using PFM.Api.Contracts.BudgetPlan;
 using PFM.Api.Contracts.Expense;
 using PFM.Services.Utils.Helpers;
 using PFM.Api.Contracts.Account;
+using PFM.Services.Events.Interfaces;
+using PFM.Services.Events;
+using System.Transactions;
 
 namespace PFM.Services.Interfaces.Services
 {
@@ -22,9 +25,10 @@ namespace PFM.Services.Interfaces.Services
         private readonly IIncomeRepository _incomeRepository;
         private readonly IHistoricMovementRepository _historicMovementRepository;
         private readonly IExpenseTypeRepository _ExpenseTypeRepository;
+        private readonly IEventPublisher _eventPublisher;
 
         public ExpenseService(IExpenseRepository ExpenseRepository, IBankAccountRepository bankAccountRepository, IAtmWithdrawRepository atmWithdrawRepository, IIncomeRepository incomeRepository,
-            IHistoricMovementRepository historicMovementRepository, IExpenseTypeRepository ExpenseTypeRepository, ISavingRepository savingRepository)
+            IHistoricMovementRepository historicMovementRepository, IExpenseTypeRepository ExpenseTypeRepository, ISavingRepository savingRepository, IEventPublisher eventPublisher)
         {
             this._ExpenseRepository = ExpenseRepository;
             this._bankAccountRepository = bankAccountRepository;
@@ -33,6 +37,7 @@ namespace PFM.Services.Interfaces.Services
             this._historicMovementRepository = historicMovementRepository;
             this._ExpenseTypeRepository = ExpenseTypeRepository;
             this._savingRepository = savingRepository;
+            this._eventPublisher = eventPublisher;
         }
 
         public void CreateExpenses(List<ExpenseDetails> ExpenseDetails)
@@ -42,55 +47,70 @@ namespace PFM.Services.Interfaces.Services
 
         public void CreateExpense(ExpenseDetails expenseDetails)
         {
-            var Expense = Mapper.Map<Expense>(expenseDetails);
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var Expense = Mapper.Map<Expense>(expenseDetails);
 
-            var movement = new Movement(expenseDetails);
+                var movement = new Movement(expenseDetails);
 
-            var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository);
-            strategy.Debit();
+                var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                strategy.Debit();
 
-            if (movement.TargetIncomeId.HasValue)
-                Expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
+                if (movement.TargetIncomeId.HasValue)
+                    Expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
 
-            _ExpenseRepository.Create(Expense);
+                _ExpenseRepository.Create(Expense);
+
+                scope.Complete();
+            }
         }
         
         public void EditExpense(ExpenseDetails ExpenseDetails)
         {
-            var Expense = _ExpenseRepository.GetById(ExpenseDetails.Id, true);
-
-            var oldMovement = new Movement(Mapper.Map<ExpenseDetails>(Expense));
-
-            Expense = Mapper.Map<Expense>(ExpenseDetails);
-            if (Expense.GeneratedIncomeId.HasValue)
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                Expense.GeneratedIncomeId = (int?)null;
+                var Expense = _ExpenseRepository.GetById(ExpenseDetails.Id, true);
+
+                var oldMovement = new Movement(Mapper.Map<ExpenseDetails>(Expense));
+
+                Expense = Mapper.Map<Expense>(ExpenseDetails);
+                if (Expense.GeneratedIncomeId.HasValue)
+                {
+                    Expense.GeneratedIncomeId = (int?)null;
+                    _ExpenseRepository.Update(Expense);
+                }
+
+                var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                var newMovement = new Movement(ExpenseDetails);
+
+                strategy.UpdateDebit(newMovement);
+
+                if (newMovement.TargetIncomeId.HasValue)
+                {
+                    // Update the GenerateIncomeId.
+                    Expense.GeneratedIncomeId = newMovement.TargetIncomeId.Value;
+                }
+
                 _ExpenseRepository.Update(Expense);
+
+                scope.Complete();
             }
-
-            var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository);
-            var newMovement = new Movement(ExpenseDetails);
-
-            strategy.UpdateDebit(newMovement);
-
-            if (newMovement.TargetIncomeId.HasValue)
-            {
-                // Update the GenerateIncomeId.
-                Expense.GeneratedIncomeId = newMovement.TargetIncomeId.Value;
-            }
-
-            _ExpenseRepository.Update(Expense);
         }
 
         public void DeleteExpense(int id)
         {
-            var Expense = _ExpenseRepository.GetById(id);
-            var ExpenseDetails = Mapper.Map<ExpenseDetails>(Expense);
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var Expense = _ExpenseRepository.GetById(id);
+                var ExpenseDetails = Mapper.Map<ExpenseDetails>(Expense);
 
-            _ExpenseRepository.Delete(Expense);
+                _ExpenseRepository.Delete(Expense);
 
-            var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(ExpenseDetails), _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository);
-            strategy.Credit();
+                var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(ExpenseDetails), _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                strategy.Credit();
+
+                scope.Complete();
+            }
         }
 
         public ExpenseDetails GetById(int id)

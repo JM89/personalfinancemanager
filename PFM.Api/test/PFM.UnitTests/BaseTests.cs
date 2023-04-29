@@ -3,6 +3,7 @@ using Moq;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.SearchParameters;
+using PFM.Services.Events.Interfaces;
 using PFM.Services.Interfaces.Services;
 using System.Collections.Generic;
 
@@ -17,6 +18,7 @@ namespace PFM.UnitTests
         protected Mock<IHistoricMovementRepository> MockHistoricMovementRepository;
         protected Mock<IExpenseTypeRepository> MockExpenseTypeRepository;
         protected Mock<ISavingRepository> MockSavingRepository;
+        protected Mock<IEventPublisher> MockEventPublisher;
 
         public BaseTests()
         {
@@ -51,6 +53,9 @@ namespace PFM.UnitTests
             MockSavingRepository = new Mock<ISavingRepository>();
             MockSavingRepository.Setup(x => x.GetList2()).Returns(savings);
 
+            MockEventPublisher = new Mock<IEventPublisher>();
+            MockEventPublisher.Setup(x => x.PublishAsync(It.IsAny<IEvent>(), default)).ReturnsAsync(true);
+
             var service = new ExpenseService(
                 MockExpenseRepository.Object,
                 MockBankAccountRepository.Object,
@@ -58,7 +63,8 @@ namespace PFM.UnitTests
                 MockIncomeRepository.Object,
                 MockHistoricMovementRepository.Object,
                 MockExpenseTypeRepository.Object,
-                MockSavingRepository.Object);
+                MockSavingRepository.Object,
+                MockEventPublisher.Object);
             return service;
         }
     }

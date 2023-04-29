@@ -3,13 +3,14 @@ using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using System;
+using PFM.Services.Events.Interfaces;
 
 namespace PFM.Services.MovementStrategy
 {
     public class CommonMovementStrategy : MovementStrategy
     {
-        public CommonMovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository)
-            : base(movement, bankAccountRepository, historicMovementRepository, incomeRepository, atmWithdrawRepository)
+        public CommonMovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IHistoricMovementRepository historicMovementRepository, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+            : base(movement, bankAccountRepository, historicMovementRepository, incomeRepository, atmWithdrawRepository, eventPublisher)
         { }
 
         public override void Debit()
@@ -64,7 +65,7 @@ namespace PFM.Services.MovementStrategy
                     Credit(account, CurrentMovement);
 
                     var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository,
-                        HistoricMovementRepository, IncomeRepository, AtmWithdrawRepository);
+                        HistoricMovementRepository, IncomeRepository, AtmWithdrawRepository, EventPublisher);
 
                     strategy.Debit();
                 }
