@@ -1,20 +1,21 @@
 ﻿using PFM.Api.Contracts.Income;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PFM.Services.Interfaces
 {
     public interface IIncomeService : IBaseService
     {
-        void CreateIncomes(List<IncomeDetails> incomeDetails);
+        Task<bool> CreateIncomes(List<IncomeDetails> incomeDetails);
 
-        void CreateIncome(IncomeDetails incomeDetails);
+        Task<bool> CreateIncome(IncomeDetails incomeDetails);
 
         IList<IncomeList> GetIncomes(int accountId);
 
         IncomeDetails GetById(int id);
 
-        void EditIncome(IncomeDetails incomeDetails);
+        Task<bool> EditIncome(IncomeDetails incomeDetails);
 
-        void DeleteIncome(int id);
+        Task<bool> DeleteIncome(int id);
     }
 }

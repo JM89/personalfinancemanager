@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PFM.Api.Contracts.Saving;
 
 namespace PFM.Services.Interfaces
@@ -7,12 +8,12 @@ namespace PFM.Services.Interfaces
     {
         IList<SavingList> GetSavingsByAccountId(int accountId);
 
-        void CreateSaving(SavingDetails savingDetails);
+        Task<bool> CreateSaving(SavingDetails savingDetails);
 
         SavingDetails GetById(int id);
 
-        void EditSaving(SavingDetails savingDetails);
+        Task<bool> EditSaving(SavingDetails savingDetails);
 
-        void DeleteSaving(int id);
+        Task<bool> DeleteSaving(int id);
     }
 }

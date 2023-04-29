@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using PFM.Services.Core;
-using PFM.Api.Contracts.BudgetPlan;
+﻿using PFM.Api.Contracts.BudgetPlan;
 using PFM.Api.Contracts.Dashboard;
 using PFM.Api.Contracts.Expense;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PFM.Services.Interfaces
 {
     public interface IExpenseService : IBaseService
     {
-        void CreateExpenses(List<ExpenseDetails> ExpenseDetails);
+        Task<bool> CreateExpenses(List<ExpenseDetails> ExpenseDetails);
 
-        void CreateExpense(ExpenseDetails ExpenseDetails);
+        Task<bool> CreateExpense(ExpenseDetails ExpenseDetails);
 
-        void EditExpense(ExpenseDetails ExpenseDetails);
+        Task<bool> EditExpense(ExpenseDetails ExpenseDetails);
 
-        void DeleteExpense(int id);
+        Task<bool> DeleteExpense(int id);
 
         ExpenseDetails GetById(int id);
 

@@ -12,9 +12,9 @@ namespace PFM.Services.Interfaces
 
         AccountDetails GetById(int id);
 
-        void EditBankAccount(AccountDetails accountDetails, string userId);
+        Task<bool> EditBankAccount(AccountDetails accountDetails, string userId);
 
-        void DeleteBankAccount(int id);
+        Task<bool> DeleteBankAccount(int id);
 
         void SetAsFavorite(int id);
     }

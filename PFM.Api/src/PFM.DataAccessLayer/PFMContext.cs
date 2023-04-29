@@ -15,7 +15,6 @@ namespace PFM.DataAccessLayer
         public DbSet<Income> Incomes { get; set; }
         public DbSet<BudgetPlan> BudgetPlans { get; set; }
         public DbSet<AtmWithdraw> AtmWithdraws { get; set; }
-        public DbSet<HistoricMovement> HistoricMovements { get; set; }
         public DbSet<BudgetByExpenseType> BudgetByExpenseTypes { get; set; }
         public DbSet<BankBranch> BankBranches { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }

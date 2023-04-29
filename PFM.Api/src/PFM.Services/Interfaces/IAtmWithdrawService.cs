@@ -1,23 +1,24 @@
-﻿using System.Collections.Generic;
-using PFM.Api.Contracts.AtmWithdraw;
+﻿using PFM.Api.Contracts.AtmWithdraw;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PFM.Services.Interfaces
 {
     public interface IAtmWithdrawService : IBaseService
     {
-        void CreateAtmWithdraws(List<AtmWithdrawDetails> atmWithdrawDetails);
+        Task<bool> CreateAtmWithdraws(List<AtmWithdrawDetails> atmWithdrawDetails);
 
         IList<AtmWithdrawList> GetAtmWithdrawsByAccountId(int accountId);
 
-        void CreateAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails);
+        Task<bool> CreateAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails);
 
         AtmWithdrawDetails GetById(int id);
 
-        void EditAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails);
+        Task<bool> EditAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails);
 
         void CloseAtmWithdraw(int id);
 
-        void DeleteAtmWithdraw(int id);
+        Task<bool> DeleteAtmWithdraw(int id);
 
         void ChangeDebitStatus(int id, bool debitStatus);
     }
