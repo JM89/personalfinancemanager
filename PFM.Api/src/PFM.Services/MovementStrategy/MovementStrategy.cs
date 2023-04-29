@@ -1,5 +1,6 @@
 ﻿using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Events.Interfaces;
+using System.Threading.Tasks;
 
 namespace PFM.Services.MovementStrategy
 {
@@ -24,10 +25,10 @@ namespace PFM.Services.MovementStrategy
             this.EventPublisher = eventPublisher;
         }
 
-        public abstract void Debit();
+        public abstract Task<bool> Debit();
 
-        public abstract void Credit();
+        public abstract Task<bool> Credit();
 
-        public abstract void UpdateDebit(Movement newMovement);
+        public abstract Task<bool> UpdateDebit(Movement newMovement);
     }
 }

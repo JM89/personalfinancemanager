@@ -9,6 +9,7 @@ using PFM.Services.MovementStrategy;
 using PFM.Api.Contracts.Saving;
 using PFM.Services.Events.Interfaces;
 using System.Transactions;
+using System.Threading.Tasks;
 
 namespace PFM.Services
 {
@@ -32,7 +33,7 @@ namespace PFM.Services
             this._eventPublisher = eventPublisher;
         }
 
-        public void CreateSaving(SavingDetails savingDetails)
+        public async Task<bool> CreateSaving(SavingDetails savingDetails)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -41,7 +42,7 @@ namespace PFM.Services
                 var movement = new Movement(savingDetails);
 
                 var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                strategy.Debit();
+                var result  = await strategy.Debit();
 
                 if (!movement.TargetIncomeId.HasValue)
                     throw new ArgumentException("Target Income ID should not be null.");
@@ -51,10 +52,12 @@ namespace PFM.Services
                 _savingRepository.Create(saving);
 
                 scope.Complete();
+
+                return result;
             }
         }
 
-        public void DeleteSaving(int id)
+        public async Task<bool> DeleteSaving(int id)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -64,13 +67,15 @@ namespace PFM.Services
                 _savingRepository.Delete(saving);
 
                 var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(savingDetails), _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                strategy.Credit();
+                var result = await strategy.Credit();
 
                 scope.Complete();
+
+                return result;
             }
         }
 
-        public void EditSaving(SavingDetails savingDetails)
+        public async Task<bool> EditSaving(SavingDetails savingDetails)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -86,7 +91,7 @@ namespace PFM.Services
                 var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var newMovement = new Movement(savingDetails);
 
-                strategy.UpdateDebit(newMovement);
+                var result = await strategy.UpdateDebit(newMovement);
 
                 if (!newMovement.TargetIncomeId.HasValue)
                     throw new ArgumentException("Target Income ID should not be null.");
@@ -96,6 +101,8 @@ namespace PFM.Services
                 _savingRepository.Update(saving);
 
                 scope.Complete();
+
+                return result;
             }
         }
 

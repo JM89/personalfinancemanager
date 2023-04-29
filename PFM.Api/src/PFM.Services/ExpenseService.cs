@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using PFM.Services.MovementStrategy;
-using System;
-using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DataAccessLayer.Entities;
-using PFM.Api.Contracts.Dashboard;
-using PFM.Api.Contracts.BudgetPlan;
-using PFM.Api.Contracts.Expense;
-using PFM.Services.Utils.Helpers;
+﻿using AutoMapper;
 using PFM.Api.Contracts.Account;
+using PFM.Api.Contracts.BudgetPlan;
+using PFM.Api.Contracts.Dashboard;
+using PFM.Api.Contracts.Expense;
+using PFM.Api.Contracts.Income;
+using PFM.DataAccessLayer.Entities;
+using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Events.Interfaces;
-using PFM.Services.Events;
+using PFM.Services.MovementStrategy;
+using PFM.Services.Utils.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Transactions;
 
 namespace PFM.Services.Interfaces.Services
@@ -40,12 +41,18 @@ namespace PFM.Services.Interfaces.Services
             this._eventPublisher = eventPublisher;
         }
 
-        public void CreateExpenses(List<ExpenseDetails> ExpenseDetails)
+        public Task<bool> CreateExpenses(List<ExpenseDetails> ExpenseDetails)
         {
-            ExpenseDetails.ForEach(CreateExpense);
+            var resultBatch = true;
+            ExpenseDetails.ForEach(async (income) => {
+                var result = await CreateExpense(income);
+                if (!result)
+                    resultBatch = false;
+            });
+            return Task.FromResult(resultBatch);
         }
 
-        public void CreateExpense(ExpenseDetails expenseDetails)
+        public async Task<bool> CreateExpense(ExpenseDetails expenseDetails)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -54,7 +61,7 @@ namespace PFM.Services.Interfaces.Services
                 var movement = new Movement(expenseDetails);
 
                 var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                strategy.Debit();
+                var result = await strategy.Debit();
 
                 if (movement.TargetIncomeId.HasValue)
                     Expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
@@ -62,10 +69,12 @@ namespace PFM.Services.Interfaces.Services
                 _ExpenseRepository.Create(Expense);
 
                 scope.Complete();
+
+                return result;
             }
         }
         
-        public void EditExpense(ExpenseDetails ExpenseDetails)
+        public async Task<bool> EditExpense(ExpenseDetails ExpenseDetails)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -83,7 +92,7 @@ namespace PFM.Services.Interfaces.Services
                 var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var newMovement = new Movement(ExpenseDetails);
 
-                strategy.UpdateDebit(newMovement);
+                var result = await strategy.UpdateDebit(newMovement);
 
                 if (newMovement.TargetIncomeId.HasValue)
                 {
@@ -94,10 +103,12 @@ namespace PFM.Services.Interfaces.Services
                 _ExpenseRepository.Update(Expense);
 
                 scope.Complete();
+
+                return result;
             }
         }
 
-        public void DeleteExpense(int id)
+        public async Task<bool> DeleteExpense(int id)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -107,9 +118,11 @@ namespace PFM.Services.Interfaces.Services
                 _ExpenseRepository.Delete(Expense);
 
                 var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(ExpenseDetails), _bankAccountRepository, _historicMovementRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                strategy.Credit();
+                var result = await strategy.Credit();
 
                 scope.Complete();
+
+                return result;
             }
         }
 

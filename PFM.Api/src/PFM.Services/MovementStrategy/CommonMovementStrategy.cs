@@ -1,9 +1,11 @@
-﻿using PFM.Services.Helpers;
-using PFM.DataAccessLayer.Entities;
+﻿using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using System;
+using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
+using PFM.Services.Helpers;
+using System;
+using System.Threading.Tasks;
 
 namespace PFM.Services.MovementStrategy
 {
@@ -13,12 +15,12 @@ namespace PFM.Services.MovementStrategy
             : base(movement, bankAccountRepository, historicMovementRepository, incomeRepository, atmWithdrawRepository, eventPublisher)
         { }
 
-        public override void Debit()
+        public override async Task<bool> Debit()
         {
             if (CurrentMovement?.SourceAccountId != null)
             {
-                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value);
-                Debit(account, CurrentMovement);
+                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value, a => a.Currency, a => a.Bank);
+                return await Debit(account, CurrentMovement);
             }
             else
             {
@@ -26,20 +28,33 @@ namespace PFM.Services.MovementStrategy
             }
         }
 
-        private void Debit(Account account, Movement movement)
+        private async Task<bool> Debit(Account account, Movement movement)
         {
             MovementHelpers.Debit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance);
 
+            var evt = new BankAccountDebited()
+            {
+                BankCode = account.Id.ToString(),
+                CurrencyCode = account.Currency.Id.ToString(),
+                PreviousBalance = account.CurrentBalance,
+                CurrentBalance = account.CurrentBalance - movement.Amount,
+                UserId = account.User_Id,
+                OperationDate = movement.Date,
+                OperationType = $"Expense via {movement.PaymentMethod}"
+            };
+
             account.CurrentBalance -= movement.Amount;
             BankAccountRepository.Update(account);
+
+            return await EventPublisher.PublishAsync(evt, default);
         }
 
-        public override void Credit()
+        public override async Task<bool> Credit()
         {
             if (CurrentMovement?.SourceAccountId != null)
             {
-                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value);
-                Credit(account, CurrentMovement);
+                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value, a => a.Currency, a => a.Bank);
+                return await Credit(account, CurrentMovement);
             }
             else
             {
@@ -47,33 +62,48 @@ namespace PFM.Services.MovementStrategy
             }
         }
 
-        private void Credit(Account account, Movement movement)
+        private async Task<bool> Credit(Account account, Movement movement)
         {
             MovementHelpers.Credit(HistoricMovementRepository, movement.Amount, account.Id, ObjectType.Account, account.CurrentBalance);
 
+            var evt = new BankAccountCredited()
+            {
+                BankCode = account.Id.ToString(),
+                CurrencyCode = account.Currency.Id.ToString(),
+                PreviousBalance = account.CurrentBalance,
+                CurrentBalance = account.CurrentBalance + movement.Amount,
+                UserId = account.User_Id,
+                OperationDate = movement.Date,
+                OperationType = $"Expense via {movement.PaymentMethod}"
+            };
+
             account.CurrentBalance += movement.Amount;
             BankAccountRepository.Update(account);
+
+            return await EventPublisher.PublishAsync(evt, default);
         }
 
-        public override void UpdateDebit(Movement newMovement)
+        public override async Task<bool> UpdateDebit(Movement newMovement)
         {
             if (newMovement.SourceAccountId.HasValue)
             {
-                var account = BankAccountRepository.GetById(newMovement.SourceAccountId.Value);
+                var account = BankAccountRepository.GetById(newMovement.SourceAccountId.Value, a => a.Currency, a => a.Bank);
                 if (CurrentMovement.PaymentMethod != newMovement.PaymentMethod)
                 {
-                    Credit(account, CurrentMovement);
+                    await Credit(account, CurrentMovement);
 
                     var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository,
                         HistoricMovementRepository, IncomeRepository, AtmWithdrawRepository, EventPublisher);
 
-                    strategy.Debit();
+                    await strategy.Debit();
                 }
                 else if (CurrentMovement.Amount != newMovement.Amount)
                 {
-                    Credit(account, CurrentMovement);
-                    Debit(account, newMovement);
+                    await Credit(account, CurrentMovement);
+                    await Debit(account, newMovement);
                 }
+
+                return true;
             }
             else
             {

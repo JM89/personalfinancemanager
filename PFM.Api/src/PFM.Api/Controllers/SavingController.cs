@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.Saving;
 using PFM.Services.Interfaces;
 
@@ -9,41 +8,41 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class SavingController : ControllerBase
     {
-        private readonly ISavingService _SavingService;
+        private readonly ISavingService _savingService;
 
         public SavingController(ISavingService SavingService)
         {
-            _SavingService = SavingService;
+            _savingService = SavingService;
         }
 
         [HttpGet("GetList/{accountId}")]
         public IEnumerable<SavingList> GetList(int accountId)
         {
-            return _SavingService.GetSavingsByAccountId(accountId);
+            return _savingService.GetSavingsByAccountId(accountId);
         }
 
         [HttpGet("Get/{id}")]
         public SavingDetails Get(int id)
         {
-            return _SavingService.GetById(id);
+            return _savingService.GetById(id);
         }
         
         [HttpPost("Create")]
-        public void Post([FromBody]SavingDetails createdObj)
+        public async Task<bool> Post([FromBody]SavingDetails createdObj)
         {
-            _SavingService.CreateSaving(createdObj);
+            return await _savingService.CreateSaving(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, [FromBody]SavingDetails editedObj)
+        public async Task<bool> Put(int id, [FromBody]SavingDetails editedObj)
         {
-            _SavingService.EditSaving(editedObj);
+            return await _savingService.EditSaving(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            _SavingService.DeleteSaving(id);
+            return await _savingService.DeleteSaving(id);
         }
     }
 }
