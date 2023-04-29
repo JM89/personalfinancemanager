@@ -1,8 +1,9 @@
 ﻿using PFM.Services.Events.Interfaces;
+using System;
 
 namespace PFM.Services.Events.EventTypes
 {
-    internal class BankAccountCreated: IEvent
+    internal class BankAccountCredited : IEvent
     {
         public string Id => $"{StreamGroup}-{UserId}-{BankCode}-{CurrencyCode}";
 
@@ -10,10 +11,14 @@ namespace PFM.Services.Events.EventTypes
 
         public string BankCode { get; set; }
 
+        public decimal PreviousBalance { get; set; }
+
         public decimal CurrentBalance { get; set; }
 
         public string StreamGroup => "BankAccount";
 
         public string UserId { get; set; }
+
+        public DateTime DateOperation { get; set; }
     }
 }

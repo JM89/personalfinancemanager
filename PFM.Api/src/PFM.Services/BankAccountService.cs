@@ -107,7 +107,7 @@ namespace PFM.Services
             return mappedAccount;
         }
 
-        public async Task<bool> EditBankAccount(AccountDetails accountDetails, string userId)
+        public Task<bool> EditBankAccount(AccountDetails accountDetails, string userId)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -118,19 +118,9 @@ namespace PFM.Services
 
                 var updated = _bankAccountRepository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
 
-                var evt = new BankAccountUpdated()
-                {
-                    BankCode = updated.Id.ToString(),
-                    CurrencyCode = updated.Currency.Id.ToString(),
-                    CurrentBalance = updated.CurrentBalance,
-                    UserId = updated.User_Id
-                };
-
-                var published = await _eventPublisher.PublishAsync(evt, default);
-
                 scope.Complete();
 
-                return published;
+                return Task.FromResult(true);
             }
         }
 

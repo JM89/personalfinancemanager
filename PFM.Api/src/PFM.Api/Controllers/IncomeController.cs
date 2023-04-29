@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.Income;
 using PFM.Services.Interfaces;
 
@@ -9,47 +8,47 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class IncomeController : ControllerBase
     {
-        private readonly IIncomeService _IncomeService;
+        private readonly IIncomeService _incomeService;
 
         public IncomeController(IIncomeService IncomeService)
         {
-            _IncomeService = IncomeService;
+            _incomeService = IncomeService;
         }
 
         [HttpGet("GetList/{accountId}")]
         public IEnumerable<IncomeList> GetList(int accountId)
         {
-            return _IncomeService.GetIncomes(accountId);
+            return _incomeService.GetIncomes(accountId);
         }
 
         [HttpGet("Get/{id}")]
         public IncomeDetails Get(int id)
         {
-            return _IncomeService.GetById(id);
+            return _incomeService.GetById(id);
         }
         
         [HttpPost("Create")]
-        public void Post([FromBody]IncomeDetails createdObj)
+        public async Task<bool> Post([FromBody]IncomeDetails createdObj)
         {
-            _IncomeService.CreateIncome(createdObj);
+            return await _incomeService.CreateIncome(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, [FromBody]IncomeDetails editedObj)
+        public async Task<bool> Put(int id, [FromBody]IncomeDetails editedObj)
         {
-            _IncomeService.EditIncome(editedObj);
+            return await _incomeService.EditIncome(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            _IncomeService.DeleteIncome(id);
+            return await _incomeService.DeleteIncome(id);
         }
         
         [HttpPost("CreateIncomes")]
-        public void CreateIncomes([FromBody]List<IncomeDetails> createdObjs)
+        public async Task<bool> CreateIncomes([FromBody]List<IncomeDetails> createdObjs)
         {
-            _IncomeService.CreateIncomes(createdObjs);
+            return await _incomeService.CreateIncomes(createdObjs);
         }
     }
 }

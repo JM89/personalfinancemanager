@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using PFM.DataAccessLayer.Entities;
-using AutoMapper;
-using PFM.Services.Interfaces;
-using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Helpers;
-using PFM.DataAccessLayer.Enumerations;
+﻿using AutoMapper;
 using PFM.Api.Contracts.Income;
+using PFM.DataAccessLayer.Entities;
+using PFM.DataAccessLayer.Enumerations;
+using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Events.EventTypes;
+using PFM.Services.Events.Interfaces;
+using PFM.Services.Helpers;
+using PFM.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Transactions;
 
 namespace PFM.Services
 {
@@ -15,30 +19,56 @@ namespace PFM.Services
         private readonly IIncomeRepository _incomeRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IHistoricMovementRepository _historicMovementRepository;
+        private readonly IEventPublisher _eventPublisher;
 
         public IncomeService(IIncomeRepository incomeRepository, IBankAccountRepository bankAccountRepository,
-            IHistoricMovementRepository historicMovementRepository)
+            IHistoricMovementRepository historicMovementRepository, IEventPublisher eventPublisher)
         {
             this._incomeRepository = incomeRepository;
             this._bankAccountRepository = bankAccountRepository;
             this._historicMovementRepository = historicMovementRepository;
+            this._eventPublisher = eventPublisher;
         }
 
-        public void CreateIncomes(List<IncomeDetails> incomeDetails)
+        public Task<bool> CreateIncomes(List<IncomeDetails> incomeDetails)
         {
-            incomeDetails.ForEach(CreateIncome);
+            var resultBatch = true;
+            incomeDetails.ForEach(async (income) => {
+                var result = await CreateIncome(income);
+                if (!result)
+                    resultBatch = false;
+            });
+            return Task.FromResult(resultBatch); 
         }
-
-        public void CreateIncome(IncomeDetails incomeDetails)
+        public async Task<bool> CreateIncome(IncomeDetails incomeDetails)
         {
-            var income = Mapper.Map<Income>(incomeDetails);
-            _incomeRepository.Create(income);
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var income = Mapper.Map<Income>(incomeDetails);
+                _incomeRepository.Create(income);
 
-            var account = _bankAccountRepository.GetById(income.AccountId);
-            MovementHelpers.Credit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
+                var account = _bankAccountRepository.GetById(income.AccountId, a => a.Currency, a => a.Bank);
+                MovementHelpers.Credit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
 
-            account.CurrentBalance += incomeDetails.Cost;
-            _bankAccountRepository.Update(account);
+                var evt = new BankAccountCredited()
+                {
+                    BankCode = account.Id.ToString(),
+                    CurrencyCode = account.Currency.Id.ToString(),
+                    PreviousBalance = account.CurrentBalance,
+                    CurrentBalance = account.CurrentBalance + incomeDetails.Cost,
+                    UserId = account.User_Id,
+                    DateOperation = income.DateIncome
+                };
+
+                account.CurrentBalance += incomeDetails.Cost;
+                _bankAccountRepository.Update(account);
+
+                var published = await _eventPublisher.PublishAsync(evt, default);
+
+                scope.Complete();
+
+                return published;
+            }
         }
 
         public IList<IncomeList> GetIncomes(int accountId)
@@ -62,39 +92,93 @@ namespace PFM.Services
             return Mapper.Map<IncomeDetails>(income);
         }
 
-        public void EditIncome(IncomeDetails incomeDetails)
+        public async Task<bool> EditIncome(IncomeDetails incomeDetails)
         {
-            var income = _incomeRepository.GetById(incomeDetails.Id);
-
-            var oldCost = income.Cost;
-
-            income.Description = incomeDetails.Description;
-            income.Cost = incomeDetails.Cost;
-            income.AccountId = incomeDetails.AccountId;
-            income.DateIncome = incomeDetails.DateIncome;
-            _incomeRepository.Update(income);
-
-            if (oldCost != income.Cost)
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var account = _bankAccountRepository.GetById(income.AccountId);
-                MovementHelpers.Debit(_historicMovementRepository, oldCost, account.Id, ObjectType.Account, account.CurrentBalance);
-                account.CurrentBalance -= oldCost;
-                MovementHelpers.Credit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
-                account.CurrentBalance += income.Cost;
-                _bankAccountRepository.Update(account);
+                var income = _incomeRepository.GetById(incomeDetails.Id);
+
+                var oldCost = income.Cost;
+
+                income.Description = incomeDetails.Description;
+                income.Cost = incomeDetails.Cost;
+                income.AccountId = incomeDetails.AccountId;
+                income.DateIncome = incomeDetails.DateIncome;
+                _incomeRepository.Update(income);
+
+                var published = true;
+                if (oldCost != income.Cost)
+                {
+                    var account = _bankAccountRepository.GetById(income.AccountId, a => a.Currency, a => a.Bank);
+                    MovementHelpers.Debit(_historicMovementRepository, oldCost, account.Id, ObjectType.Account, account.CurrentBalance);
+
+                    var evtDebited = new BankAccountDebited()
+                    {
+                        BankCode = account.Id.ToString(),
+                        CurrencyCode = account.Currency.Id.ToString(),
+                        PreviousBalance = account.CurrentBalance,
+                        CurrentBalance = account.CurrentBalance - oldCost,
+                        UserId = account.User_Id,
+                        DateOperation = income.DateIncome
+                    };
+
+                    account.CurrentBalance -= oldCost;
+                    MovementHelpers.Credit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
+
+                    var evtCredited = new BankAccountCredited()
+                    {
+                        BankCode = account.Id.ToString(),
+                        CurrencyCode = account.Currency.Id.ToString(),
+                        PreviousBalance = account.CurrentBalance,
+                        CurrentBalance = account.CurrentBalance + income.Cost,
+                        UserId = account.User_Id,
+                        DateOperation = income.DateIncome
+                    };
+
+                    account.CurrentBalance += income.Cost;
+                    _bankAccountRepository.Update(account);
+
+                    published = await _eventPublisher.PublishAsync(evtDebited, default);
+                    if (published)
+                        published = await _eventPublisher.PublishAsync(evtCredited, default);
+                }
+
+                scope.Complete();
+
+                return published;
             }
         }
 
-        public void DeleteIncome(int id)
+        public async Task<bool> DeleteIncome(int id)
         {
-            var income = _incomeRepository.GetById(id);
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var income = _incomeRepository.GetById(id);
 
-            var account = _bankAccountRepository.GetById(income.AccountId);
-            MovementHelpers.Debit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
-            account.CurrentBalance -= income.Cost;
-            _bankAccountRepository.Update(account);
+                var account = _bankAccountRepository.GetById(income.AccountId, a => a.Currency, a => a.Bank);
+                MovementHelpers.Debit(_historicMovementRepository, income.Cost, account.Id, ObjectType.Account, account.CurrentBalance);
 
-            _incomeRepository.Delete(income);
+                var evt = new BankAccountDebited()
+                {
+                    BankCode = account.Id.ToString(),
+                    CurrencyCode = account.Currency.Id.ToString(),
+                    PreviousBalance = account.CurrentBalance,
+                    CurrentBalance = account.CurrentBalance - income.Cost,
+                    UserId = account.User_Id,
+                    DateOperation = income.DateIncome
+                };
+
+                account.CurrentBalance -= income.Cost;
+                _bankAccountRepository.Update(account);
+
+                _incomeRepository.Delete(income);
+
+                var published = await _eventPublisher.PublishAsync(evt, default);
+
+                scope.Complete();
+
+                return published;
+            }
         }
     }
 }
