@@ -3,7 +3,6 @@ using PFM.Api.Contracts.Account;
 using PFM.Api.Contracts.BudgetPlan;
 using PFM.Api.Contracts.Dashboard;
 using PFM.Api.Contracts.Expense;
-using PFM.Api.Contracts.Income;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Events.Interfaces;
@@ -19,7 +18,7 @@ namespace PFM.Services.Interfaces.Services
 {
     public class ExpenseService : IExpenseService
     {
-        private readonly IExpenseRepository _ExpenseRepository;
+        private readonly IExpenseRepository _expenseRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IAtmWithdrawRepository _atmWithdrawRepository;
         private readonly ISavingRepository _savingRepository;
@@ -30,7 +29,7 @@ namespace PFM.Services.Interfaces.Services
         public ExpenseService(IExpenseRepository ExpenseRepository, IBankAccountRepository bankAccountRepository, IAtmWithdrawRepository atmWithdrawRepository, IIncomeRepository incomeRepository,
             IExpenseTypeRepository ExpenseTypeRepository, ISavingRepository savingRepository, IEventPublisher eventPublisher)
         {
-            this._ExpenseRepository = ExpenseRepository;
+            this._expenseRepository = ExpenseRepository;
             this._bankAccountRepository = bankAccountRepository;
             this._atmWithdrawRepository = atmWithdrawRepository;
             this._incomeRepository = incomeRepository;
@@ -64,7 +63,7 @@ namespace PFM.Services.Interfaces.Services
                 if (movement.TargetIncomeId.HasValue)
                     Expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
 
-                _ExpenseRepository.Create(Expense);
+                _expenseRepository.Create(Expense);
 
                 scope.Complete();
 
@@ -72,48 +71,14 @@ namespace PFM.Services.Interfaces.Services
             }
         }
         
-        public async Task<bool> EditExpense(ExpenseDetails ExpenseDetails)
-        {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                var Expense = _ExpenseRepository.GetById(ExpenseDetails.Id, true);
-
-                var oldMovement = new Movement(Mapper.Map<ExpenseDetails>(Expense));
-
-                Expense = Mapper.Map<Expense>(ExpenseDetails);
-                if (Expense.GeneratedIncomeId.HasValue)
-                {
-                    Expense.GeneratedIncomeId = (int?)null;
-                    _ExpenseRepository.Update(Expense);
-                }
-
-                var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                var newMovement = new Movement(ExpenseDetails);
-
-                var result = await strategy.UpdateDebit(newMovement);
-
-                if (newMovement.TargetIncomeId.HasValue)
-                {
-                    // Update the GenerateIncomeId.
-                    Expense.GeneratedIncomeId = newMovement.TargetIncomeId.Value;
-                }
-
-                _ExpenseRepository.Update(Expense);
-
-                scope.Complete();
-
-                return result;
-            }
-        }
-
         public async Task<bool> DeleteExpense(int id)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var Expense = _ExpenseRepository.GetById(id);
+                var Expense = _expenseRepository.GetById(id);
                 var ExpenseDetails = Mapper.Map<ExpenseDetails>(Expense);
 
-                _ExpenseRepository.Delete(Expense);
+                _expenseRepository.Delete(Expense);
 
                 var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(ExpenseDetails), _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var result = await strategy.Credit();
@@ -126,9 +91,9 @@ namespace PFM.Services.Interfaces.Services
 
         public ExpenseDetails GetById(int id)
         {
-            var Expense = _ExpenseRepository
-                                    .GetList2(u => u.Account.Currency, u => u.ExpenseType, u => u.PaymentMethod)
-                                    .SingleOrDefault(x => x.Id == id);
+            var Expense = _expenseRepository
+                            .GetList2(u => u.Account.Currency, u => u.ExpenseType, u => u.PaymentMethod)
+                            .SingleOrDefault(x => x.Id == id);
 
             if (Expense == null)
             {
@@ -140,15 +105,15 @@ namespace PFM.Services.Interfaces.Services
 
         public void ChangeDebitStatus(int id, bool debitStatus)
         {
-            var Expense = _ExpenseRepository.GetById(id);
+            var Expense = _expenseRepository.GetById(id);
             Expense.HasBeenAlreadyDebited = debitStatus;
-            _ExpenseRepository.Update(Expense);
+            _expenseRepository.Update(Expense);
         }
 
         public IList<ExpenseList> GetExpenses(PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
         {
             var searchParameters = Mapper.Map<PFM.DataAccessLayer.SearchParameters.ExpenseGetListSearchParameters>(search);
-            var Expenses = _ExpenseRepository.GetByParameters(searchParameters).ToList();
+            var Expenses = _expenseRepository.GetByParameters(searchParameters).ToList();
 
             if (!string.IsNullOrEmpty(search.UserId))
             {

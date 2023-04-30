@@ -70,51 +70,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        ///  Initialize the Edit form.
-        /// </summary>
-        /// <param name="id">Income id</param>
-        /// <returns></returns>
-        public async Task<ActionResult> Edit(int? id)
-        {
-            await AccountBasicInfo();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var incomeModel = _incomeService.GetById(id.Value);
-            
-            if (incomeModel == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(incomeModel);
-        }
-
-        /// <summary>
-        /// Update an existing income.
-        /// </summary>
-        /// <param name="incomeEditModel"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(IncomeEditModel incomeEditModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var accountId = await GetCurrentAccount();
-                incomeEditModel.AccountId = accountId;
-
-                await _incomeService.EditIncome(incomeEditModel);
-                
-                return RedirectToAction("Index");
-            }
-            return View(incomeEditModel);
-        }
-
-        /// <summary>
         /// Delete the income after confirmation.
         /// </summary>
         /// <param name="id">Income id</param>

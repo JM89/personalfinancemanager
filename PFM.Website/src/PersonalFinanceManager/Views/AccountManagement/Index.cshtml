@@ -189,29 +189,26 @@
                                 <col width="18%"/>
                             </colgroup>
                             <thead>
-                            <tr>
-                                <th>
+                                <tr>
+                                    <th>
 
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CategoryName)
-                                </th>
-                                <th style="text-align: right;">
-                                    @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostCurrentMonth)
-                                </th>
-                                @if (@Model.HasCurrentBudgetPlan)
-                                {
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CategoryName)
+                                    </th>
+                                    <th style="text-align: right;">
+                                        @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostCurrentMonth)
+                                    </th>
                                     <th style="text-align: right;">
                                         @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostPlannedMonthly)
                                     </th>
-                                }
-                                <th style="text-align: right;">
-                                    @Model.LabelPreviousMonth
-                                </th>
-                                <th style="text-align: right;">
-                                    @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostOver12Month)
-                                </th>
-                            </tr>
+                                    <th style="text-align: right;">
+                                        @Model.LabelPreviousMonth
+                                    </th>
+                                    <th style="text-align: right;">
+                                        @Html.DisplayNameFor(m => @Model.ExpensesByCategory[0].CostOver12Month)
+                                    </th>
+                                </tr>
                             </thead>
                             <tbody>
                             @foreach (var item in @Model.ExpensesByCategory)
@@ -236,7 +233,11 @@
                                             @Html.DisplayFor(modelItem => item.DisplayedCostPlannedMonthly)
                                             @CustomHelpers.DisplayAmountDifference(@item.DiffCostPlannedMonthly, @item.DisplayedDiffCostPlannedMonthly)
                                         </td>
-                                    }                                           
+                                    }   
+                                    else
+                                    {
+                                        <td align="right">-</td>
+                                    }
                                     <td align="right">
                                         @Html.DisplayFor(modelItem => item.DisplayedCostPreviousMonth)
                                         @CustomHelpers.DisplayAmountDifference(@item.DiffCostPreviousMonth, @item.DisplayedDiffCostPreviousMonth)

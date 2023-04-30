@@ -13,8 +13,6 @@ namespace PersonalFinanceManager.Services.Interfaces
 
         Task<SavingEditModel> GetById(int id);
 
-        Task<bool> EditSaving(SavingEditModel savingEditModel);
-
         Task<bool> DeleteSaving(int id);
     }
 }

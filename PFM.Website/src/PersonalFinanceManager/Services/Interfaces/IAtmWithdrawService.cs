@@ -15,8 +15,6 @@ namespace PersonalFinanceManager.Services.Interfaces
 
         Task<AtmWithdrawEditModel> GetById(int id);
 
-        Task<bool> EditAtmWithdraw(AtmWithdrawEditModel atmWithdrawEditModel);
-
         Task<bool> CloseAtmWithdraw(int id);
 
         Task<bool> DeleteAtmWithdraw(int id);

@@ -77,32 +77,5 @@ namespace PFM.Services.MovementStrategy
 
             return await EventPublisher.PublishAsync(evt, default);
         }
-
-        public override async Task<bool> UpdateDebit(Movement newMovement)
-        {
-            if (newMovement.SourceAccountId.HasValue)
-            {
-                var account = BankAccountRepository.GetById(newMovement.SourceAccountId.Value, a => a.Currency, a => a.Bank);
-                if (CurrentMovement.PaymentMethod != newMovement.PaymentMethod)
-                {
-                    await Credit(account, CurrentMovement);
-
-                    var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository, IncomeRepository, AtmWithdrawRepository, EventPublisher);
-
-                    await strategy.Debit();
-                }
-                else if (CurrentMovement.Amount != newMovement.Amount)
-                {
-                    await Credit(account, CurrentMovement);
-                    await Debit(account, newMovement);
-                }
-
-                return true;
-            }
-            else
-            {
-                throw new ArgumentException("Current Source account can't be null.");
-            }
-        }
     }
 }

@@ -12,8 +12,6 @@ namespace PFM.Services.Interfaces
 
         Task<bool> CreateExpense(ExpenseDetails ExpenseDetails);
 
-        Task<bool> EditExpense(ExpenseDetails ExpenseDetails);
-
         Task<bool> DeleteExpense(int id);
 
         ExpenseDetails GetById(int id);

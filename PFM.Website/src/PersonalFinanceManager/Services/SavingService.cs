@@ -29,12 +29,6 @@ namespace PersonalFinanceManager.Services
             return await _httpClientExtended.Delete($"/Saving/Delete/{id}");
         }
 
-        public async Task<bool> EditSaving(SavingEditModel model)
-        {
-            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Saving.SavingDetails>(model);
-            return await _httpClientExtended.Put($"/Saving/Edit/{model.Id}", dto);
-        }
-
         public async Task<SavingEditModel> GetById(int id)
         {
             var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Saving.SavingDetails>($"/Saving/Get/{id}");

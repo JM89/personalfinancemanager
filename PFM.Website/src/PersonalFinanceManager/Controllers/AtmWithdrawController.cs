@@ -70,51 +70,6 @@ namespace PersonalFinanceManager.Controllers
         }
 
         /// <summary>
-        ///  Initialize the Edit form.
-        /// </summary>
-        /// <param name="id">ATM Withdraw id</param>
-        /// <returns></returns>
-        public async Task<ActionResult> Edit(int? id)
-        {
-            await AccountBasicInfo();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var atmWithdrawModel = await _atmWithdrawService.GetById(id.Value);
-            
-            if (atmWithdrawModel == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(atmWithdrawModel);
-        }
-
-        /// <summary>
-        /// Update an existing ATM withdraw.
-        /// </summary>
-        /// <param name="atmWithdrawEditModel"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(AtmWithdrawEditModel atmWithdrawEditModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var accountId = await GetCurrentAccount();
-                atmWithdrawEditModel.AccountId = accountId;
-
-                await _atmWithdrawService.EditAtmWithdraw(atmWithdrawEditModel);
-                
-                return RedirectToAction("Index");
-            }
-            return View(atmWithdrawEditModel);
-        }
-
-        /// <summary>
         /// Close an ATM withdraw: set current amount to 0 and don't display it anymore.
         /// </summary>
         /// <param name="id"></param>

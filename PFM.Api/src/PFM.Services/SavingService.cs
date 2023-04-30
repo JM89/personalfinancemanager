@@ -73,37 +73,6 @@ namespace PFM.Services
             }
         }
 
-        public async Task<bool> EditSaving(SavingDetails savingDetails)
-        {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                var saving = _savingRepository.GetById(savingDetails.Id, true);
-
-                var oldMovement = new Movement(Mapper.Map<SavingDetails>(saving));
-
-                // Update the saving . Reset of generated income as it might be deleted when UpdateDebit.
-                saving = Mapper.Map<Saving>(savingDetails);
-                saving.GeneratedIncomeId = (int?)null;
-                _savingRepository.Update(saving);
-
-                var strategy = ContextMovementStrategy.GetMovementStrategy(oldMovement, _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                var newMovement = new Movement(savingDetails);
-
-                var result = await strategy.UpdateDebit(newMovement);
-
-                if (!newMovement.TargetIncomeId.HasValue)
-                    throw new ArgumentException("Target Income ID should not be null.");
-
-                // Update the GenerateIncomeId.
-                saving.GeneratedIncomeId = newMovement.TargetIncomeId.Value;
-                _savingRepository.Update(saving);
-
-                scope.Complete();
-
-                return result;
-            }
-        }
-
         public SavingDetails GetById(int id)
         {
             var saving = _savingRepository.GetById(id, u => u.TargetInternalAccount);

@@ -106,7 +106,7 @@
                                 @Html.Raw("|")
                             }
                         }
-                        @CustomHelpers.ListButtons(@item.Id, true, "Expenditure", "", @item.Description)
+                        @CustomHelpers.ListButtons(@item.Id, true, false, "Expenditure", "", @item.Description)
                     </td>
                     @Html.Hidden("AtmWithdrawId", @item.AtmWithdrawId)
                     @Html.Hidden("TargetInternalAccountId", @item.TargetInternalAccountId)

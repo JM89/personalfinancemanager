@@ -50,7 +50,7 @@
                         @Html.DisplayFor(modelItem => item.CountryName)
                     </td>
                     <td align="right">
-                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, "Bank", @Resources.DisabledButtonTooltips.BankCantBeDeleted, @item.Name)
+                        @CustomHelpers.ListButtons(@item.Id, item.CanBeDeleted, true, "Bank", @Resources.DisabledButtonTooltips.BankCantBeDeleted, @item.Name)
                     </td>
                 </tr>
             }

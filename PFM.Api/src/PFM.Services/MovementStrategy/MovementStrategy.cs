@@ -26,7 +26,5 @@ namespace PFM.Services.MovementStrategy
         public abstract Task<bool> Debit();
 
         public abstract Task<bool> Credit();
-
-        public abstract Task<bool> UpdateDebit(Movement newMovement);
     }
 }

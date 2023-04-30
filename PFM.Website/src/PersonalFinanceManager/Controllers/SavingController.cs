@@ -74,54 +74,6 @@ namespace PersonalFinanceManager.Controllers
             return View(savingEditModel);
         }
 
-        /// <summary>
-        ///  Initialize the Edit form.
-        /// </summary>
-        /// <param name="id">Saving id</param>
-        /// <returns></returns>
-        public async Task<ActionResult> Edit(int? id)
-        {
-            await AccountBasicInfo();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var savingModel = await _savingService.GetById(id.Value);
-            await PopulateDropDownLists(savingModel);
-
-            if (savingModel == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(savingModel);
-        }
-
-        /// <summary>
-        /// Update an existing saving.
-        /// </summary>
-        /// <param name="savingEditModel"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(SavingEditModel savingEditModel)
-        {
-            await PopulateDropDownLists(savingEditModel);
-
-            if (ModelState.IsValid)
-            {
-                var accountId = await GetCurrentAccount();
-                savingEditModel.AccountId = accountId;
-
-                await _savingService.EditSaving(savingEditModel);
-                
-                return RedirectToAction("Index");
-            }
-            return View(savingEditModel);
-        }
-
         private async Task PopulateDropDownLists(SavingEditModel savingModel)
         {
             var accountId = await GetCurrentAccount();

@@ -12,8 +12,6 @@ namespace PFM.Services.Interfaces
 
         SavingDetails GetById(int id);
 
-        Task<bool> EditSaving(SavingDetails savingDetails);
-
         Task<bool> DeleteSaving(int id);
     }
 }

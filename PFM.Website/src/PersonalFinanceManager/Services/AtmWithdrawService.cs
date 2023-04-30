@@ -42,12 +42,6 @@ namespace PersonalFinanceManager.Services
             var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>($"/AtmWithdraw/Get/{id}");
             return AutoMapper.Mapper.Map<AtmWithdrawEditModel>(response);
         }
-
-        public async Task<bool> EditAtmWithdraw(AtmWithdrawEditModel model)
-        {
-            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>(model);
-            return await _httpClientExtended.Put($"/AtmWithdraw/Edit/{model.Id}", dto);
-        }
         
         public async Task<bool> CloseAtmWithdraw(int id)
         {
