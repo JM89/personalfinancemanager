@@ -3,6 +3,7 @@ using PersonalFinanceManager.Models.Dashboard;
 using PersonalFinanceManager.Models.Expenditure;
 using PersonalFinanceManager.Services.HttpClientWrapper;
 using PersonalFinanceManager.Services.Interfaces;
+using PFM.Api.Contracts.BudgetPlan;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -63,8 +64,8 @@ namespace PersonalFinanceManager.Services
 
         public async Task<ExpenseSummaryModel> GetExpenseSummary(int accountId, BudgetPlanEditModel model)
         {
-            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails>(model);
-            var response = await _httpClientExtended.Post<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails, PFM.Api.Contracts.Dashboard.ExpenseSummary>($"/Expense/GetExpenseSummary/{accountId}", dto);
+            var dto = AutoMapper.Mapper.Map<BudgetPlanDetails>(model) ?? new BudgetPlanDetails() { ExpenseTypes = new List<BudgetPlanExpenseType>()};
+            var response = await _httpClientExtended.Post<BudgetPlanDetails, PFM.Api.Contracts.Dashboard.ExpenseSummary>($"/Expense/GetExpenseSummary/{accountId}", dto);
             return AutoMapper.Mapper.Map<ExpenseSummaryModel>(response);
         }
     }

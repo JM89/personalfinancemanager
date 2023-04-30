@@ -169,6 +169,11 @@ namespace PFM.Services.Interfaces.Services
                 throw new ArgumentException("Account can't be null.");
             }
 
+            if (budgetPlan.Id == 0)
+            {
+                budgetPlan = null;
+            }
+
             var today = DateTime.Now;
             var over12MonthsInterval = new Interval(today, DateTimeUnitEnums.Years, 1);
             var over6MonthsInterval = new Interval(today, DateTimeUnitEnums.Months, 6);
