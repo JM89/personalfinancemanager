@@ -49,30 +49,7 @@ BEGIN
 	) ON [PRIMARY]
 END
 GO
-/****** Object:  Table [dbo].[BankBranches]    Script Date: 14/04/2023 18:02:54 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
-IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'BankBranches'))
-BEGIN
-	CREATE TABLE [dbo].[BankBranches](
-		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[Name] [nvarchar](max) NOT NULL,
-		[AddressLine1] [nvarchar](max) NOT NULL,
-		[AddressLine2] [nvarchar](max) NULL,
-		[PostCode] [nvarchar](max) NOT NULL,
-		[City] [nvarchar](max) NOT NULL,
-		[PhoneNumber] [nvarchar](max) NOT NULL,
-		[BankId] [int] NOT NULL,
-	CONSTRAINT [PK_BankBranches] PRIMARY KEY CLUSTERED 
-	(
-		[Id] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-END
-GO
 /****** Object:  Table [dbo].[Banks]    Script Date: 14/04/2023 18:02:54 ******/
 SET ANSI_NULLS ON
 GO
@@ -473,15 +450,6 @@ BEGIN
 	REFERENCES [dbo].[Accounts] ([Id])
 	ON DELETE CASCADE
 	ALTER TABLE [dbo].[AtmWithdraws] CHECK CONSTRAINT [FK_AtmWithdraws_Accounts_AccountId]
-END
-GO
-
-IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE='FOREIGN KEY' AND CONSTRAINT_NAME = 'FK_BankBranches_Banks_BankId'))
-BEGIN
-	ALTER TABLE [dbo].[BankBranches]  WITH CHECK ADD  CONSTRAINT [FK_BankBranches_Banks_BankId] FOREIGN KEY([BankId])
-	REFERENCES [dbo].[Banks] ([Id])
-	ON DELETE CASCADE
-	ALTER TABLE [dbo].[BankBranches] CHECK CONSTRAINT [FK_BankBranches_Banks_BankId]
 END
 GO
 

@@ -321,7 +321,6 @@
     <Compile Include="Models\AspNetUserAccount\RegisterViewModel.cs" />
     <Compile Include="Models\AtmWithdraw\AtmWithdrawEditModel.cs" />
     <Compile Include="Models\AtmWithdraw\AtmWithdrawListModel.cs" />
-    <Compile Include="Models\Bank\BankBrandEditModel.cs" />
     <Compile Include="Models\Bank\BankEditModel.cs" />
     <Compile Include="Models\Bank\BankListModel.cs" />
     <Compile Include="Models\BudgetPlan\BudgetPlanEditModel.cs" />

@@ -26,9 +26,6 @@ namespace PersonalFinanceManager.Models.Bank
 
         public IList<SelectListItem> AvailableCountries { get; set; }
 
-        [LocalizedDisplayName("BankFavoriteBranch")]
-        public BankBrandEditModel FavoriteBranch { get; set; }
-
         [LocalizedDisplayName("BankWebsite")]
         [MaxLength(200)]
         [Required]

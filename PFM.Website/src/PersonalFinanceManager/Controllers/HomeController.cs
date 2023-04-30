@@ -105,15 +105,6 @@ namespace PersonalFinanceManager.Controllers
                 model.FavoriteBankDetails = new Models.Bank.BankEditModel()
                 {
                     IconPath = fullAccountDetails.BankIconPath,
-                    FavoriteBranch = new Models.Bank.BankBrandEditModel()
-                    {
-                        Name = fullAccountDetails.BankBranchName,
-                        AddressLine1 = fullAccountDetails.BankBranchAddressLine1,
-                        AddressLine2 = fullAccountDetails.BankBranchAddressLine2,
-                        PostCode = fullAccountDetails.BankBranchPostCode,
-                        City = fullAccountDetails.BankBranchCity,
-                        PhoneNumber = fullAccountDetails.BankBranchPhoneNumber
-                    },
                     Website = fullAccountDetails.BankWebsite,
                 };
             }

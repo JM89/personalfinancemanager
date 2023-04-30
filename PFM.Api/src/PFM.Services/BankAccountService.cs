@@ -18,17 +18,15 @@ namespace PFM.Services
         private readonly IExpenseRepository _expenditureRepository;
         private readonly IIncomeRepository _incomeRepository;
         private readonly IAtmWithdrawRepository _atmWithdrawRepository;
-        private readonly IBankBranchRepository _bankBranchRepository;
         private readonly IEventPublisher _eventPublisher;
 
         public BankAccountService(IBankAccountRepository bankAccountRepository, IExpenseRepository expenditureRepository, IIncomeRepository incomeRepository,
-            IAtmWithdrawRepository atmWithdrawRepository, IBankBranchRepository bankBranchRepository, IEventPublisher eventPublisher)
+            IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
         {
             this._bankAccountRepository = bankAccountRepository;
             this._expenditureRepository = expenditureRepository;
             this._incomeRepository = incomeRepository;
             this._atmWithdrawRepository = atmWithdrawRepository;
-            this._bankBranchRepository = bankBranchRepository;
             this._eventPublisher = eventPublisher;
         }
 
@@ -90,21 +88,7 @@ namespace PFM.Services
                 return null;
             }
 
-            // Can be null for online banking
-            var favoriteBankDetails = _bankBranchRepository.GetList().SingleOrDefault(x => x.BankId == account.BankId);
-
-            var mappedAccount = Mapper.Map<AccountDetails>(account);
-
-            if (favoriteBankDetails != null)
-            {
-                mappedAccount.BankBranchName = favoriteBankDetails.Name;
-                mappedAccount.BankBranchAddressLine1 = favoriteBankDetails.AddressLine1;
-                mappedAccount.BankBranchAddressLine2 = favoriteBankDetails.AddressLine2;
-                mappedAccount.BankBranchPostCode = favoriteBankDetails.PostCode;
-                mappedAccount.BankBranchCity = favoriteBankDetails.City;
-                mappedAccount.BankBranchPhoneNumber = favoriteBankDetails.PhoneNumber;
-            }
-            return mappedAccount;
+            return Mapper.Map<AccountDetails>(account);
         }
 
         public Task<bool> EditBankAccount(AccountDetails accountDetails, string userId)

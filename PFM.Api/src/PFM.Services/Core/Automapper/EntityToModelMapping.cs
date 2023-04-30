@@ -30,7 +30,6 @@ namespace PFM.Services.Core.Automapper
 
             CreateMap<DataAccessLayer.Entities.Bank, Api.Contracts.Bank.BankList>();
             CreateMap<DataAccessLayer.Entities.Bank, Api.Contracts.Bank.BankDetails>();
-            CreateMap<DataAccessLayer.Entities.BankBranch, Api.Contracts.Bank.BankBranchDetails>();
 
             CreateMap<DataAccessLayer.Entities.Currency, Api.Contracts.Currency.CurrencyList>();
             CreateMap<DataAccessLayer.Entities.Currency, Api.Contracts.Currency.CurrencyDetails>();

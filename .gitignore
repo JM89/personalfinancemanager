@@ -11,7 +11,6 @@ general.log
 /packages
 /PFM.Website/packages
 .sonarqube
-bank_icons
 /*.user
 /*.suo
 *.user

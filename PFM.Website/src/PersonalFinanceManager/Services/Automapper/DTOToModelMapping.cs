@@ -19,7 +19,6 @@ namespace PersonalFinanceManager.Services.Automapper
                 .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense));
             CreateMap<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawList, Models.AtmWithdraw.AtmWithdrawListModel>()
                  .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense)); 
-            CreateMap<PFM.Api.Contracts.Bank.BankBranchDetails, Models.Bank.BankBrandEditModel>();
             CreateMap<PFM.Api.Contracts.Bank.BankDetails, Models.Bank.BankEditModel>();
             CreateMap<PFM.Api.Contracts.Bank.BankList, Models.Bank.BankListModel>();
             CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails, Models.BudgetPlan.BudgetPlanEditModel>()

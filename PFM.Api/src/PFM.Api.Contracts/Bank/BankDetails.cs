@@ -11,8 +11,6 @@ namespace PFM.Api.Contracts.Bank
 
         public int CountryId { get; set; }
 
-        public BankBranchDetails FavoriteBranch { get; set; }
-
         public string Website { get; set; }
 
         public string GeneralEnquiryPhoneNumber { get; set; }
