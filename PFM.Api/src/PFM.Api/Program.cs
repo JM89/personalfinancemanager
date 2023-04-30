@@ -34,7 +34,7 @@ namespace PFM.Api
             var app = builder.Build();
 
             app.UseMiddleware<TimedOperationMiddleware>();
-            app.UseMiddleware<UnhandledExceptionMiddleware>();
+            app.UseMiddleware<ResponseWrapperMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {

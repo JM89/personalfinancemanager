@@ -17,7 +17,7 @@ namespace PFM.Api.Contracts.Shared
         {
             this.Errors = new Dictionary<string,  List<string>>()
             {
-                { "global", new List<string> { error} }
+                { "default", new List<string> { error} }
             };
         }
 

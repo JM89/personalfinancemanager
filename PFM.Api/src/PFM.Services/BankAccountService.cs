@@ -98,20 +98,25 @@ namespace PFM.Services
             {
                 var account = _bankAccountRepository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
 
+                var businessException = new BusinessException();
+
                 if (account.Currency.Id != accountDetails.CurrencyId)
                 {
-                    throw new BusinessException(nameof(account.Currency), "Currency cannot modified on an existing account");
+                    businessException.AddErrorMessage(nameof(account.Currency), "Currency cannot be modified on an existing account");
                 }
 
                 if (account.Bank.Id != accountDetails.BankId)
                 {
-                    throw new BusinessException(nameof(account.Bank), "Bank cannot modified on an existing account");
+                    businessException.AddErrorMessage(nameof(account.Bank), "Bank cannot be modified on an existing account");
                 }
 
                 if (account.User_Id != userId)
                 {
-                    throw new BusinessException(nameof(account.User_Id), "User cannot modified on an existing account");
+                    businessException.AddErrorMessage(nameof(account.User_Id), "User cannot be modified on an existing account");
                 }
+
+                if (businessException.HasError())
+                    throw businessException;
 
                 account = Mapper.Map<Account>(accountDetails);
                 account.User_Id = userId;
