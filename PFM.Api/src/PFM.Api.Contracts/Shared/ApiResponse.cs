@@ -4,9 +4,9 @@ namespace PFM.Api.Contracts.Shared
 {
     public class ApiResponse
     {
-        public object Data { get; }
+        public object Data { get; set; }
 
-        public IDictionary<string, List<string>> Errors { get; }
+        public IDictionary<string, List<string>> Errors { get; set; }
 
         public ApiResponse(object data)
         {
