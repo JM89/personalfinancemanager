@@ -131,46 +131,7 @@
                 </div>
             </div>
             
-            <div class="col-lg-4">
-
-                <div class="ibox">
-                    <div class="ibox-title">Favorite Bank Details</div>
-                    <div class="ibox-content">
-                        @if (@Model.FavoriteBankDetails == null)
-                        {
-                            <label>No favorite account!</label>
-                        }
-                        else
-                        {
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <img src="@Model.FavoriteBankDetails.IconPath" style="width: 80px;" />
-                                </div>
-                                <div class="col-lg-9">
-                                    <ul class="list-unstyled m-t-md">
-                                        <li>
-                                            <span class="fa fa-globe m-r-xs"></span>
-                                            <label>Website:</label>
-                                            <a href="http://@Model.FavoriteBankDetails.Website">@Model.FavoriteBankDetails.Website</a>
-                                        </li>
-                                        <li>
-                                            <span class="fa fa-home m-r-xs"></span>
-                                            <label>Address:</label>
-                                            @Model.DisplayFavoriteBankFullAddress
-                                        </li>
-                                        <li>
-                                            <span class="fa fa-phone m-r-xs"></span>
-                                            <label>Appt Phone Number:</label>
-                                            @Model.FavoriteBankDetails.FavoriteBranch.PhoneNumber
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-
+            <div class="col-lg-4"></div>
 
         </div>
         </div>

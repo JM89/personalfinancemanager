@@ -15,7 +15,6 @@ namespace PFM.Services.Core.Automapper
             CreateMap<Api.Contracts.Expense.ExpenseList, DataAccessLayer.Entities.Expense>();
 
             CreateMap<Api.Contracts.Bank.BankDetails, DataAccessLayer.Entities.Bank>();
-            CreateMap<Api.Contracts.Bank.BankBranchDetails, DataAccessLayer.Entities.BankBranch>();
 
             CreateMap<Api.Contracts.AtmWithdraw.AtmWithdrawList, DataAccessLayer.Entities.AtmWithdraw>();
             CreateMap<Api.Contracts.AtmWithdraw.AtmWithdrawDetails, DataAccessLayer.Entities.AtmWithdraw>();

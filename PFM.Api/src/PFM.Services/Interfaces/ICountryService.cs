@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using PFM.Api.Contracts.Country;
+﻿using PFM.Api.Contracts.Country;
+using System.Collections.Generic;
 
 namespace PFM.Services.Interfaces
 {
@@ -7,12 +7,6 @@ namespace PFM.Services.Interfaces
     {
         IList<CountryList> GetCountries();
 
-        void CreateCountry(CountryDetails countryDetails);
-
         CountryDetails GetById(int id);
-
-        void EditCountry(CountryDetails countryDetails);
-
-        void DeleteCountry(int id);
     }
 }

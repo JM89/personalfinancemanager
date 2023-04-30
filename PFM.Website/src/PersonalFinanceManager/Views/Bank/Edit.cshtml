@@ -92,38 +92,6 @@
                 </div>
             </div>
 
-            <hr />
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.FavoriteBranch, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-size:18px;color:green;" })
-            </div>
-
-            @Html.HiddenFor(model => model.FavoriteBranch.Id)
-
-            @Html.HiddenFor(model => model.FavoriteBranch.BankId)
-
-            @Html.FieldEditor(model => model.FavoriteBranch.Name)
-
-            @Html.FieldEditor(model => model.FavoriteBranch.AddressLine1)
-
-            @Html.FieldEditor(model => model.FavoriteBranch.AddressLine2)
-
-            @Html.FieldEditor(model => model.FavoriteBranch.PostCode)
-
-            @Html.FieldEditor(model => model.FavoriteBranch.City)
-
-            <div class="form-group">
-                <div class="control-label col-md-2">
-                    @Html.LabelFor(model => model.FavoriteBranch.PhoneNumber)&nbsp;
-                    <a title="@Resources.FieldHelper.BankBranchPhoneNumberHelper"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
-                </div>
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.FavoriteBranch.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FavoriteBranch.PhoneNumber, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="@Resources.ButtonNames.AddSaveButton" class="btn btn-primary" />

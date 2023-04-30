@@ -13,7 +13,6 @@ namespace PersonalFinanceManager.Services.Automapper
             CreateMap<Models.AtmWithdraw.AtmWithdrawEditModel, PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>()
                 .ForMember(dest => dest.DateExpense, src => src.MapFrom(opts => opts.DateExpenditure));
             CreateMap<Models.Bank.BankEditModel, PFM.Api.Contracts.Bank.BankDetails>();
-            CreateMap<Models.Bank.BankBrandEditModel, PFM.Api.Contracts.Bank.BankBranchDetails>();
             CreateMap<Models.ExpenditureType.ExpenditureTypeListModel, PFM.Api.Contracts.ExpenseType.ExpenseTypeList>();
             CreateMap<Models.BudgetPlan.BudgetPlanExpenditureType, PFM.Api.Contracts.BudgetPlan.BudgetPlanExpenseType>()
                 .ForMember(dest => dest.ExpenseType, src => src.MapFrom(opts => opts.ExpenditureType));

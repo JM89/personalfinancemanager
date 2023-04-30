@@ -38,16 +38,6 @@ namespace PersonalFinanceManager.Models.Home
         
         public BankEditModel FavoriteBankDetails { get; set; }
 
-        public string DisplayFavoriteBankFullAddress
-        {
-            get
-            {
-                return string.Format("{0} {1} {2} {3}", FavoriteBankDetails.FavoriteBranch.AddressLine1,
-                    FavoriteBankDetails.FavoriteBranch.AddressLine2, FavoriteBankDetails.FavoriteBranch.PostCode,
-                    FavoriteBankDetails.FavoriteBranch.City);
-            }
-        }
-
         public ConversionRateModel FavoriteConversionRate { get; set; }
 
         public IList<NumberOfMvtPerPaymentMethodModel> AmountDebitMovementPercentagePerPaymentMethods { get; set; }

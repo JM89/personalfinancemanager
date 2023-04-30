@@ -8,11 +8,5 @@ namespace PFM.Services.Interfaces
         IList<CurrencyList> GetCurrencies();
 
         CurrencyDetails GetById(int id);
-
-        void CreateCurrency(CurrencyDetails currencyDetails);
-
-        void EditCurrency(CurrencyDetails currencyDetails);
-
-        void DeleteCurrency(int id);
     }
 }
