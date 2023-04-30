@@ -295,7 +295,6 @@
     <Compile Include="Controllers\AtmWithdrawController.cs" />
     <Compile Include="Controllers\UserProfileController.cs" />
     <Compile Include="Controllers\IncomeController.cs" />
-    <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BankAccountController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
@@ -545,9 +544,6 @@
     <Content Include="Views\Bank\Create.cshtml" />
     <Content Include="Views\Bank\Edit.cshtml" />
     <Content Include="Views\Bank\Index.cshtml" />
-    <Content Include="Views\Country\Create.cshtml" />
-    <Content Include="Views\Country\Edit.cshtml" />
-    <Content Include="Views\Country\Index.cshtml" />
     <Content Include="Views\Income\Create.cshtml" />
     <Content Include="Views\Income\Index.cshtml" />
     <Content Include="Views\Income\Edit.cshtml" />

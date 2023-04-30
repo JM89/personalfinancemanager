@@ -56,3 +56,11 @@ IF NOT EXISTS (SELECT * FROM [dbo].[FrequenceOptions] WHERE [Id] = 2)
 BEGIN
     INSERT INTO [dbo].[FrequenceOptions]([Id], [Name]) VALUES(2, 'Every X Months')
 END
+
+SET IDENTITY_INSERT [dbo].[Countries] ON
+INSERT INTO [dbo].[Countries] (Id, Name) VALUES (1, 'United Kingdom')
+INSERT INTO [dbo].[Countries] (Id, Name) VALUES (2, 'France')
+INSERT INTO [dbo].[Countries] (Id, Name) VALUES (3, 'Germany')
+INSERT INTO [dbo].[Countries] (Id, Name) VALUES (4, 'Spain')
+INSERT INTO [dbo].[Countries] (Id, Name) VALUES (5, 'Italy')
+SET IDENTITY_INSERT [dbo].[Countries] OFF

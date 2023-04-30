@@ -23,28 +23,5 @@ namespace PersonalFinanceManager.Services
             var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Country.CountryList>($"/Country/GetList");
             return response.Select(AutoMapper.Mapper.Map<CountryListModel>).ToList();
         }
-
-        public async Task<bool> CreateCountry(CountryEditModel model)
-        {
-            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Country.CountryDetails>(model);
-            return await _httpClientExtended.Post($"/Country/Create", dto);
-        }
-
-        public async Task<CountryEditModel> GetById(int id)
-        {
-            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Country.CountryDetails>($"/Country/Get/{id}");
-            return AutoMapper.Mapper.Map<CountryEditModel>(response);
-        }
-
-        public async Task<bool> EditCountry(CountryEditModel model)
-        {
-            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Country.CountryDetails>(model);
-            return await _httpClientExtended.Put($"/Country/Edit/{model.Id}", dto);
-        }
-
-        public async Task<bool> DeleteCountry(int id)
-        {
-            return await _httpClientExtended.Delete($"/Country/Delete/{id}");
-        }
     }
 }
