@@ -15,8 +15,6 @@ namespace PersonalFinanceManager.Services.Interfaces
 
         Task<IncomeEditModel> GetById(int id);
 
-        Task<bool> EditIncome(IncomeEditModel incomeEditModel);
-
         Task<bool> DeleteIncome(int id);
     }
 }

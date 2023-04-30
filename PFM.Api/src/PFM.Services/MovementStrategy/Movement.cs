@@ -24,7 +24,7 @@ namespace PFM.Services.MovementStrategy
         public int? TargetIncomeId { get; set; }
 
         public Movement(SavingDetails saving)
-        {
+        { 
             this.Date = saving.DateSaving;
             this.Description = saving.Description;
             this.Amount = saving.Amount;

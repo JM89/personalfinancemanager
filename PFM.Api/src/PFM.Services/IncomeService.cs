@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using PFM.Api.Contracts.Income;
 using PFM.DataAccessLayer.Entities;
-using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
@@ -89,63 +88,6 @@ namespace PFM.Services
             }
 
             return Mapper.Map<IncomeDetails>(income);
-        }
-
-        public async Task<bool> EditIncome(IncomeDetails incomeDetails)
-        {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                var income = _incomeRepository.GetById(incomeDetails.Id);
-
-                var oldCost = income.Cost;
-
-                income.Description = incomeDetails.Description;
-                income.Cost = incomeDetails.Cost;
-                income.AccountId = incomeDetails.AccountId;
-                income.DateIncome = incomeDetails.DateIncome;
-                _incomeRepository.Update(income);
-
-                var published = true;
-                if (oldCost != income.Cost)
-                {
-                    var account = _bankAccountRepository.GetById(income.AccountId, a => a.Currency, a => a.Bank);
-
-                    var evtDebited = new BankAccountDebited()
-                    {
-                        BankCode = account.Bank.Id.ToString(),
-                        CurrencyCode = account.Currency.Id.ToString(),
-                        PreviousBalance = account.CurrentBalance,
-                        CurrentBalance = account.CurrentBalance - oldCost,
-                        UserId = account.User_Id,
-                        OperationDate = income.DateIncome,
-                        OperationType = OperationType
-                    };
-
-                    account.CurrentBalance -= oldCost;
-
-                    var evtCredited = new BankAccountCredited()
-                    {
-                        BankCode = account.Bank.Id.ToString(),
-                        CurrencyCode = account.Currency.Id.ToString(),
-                        PreviousBalance = account.CurrentBalance,
-                        CurrentBalance = account.CurrentBalance + income.Cost,
-                        UserId = account.User_Id,
-                        OperationDate = income.DateIncome,
-                        OperationType = OperationType
-                    };
-
-                    account.CurrentBalance += income.Cost;
-                    _bankAccountRepository.Update(account);
-
-                    published = await _eventPublisher.PublishAsync(evtDebited, default);
-                    if (published)
-                        published = await _eventPublisher.PublishAsync(evtCredited, default);
-                }
-
-                scope.Complete();
-
-                return published;
-            }
         }
 
         public async Task<bool> DeleteIncome(int id)

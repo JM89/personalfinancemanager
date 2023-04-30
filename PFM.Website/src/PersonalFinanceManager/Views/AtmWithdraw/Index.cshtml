@@ -98,7 +98,6 @@
                             
                             <a href="/AtmWithdraw/Close/@item.Id" title="@Resources.ButtonNames.CloseATMButton"><i class="fa fa-power-off"></i></a>
 
-                            @CustomHelpers.EditButton(@item.Id, item.CanBeEdited, "AtmWithdraw", @Resources.DisabledButtonTooltips.AtmWithdrawCantBeEdited) @Html.Raw("|")
                             @CustomHelpers.DeleteButton(@item.Id, item.CanBeDeleted, "AtmWithdraw", @Resources.DisabledButtonTooltips.AtmWithdrawCantBeDeleted, @item.Description)
                         }
 

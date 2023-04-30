@@ -92,45 +92,6 @@ namespace PersonalFinanceManager.Controllers
             return View(expenditureModel);
         }
 
-        // GET: BankAccount/Edit/5
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            await AccountBasicInfo();
-
-            var expenditureModel = await _expenditureService.GetById(id.Value);
-
-            if (expenditureModel == null)
-            {
-                return HttpNotFound();
-            }
-
-            await PopulateDropDownLists(expenditureModel);
-
-            return View(expenditureModel);
-        }
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(ExpenditureEditModel expenditureModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var accountId = await GetCurrentAccount();
-
-                expenditureModel.AccountId = accountId;
-
-                await _expenditureService.EditExpenditure(expenditureModel);
-
-                return RedirectToAction("Index", new { accountId });
-            }
-            return View(expenditureModel);
-        }
-
         public async Task<ActionResult> UndoDebit(int? id)
         {
             if (id == null)

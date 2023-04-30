@@ -33,12 +33,6 @@ namespace PFM.Api.Controllers
             return await _incomeService.CreateIncome(createdObj);
         }
         
-        [HttpPut("Edit/{id}")]
-        public async Task<bool> Put(int id, [FromBody]IncomeDetails editedObj)
-        {
-            return await _incomeService.EditIncome(editedObj);
-        }
-        
         [HttpDelete("Delete/{id}")]
         public async Task<bool> Delete(int id)
         {

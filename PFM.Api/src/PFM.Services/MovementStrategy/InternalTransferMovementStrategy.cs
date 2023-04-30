@@ -19,8 +19,8 @@ namespace PFM.Services.MovementStrategy
         {
             if (CurrentMovement?.SourceAccountId != null && CurrentMovement.TargetAccountId.HasValue)
             {
-                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value);
-                var internalAccount = BankAccountRepository.GetById(CurrentMovement.TargetAccountId.Value);
+                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value, a => a.Currency, a => a.Bank);
+                var internalAccount = BankAccountRepository.GetById(CurrentMovement.TargetAccountId.Value, a => a.Currency, a => a.Bank);
                 return await Debit(account, internalAccount, CurrentMovement);
             }
             else
@@ -139,45 +139,6 @@ namespace PFM.Services.MovementStrategy
                 published = await EventPublisher.PublishAsync(evtCredited, default);
 
             return published;
-        }
-
-        public override async Task<bool> UpdateDebit(Movement newMovement)
-        {
-            if (CurrentMovement.SourceAccountId.HasValue && CurrentMovement.TargetAccountId.HasValue)
-            {
-                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value, a => a.Currency, a => a.Bank);
-                var internalAccount = BankAccountRepository.GetById(CurrentMovement.TargetAccountId.Value, a => a.Currency, a => a.Bank);
-
-                if (CurrentMovement.PaymentMethod != newMovement.PaymentMethod)
-                {
-                    await Credit(account, internalAccount, CurrentMovement);
-
-                    var strategy = ContextMovementStrategy.GetMovementStrategy(newMovement, BankAccountRepository, IncomeRepository, AtmWithdrawRepository, EventPublisher);
-                    await strategy.Debit();
-                }
-                else
-                {
-                    if (!newMovement.TargetAccountId.HasValue)
-                        throw new ArgumentException("New Target account can't be null.");
-
-                    if (CurrentMovement.TargetAccountId.Value != newMovement.TargetAccountId.Value)
-                    {
-                        var newInternalAccount = BankAccountRepository.GetById(newMovement.TargetAccountId.Value, a => a.Currency, a => a.Bank);
-                        await Credit(account, internalAccount, CurrentMovement);
-                        await Debit(account, newInternalAccount, newMovement);
-                    }
-                    else if (CurrentMovement.Amount != newMovement.Amount)
-                    {
-                        await Credit(account, internalAccount, CurrentMovement);
-                        await Debit(account, internalAccount, newMovement);
-                    }
-                }
-            }
-            else
-            {
-                throw new ArgumentException("Current Source account & Target Account can't be null.");
-            }
-            return true;
         }
     }
 }

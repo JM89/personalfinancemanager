@@ -14,8 +14,6 @@ namespace PFM.Services.Interfaces
 
         AtmWithdrawDetails GetById(int id);
 
-        Task<bool> EditAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails);
-
         void CloseAtmWithdraw(int id);
 
         Task<bool> DeleteAtmWithdraw(int id);

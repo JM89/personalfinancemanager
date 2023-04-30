@@ -42,12 +42,6 @@ namespace PersonalFinanceManager.Services
             return AutoMapper.Mapper.Map<IncomeEditModel>(response);
         }
 
-        public async Task<bool> EditIncome(IncomeEditModel model)
-        {
-            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Income.IncomeDetails>(model);
-            return await _httpClientExtended.Put($"/Income/Edit/{model.Id}", dto);
-        }
-
         public async Task<bool> DeleteIncome(int id)
         {
             return await _httpClientExtended.Delete($"/Income/Delete/{id}");

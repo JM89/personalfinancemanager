@@ -33,12 +33,6 @@ namespace PFM.Api.Controllers
             return await _atmWithdrawService.CreateAtmWithdraw(createdObj);
         }
         
-        [HttpPut("Edit/{id}")]
-        public async Task<bool> Put(int id, [FromBody]AtmWithdrawDetails editedObj)
-        {
-            return await _atmWithdrawService.EditAtmWithdraw(editedObj);
-        }
-        
         [HttpDelete("Delete/{id}")]
         public async Task<bool> Delete(int id)
         {

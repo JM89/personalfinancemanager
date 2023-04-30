@@ -33,12 +33,6 @@ namespace PFM.Api.Controllers
             return await _savingService.CreateSaving(createdObj);
         }
         
-        [HttpPut("Edit/{id}")]
-        public async Task<bool> Put(int id, [FromBody]SavingDetails editedObj)
-        {
-            return await _savingService.EditSaving(editedObj);
-        }
-        
         [HttpDelete("Delete/{id}")]
         public async Task<bool> Delete(int id)
         {

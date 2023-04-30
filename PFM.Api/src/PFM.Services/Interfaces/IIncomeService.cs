@@ -14,8 +14,6 @@ namespace PFM.Services.Interfaces
 
         IncomeDetails GetById(int id);
 
-        Task<bool> EditIncome(IncomeDetails incomeDetails);
-
         Task<bool> DeleteIncome(int id);
     }
 }

@@ -13,8 +13,6 @@ namespace PersonalFinanceManager.Services.Interfaces
 
         Task<bool> CreateExpenditure(ExpenditureEditModel expenditureEditModel);
 
-        Task<bool> EditExpenditure(ExpenditureEditModel expenditureEditModel);
-
         Task<bool> DeleteExpenditure(int id);
 
         Task<ExpenditureEditModel> GetById(int id);

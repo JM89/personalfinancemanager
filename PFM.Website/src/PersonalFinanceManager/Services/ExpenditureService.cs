@@ -32,12 +32,6 @@ namespace PersonalFinanceManager.Services
             var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Expense.ExpenseDetails>(model);
             return await _httpClientExtended.Post($"/Expense/Create", dto);
         }
-        
-        public async Task<bool> EditExpenditure(ExpenditureEditModel model)
-        {
-            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Expense.ExpenseDetails>(model);
-            return await _httpClientExtended.Put($"/Expense/Edit/{model.Id}", dto);
-        }
 
         public async Task<bool> DeleteExpenditure(int id)
         {

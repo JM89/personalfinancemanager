@@ -34,13 +34,7 @@ namespace PFM.Api.Controllers
         {
             return await _expenseService.CreateExpenses(createdObjs);
         }
-
-        [HttpPut("Edit/{id}")]
-        public async Task<bool> Put(int id, [FromBody]ExpenseDetails editedObj)
-        {
-            return await _expenseService.EditExpense(editedObj);
-        }
-        
+       
         [HttpDelete("Delete/{id}")]
         public async Task<bool> Delete(int id)
         {

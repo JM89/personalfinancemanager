@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COUNT_ATTEMPT=20
+COUNT_ATTEMPT=50
 
 echo "Attempt to connect to the DB server: $DB_SERVER_NAME,$DB_SERVER_PORT"
 for ((n=$COUNT_ATTEMPT;n>0;n--)) ; do
@@ -9,7 +9,7 @@ for ((n=$COUNT_ATTEMPT;n>0;n--)) ; do
         break
     fi
     echo "Next connection attempt in 1s"
-    sleep 1
+    sleep 5
 done
 
 [[ $n == 0 ]] && echo "Failed connection to DB server: $DB_SERVER_NAME,$DB_SERVER_PORT" && exit 1
