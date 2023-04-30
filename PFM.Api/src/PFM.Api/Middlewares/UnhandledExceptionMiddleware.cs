@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Serilog.Context;
 using SerilogTimings;
-using System.Threading.Tasks;
 
 namespace PFM.Api.Middlewares
 {
     public class TimedOperationMiddleware
     {
         private readonly RequestDelegate _next;
+
+        private readonly string StatusCodeLogProperty = "StatusCode";
 
         public TimedOperationMiddleware(RequestDelegate next)
         {
@@ -18,6 +19,8 @@ namespace PFM.Api.Middlewares
             using (var op = Operation.Begin($"{httpContext.Request.Method} {httpContext.Request.Path}"))
             {
                 await _next(httpContext);
+
+                LogContext.PushProperty(StatusCodeLogProperty, httpContext.Response.StatusCode);
                 op.Complete();
             }
         }

@@ -36,7 +36,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired)
+                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
                 {
                     _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
                 }
@@ -71,7 +71,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
            
             try
             {
-                if (opts.AuthenticationTokenRequired)
+                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
                 {
                     _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
                 }
@@ -107,7 +107,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try 
             {
-                if (opts.AuthenticationTokenRequired)
+                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
                 {
                     _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
                 }
@@ -148,7 +148,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired)
+                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
                 {
                     _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
                 }
@@ -185,7 +185,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired)
+                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
                 {
                     _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
                 }
@@ -219,7 +219,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired)
+                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
                 {
                     _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
                 }
@@ -255,7 +255,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired)
+                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
                 {
                     _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
                 }
