@@ -10,6 +10,7 @@ namespace PFM.UnitTests.Helpers
         {
             var model = new BudgetPlanDetails()
             {
+                Id = 1,
                 ExpenseTypes = new List<BudgetPlanExpenseType>()
              };
             foreach (var expenditureType in expenditureTypes)

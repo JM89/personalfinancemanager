@@ -169,7 +169,7 @@ namespace PFM.Services.Interfaces.Services
                 throw new ArgumentException("Account can't be null.");
             }
 
-            if (budgetPlan.Id == 0)
+            if (budgetPlan?.Id == 0)
             {
                 budgetPlan = null;
             }
