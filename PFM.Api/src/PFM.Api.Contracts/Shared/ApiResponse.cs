@@ -8,6 +8,8 @@ namespace PFM.Api.Contracts.Shared
 
         public IDictionary<string, List<string>> Errors { get; set; }
 
+        public ApiResponse() { }
+
         public ApiResponse(object data)
         {
             this.Data = data;

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PersonalFinanceManager.Services.Exceptions;
+using PFM.Api.Contracts.Shared;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -43,15 +44,8 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
                 var endpoint = _apiBaseUrl + url;
                 var httpResponse = await _httpClient.GetAsync(endpoint);
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    var content = await httpResponse.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<IList<TResult>>(content).ToList();
-                }
-                else
-                {
-                    throw new ApiException(url, httpResponse.StatusCode.ToString());
-                }
+
+                result = await ReadApiResponse<IList<TResult>>(httpResponse, url);
             }
             catch (Exception ex)
             {
@@ -67,6 +61,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
             {
                 opts = new HttpClientRequestOptions();
             }
+
             TResult result = default(TResult);
            
             try
@@ -78,15 +73,8 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
                 var endpoint = _apiBaseUrl + url;
                 var httpResponse = await _httpClient.GetAsync(endpoint);
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    var content = await httpResponse.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<TResult>(content);
-                }
-                else
-                {
-                    throw new ApiException(url, httpResponse.StatusCode.ToString());
-                }
+
+                result = await ReadApiResponse<TResult>(httpResponse, url);
             }
             catch (Exception ex)
             {
@@ -115,15 +103,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 var json = JsonConvert.SerializeObject(searchParameters);
                 var requestBody = new StringContent(json, Encoding.UTF8, "application/json");
                 var httpResponse = await _httpClient.PostAsync(endpoint, requestBody);
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    var content = await httpResponse.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<IList<TResult>>(content).ToList();
-                }
-                else
-                {
-                    throw new ApiException(url, httpResponse.StatusCode.ToString());
-                }
+                result = await ReadApiResponse<IList<TResult>>(httpResponse, url);
             }
             catch (Exception ex)
             {
@@ -157,15 +137,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 var json = JsonConvert.SerializeObject(obj);
                 var requestBody = new StringContent(json, Encoding.UTF8, "application/json");
                 var httpResponse = await _httpClient.PostAsync(endpoint, requestBody);
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    var content = await httpResponse.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<TResult>(content);
-                }
-                else
-                {
-                    throw new ApiException(url, httpResponse.StatusCode.ToString());
-                }
+                result = await ReadApiResponse<TResult>(httpResponse, url);
             }
             catch (Exception ex)
             {
@@ -278,6 +250,19 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 _logger.Error(ex, "Unhandled exception occurred while calling Delete method");
                 throw;
             }
+        }
+
+        private async Task<TResult> ReadApiResponse<TResult>(HttpResponseMessage httpResponse, string url)
+        {
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(content);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                throw new ApiException(url, httpResponse.StatusCode.ToString(), apiResponse.Errors);
+            }
+
+            return (TResult)Convert.ChangeType(apiResponse.Data, typeof(TResult));
         }
 
         private string GetAccessToken()
