@@ -29,22 +29,5 @@ namespace PersonalFinanceManager.Services
             var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Currency.CurrencyDetails>($"/Currency/Get/{id}");
             return AutoMapper.Mapper.Map<CurrencyEditModel>(response);
         }
-
-        public async Task<bool> CreateCurrency(CurrencyEditModel model)
-        {
-            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Currency.CurrencyDetails>(model);
-            return await _httpClientExtended.Post($"/Currency/Create", dto);
-        }
-
-        public async Task<bool> EditCurrency(CurrencyEditModel model)
-        {
-            var dto = AutoMapper.Mapper.Map<PFM.Api.Contracts.Currency.CurrencyDetails>(model);
-            return await _httpClientExtended.Put($"/Currency/Edit/{model.Id}", dto);
-        }
-
-        public async Task<bool> DeleteCurrency(int id)
-        {
-            return await _httpClientExtended.Delete($"/Currency/Delete/{id}");
-        }
     }
 }

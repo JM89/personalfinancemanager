@@ -297,7 +297,6 @@
     <Compile Include="Controllers\IncomeController.cs" />
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BankAccountController.cs" />
-    <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\ExpenditureController.cs" />
     <Compile Include="Controllers\ExpenditureTypeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

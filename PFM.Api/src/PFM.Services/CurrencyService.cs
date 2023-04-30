@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using PFM.Services.Interfaces;
-using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DataAccessLayer.Entities;
+﻿using AutoMapper;
 using PFM.Api.Contracts.Currency;
+using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PFM.Services
 {
@@ -54,26 +53,6 @@ namespace PFM.Services
             }
 
             return Mapper.Map<CurrencyDetails>(currency);
-        }
-
-        public void CreateCurrency(CurrencyDetails currencyDetails)
-        {
-            var currency = Mapper.Map<Currency>(currencyDetails);
-            _currencyRepository.Create(currency);
-        }
-
-        public void EditCurrency(CurrencyDetails currencyDetails)
-        {
-            var currency = _currencyRepository.GetById(currencyDetails.Id); 
-            currency.Name = currencyDetails.Name;
-            currency.Symbol = currencyDetails.Symbol;
-            _currencyRepository.Update(currency);
-        }
-
-        public void DeleteCurrency(int id)
-        {
-            var currency = _currencyRepository.GetById(id);
-            _currencyRepository.Delete(currency);
         }
     }
 }
