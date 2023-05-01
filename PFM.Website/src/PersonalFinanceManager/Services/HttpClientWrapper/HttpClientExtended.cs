@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PersonalFinanceManager.Services.Exceptions;
 using PFM.Api.Contracts.Shared;
 using System;
@@ -37,10 +38,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
-                {
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
-                }
+                SetAuthorizationHeader(opts);
 
                 var endpoint = _apiBaseUrl + url;
                 var httpResponse = await _httpClient.GetAsync(endpoint);
@@ -66,10 +64,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
            
             try
             {
-                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
-                {
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
-                }
+                SetAuthorizationHeader(opts);
 
                 var endpoint = _apiBaseUrl + url;
                 var httpResponse = await _httpClient.GetAsync(endpoint);
@@ -95,10 +90,8 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try 
             {
-                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
-                {
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
-                }
+                SetAuthorizationHeader(opts);
+
                 var endpoint = _apiBaseUrl + url;
                 var json = JsonConvert.SerializeObject(searchParameters);
                 var requestBody = new StringContent(json, Encoding.UTF8, "application/json");
@@ -115,7 +108,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
         public async Task<bool> Post<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null)
         {
-            return await Post<TObject, object>(url, obj, opts) != null;
+            return await Post<TObject, bool>(url, obj, opts);
         }
 
         public async Task<TResult> Post<TObject, TResult>(string url, TObject obj, HttpClientRequestOptions opts = null)
@@ -128,10 +121,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
-                {
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
-                }
+                SetAuthorizationHeader(opts);
 
                 var endpoint = _apiBaseUrl + url;
                 var json = JsonConvert.SerializeObject(obj);
@@ -157,10 +147,8 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
-                {
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
-                }
+                SetAuthorizationHeader(opts);
+
                 var endpoint = _apiBaseUrl + url;
 
                 var httpResponse = await _httpClient.PostAsync(endpoint, null);
@@ -191,10 +179,8 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
-                {
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
-                }
+                SetAuthorizationHeader(opts);
+
                 var endpoint = _apiBaseUrl + url;
 
                 var json = JsonConvert.SerializeObject(obj);
@@ -227,10 +213,7 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
             try
             {
-                if (opts.AuthenticationTokenRequired && !_httpClient.DefaultRequestHeaders.Contains("Authorization"))
-                {
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
-                }
+                SetAuthorizationHeader(opts);
 
                 var endpoint = _apiBaseUrl + url;
                 var httpResponse = await _httpClient.DeleteAsync(endpoint);
@@ -262,7 +245,28 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
                 throw new ApiException(url, httpResponse.StatusCode.ToString(), apiResponse.Errors);
             }
 
-            return (TResult)Convert.ChangeType(apiResponse.Data, typeof(TResult));
+            if (apiResponse.Data == null)
+            {
+                return default(TResult);
+            }
+
+            if (typeof(TResult) == typeof(bool) && bool.TryParse(apiResponse.Data.ToString(), out bool bResult))
+            {
+                return (TResult)Convert.ChangeType(bResult, typeof(TResult));
+            }
+
+            return JsonConvert.DeserializeObject<TResult>(apiResponse.Data.ToString()); 
+        }
+
+        private void SetAuthorizationHeader(HttpClientRequestOptions opts = null)
+        {
+            if (!opts.AuthenticationTokenRequired)
+                return;
+
+            if (_httpClient.DefaultRequestHeaders.Contains("Authorization"))
+                _httpClient.DefaultRequestHeaders.Remove("Authorization");
+
+            _httpClient.DefaultRequestHeaders.Add("Authorization", GetAccessToken());
         }
 
         private string GetAccessToken()
