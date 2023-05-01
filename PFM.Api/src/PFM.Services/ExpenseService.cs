@@ -125,7 +125,7 @@ namespace PFM.Services.Interfaces.Services
             return mappedExpenses.ToList();
         }
 
-        public ExpenseSummary GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan)
+        public ExpenseSummary GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate)
         {
             var account = _bankAccountRepository.GetById(accountId, x => x.Bank, x => x.Currency);
 
@@ -139,11 +139,10 @@ namespace PFM.Services.Interfaces.Services
                 budgetPlan = null;
             }
 
-            var today = DateTime.Now;
-            var over12MonthsInterval = new Interval(today, DateTimeUnitEnums.Years, 1);
-            var over6MonthsInterval = new Interval(today, DateTimeUnitEnums.Months, 6);
-            var currentMonthInterval = new Interval(today, today);
-            var previousInterval = new Interval(today, DateTimeUnitEnums.Months, 1);
+            var over12MonthsInterval = new Interval(referenceDate, DateTimeUnitEnums.Years, 1);
+            var over6MonthsInterval = new Interval(referenceDate, DateTimeUnitEnums.Months, 6);
+            var currentMonthInterval = new Interval(referenceDate, referenceDate);
+            var previousInterval = new Interval(referenceDate, DateTimeUnitEnums.Months, 1);
 
             var categories = _ExpenseTypeRepository.GetList2().GroupBy(x => x.Id).ToDictionary(x => x.Key, y => y.Single());
 
@@ -162,7 +161,7 @@ namespace PFM.Services.Interfaces.Services
             over12MonthsInterval.StartDate = DateTimeFormatHelper.GetFirstDayOfMonth(
                 expenses.Any() ?
                 expenses.OrderBy(x => x.DateExpense).First().DateExpense :
-                today);
+                referenceDate);
 
             // Count the number of months in the interval
             var nbMonthInterval = over12MonthsInterval.Count(DateTimeUnitEnums.Months);
@@ -263,8 +262,8 @@ namespace PFM.Services.Interfaces.Services
             {
                 Account = Mapper.Map<AccountDetails>(account),
                 ExpensesByCategory = expensesByCategory.OrderByDescending(x => x.CostCurrentMonth).ToList(),
-                LabelCurrentMonth = DateTimeFormatHelper.GetMonthNameAndYear(today),
-                LabelPreviousMonth = DateTimeFormatHelper.GetMonthNameAndYear(today.AddMonths(-1)),
+                LabelCurrentMonth = DateTimeFormatHelper.GetMonthNameAndYear(referenceDate),
+                LabelPreviousMonth = DateTimeFormatHelper.GetMonthNameAndYear(referenceDate.AddMonths(-1)),
                 BudgetPlanName = budgetPlan != null ? budgetPlan.Name : string.Empty,
                 AccountName = account.Name,
                 DisplayDashboard = true,

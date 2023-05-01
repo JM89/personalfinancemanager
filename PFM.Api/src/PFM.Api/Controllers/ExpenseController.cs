@@ -56,7 +56,7 @@ namespace PFM.Api.Controllers
         [HttpPost("GetExpenseSummary/{accountId}")]
         public ExpenseSummary GetExpenseSummary(int accountId, [FromBody]BudgetPlanDetails budgetPlan)
         {
-            return _expenseService.GetExpenseSummary(accountId, budgetPlan);
+            return _expenseService.GetExpenseSummary(accountId, budgetPlan, DateTime.Now);
         }
 
         [HttpPost("GetExpenses")]

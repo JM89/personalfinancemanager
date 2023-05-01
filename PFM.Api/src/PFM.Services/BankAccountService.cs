@@ -2,6 +2,7 @@
 using PFM.Api.Contracts.Account;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Core.Exceptions;
 using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.Interfaces;
@@ -95,7 +96,28 @@ namespace PFM.Services
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var account = _bankAccountRepository.GetListAsNoTracking().SingleOrDefault(x => x.Id == accountDetails.Id);
+                var account = _bankAccountRepository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
+
+                var businessException = new BusinessException();
+
+                if (account.Currency.Id != accountDetails.CurrencyId)
+                {
+                    businessException.AddErrorMessage(nameof(account.Currency), "Currency cannot be modified on an existing account");
+                }
+
+                if (account.Bank.Id != accountDetails.BankId)
+                {
+                    businessException.AddErrorMessage(nameof(account.Bank), "Bank cannot be modified on an existing account");
+                }
+
+                if (account.User_Id != userId)
+                {
+                    businessException.AddErrorMessage(nameof(account.User_Id), "User cannot be modified on an existing account");
+                }
+
+                if (businessException.HasError())
+                    throw businessException;
+
                 account = Mapper.Map<Account>(accountDetails);
                 account.User_Id = userId;
                 _bankAccountRepository.Update(account);

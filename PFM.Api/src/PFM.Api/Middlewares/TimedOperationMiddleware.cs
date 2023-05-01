@@ -1,39 +1,28 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Net;
-using System.Threading.Tasks;
+﻿using Serilog.Context;
+using SerilogTimings;
 
 namespace PFM.Api.Middlewares
 {
-    public class UnhandledExceptionMiddleware
+    public class TimedOperationMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly Serilog.ILogger _logger;
 
-        public UnhandledExceptionMiddleware(RequestDelegate next, Serilog.ILogger logger)
+        private readonly string StatusCodeLogProperty = "StatusCode";
+
+        public TimedOperationMiddleware(RequestDelegate next)
         {
-            _logger = logger;
             _next = next;
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            try
+            using (var op = Operation.Begin($"{httpContext.Request.Method} {httpContext.Request.Path}"))
             {
                 await _next(httpContext);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Unhandled exception occurred");
-                await HandleExceptionAsync(httpContext);
-            }
-        }
 
-        private async Task HandleExceptionAsync(HttpContext context)
-        {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync($"Go check the application logs!");
+                LogContext.PushProperty(StatusCodeLogProperty, httpContext.Response.StatusCode);
+                op.Complete();
+            }
         }
     }
 }

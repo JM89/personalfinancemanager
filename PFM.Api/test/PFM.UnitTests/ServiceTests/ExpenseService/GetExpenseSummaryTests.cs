@@ -24,13 +24,13 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
                 ExpenseTypeHelper.CreateExpenseTypeModel(2, "Energy")
             };
             var i = 1;
-            var now = DateTime.Now;
-            var oneMonthAgo = DateTime.Now.AddMonths(-1);
-            var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+            var now = new DateTime(2022, 4, 15);
+            var oneMonthAgo = now.AddMonths(-1);
+            var twoMonthsAgo = now.AddMonths(-2);
             var nowName = DateTimeFormatHelper.GetMonthNameAndYear(now);
             var oneMonthAgoName = DateTimeFormatHelper.GetMonthNameAndYear(oneMonthAgo);
             var twoMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(twoMonthsAgo);
-            var threeMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(DateTime.Now.AddMonths(-3));
+            var threeMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(now.AddMonths(-3));
             var expenses = new List<Expense>()
             {
                 ExpenseHelper.CreateExpenseModel(i++, now, 100, 1),
@@ -50,7 +50,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null);
+            var result = service.GetExpenseSummary(1, null, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -120,13 +120,13 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
                 ExpenseTypeHelper.CreateExpenseTypeModel(2, "Energy")
             };
             var i = 1;
-            var now = DateTime.Now;
-            var oneMonthAgo = DateTime.Now.AddMonths(-1);
-            var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+            var now = new DateTime(2022, 4, 15);
+            var oneMonthAgo = now.AddMonths(-1);
+            var twoMonthsAgo = now.AddMonths(-2);
             var nowName = DateTimeFormatHelper.GetMonthNameAndYear(now);
             var oneMonthAgoName = DateTimeFormatHelper.GetMonthNameAndYear(oneMonthAgo);
             var twoMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(twoMonthsAgo);
-            var threeMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(DateTime.Now.AddMonths(-3));
+            var threeMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(now.AddMonths(-3));
             var expenses = new List<Expense>()
             {
                 ExpenseHelper.CreateExpenseModel(i++, now, 100, 1),
@@ -157,7 +157,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null);
+            var result = service.GetExpenseSummary(1, null, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -201,13 +201,13 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
                 ExpenseTypeHelper.CreateExpenseTypeModel(2, "Energy")
             };
             var i = 1;
-            var now = DateTime.Now;
-            var oneMonthAgo = DateTime.Now.AddMonths(-1);
-            var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+            var now = new DateTime(2022, 4, 15);
+            var oneMonthAgo = now.AddMonths(-1);
+            var twoMonthsAgo = now.AddMonths(-2);
             var nowName = DateTimeFormatHelper.GetMonthNameAndYear(now);
             var oneMonthAgoName = DateTimeFormatHelper.GetMonthNameAndYear(oneMonthAgo);
             var twoMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(twoMonthsAgo);
-            var threeMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(DateTime.Now.AddMonths(-3));
+            var threeMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(now.AddMonths(-3));
             var expenses = new List<Expense>()
             {
                 ExpenseHelper.CreateExpenseModel(i++, now, 100, 1),
@@ -221,7 +221,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null);
+            var result = service.GetExpenseSummary(1, null, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -284,9 +284,9 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
                 ExpenseTypeHelper.CreateExpenseTypeListModel(2, "Energy")
             };
             var i = 1;
-            var now = DateTime.Now;
-            var oneMonthAgo = DateTime.Now.AddMonths(-1);
-            var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+            var now = new DateTime(2022, 4, 15);
+            var oneMonthAgo = now.AddMonths(-1);
+            var twoMonthsAgo = now.AddMonths(-2);
             var expenses = new List<Expense>()
             {
                 ExpenseHelper.CreateExpenseModel(i++, now, 100, 1),
@@ -308,7 +308,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, budgetPlan);
+            var result = service.GetExpenseSummary(1, budgetPlan, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -340,9 +340,9 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
                 ExpenseTypeHelper.CreateExpenseTypeListModel(1, "Food")
             };
             var i = 1;
-            var now = DateTime.Now;
-            var oneMonthAgo = DateTime.Now.AddMonths(-1);
-            var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+            var now = new DateTime(2022, 4, 15);
+            var oneMonthAgo = now.AddMonths(-1);
+            var twoMonthsAgo = now.AddMonths(-2);
             var expenses = new List<Expense>()
             {
                 ExpenseHelper.CreateExpenseModel(i++, now, 100, 1),
@@ -364,7 +364,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, budgetPlan);
+            var result = service.GetExpenseSummary(1, budgetPlan, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -388,11 +388,12 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
             var incomes = new List<Income>();
             var savings = new List<Saving>();
 
+            var now = new DateTime(2022, 4, 15);
             var service = SetupExpenseService(account, typeEntities, expenses, incomes, savings);
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null);
+            var result = service.GetExpenseSummary(1, null, now);
 
             // Assert
             Assert.False(result.HasCategories);
@@ -419,13 +420,13 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
                 ExpenseTypeHelper.CreateExpenseTypeModel(1, "Food"),
                 ExpenseTypeHelper.CreateExpenseTypeModel(2, "Energy")
             };
-            var now = DateTime.Now;
-            var oneMonthAgo = DateTime.Now.AddMonths(-1);
-            var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+            var now = new DateTime(2022, 4, 15);
+            var oneMonthAgo = now.AddMonths(-1);
+            var twoMonthsAgo = now.AddMonths(-2);
             var nowName = DateTimeFormatHelper.GetMonthNameAndYear(now);
             var oneMonthAgoName = DateTimeFormatHelper.GetMonthNameAndYear(oneMonthAgo);
             var twoMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(twoMonthsAgo);
-            var threeMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(DateTime.Now.AddMonths(-3));
+            var threeMonthsAgoName = DateTimeFormatHelper.GetMonthNameAndYear(now.AddMonths(-3));
             var expenses = new List<Expense>();
             var incomes = new List<Income>();
             var savings = new List<Saving>();
@@ -434,7 +435,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null);
+            var result = service.GetExpenseSummary(1, null, now);
 
             // Assert
 
