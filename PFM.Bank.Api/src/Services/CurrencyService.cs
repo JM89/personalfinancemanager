@@ -10,18 +10,10 @@ namespace PFM.Services
     public class CurrencyService : ICurrencyService
     {
         private readonly ICurrencyRepository _currencyRepository;
-        private readonly ISalaryRepository _salaryRepository;
-        private readonly IPensionRepository _pensionRepository;
-        private readonly ITaxRepository _taxRepository;
-        private readonly IBankAccountRepository _bankAccountRepository;
 
-        public CurrencyService(ICurrencyRepository currencyRepository, IPensionRepository pensionRepository, ITaxRepository taxRepository, ISalaryRepository salaryRepository, IBankAccountRepository bankAccountRepository)
+        public CurrencyService(ICurrencyRepository currencyRepository)
         {
             this._currencyRepository = currencyRepository;
-            this._bankAccountRepository = bankAccountRepository;
-            this._salaryRepository = salaryRepository;
-            this._pensionRepository = pensionRepository;
-            this._taxRepository = taxRepository;
         }
 
         public IList<CurrencyList> GetCurrencies()
@@ -32,12 +24,7 @@ namespace PFM.Services
 
             mappedCurrencies.ForEach(currency =>
             {
-                var hasAccount = _bankAccountRepository.GetList().Any(x => x.CurrencyId == currency.Id);
-                var hasSalary = _salaryRepository.GetList().Any(x => x.CurrencyId == currency.Id);
-                var hasPension = _pensionRepository.GetList().Any(x => x.CurrencyId == currency.Id);
-                var hasTax = _taxRepository.GetList().Any(x => x.CurrencyId == currency.Id);
-
-                currency.CanBeDeleted = !hasAccount && !hasSalary && !hasPension && !hasTax;
+                currency.CanBeDeleted = false;
             });
 
             return mappedCurrencies;

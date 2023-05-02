@@ -16,18 +16,11 @@ namespace PFM.Services
     public class BankAccountService: IBankAccountService
     {
         private readonly IBankAccountRepository _bankAccountRepository;
-        private readonly IExpenseRepository _expenditureRepository;
-        private readonly IIncomeRepository _incomeRepository;
-        private readonly IAtmWithdrawRepository _atmWithdrawRepository;
         private readonly IEventPublisher _eventPublisher;
 
-        public BankAccountService(IBankAccountRepository bankAccountRepository, IExpenseRepository expenditureRepository, IIncomeRepository incomeRepository,
-            IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+        public BankAccountService(IBankAccountRepository bankAccountRepository, IEventPublisher eventPublisher)
         {
             this._bankAccountRepository = bankAccountRepository;
-            this._expenditureRepository = expenditureRepository;
-            this._incomeRepository = incomeRepository;
-            this._atmWithdrawRepository = atmWithdrawRepository;
             this._eventPublisher = eventPublisher;
         }
 
@@ -70,11 +63,8 @@ namespace PFM.Services
 
             mappedAccounts.ForEach(account =>
             {
-                var hasExpenditures = _expenditureRepository.GetList().Any(x => x.AccountId == account.Id);
-                var hasIncome = _incomeRepository.GetList().Any(x => x.AccountId == account.Id);
-                var hasAtmWithdraw = _atmWithdrawRepository.GetList().Any(x => x.AccountId == account.Id);
-
-                account.CanBeDeleted = !hasExpenditures && !hasIncome && !hasAtmWithdraw;
+                // TODO: If we ever need some control over this, we need an endpoint to call to check if any movements were done already.
+                account.CanBeDeleted = false;
             });
 
             return mappedAccounts;
