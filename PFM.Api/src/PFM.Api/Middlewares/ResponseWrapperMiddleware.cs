@@ -31,7 +31,7 @@ namespace PFM.Api.Middlewares
         {
             var currentBody = context.Response.Body;
 
-            if (ignoreRules.Contains(context.Request.Path) || currentBody.GetType().Name != "HttpResponseStream")
+            if (ignoreRules.Contains(context.Request.Path))
             {
                 await _next(context);
                 return;

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.IdentityModel.Tokens;
 using PFM.Bank.Api.Services.ExternalServices.AuthApi;
 
 namespace Api.Filters
@@ -22,7 +23,7 @@ namespace Api.Filters
             bool result = false;
             try
             {
-                string token = null;
+                string token = string.Empty;
                 if (context.HttpContext.Request.Headers.ContainsKey("Authorization"))
                 {
                     var authorizationHeader = context.HttpContext.Request.Headers["Authorization"];
@@ -32,14 +33,14 @@ namespace Api.Filters
                     }
                 }
 
-                if (token != null)
+                if (!token.IsNullOrEmpty())
                 {
                     result = await _authApi.ValidateToken(token);
                 }
             }
             catch(Exception ex)
             {
-                _logger.Error("Auth API thrown an exception");
+                _logger.Error(ex, "Authentication API thrown an exception");
             }
 
             if (!result)

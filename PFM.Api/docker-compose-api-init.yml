@@ -35,3 +35,24 @@ services:
       - "5000:5000"
     networks:
       - local-network
+
+  pfm-bank-api:
+    build:
+      context: ../PFM.Bank.Api
+      dockerfile: Dockerfile
+      args:
+        - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    environment:
+      ASPNETCORE_URLS: http://+:50001
+      ASPNETCORE_ENVIRONMENT: Development
+      APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
+      APP_ConnectionStrings__PFMConnection: Server=db-server,1433;Database=PFM_BANK_DB;User Id=PFM_BANK_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
+      APP_AppSettings__AwsEndpointUrl: http://pfm-auth-api:5000
+      APP_AuthApi__EndpointUrl:
+      AWS_ACCESS_KEY_ID: XX
+      AWS_SECRET_ACCESS_KEY: XX
+    container_name: pfm-bank-api
+    ports:
+      - "50001:50001"
+    networks:
+      - local-network

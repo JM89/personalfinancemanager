@@ -11,7 +11,10 @@ namespace Api.Middlewares
         private readonly RequestDelegate _next;
         private readonly Serilog.ILogger _logger;
         private readonly List<string> ignoreRules = new List<string> {
-            "/swagger/v1/swagger.json"
+            "/swagger/v1/swagger.json",
+            "/swagger/index.html",
+            "/swagger",
+            "/"
         };
 
         private readonly JsonSerializerSettings _serializeOptions = new JsonSerializerSettings
@@ -29,10 +32,17 @@ namespace Api.Middlewares
         {
             var currentBody = context.Response.Body;
 
-            if (ignoreRules.Contains(context.Request.Path) || currentBody.GetType().Name != "HttpResponseStream")
+            try
             {
-                await _next(context);
-                return;
+                if (context.Request.Path.HasValue && ignoreRules.Any(x => context.Request.Path.Value.StartsWith(x)))
+                {
+                    await _next(context);
+                    return;
+                }
+            }
+            catch(Exception ex)
+            {
+                await HandleExceptions(context, ex);
             }
 
             using (var memoryStream = new MemoryStream())
@@ -65,12 +75,17 @@ namespace Api.Middlewares
                     context.Response.Body = currentBody;
                     memoryStream.Seek(0, SeekOrigin.Begin);
 
-                    _logger.Error(ex, "Unhandled exception occurred");
-                    context.Response.ContentType = "application/json";
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiResponse("Unhandled exception occurred"), _serializeOptions));
+                    await HandleExceptions(context, ex);
                 }
             }
+        }
+
+        private async Task HandleExceptions(HttpContext context, Exception ex)
+        {
+            _logger.Error(ex, "Unhandled exception occurred");
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiResponse("Unhandled exception occurred"), _serializeOptions));
         }
     }
 }

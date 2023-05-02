@@ -21,6 +21,7 @@ namespace PFM.Api
 
             builder.Services
                 .AddAuthenticationAndAuthorization(builder.Configuration)
+                .AddBankApi(builder.Configuration)
                 .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition()

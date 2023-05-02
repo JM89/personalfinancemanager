@@ -48,7 +48,7 @@ namespace PFM.Services
         {
             Validate(bankDetails);
 
-            var bank = Mapper.Map<Bank>(bankDetails);
+            var bank = Mapper.Map<PFM.DataAccessLayer.Entities.Bank>(bankDetails);
             _bankRepository.Create(bank);
         }
 
@@ -69,7 +69,7 @@ namespace PFM.Services
             Validate(bankDetails);
 
             var bank = _bankRepository.GetListAsNoTracking().SingleOrDefault(x => x.Id == bankDetails.Id);
-            bank = Mapper.Map<Bank>(bankDetails);
+            bank = Mapper.Map<PFM.DataAccessLayer.Entities.Bank>(bankDetails);
             _bankRepository.Update(bank);
         }
 
