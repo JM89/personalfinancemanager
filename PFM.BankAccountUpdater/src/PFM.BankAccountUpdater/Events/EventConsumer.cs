@@ -1,7 +1,8 @@
 ﻿using EventStore.Client;
+using PFM.Bank.Event.Contracts;
+using PFM.Bank.Event.Contracts.Interfaces;
 using PFM.BankAccountUpdater.Events.Interface;
 using PFM.BankAccountUpdater.Events.Settings;
-using PFM.BankAccountUpdater.Handlers;
 using PFM.BankAccountUpdater.Handlers.Interfaces;
 using Polly;
 using System.Text.Json;
@@ -18,8 +19,8 @@ namespace PFM.BankAccountUpdater.Events
 
         private readonly IEventDispatcher _eventDispatcher;
 
-        private static string AssemblyName = typeof(Program).Assembly.GetName().Name ?? "";
-        private static string EventTypeNamespace = $"{AssemblyName}.Handlers.EventTypes";
+        private static string AssemblyName = typeof(BankAccountCreated).Assembly.GetName().Name ?? "";
+        private static string EventTypeNamespace = "PFM.Bank.Event.Contracts";
 
         public EventConsumer(Serilog.ILogger logger, IEventDispatcher eventDispatcher, EventStorePersistentSubscriptionsClient client, EventStoreConsumerSettings settings)
         {
@@ -73,6 +74,12 @@ namespace PFM.BankAccountUpdater.Events
             }
 
             var receivedEvent = JsonSerializer.Deserialize(System.Text.Encoding.UTF8.GetString(evt.Event.Data.Span), type) as IEvent;
+
+            if (receivedEvent == null)
+            {
+                _logger.Error("Received event is null");
+                throw new ArgumentNullException("Received event is null");
+            }
 
             _eventDispatcher.Dispatch(receivedEvent);
 

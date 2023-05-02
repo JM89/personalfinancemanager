@@ -1,4 +1,5 @@
-﻿using PFM.BankAccountUpdater.Handlers.Interfaces;
+﻿using PFM.Bank.Event.Contracts.Interfaces;
+using PFM.BankAccountUpdater.Handlers.Interfaces;
 
 namespace PFM.BankAccountUpdater.Handlers
 {
