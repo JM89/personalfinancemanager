@@ -16,14 +16,14 @@ done
 
 echo "Successful connection to DB server: $DB_SERVER_NAME,$DB_SERVER_PORT"
 
-echo "Run 01_create_main_db_if_not_exists.sql script"
-/opt/mssql-tools/bin/sqlcmd -S "$DB_SERVER_NAME,$DB_SERVER_PORT" -U SA -P "$DB_SA_PASSWORD" -i scripts/01_create_main_db_if_not_exists.sql
+echo "Run 01_create_db_if_not_exists.sql script"
+/opt/mssql-tools/bin/sqlcmd -S "$DB_SERVER_NAME,$DB_SERVER_PORT" -U SA -P "$DB_SA_PASSWORD" -i scripts/01_create_db_if_not_exists.sql
 
-echo "Run 02_create_pfmapi_user_if_not_exists.sql script"
-/opt/mssql-tools/bin/sqlcmd -S "$DB_SERVER_NAME,$DB_SERVER_PORT" -U SA -P "$DB_SA_PASSWORD" -i scripts/02_create_pfmapi_user_if_not_exists.sql
+echo "Run 02_create_user_if_not_exists.sql script"
+/opt/mssql-tools/bin/sqlcmd -S "$DB_SERVER_NAME,$DB_SERVER_PORT" -U SA -P "$DB_SA_PASSWORD" -i scripts/02_create_user_if_not_exists.sql
 
-echo "Run 03_create_main_db_schema.sql script"
-/opt/mssql-tools/bin/sqlcmd -S "$DB_SERVER_NAME,$DB_SERVER_PORT" -U SA -P "$DB_SA_PASSWORD" -i scripts/03_create_main_db_schema.sql
+echo "Run 03_create_db_schema.sql script"
+/opt/mssql-tools/bin/sqlcmd -S "$DB_SERVER_NAME,$DB_SERVER_PORT" -U SA -P "$DB_SA_PASSWORD" -i scripts/03_create_db_schema.sql
 
 echo "Run 04_add_seed_data.sql script"
 /opt/mssql-tools/bin/sqlcmd -S "$DB_SERVER_NAME,$DB_SERVER_PORT" -U SA -P "$DB_SA_PASSWORD" -i scripts/04_add_seed_data.sql
