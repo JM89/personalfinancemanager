@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PFM.Services.Interfaces
+namespace Services.Interfaces
 {
     public interface IBankAccountService : IBaseService
     {

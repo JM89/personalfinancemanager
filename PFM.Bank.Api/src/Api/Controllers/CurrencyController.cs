@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Bank.Api.Contracts.Currency;
-using PFM.Services.Interfaces;
+using Services.Interfaces;
 
 namespace Api.Controllers
 {

@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PFM.DataAccessLayer.Entities;
+﻿using DataAccessLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace PFM.DataAccessLayer
+namespace DataAccessLayer
 {
     public class PFMContext: DbContext
     {

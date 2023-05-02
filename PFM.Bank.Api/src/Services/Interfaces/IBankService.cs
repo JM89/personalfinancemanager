@@ -1,7 +1,7 @@
 ﻿using PFM.Bank.Api.Contracts.Bank;
 using System.Collections.Generic;
 
-namespace PFM.Services.Interfaces
+namespace Services.Interfaces
 {
     public interface IBankService : IBaseService
     {

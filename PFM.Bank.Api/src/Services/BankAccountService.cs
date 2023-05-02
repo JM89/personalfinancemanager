@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
+using DataAccessLayer.Entities;
+using DataAccessLayer.Repositories.Interfaces;
 using PFM.Bank.Api.Contracts.Account;
-using PFM.DataAccessLayer.Entities;
-using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Core.Exceptions;
-using PFM.Services.Events.EventTypes;
-using PFM.Services.Events.Interfaces;
-using PFM.Services.Interfaces;
+using Services.Events.EventTypes;
+using Services.Events.Interfaces;
+using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace PFM.Services
+namespace Services
 {
     public class BankAccountService: IBankAccountService
     {

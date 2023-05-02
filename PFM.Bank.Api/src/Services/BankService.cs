@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using DataAccessLayer.Repositories.Interfaces;
 using PFM.Bank.Api.Contracts.Bank;
-using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Core.Exceptions;
-using PFM.Services.Interfaces;
+using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PFM.Services
+namespace Services
 {
     public class BankService : IBankService
     {
@@ -47,7 +47,7 @@ namespace PFM.Services
         {
             Validate(bankDetails);
 
-            var bank = Mapper.Map<PFM.DataAccessLayer.Entities.Bank>(bankDetails);
+            var bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
             _bankRepository.Create(bank);
         }
 
@@ -68,7 +68,7 @@ namespace PFM.Services
             Validate(bankDetails);
 
             var bank = _bankRepository.GetListAsNoTracking().SingleOrDefault(x => x.Id == bankDetails.Id);
-            bank = Mapper.Map<PFM.DataAccessLayer.Entities.Bank>(bankDetails);
+            bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
             _bankRepository.Update(bank);
         }
 

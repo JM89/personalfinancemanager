@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
-using PFM.Services.ExternalServices.AuthApi;
+using PFM.Bank.Api.Services.ExternalServices.AuthApi;
 
 namespace Api.Filters
 {

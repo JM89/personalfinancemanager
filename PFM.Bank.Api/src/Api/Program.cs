@@ -1,10 +1,10 @@
+using Api.Extensions;
+using Api.Middlewares;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
+using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
-using Api.Extensions;
-using Api.Middlewares;
-using PFM.DataAccessLayer;
 using PFM.Services.Core.Automapper;
 
 namespace Api

@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
-using PFM.Services.Events;
-using PFM.Services.Events.Interfaces;
-using PFM.Services.ExternalServices.AuthApi;
+using PFM.Bank.Api.Services.ExternalServices.AuthApi;
 using Refit;
 using Serilog;
+using Services.Events;
+using Services.Events.Interfaces;
 
 namespace Api.Extensions
 {

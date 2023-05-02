@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PFM.DataAccessLayer.Entities
+namespace DataAccessLayer.Entities
 {
     public class Country : PersistedEntity
     {
