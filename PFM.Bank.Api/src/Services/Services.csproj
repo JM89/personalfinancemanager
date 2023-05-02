@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Api.Contracts\Api.Contracts.csproj" />
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Event.Contracts\Event.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

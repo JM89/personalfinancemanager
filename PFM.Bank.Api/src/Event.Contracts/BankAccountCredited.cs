@@ -1,9 +1,9 @@
-﻿using Services.Events.Interfaces;
+﻿using PFM.Bank.Event.Contracts.Interfaces;
 using System;
 
-namespace Services.Events.EventTypes
+namespace PFM.Bank.Event.Contracts
 {
-    internal class BankAccountCredited : IEvent
+    public class BankAccountCredited : IEvent
     {
         public string Id => $"{StreamGroup}-{UserId}-{BankCode}-{CurrencyCode}";
 
