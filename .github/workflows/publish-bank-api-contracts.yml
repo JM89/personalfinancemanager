@@ -83,5 +83,5 @@ jobs:
       
       - name: Publish API Contracts
         working-directory: ${{ env.WORKDIR }}/src/${{ env.TARGET_LIB }}
-        run: dotnet nuget push "bin/Release/*.nupkg" --api-key ${{ secrets.PAT_WRITE_PACKAGES }} --source "${{ env.GITHUB_ORG }} - GitHub Packages" --skip-duplicate
+        run: dotnet push "bin/Release/*.nupkg" --api-key ${{ secrets.PAT_WRITE_PACKAGES }} --source "${{ env.GITHUB_ORG }} - GitHub Packages" --skip-duplicate
       
