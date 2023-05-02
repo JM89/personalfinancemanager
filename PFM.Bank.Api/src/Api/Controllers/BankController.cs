@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.Bank;
 using PFM.Services.Interfaces;
 
@@ -9,41 +8,41 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class BankController : ControllerBase
     {
-        private readonly IBankService _BankService;
+        private readonly IBankService _bankService;
 
-        public BankController(IBankService BankService)
+        public BankController(IBankService bankService)
         {
-            _BankService = BankService;
+            _bankService = bankService;
         }
 
         [HttpGet("GetList")]
         public IEnumerable<BankList> GetList()
         {
-            return _BankService.GetBanks();
+            return _bankService.GetBanks();
         }
 
         [HttpGet("Get/{id}")]
         public BankDetails Get(int id)
         {
-            return _BankService.GetById(id);
+            return _bankService.GetById(id);
         }
         
         [HttpPost("Create")]
         public void Post([FromBody]BankDetails createdObj)
         {
-            _BankService.CreateBank(createdObj);
+            _bankService.CreateBank(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
         public void Put(int id, [FromBody]BankDetails editedObj)
         {
-            _BankService.EditBank(editedObj);
+            _bankService.EditBank(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
         public void Delete(int id)
         {
-            _BankService.DeleteBank(id);
+            _bankService.DeleteBank(id);
         }
     }
 }
