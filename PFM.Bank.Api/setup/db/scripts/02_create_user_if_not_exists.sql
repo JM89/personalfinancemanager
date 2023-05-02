@@ -7,7 +7,7 @@ BEGIN
 END
 GO
 
-USE PFM_MAIN_DB
+USE PFM_BANK_DB
 GO
 
 IF NOT EXISTS(SELECT * FROM sys.database_principals WHERE name = N'PFM_BANK_API_SVC')

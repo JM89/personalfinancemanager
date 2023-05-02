@@ -1,4 +1,4 @@
-USE PFM_MAIN_DB
+USE PFM_BANK_DB
 GO
 
 INSERT INTO [dbo].[Banks] ([Name],[IconPath],[CountryId],[Website],[GeneralEnquiryPhoneNumber])

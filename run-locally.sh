@@ -16,3 +16,6 @@ cd ..
 cd ./PFM.BankAccountUpdater
 docker-compose -f docker-compose-init.yml  up --build -d
 cd ..
+cd ./PFM.Bank.Api
+docker-compose -f docker-compose-api-init.yml up --build -d
+cd ..

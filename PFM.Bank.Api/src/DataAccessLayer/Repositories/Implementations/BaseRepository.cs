@@ -82,12 +82,12 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
 
         public TEntity GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            var result = _db.Set<TEntity>();
+            var result = _db.Set<TEntity>().AsNoTracking();
 
             IQueryable<TEntity> query = null;
             foreach (var property in includeProperties)
             {
-                query = query == null ? result.Include(property) : query.Include(property);
+                query = query == null ? result.Include(property).AsNoTracking() : query.Include(property).AsNoTracking();
             }
 
             return query?.Single(x => x.Id == id) ?? result.Single(x => x.Id == id); 

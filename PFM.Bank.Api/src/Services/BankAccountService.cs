@@ -18,6 +18,8 @@ namespace PFM.Services
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IEventPublisher _eventPublisher;
 
+        private readonly string PropertyCannotBeModified = "Property cannot be modified on an existing bank account.";
+
         public BankAccountService(IBankAccountRepository bankAccountRepository, IEventPublisher eventPublisher)
         {
             this._bankAccountRepository = bankAccountRepository;
@@ -92,17 +94,22 @@ namespace PFM.Services
 
                 if (account.Currency.Id != accountDetails.CurrencyId)
                 {
-                    businessException.AddErrorMessage(nameof(account.Currency), "Currency cannot be modified on an existing account");
+                    businessException.AddErrorMessage(nameof(account.Currency), PropertyCannotBeModified);
                 }
 
                 if (account.Bank.Id != accountDetails.BankId)
                 {
-                    businessException.AddErrorMessage(nameof(account.Bank), "Bank cannot be modified on an existing account");
+                    businessException.AddErrorMessage(nameof(account.Bank), PropertyCannotBeModified);
                 }
 
                 if (account.User_Id != userId)
                 {
-                    businessException.AddErrorMessage(nameof(account.User_Id), "User cannot be modified on an existing account");
+                    businessException.AddErrorMessage(nameof(account.User_Id), PropertyCannotBeModified);
+                }
+
+                if (account.IsSavingAccount != accountDetails.IsSavingAccount)
+                {
+                    businessException.AddErrorMessage(nameof(account.IsSavingAccount), PropertyCannotBeModified);
                 }
 
                 if (businessException.HasError())

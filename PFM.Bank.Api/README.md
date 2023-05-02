@@ -16,16 +16,11 @@ The application can be found [here](http://localhost/#/events?filter=Application
 
 All actions require to be authenticated. Registering a new user can be done in the PFM Auth API (http://localhost:5000).
 
-Start by registering a new user:
+Run the following command:
 
-```json
-{
-  "email": "test@test.com",
-  "password": "Helloworld123!"
-}
+```shell
+curl -X POST http://localhost:5000/users/register -d "{\"username\":\"test@gmail.com\", \"password\":\"String123456!\", \"firstname\": \"\", \"lastname\":\"\" }" -H "Content-Type: application/json"
 ```
-
-![](../Documentation/Pictures/API-Register.png)
 
 The response returned by this call is a token. 
 
