@@ -68,7 +68,8 @@ Check the documentation [here](./PFM.Auth.Api/README.md).
 |App - PFM.Website|:heavy_minus_sign:|[Website](http://localhost:54401)|:heavy_minus_sign:|
 |App - PFM.Api|[Api Endpoints](https://localhost:4431/api)<br/>[Swagger](https://localhost:4431/swagger/index.html)|[Api Endpoints](https://localhost:7098/api)<br/>[Swagger](https://localhost:7098/swagger/index.html)|[Api Endpoints](https://pfm-api:4431/api)|
 |App - PFM.Auth.Api|[Api Endpoints](http://localhost:5000)|[Api Endpoints](http://localhost:4000)|[Api Endpoints](http://pfm-auth-api:5000)|
-|App - PFM.Bank.Api|[Api Endpoints](https://localhost:7099/api)<br/>[Swagger](https://localhost:7099/swagger/index.html)|[Api Endpoints](https://localhost:50001/api)<br/>[Swagger](https://localhost:50001/swagger/index.html)|[Api Endpoints](http://pfm-bank-api:50001/api)|
+|App - PFM.Bank.Api|[Api Endpoints](https://localhost:7099/api)<br/>[Swagger](https://localhost:7099/swagger/index.html)|[Api Endpoints](https://localhost:50001/api)<br/>[Swagger](http://localhost:50001/swagger/index.html)|[Api Endpoints](http://pfm-bank-api:50001/api)|
 |SEQ|[Log Ingest](http://localhost:5341)<br/>[UI](http://localhost:80)|[Log Ingest](http://localhost:5341)<br/>[UI](http://localhost:80)|[Log Ingest](http://seq:5341)|
 |SQL Server|localhost,1433|localhost,1433|db-server,1433|
 |Localstack|[Endpoints](http://localhost:4566)|[Endpoints](http://localhost:4566)|[Endpoints](http://localstack:4566)|
+|EventStore|[Endpoints](http://localhost:2113)|[Endpoints](http://localhost:2113/)|[Endpoints](http://eventstore:2113)|
