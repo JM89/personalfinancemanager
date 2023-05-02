@@ -62,7 +62,7 @@ jobs:
           echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
 
       - name: Log in to access GitHub Packages 
-        run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.GITHUB_TOKEN }} "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" --store-password-in-clear-text
+        run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.PAT_WRITE_PACKAGES }} "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" --store-password-in-clear-text
 
       - name: Setup .NET Core SDK ${{ env.DOTNET_ENV }}
         uses: actions/setup-dotnet@v3
@@ -82,5 +82,5 @@ jobs:
       
       - name: Publish API Contracts
         working-directory: ${{ env.WORKDIR }}/src/${{ env.TARGET_LIB }}
-        run: dotnet nuget push "bin/Release/${{ env.TARGET_LIB }}.${{ steps.gitversion.outputs.fullSemVer }}.nupkg" --api-key ${{ secrets.PAT_WRITE_PACKAGES }} --source "${{ env.GITHUB_ORG }} - GitHub Packages" --skip-duplicate
+        run: dotnet nuget push "bin/Release/*.nupkg" --api-key ${{ secrets.PAT_WRITE_PACKAGES }} --source "${{ env.GITHUB_ORG }} - GitHub Packages" --skip-duplicate
       

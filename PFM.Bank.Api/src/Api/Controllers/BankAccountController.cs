@@ -36,6 +36,7 @@ namespace PFM.Api.Controllers
         [HttpPut("Edit/{id}/{userId}")]
         public async Task<bool> Put(int id, string userId, [FromBody]AccountDetails editedObj)
         {
+            editedObj.Id = id;
             return await _bankAccountService.EditBankAccount(editedObj, userId);
         }
         

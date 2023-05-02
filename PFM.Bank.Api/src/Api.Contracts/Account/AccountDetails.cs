@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PFM.Api.Contracts.Account
+﻿namespace PFM.Api.Contracts.Account
 {
     public class AccountDetails
     {
