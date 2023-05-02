@@ -1,6 +1,6 @@
-﻿using PFM.Api.Contracts.Shared;
+﻿using Api.Contracts.Shared;
 
-namespace PFM.Api.Contracts.Currency
+namespace PFM.Bank.Api.Contracts.Currency
 {
     public class CurrencyList : ICanBeDeleted
     {

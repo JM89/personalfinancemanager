@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PFM.Api.Contracts.Bank
+namespace PFM.Bank.Api.Contracts.Bank
 {
     public class BankDetails
     {

@@ -1,4 +1,4 @@
-﻿namespace PFM.Api.Contracts.Country
+﻿namespace PFM.Bank.Api.Contracts.Country
 {
     public class CountryDetails
     {

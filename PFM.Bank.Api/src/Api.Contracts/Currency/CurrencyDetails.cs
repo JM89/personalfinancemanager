@@ -1,4 +1,4 @@
-﻿namespace PFM.Api.Contracts.Currency
+﻿namespace PFM.Bank.Api.Contracts.Currency
 {
     public class CurrencyDetails
     {

@@ -1,6 +1,6 @@
-﻿using PFM.Api.Contracts.Shared;
+﻿using Api.Contracts.Shared;
 
-namespace PFM.Api.Contracts.Bank
+namespace PFM.Bank.Api.Contracts.Bank
 {
     public class BankList : ICanBeDeleted
     {
