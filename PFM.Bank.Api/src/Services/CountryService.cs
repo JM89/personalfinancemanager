@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using PFM.Api.Contracts.Country;
+using PFM.Bank.Api.Contracts.Country;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Interfaces;
 using System.Collections.Generic;

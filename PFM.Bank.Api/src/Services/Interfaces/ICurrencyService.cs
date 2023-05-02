@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using PFM.Api.Contracts.Currency;
+﻿using PFM.Bank.Api.Contracts.Currency;
+using System.Collections.Generic;
 
 namespace PFM.Services.Interfaces
 {

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using PFM.Api.Contracts.Bank;
+﻿using PFM.Bank.Api.Contracts.Bank;
+using System.Collections.Generic;
 
 namespace PFM.Services.Interfaces
 {

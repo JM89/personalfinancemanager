@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using PFM.Api.Contracts.Account;
+using PFM.Bank.Api.Contracts.Account;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Core.Exceptions;

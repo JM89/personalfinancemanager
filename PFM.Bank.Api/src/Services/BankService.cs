@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using PFM.Services.Interfaces;
+﻿using AutoMapper;
+using PFM.Bank.Api.Contracts.Bank;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Core.Exceptions;
-using PFM.DataAccessLayer.Entities;
-using PFM.Api.Contracts.Bank;
+using PFM.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PFM.Services
 {
@@ -48,7 +47,7 @@ namespace PFM.Services
         {
             Validate(bankDetails);
 
-            var bank = Mapper.Map<Bank>(bankDetails);
+            var bank = Mapper.Map<PFM.DataAccessLayer.Entities.Bank>(bankDetails);
             _bankRepository.Create(bank);
         }
 
@@ -69,7 +68,7 @@ namespace PFM.Services
             Validate(bankDetails);
 
             var bank = _bankRepository.GetListAsNoTracking().SingleOrDefault(x => x.Id == bankDetails.Id);
-            bank = Mapper.Map<Bank>(bankDetails);
+            bank = Mapper.Map<PFM.DataAccessLayer.Entities.Bank>(bankDetails);
             _bankRepository.Update(bank);
         }
 

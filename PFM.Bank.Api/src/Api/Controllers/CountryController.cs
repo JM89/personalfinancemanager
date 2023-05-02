@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PFM.Api.Contracts.Country;
+using PFM.Bank.Api.Contracts.Country;
 using PFM.Services.Interfaces;
 
 namespace PFM.Api.Controllers

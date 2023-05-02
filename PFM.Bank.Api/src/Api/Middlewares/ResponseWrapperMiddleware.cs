@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Api.Contracts.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using PFM.Api.Contracts.Shared;
 using PFM.Services.Core.Exceptions;
-using System.IO;
 using System.Net;
 
 namespace PFM.Api.Middlewares
