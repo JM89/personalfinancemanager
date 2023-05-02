@@ -1,0 +1,34 @@
+name: Build and Tests PFM Bank API
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+env:
+  DOTNET_ENV: '7.0.x'
+  WORKDIR: PFM.Bank.Api/
+  GITHUB_ORG: 'JM89'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ env.DOTNET_ENV }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_ENV }}     
+      - name: Log in to access GitHub Packages 
+        run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.PAT_READ_PACKAGES }} "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" --store-password-in-clear-text
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal

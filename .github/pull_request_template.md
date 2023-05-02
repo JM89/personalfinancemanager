@@ -9,6 +9,9 @@
 ### Auth API
 - N/A
 
+### Bank API
+- N/A
+
 ### Bank Account Updater
 - N/A
 

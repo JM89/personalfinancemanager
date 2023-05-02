@@ -1,0 +1,8 @@
+USE master
+GO
+
+IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'PFM_BANK_DB')
+BEGIN
+    CREATE DATABASE [PFM_BANK_DB]
+END
+GO

@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>JM89</Authors>
+    <PackageId>PFM.Bank.Api.Contracts</PackageId>
+    <PackageDescription>Contracts shared between the PFM API and Website.</PackageDescription>
+  </PropertyGroup>
+
+</Project>
