@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
+using PFM.Services.Caches;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.ExternalServices.AuthApi;
@@ -79,15 +81,22 @@ namespace PFM.Api.Extensions
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankAccountApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+            services.AddSingleton<IBankAccountCache, BankAccountCache>();
+
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+            services.AddSingleton<IBankCache, BankCache>();
+
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICurrencyApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+            services.AddSingleton<ICurrencyCache, CurrencyCache>();
+
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICountryApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+            services.AddSingleton<ICountryCache, CountryCache>();
 
             return services;
         }
