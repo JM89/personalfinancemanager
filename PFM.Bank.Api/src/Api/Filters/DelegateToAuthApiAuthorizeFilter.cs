@@ -3,10 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PFM.Services.ExternalServices.AuthApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PFM.Api.Filters
 {
@@ -14,10 +10,6 @@ namespace PFM.Api.Filters
     {
         private readonly IAuthApi _authApi;
         private readonly Serilog.ILogger _logger;
-        private IList<string> _ignoreList = new List<string>() {
-            "/api/Account/Login",
-            "/api/Account/Register"
-        };
 
         public DelegateToAuthApiAuthorizeFilter(AuthorizationPolicy policy, Serilog.ILogger logger, IAuthApi authApi) : base(policy)
         {
@@ -27,9 +19,6 @@ namespace PFM.Api.Filters
 
         public override async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            if (_ignoreList.Any(x => x == context.HttpContext.Request.Path))
-                return;
-
             bool result = false;
             try
             {
