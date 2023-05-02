@@ -3,7 +3,7 @@ using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Interfaces;
 using System.Reflection;
 
-namespace PFM.Api.Extensions
+namespace Api.Extensions
 {
     public class AutoFacModule: Autofac.Module
     {

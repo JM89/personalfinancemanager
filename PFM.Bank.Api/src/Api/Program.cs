@@ -2,12 +2,12 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using PFM.Api.Extensions;
-using PFM.Api.Middlewares;
+using Api.Extensions;
+using Api.Middlewares;
 using PFM.DataAccessLayer;
 using PFM.Services.Core.Automapper;
 
-namespace PFM.Api
+namespace Api
 {
     public class Program
     {

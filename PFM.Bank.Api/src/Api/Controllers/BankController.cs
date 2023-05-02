@@ -2,7 +2,7 @@
 using PFM.Bank.Api.Contracts.Bank;
 using PFM.Services.Interfaces;
 
-namespace PFM.Api.Controllers
+namespace Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

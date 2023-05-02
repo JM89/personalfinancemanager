@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PFM.Services.ExternalServices.AuthApi;
 
-namespace PFM.Api.Filters
+namespace Api.Filters
 {
     public class DelegateToAuthApiAuthorizeFilter : AuthorizeFilter
     {

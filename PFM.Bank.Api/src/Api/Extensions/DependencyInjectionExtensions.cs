@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
-using PFM.Api.Filters;
 using PFM.Services.Events;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.ExternalServices.AuthApi;
 using Refit;
 using Serilog;
 
-namespace PFM.Api.Extensions
+namespace Api.Extensions
 {
     public static class DependencyInjectionExtensions
     {
@@ -39,13 +38,21 @@ namespace PFM.Api.Extensions
         /// <returns></returns>
         public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
         {
+            var authenticationApiConfigs = configuration["AuthApi:EndpointUrl"];
+            if (authenticationApiConfigs == null)
+                throw new Exception("DI exception: Authentication API config was not found");
+
             services.AddRefitClient<IAuthApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(configuration["AuthApi:EndpointUrl"]));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(authenticationApiConfigs));
 
             services.AddMvc(o =>
             {
+                var authenticationApi = services.BuildServiceProvider().GetService<IAuthApi>();
+                if (authenticationApi == null)
+                    throw new Exception("DI exception: Authentication API was not injected");
+
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
-                o.Filters.Add(new DelegateToAuthApiAuthorizeFilter(policy, Log.Logger, services.BuildServiceProvider().GetService<IAuthApi>()));
+                o.Filters.Add(new Api.Filters.DelegateToAuthApiAuthorizeFilter(policy, Log.Logger, authenticationApi));
             });
 
             services

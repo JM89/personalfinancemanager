@@ -1,7 +1,7 @@
 ﻿using Serilog.Context;
 using SerilogTimings;
 
-namespace PFM.Api.Middlewares
+namespace Api.Middlewares
 {
     public class TimedOperationMiddleware
     {

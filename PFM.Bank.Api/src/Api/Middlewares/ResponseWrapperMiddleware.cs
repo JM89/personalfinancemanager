@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 using PFM.Services.Core.Exceptions;
 using System.Net;
 
-namespace PFM.Api.Middlewares
+namespace Api.Middlewares
 {
     public class ResponseWrapperMiddleware
     {
