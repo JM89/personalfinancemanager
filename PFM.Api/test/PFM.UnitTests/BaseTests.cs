@@ -1,4 +1,5 @@
 ﻿using Moq;
+using PFM.Bank.Event.Contracts.Interfaces;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.SearchParameters;

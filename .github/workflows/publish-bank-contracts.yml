@@ -1,4 +1,4 @@
-name: Publish PFM Bank API Contracts
+name: Publish PFM Bank Contracts
 
 on:
   workflow_dispatch:
@@ -10,7 +10,8 @@ env:
   DOTNET_ENV: '2.0.x'
   WORKDIR: PFM.Bank.Api/
   GITHUB_ORG: 'JM89'
-  TARGET_LIB: Api.Contracts
+  API_TARGET_LIB: Api.Contracts
+  EVT_TARGET_LIB: Event.Contracts
 
 jobs:
   check-if-publish-required:
@@ -32,7 +33,8 @@ jobs:
           base: main
           filters: |
             libs-have-changed:
-              - '${{ env.WORKDIR }}src/${{ env.TARGET_LIB }}/**'
+              - '${{ env.WORKDIR }}src/${{ env.API_TARGET_LIB }}/**'
+              - '${{ env.WORKDIR }}src/${{ env.EVT_TARGET_LIB }}/**'
   build:
     if: needs.check-if-publish-required.outputs.should-publish == 'true'
     needs: check-if-publish-required
@@ -72,15 +74,17 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
 
-      - name: Build API Contracts
-        working-directory: ${{ env.WORKDIR }}/src/${{ env.TARGET_LIB }}
+      - name: Build Solution
         run: dotnet build --configuration Release --no-restore
 
       - name: Pack API Contracts
-        working-directory: ${{ env.WORKDIR }}/src/${{ env.TARGET_LIB }}
+        working-directory: ${{ env.WORKDIR }}/src/${{ env.API_TARGET_LIB }}
         run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.fullSemVer }}
       
-      - name: Publish API Contracts
-        working-directory: ${{ env.WORKDIR }}/src/${{ env.TARGET_LIB }}
-        run: dotnet nuget push "bin/Release/*.nupkg" --api-key ${{ secrets.PAT_WRITE_PACKAGES }} --source "${{ env.GITHUB_ORG }} - GitHub Packages" --skip-duplicate
+      - name: Pack Event Contracts
+        working-directory: ${{ env.WORKDIR }}/src/${{ env.EVT_TARGET_LIB }}
+        run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.fullSemVer }}
+
+      - name: Publish Contracts
+        run: dotnet nuget push "**/*.nupkg" --api-key ${{ secrets.PAT_WRITE_PACKAGES }} --source "${{ env.GITHUB_ORG }} - GitHub Packages" --skip-duplicate
       

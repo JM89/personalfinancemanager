@@ -1,4 +1,4 @@
-﻿namespace Services.Events.Interfaces
+﻿namespace PFM.Bank.Event.Contracts.Interfaces
 {
     public interface IEvent
     {

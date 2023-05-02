@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using PFM.Api.Contracts.Income;
+using PFM.Bank.Event.Contracts;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.Interfaces;
 using System.Collections.Generic;

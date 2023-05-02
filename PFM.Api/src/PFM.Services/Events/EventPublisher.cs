@@ -1,6 +1,6 @@
 ﻿using EventStore.Client;
+using PFM.Bank.Event.Contracts.Interfaces;
 using PFM.Services.Events.Interfaces;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;

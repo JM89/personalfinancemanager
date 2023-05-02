@@ -2,8 +2,8 @@
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.Interfaces;
 using PFM.Bank.Api.Contracts.Account;
+using PFM.Bank.Event.Contracts;
 using PFM.Services.Core.Exceptions;
-using Services.Events.EventTypes;
 using Services.Events.Interfaces;
 using Services.Interfaces;
 using System.Collections.Generic;

@@ -1,9 +1,9 @@
-﻿using Services.Events.Interfaces;
+﻿using PFM.Bank.Event.Contracts.Interfaces;
 using System;
 
-namespace Services.Events.EventTypes
+namespace PFM.Bank.Event.Contracts
 {
-    internal class BankAccountDebited : IEvent
+    public class BankAccountDebited : IEvent
     {
         public string Id => $"{StreamGroup}-{UserId}-{BankCode}-{CurrencyCode}";
 
@@ -18,9 +18,11 @@ namespace Services.Events.EventTypes
         public string StreamGroup => "BankAccount";
 
         public string UserId { get; set; }
+
         public DateTime OperationDate { get; set; }
 
         public string OperationType { get; set; }
+
         public string TargetBankAccount { get; set; }
     }
 }

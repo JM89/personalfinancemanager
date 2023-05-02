@@ -1,4 +1,4 @@
-﻿using PFM.BankAccountUpdater.Handlers.EventTypes;
+﻿using PFM.Bank.Event.Contracts;
 using PFM.BankAccountUpdater.Handlers.Interfaces;
 using Serilog.Context;
 using SerilogTimings;

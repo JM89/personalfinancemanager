@@ -1,4 +1,6 @@
-﻿namespace PFM.BankAccountUpdater.Handlers.Interfaces
+﻿using PFM.Bank.Event.Contracts.Interfaces;
+
+namespace PFM.BankAccountUpdater.Handlers.Interfaces
 {
     public interface IHandler<T>
         where T : IEvent

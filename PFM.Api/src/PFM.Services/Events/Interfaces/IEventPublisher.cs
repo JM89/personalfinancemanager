@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using PFM.Bank.Event.Contracts.Interfaces;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace PFM.Services.Events.Interfaces
 {

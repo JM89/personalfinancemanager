@@ -1,9 +1,9 @@
 ﻿using EventStore.Client;
+using PFM.Bank.Event.Contracts;
 using PFM.BankAccountUpdater.Events;
 using PFM.BankAccountUpdater.Events.Interface;
 using PFM.BankAccountUpdater.Events.Settings;
 using PFM.BankAccountUpdater.Handlers;
-using PFM.BankAccountUpdater.Handlers.EventTypes;
 using PFM.BankAccountUpdater.Handlers.Interfaces;
 using Serilog;
 

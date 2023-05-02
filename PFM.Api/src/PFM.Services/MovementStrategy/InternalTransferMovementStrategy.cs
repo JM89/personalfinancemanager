@@ -1,6 +1,6 @@
-﻿using PFM.DataAccessLayer.Entities;
+﻿using PFM.Bank.Event.Contracts;
+using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Events.EventTypes;
 using PFM.Services.Events.Interfaces;
 using System;
 using System.Threading.Tasks;
