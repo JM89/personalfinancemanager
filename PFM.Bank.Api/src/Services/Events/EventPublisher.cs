@@ -1,11 +1,10 @@
 ﻿using EventStore.Client;
-using PFM.Services.Events.Interfaces;
-using System.Collections.Generic;
+using Services.Events.Interfaces;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PFM.Services.Events
+namespace Services.Events
 {
     public class EventPublisher : IEventPublisher
     {

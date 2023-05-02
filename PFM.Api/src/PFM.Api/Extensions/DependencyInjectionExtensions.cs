@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
-using PFM.Api.Filters;
+using PFM.Services.Caches;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.ExternalServices.AuthApi;
@@ -39,13 +40,21 @@ namespace PFM.Api.Extensions
         /// <returns></returns>
         public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
         {
+            var authenticationApiConfigs = configuration["AuthApi:EndpointUrl"];
+            if (authenticationApiConfigs == null)
+                throw new Exception("DI exception: Authentication API config was not found");
+
             services.AddRefitClient<IAuthApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(configuration["AuthApi:EndpointUrl"]));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(authenticationApiConfigs));
 
             services.AddMvc(o =>
             {
+                var authenticationApi = services.BuildServiceProvider().GetService<IAuthApi>();
+                if (authenticationApi == null)
+                    throw new Exception("DI exception: Authentication API was not injected");
+
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
-                o.Filters.Add(new DelegateToAuthApiAuthorizeFilter(policy, Log.Logger, services.BuildServiceProvider().GetService<IAuthApi>()));
+                o.Filters.Add(new Api.Filters.DelegateToAuthApiAuthorizeFilter(policy, Log.Logger, authenticationApi));
             });
 
             services
@@ -60,6 +69,35 @@ namespace PFM.Api.Extensions
                     cfg.RequireHttpsMetadata = false;
                     cfg.SaveToken = true;
                 });
+            return services;
+        }
+
+        public static IServiceCollection AddBankApi(this IServiceCollection services, IConfiguration configuration)
+        {
+            var apiConfigs = configuration["BankApi:EndpointUrl"];
+            if (apiConfigs == null)
+                throw new Exception("DI exception: Bank API config was not found");
+
+            services
+                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankAccountApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+            services.AddSingleton<IBankAccountCache, BankAccountCache>();
+
+            services
+                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+            services.AddSingleton<IBankCache, BankCache>();
+
+            services
+                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICurrencyApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+            services.AddSingleton<ICurrencyCache, CurrencyCache>();
+
+            services
+                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICountryApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+            services.AddSingleton<ICountryCache, CountryCache>();
+
             return services;
         }
 

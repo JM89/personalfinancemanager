@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PFM.Api.Contracts.Shared
+namespace Api.Contracts.Shared
 {
     public class ApiResponse
     {

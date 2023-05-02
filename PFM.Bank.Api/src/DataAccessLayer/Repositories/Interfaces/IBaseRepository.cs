@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PFM.DataAccessLayer.Entities;
+﻿using DataAccessLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace PFM.DataAccessLayer.Repositories.Interfaces
+namespace DataAccessLayer.Repositories.Interfaces
 {
     public interface IBaseRepository<TEntity> 
         where TEntity : PersistedEntity

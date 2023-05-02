@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PFM.Services.Core.Automapper
 {
@@ -11,17 +6,17 @@ namespace PFM.Services.Core.Automapper
     {
         public EntityToModelMapping()
         {
-            CreateMap<DataAccessLayer.Entities.Country, Api.Contracts.Country.CountryList>();
-            CreateMap<DataAccessLayer.Entities.Country, Api.Contracts.Country.CountryDetails>();
+            CreateMap<DataAccessLayer.Entities.Country, PFM.Bank.Api.Contracts.Country.CountryList>();
+            CreateMap<DataAccessLayer.Entities.Country, PFM.Bank.Api.Contracts.Country.CountryDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Bank, Api.Contracts.Bank.BankList>();
-            CreateMap<DataAccessLayer.Entities.Bank, Api.Contracts.Bank.BankDetails>();
+            CreateMap<DataAccessLayer.Entities.Bank, PFM.Bank.Api.Contracts.Bank.BankList>();
+            CreateMap<DataAccessLayer.Entities.Bank, PFM.Bank.Api.Contracts.Bank.BankDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Currency, Api.Contracts.Currency.CurrencyList>();
-            CreateMap<DataAccessLayer.Entities.Currency, Api.Contracts.Currency.CurrencyDetails>();
+            CreateMap<DataAccessLayer.Entities.Currency, PFM.Bank.Api.Contracts.Currency.CurrencyList>();
+            CreateMap<DataAccessLayer.Entities.Currency, PFM.Bank.Api.Contracts.Currency.CurrencyDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Account, Api.Contracts.Account.AccountList>();
-            CreateMap<DataAccessLayer.Entities.Account, Api.Contracts.Account.AccountDetails>();
+            CreateMap<DataAccessLayer.Entities.Account, PFM.Bank.Api.Contracts.Account.AccountList>();
+            CreateMap<DataAccessLayer.Entities.Account, PFM.Bank.Api.Contracts.Account.AccountDetails>();
         }
     }
 }

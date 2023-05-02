@@ -1,4 +1,4 @@
-﻿namespace PFM.Api.Contracts.Account
+﻿namespace PFM.Bank.Api.Contracts.Account
 {
     public class AccountList
     {

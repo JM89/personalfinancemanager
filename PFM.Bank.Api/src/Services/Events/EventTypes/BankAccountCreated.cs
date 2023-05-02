@@ -1,6 +1,6 @@
-﻿using PFM.Services.Events.Interfaces;
+﻿using Services.Events.Interfaces;
 
-namespace PFM.Services.Events.EventTypes
+namespace Services.Events.EventTypes
 {
     internal class BankAccountCreated: IEvent
     {

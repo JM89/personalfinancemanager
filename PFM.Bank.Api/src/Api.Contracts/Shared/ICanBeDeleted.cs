@@ -1,4 +1,4 @@
-﻿namespace PFM.Api.Contracts.Shared
+﻿namespace Api.Contracts.Shared
 {
     public interface ICanBeDeleted
     {

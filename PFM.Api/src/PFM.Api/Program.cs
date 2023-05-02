@@ -1,4 +1,5 @@
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,11 @@ namespace PFM.Api
 
             builder.Services.AddControllers();
 
+            builder.Services.AddMemoryCache();
+
             builder.Services
                 .AddAuthenticationAndAuthorization(builder.Configuration)
+                .AddBankApi(builder.Configuration)
                 .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition()

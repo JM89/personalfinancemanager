@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using PFM.Api.Contracts.Country;
-using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Interfaces;
+using DataAccessLayer.Repositories.Interfaces;
+using PFM.Bank.Api.Contracts.Country;
+using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PFM.Services
+namespace Services
 {
     public class CountryService : ICountryService
     {

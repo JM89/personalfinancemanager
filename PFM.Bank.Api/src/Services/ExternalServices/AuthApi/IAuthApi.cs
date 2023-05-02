@@ -1,9 +1,8 @@
 ﻿using PFM.Authentication.Api.DTOs;
 using Refit;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PFM.Services.ExternalServices.AuthApi
+namespace PFM.Bank.Api.Services.ExternalServices.AuthApi
 {
     public interface IAuthApi
     {

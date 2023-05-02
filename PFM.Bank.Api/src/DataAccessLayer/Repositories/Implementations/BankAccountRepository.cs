@@ -1,7 +1,7 @@
-﻿using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DataAccessLayer.Entities;
+﻿using DataAccessLayer.Entities;
+using DataAccessLayer.Repositories.Interfaces;
 
-namespace PFM.DataAccessLayer.Repositories.Implementations
+namespace DataAccessLayer.Repositories.Implementations
 {
     public class BankAccountRepository : BaseRepository<Account>, IBankAccountRepository
     {

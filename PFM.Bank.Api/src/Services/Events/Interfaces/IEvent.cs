@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace PFM.Services.Events.Interfaces
+﻿namespace Services.Events.Interfaces
 {
     public interface IEvent
     {

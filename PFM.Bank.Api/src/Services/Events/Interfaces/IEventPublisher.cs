@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using System.Threading;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
-namespace PFM.Services.Events.Interfaces
+namespace Services.Events.Interfaces
 {
     public interface IEventPublisher
     {

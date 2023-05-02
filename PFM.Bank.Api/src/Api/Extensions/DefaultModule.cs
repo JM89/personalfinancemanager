@@ -1,13 +1,13 @@
 ﻿using Autofac;
-using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Interfaces;
+using DataAccessLayer.Repositories.Interfaces;
+using Services.Interfaces;
 using System.Reflection;
 
-namespace PFM.Api.Extensions
+namespace Api.Extensions
 {
     public class AutoFacModule: Autofac.Module
     {
-        private ContainerBuilder _builder;
+        private ContainerBuilder? _builder;
 
         protected override void Load(ContainerBuilder builder)
         {
@@ -18,12 +18,20 @@ namespace PFM.Api.Extensions
 
         private void RegisterRepositories()
         {
-            _builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(IBaseRepository<>))).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces(); 
+            if (_builder == null)
+                throw new Exception("DI Exception: Load method should be called first");
+
+            var assembly = Assembly.GetAssembly(typeof(IBankAccountRepository)) ?? Assembly.GetExecutingAssembly();
+            _builder.RegisterAssemblyTypes(assembly).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces(); 
         }
 
         private void RegisterServices()
         {
-            _builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(IBaseService))).Where(t => t.Name.EndsWith("Service")).AsImplementedInterfaces();
+            if (_builder == null)
+                throw new Exception("DI Exception: Load method should be called first");
+
+            var assembly = Assembly.GetAssembly(typeof(IBankAccountService)) ?? Assembly.GetExecutingAssembly();
+            _builder.RegisterAssemblyTypes(assembly).Where(t => t.Name.EndsWith("Service")).AsImplementedInterfaces();
         }
     }
 }

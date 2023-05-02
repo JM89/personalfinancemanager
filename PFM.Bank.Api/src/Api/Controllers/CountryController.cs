@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PFM.Api.Contracts.Country;
-using PFM.Services.Interfaces;
+using PFM.Bank.Api.Contracts.Country;
+using Services.Interfaces;
 
-namespace PFM.Api.Controllers
+namespace Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

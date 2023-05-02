@@ -1,8 +1,8 @@
-﻿using PFM.Api.Contracts.Account;
+﻿using PFM.Bank.Api.Contracts.Account;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PFM.Services.Interfaces
+namespace Services.Interfaces
 {
     public interface IBankAccountService : IBaseService
     {
