@@ -5,6 +5,7 @@ using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.Entities;
 using PFM.Api.Contracts.Salary;
+using PFM.Services.Caches.Interfaces;
 
 namespace PFM.Services
 {
@@ -12,11 +13,15 @@ namespace PFM.Services
     {
         private readonly ISalaryRepository _salaryRepository;
         private readonly ISalaryDeductionRepository _salaryDeductionRepository;
+        private readonly ICountryCache _countryCache;
+        private readonly ICurrencyCache _currencyCache;
 
-        public SalaryService(ISalaryRepository salaryRepository, ISalaryDeductionRepository salaryDeductionRepository)
+        public SalaryService(ISalaryRepository salaryRepository, ISalaryDeductionRepository salaryDeductionRepository, ICountryCache countryCache, ICurrencyCache currencyCache)
         {
             this._salaryRepository = salaryRepository;
             this._salaryDeductionRepository = salaryDeductionRepository;
+            this._countryCache = countryCache;
+            this._currencyCache = currencyCache;
         }
 
         public IList<SalaryList> GetSalaries(string userId)

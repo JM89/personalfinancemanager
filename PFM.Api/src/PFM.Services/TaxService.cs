@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PFM.DataAccessLayer.Entities;
 using PFM.Api.Contracts.Tax;
+using PFM.Services.Caches.Interfaces;
 
 namespace PFM.Services
 {
@@ -12,11 +13,15 @@ namespace PFM.Services
     {
         private readonly ITaxRepository _taxRepository;
         private readonly ISalaryRepository _salaryRepository;
+        private readonly ICountryCache _countryCache;
+        private readonly ICurrencyCache _currencyCache;
 
-        public TaxService(ITaxRepository taxRepository, ISalaryRepository salaryRepository)
+        public TaxService(ITaxRepository taxRepository, ISalaryRepository salaryRepository, ICountryCache countryCache, ICurrencyCache currencyCache)
         {
             this._taxRepository = taxRepository;
             this._salaryRepository = salaryRepository;
+            this._countryCache = countryCache;
+            this._currencyCache = currencyCache;
         }
 
         public void CreateTax(TaxDetails taxDetails)

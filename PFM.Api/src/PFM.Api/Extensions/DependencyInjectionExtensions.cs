@@ -90,12 +90,14 @@ namespace PFM.Api.Extensions
 
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICurrencyApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<ICurrencyCache, CurrencyCache>();
 
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICountryApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .AddHttpMessageHandler<AuthHeaderHandler>(); 
             services.AddSingleton<ICountryCache, CountryCache>();
 
             return services;

@@ -5,16 +5,21 @@ using PFM.DataAccessLayer.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using PFM.Api.Contracts.Pension;
+using PFM.Services.Caches.Interfaces;
 
 namespace PFM.Services
 {
     public class PensionService : IPensionService
     {
         private readonly IPensionRepository _pensionRepository;
-        
-        public PensionService(IPensionRepository pensionRepository)
+        private readonly ICountryCache _countryCache;
+        private readonly ICurrencyCache _currencyCache;
+
+        public PensionService(IPensionRepository pensionRepository, ICountryCache countryCache, ICurrencyCache currencyCache)
         {
             this._pensionRepository = pensionRepository;
+            this._countryCache = countryCache;
+            this._currencyCache = currencyCache;
         }
 
         public IList<PensionList> GetPensions(string userId)

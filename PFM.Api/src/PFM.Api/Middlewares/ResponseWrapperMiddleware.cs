@@ -13,8 +13,7 @@ namespace PFM.Api.Middlewares
         private readonly List<string> ignoreRules = new List<string> {
             "/swagger/v1/swagger.json",
             "/swagger/index.html",
-            "/swagger",
-            "/"
+            "/swagger"
         };
 
         private readonly JsonSerializerSettings _serializeOptions = new JsonSerializerSettings
