@@ -8,6 +8,7 @@ EXPOSE 4431
 
 COPY src/Api/. ./Api/
 COPY src/Api.Contracts/. ./Api.Contracts/
+COPY src/Event.Contracts/. ./Event.Contracts/
 COPY src/DataAccessLayer/. ./DataAccessLayer/
 COPY src/Services/. ./Services/
 

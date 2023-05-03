@@ -16,7 +16,7 @@ services:
       - SA_PASSWORD=VerySecret1234!
       - MSSQL_ENABLE_HADR=0
       - MSSQL_AGENT_ENABLED=false
-      - MSSQL_MEMORY_LIMIT_MB=4000
+      - MSSQL_MEMORY_LIMIT_MB=8000
     ports:
       - "1433:1433"
     networks:

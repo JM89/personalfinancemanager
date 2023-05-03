@@ -1,18 +1,19 @@
-﻿using System.Collections.Generic;
-using PFM.Api.Contracts.Pension;
+﻿using PFM.Api.Contracts.Pension;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PFM.Services.Interfaces
 {
     public interface IPensionService : IBaseService
     {
-        IList<PensionList> GetPensions(string userId);
+        Task<IList<PensionList>> GetPensions(string userId);
 
-        void CreatePension(PensionDetails pensionDetails);
+        Task<bool> CreatePension(PensionDetails pensionDetails);
 
-        PensionDetails GetById(int id);
+        Task<PensionDetails> GetById(int id);
 
-        void EditPension(PensionDetails pensionDetails);
+        Task<bool> EditPension(PensionDetails pensionDetails);
 
-        void DeletePension(int id);
+        Task<bool> DeletePension(int id);
     }
 }

@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PFM.Api.Contracts.Country;
-using PFM.Services.Interfaces;
+﻿using Api.Contracts.Shared;
+using Microsoft.AspNetCore.Mvc;
+using PFM.Services.ExternalServices.BankApi;
 
 namespace PFM.Api.Controllers
 {
@@ -8,23 +8,23 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class CountryController : ControllerBase
     {
-        private readonly ICountryService _countryService;
+        private readonly ICountryApi _countryApi;
 
-        public CountryController(ICountryService CountryService)
+        public CountryController(ICountryApi countryApi)
         {
-            _countryService = CountryService;
+            _countryApi = countryApi;
         }
 
         [HttpGet("GetList")]
-        public IEnumerable<CountryList> GetList()
+        public async Task<ApiResponse> GetList()
         {
-            return _countryService.GetCountries();
+            return await _countryApi.GetList();
         }
 
         [HttpGet("Get/{id}")]
-        public CountryDetails Get(int id)
+        public async Task<ApiResponse> Get(int id)
         {
-            return _countryService.GetById(id);
+            return await _countryApi.Get(id);
         }
     }
 }

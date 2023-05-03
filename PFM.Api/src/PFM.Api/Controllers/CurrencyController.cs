@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PFM.Api.Contracts.Currency;
-using PFM.Services.Interfaces;
+﻿using Api.Contracts.Shared;
+using Microsoft.AspNetCore.Mvc;
+using PFM.Services.ExternalServices.BankApi;
 
 namespace PFM.Api.Controllers
 {
@@ -8,23 +8,23 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class CurrencyController : ControllerBase
     {
-        private readonly ICurrencyService _currencyService;
+        private readonly ICurrencyApi _currencyApi;
 
-        public CurrencyController(ICurrencyService currencyService)
+        public CurrencyController(ICurrencyApi currencyApi)
         {
-            _currencyService = currencyService;
+            _currencyApi = currencyApi;
         }
 
         [HttpGet("GetList")]
-        public IEnumerable<CurrencyList> GetList()
+        public async Task<ApiResponse> GetList()
         {
-            return _currencyService.GetCurrencies();
+            return await _currencyApi.GetList();
         }
 
         [HttpGet("Get/{id}")]
-        public CurrencyDetails Get(int id)
+        public async Task<ApiResponse> Get(int id)
         {
-            return _currencyService.GetById(id);
+            return await _currencyApi.Get(id);
         }
     }
 }

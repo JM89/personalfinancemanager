@@ -6,7 +6,7 @@ namespace PFM.Services.ExternalServices.BankApi
 {
     public interface ICountryApi
     {
-        [Get("/api/Country/GetList/{userId}")]
+        [Get("/api/Country/GetList")]
         Task<ApiResponse> GetList();
 
         [Get("/api/Country/Get/{id}")]

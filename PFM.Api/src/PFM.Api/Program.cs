@@ -18,8 +18,10 @@ namespace PFM.Api
 
             builder.Configuration.AddEnvironmentVariables(prefix: "APP_");
 
-            builder.Services.AddControllers();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddTransient<AuthHeaderHandler>();
 
+            builder.Services.AddControllers();
             builder.Services.AddMemoryCache();
 
             builder.Services

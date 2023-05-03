@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PFM.Api.Contracts.Tax;
 
 namespace PFM.Services.Interfaces
 {
     public interface ITaxService : IBaseService
     {
-        IList<TaxList> GetTaxes(string userId);
+        Task<IList<TaxList>> GetTaxes(string userId);
 
-        void CreateTax(TaxDetails taxDetails);
+        Task<bool> CreateTax(TaxDetails taxDetails);
 
-        TaxDetails GetById(int id);
+        Task<TaxDetails> GetById(int id);
 
-        void EditTax(TaxDetails taxDetails);
+        Task<bool> EditTax(TaxDetails taxDetails);
 
-        void DeleteTax(int id);
+        Task<bool> DeleteTax(int id);
 
-        IList<TaxList> GetTaxesByType(string currentUser, int taxTypeId);
+        Task<List<TaxList>> GetTaxesByType(string currentUser, int taxTypeId);
     }
 }

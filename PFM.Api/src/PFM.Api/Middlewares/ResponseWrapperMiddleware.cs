@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using PFM.Api.Contracts.Shared;
 using PFM.Services.Core.Exceptions;
@@ -13,8 +14,7 @@ namespace PFM.Api.Middlewares
         private readonly List<string> ignoreRules = new List<string> {
             "/swagger/v1/swagger.json",
             "/swagger/index.html",
-            "/swagger",
-            "/"
+            "/swagger"
         };
 
         private readonly JsonSerializerSettings _serializeOptions = new JsonSerializerSettings
@@ -58,8 +58,16 @@ namespace PFM.Api.Middlewares
 
                     var readToEnd = new StreamReader(memoryStream).ReadToEnd();
                     var objResult = JsonConvert.DeserializeObject(readToEnd);
-                    var result = new ApiResponse(objResult);
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(result, _serializeOptions));
+
+                    if (objResult is JObject && ((JObject)objResult).ContainsKey("data"))
+                    {
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(objResult, _serializeOptions));
+                    }
+                    else
+                    {
+                        var result = new ApiResponse(objResult);
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(result, _serializeOptions));
+                    }
                 }
                 catch (BusinessException ex)
                 {
