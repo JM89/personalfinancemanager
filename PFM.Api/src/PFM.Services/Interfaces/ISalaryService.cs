@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PFM.Api.Contracts.Salary;
 
 namespace PFM.Services.Interfaces
 {
     public interface ISalaryService : IBaseService
     {
-        IList<SalaryList> GetSalaries(string userId);
+        Task<IList<SalaryList>> GetSalaries(string userId);
 
-        void CreateSalary(SalaryDetails salaryDetails);
+        Task<bool> CreateSalary(SalaryDetails salaryDetails);
 
-        SalaryDetails GetById(int id);
+        Task<SalaryDetails> GetById(int id);
 
-        void EditSalary(SalaryDetails salaryDetails);
+        Task<bool> EditSalary(SalaryDetails salaryDetails);
 
-        void DeleteSalary(int id);
+        Task<bool> DeleteSalary(int id);
 
-        void CopySalary(int sourceId);
+        Task<bool> CopySalary(int sourceId);
     }
 }

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using PFM.Services.Interfaces;
-using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.DataAccessLayer.Entities;
+﻿using AutoMapper;
 using PFM.Api.Contracts.Salary;
+using PFM.DataAccessLayer.Entities;
+using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Caches.Interfaces;
+using PFM.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PFM.Services
 {
@@ -24,23 +25,26 @@ namespace PFM.Services
             this._currencyCache = currencyCache;
         }
 
-        public IList<SalaryList> GetSalaries(string userId)
+        public async Task<IList<SalaryList>> GetSalaries(string userId)
         {
             var salaries = _salaryRepository.GetList2().Where(x => x.UserId == userId).ToList();
 
             var mappedSalaries = new List<SalaryList>();
-            salaries.ForEach(async s => {
+            foreach (var s in salaries)
+            {
                 var map = Mapper.Map<SalaryList>(s);
                 var country = await _countryCache.GetById(s.CountryId);
                 map.CountryName = country.Name;
                 var currency = await _currencyCache.GetById(s.CurrencyId);
                 map.CurrencySymbol = currency.Symbol;
-            });
+
+                mappedSalaries.Add(map);
+            }
 
             return mappedSalaries.ToList();
         }
 
-        public void CreateSalary(SalaryDetails salaryDetails)
+        public Task<bool> CreateSalary(SalaryDetails salaryDetails)
         {
             var salary = Mapper.Map<Salary>(salaryDetails);
             var savedSalary = _salaryRepository.Create(salary);
@@ -51,9 +55,11 @@ namespace PFM.Services
                 salaryDeduction.SalaryId = savedSalary.Id;
                 _salaryDeductionRepository.Create(salaryDeduction);
             }
+
+            return Task.FromResult(true);
         }
 
-        public void CopySalary(int sourceId)
+        public Task<bool> CopySalary(int sourceId)
         {
             var sourceSalary = _salaryRepository.GetById(sourceId, true);
             var copySalary = Mapper.Map<Salary>(sourceSalary);
@@ -67,9 +73,11 @@ namespace PFM.Services
                 copySalaryDeduction.SalaryId = copySalary.Id;
                 _salaryDeductionRepository.Create(copySalaryDeduction);
             }
+
+            return Task.FromResult(true);
         }
 
-        public SalaryDetails GetById(int id)
+        public Task<SalaryDetails> GetById(int id)
         {
             var salary = _salaryRepository.GetList2().SingleOrDefault(x => x.Id == id);
             if (salary == null)
@@ -86,10 +94,10 @@ namespace PFM.Services
                 mappedSalary.SalaryDeductions.Add(mappedSalaryDeduction);
             }
 
-            return mappedSalary;
+            return Task.FromResult(mappedSalary);
         }
 
-        public void EditSalary(SalaryDetails salaryDetails)
+        public Task<bool> EditSalary(SalaryDetails salaryDetails)
         {
             var salary = Mapper.Map<Salary>(salaryDetails);
             _salaryRepository.Update(salary);
@@ -121,10 +129,12 @@ namespace PFM.Services
             {
                 var refreshedSalaryDeduction = _salaryDeductionRepository.GetById(excludedSalaryDeduction.Id);
                 _salaryDeductionRepository.Delete(refreshedSalaryDeduction);
-            }            
+            }
+
+            return Task.FromResult(true);
         }
 
-        public void DeleteSalary(int id)
+        public Task<bool> DeleteSalary(int id)
         {
             var salaryDeductions = _salaryDeductionRepository.GetList().Where(x => x.SalaryId == id).ToList();
             foreach (var salaryDeduction in salaryDeductions)
@@ -134,6 +144,8 @@ namespace PFM.Services
 
             var salary = _salaryRepository.GetById(id);
             _salaryRepository.Delete(salary);
+
+            return Task.FromResult(true);
         }
     }
 }

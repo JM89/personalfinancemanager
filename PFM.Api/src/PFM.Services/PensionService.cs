@@ -32,6 +32,7 @@ namespace PFM.Services
                 var map = Mapper.Map<PensionList>(p);
                 var country = await _countryCache.GetById(p.CountryId);
                 map.CountryName = country.Name;
+                mappedPensions.Add(map);
             });
 
             return mappedPensions.ToList();

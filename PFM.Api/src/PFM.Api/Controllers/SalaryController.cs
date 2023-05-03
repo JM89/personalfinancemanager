@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.Salary;
 using PFM.Services.Interfaces;
 
@@ -9,47 +8,47 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class SalaryController : ControllerBase
     {
-        private readonly ISalaryService _SalaryService;
+        private readonly ISalaryService _salaryService;
 
         public SalaryController(ISalaryService SalaryService)
         {
-            _SalaryService = SalaryService;
+            _salaryService = SalaryService;
         }
 
         [HttpGet("GetList/{userId}")]
-        public IEnumerable<SalaryList> GetList(string userId)
+        public async Task<IList<SalaryList>> GetList(string userId)
         {
-            return _SalaryService.GetSalaries(userId);
+            return await _salaryService.GetSalaries(userId);
         }
 
         [HttpGet("Get/{id}")]
-        public SalaryDetails Get(int id)
+        public Task<SalaryDetails> Get(int id)
         {
-            return _SalaryService.GetById(id);
+            return _salaryService.GetById(id);
         }
         
         [HttpPost("Create")]
-        public void Post([FromBody]SalaryDetails createdObj)
+        public Task<bool> Post([FromBody]SalaryDetails createdObj)
         {
-            _SalaryService.CreateSalary(createdObj);
+            return _salaryService.CreateSalary(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, [FromBody]SalaryDetails editedObj)
+        public Task<bool> Put(int id, [FromBody]SalaryDetails editedObj)
         {
-            _SalaryService.EditSalary(editedObj);
+            return _salaryService.EditSalary(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public void Delete(int id)
+        public Task<bool> Delete(int id)
         {
-            _SalaryService.DeleteSalary(id);
+            return _salaryService.DeleteSalary(id);
         }
 
         [HttpPost("CopySalary/{sourceId}")]
-        public void CopySalary(int sourceId)
+        public Task<bool> CopySalary(int sourceId)
         {
-            _SalaryService.CopySalary(sourceId);
+            return _salaryService.CopySalary(sourceId);
         }
     }
 }
