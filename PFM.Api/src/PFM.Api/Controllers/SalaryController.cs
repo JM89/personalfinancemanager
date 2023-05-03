@@ -36,6 +36,7 @@ namespace PFM.Api.Controllers
         [HttpPut("Edit/{id}")]
         public Task<bool> Put(int id, [FromBody]SalaryDetails editedObj)
         {
+            editedObj.Id = id;
             return _salaryService.EditSalary(editedObj);
         }
         

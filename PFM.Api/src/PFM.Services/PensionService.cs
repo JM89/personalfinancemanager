@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using PFM.Services.Interfaces;
-using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Api.Contracts.Pension;
 using PFM.DataAccessLayer.Entities;
+using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Caches.Interfaces;
+using PFM.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using PFM.Api.Contracts.Pension;
-using PFM.Services.Caches.Interfaces;
-using PFM.Api.Contracts.Salary;
+using System.Threading.Tasks;
 
 namespace PFM.Services
 {
@@ -23,48 +23,56 @@ namespace PFM.Services
             this._currencyCache = currencyCache;
         }
 
-        public IList<PensionList> GetPensions(string userId)
+        public async Task<IList<PensionList>> GetPensions(string userId)
         {
             var pensions = _pensionRepository.GetList2().Where(x => x.UserId == userId).ToList();
 
             var mappedPensions = new List<PensionList>();
-            pensions.ForEach(async p => {
+
+            foreach (var p in pensions)
+            {
                 var map = Mapper.Map<PensionList>(p);
                 var country = await _countryCache.GetById(p.CountryId);
                 map.CountryName = country.Name;
                 mappedPensions.Add(map);
-            });
+            }
 
             return mappedPensions.ToList();
         }
 
-        public void CreatePension(PensionDetails pensionDetails)
+        public Task<bool> CreatePension(PensionDetails pensionDetails)
         {
             var pension = Mapper.Map<Pension>(pensionDetails);
             _pensionRepository.Create(pension);
+
+            return Task.FromResult(true);
         }
 
-        public PensionDetails GetById(int id)
+        public Task<PensionDetails> GetById(int id)
         {
             var pension = _pensionRepository.GetById(id);
             if (pension == null)
             {
                 return null;
             }
-            return Mapper.Map<PensionDetails>(pension);
+            return Task.FromResult(Mapper.Map<PensionDetails>(pension));
         }
 
-        public void EditPension(PensionDetails pensionDetails)
+        public Task<bool> EditPension(PensionDetails pensionDetails)
         {
             var pension = Mapper.Map<Pension>(pensionDetails);
             _pensionRepository.Update(pension);
+
+            return Task.FromResult(true);
         }
 
-        public void DeletePension(int id)
+        public Task<bool> DeletePension(int id)
         {
             var pension = _pensionRepository.GetById(id);
             
             _pensionRepository.Delete(pension);
+
+            return Task.FromResult(true);
         }
     }
 }

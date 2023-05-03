@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.Pension;
 using PFM.Services.Interfaces;
 
@@ -9,41 +8,42 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class PensionController : ControllerBase
     {
-        private readonly IPensionService _PensionService;
+        private readonly IPensionService _pensionService;
 
         public PensionController(IPensionService PensionService)
         {
-            _PensionService = PensionService;
+            _pensionService = PensionService;
         }
 
         [HttpGet("GetList/{userId}")]
-        public IEnumerable<PensionList> GetList(string userId)
+        public async Task<IEnumerable<PensionList>> GetList(string userId)
         {
-            return _PensionService.GetPensions(userId);
+            return await _pensionService.GetPensions(userId);
         }
 
         [HttpGet("Get/{id}")]
-        public PensionDetails Get(int id)
+        public Task<PensionDetails> Get(int id)
         {
-            return _PensionService.GetById(id);
+            return _pensionService.GetById(id);
         }
         
         [HttpPost("Create")]
-        public void Post([FromBody]PensionDetails createdObj)
+        public Task<bool> Post([FromBody]PensionDetails createdObj)
         {
-            _PensionService.CreatePension(createdObj);
+            return _pensionService.CreatePension(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, [FromBody]PensionDetails editedObj)
+        public Task<bool> Put(int id, [FromBody]PensionDetails editedObj)
         {
-            _PensionService.EditPension(editedObj);
+            editedObj.Id = id;
+            return _pensionService.EditPension(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public void Delete(int id)
+        public Task<bool> Delete(int id)
         {
-            _PensionService.DeletePension(id);
+            return _pensionService.DeletePension(id);
         }
     }
 }
