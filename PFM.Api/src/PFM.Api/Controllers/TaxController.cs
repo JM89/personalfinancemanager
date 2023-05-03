@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.Tax;
 using PFM.Services.Interfaces;
 
@@ -9,47 +8,48 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class TaxController : ControllerBase
     {
-        private readonly ITaxService _TaxService;
+        private readonly ITaxService _taxService;
 
         public TaxController(ITaxService TaxService)
         {
-            _TaxService = TaxService;
+            _taxService = TaxService;
         }
 
         [HttpGet("GetList/{userId}")]
-        public IEnumerable<TaxList> GetList(string userId)
+        public async Task<IEnumerable<TaxList>> GetList(string userId)
         {
-            return _TaxService.GetTaxes(userId);
+            return await _taxService.GetTaxes(userId);
         }
 
         [HttpGet("GetTaxesByType/{userId}/{taxTypeId}")]
-        public IList<TaxList> GetTaxesByType(string userId, int taxTypeId)
+        public Task<List<TaxList>> GetTaxesByType(string userId, int taxTypeId)
         {
-            return _TaxService.GetTaxesByType(userId, taxTypeId);
+            return _taxService.GetTaxesByType(userId, taxTypeId);
         }
 
         [HttpGet("Get/{id}")]
-        public TaxDetails Get(int id)
+        public Task<TaxDetails> Get(int id)
         {
-            return _TaxService.GetById(id);
+            return _taxService.GetById(id);
         }
         
         [HttpPost("Create")]
-        public void Post([FromBody]TaxDetails createdObj)
+        public Task<bool> Post([FromBody]TaxDetails createdObj)
         {
-            _TaxService.CreateTax(createdObj);
+            return _taxService.CreateTax(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, [FromBody]TaxDetails editedObj)
+        public Task<bool> Put(int id, [FromBody]TaxDetails editedObj)
         {
-            _TaxService.EditTax(editedObj);
+            editedObj.Id = id;
+            return _taxService.EditTax(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public void Delete(int id)
+        public Task<bool> Delete(int id)
         {
-            _TaxService.DeleteTax(id);
+            return _taxService.DeleteTax(id);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PFM.Api.Contracts.Pension;
 using PFM.Services.Caches.Interfaces;
+using PFM.Api.Contracts.Salary;
 
 namespace PFM.Services
 {
@@ -24,9 +25,14 @@ namespace PFM.Services
 
         public IList<PensionList> GetPensions(string userId)
         {
-            var pensions = _pensionRepository.GetList2(u => u.Currency, u => u.Country).Where(x => x.UserId == userId).ToList();
+            var pensions = _pensionRepository.GetList2().Where(x => x.UserId == userId).ToList();
 
-            var mappedPensions = pensions.Select(Mapper.Map<PensionList>);
+            var mappedPensions = new List<PensionList>();
+            pensions.ForEach(async p => {
+                var map = Mapper.Map<PensionList>(p);
+                var country = await _countryCache.GetById(p.CountryId);
+                map.CountryName = country.Name;
+            });
 
             return mappedPensions.ToList();
         }

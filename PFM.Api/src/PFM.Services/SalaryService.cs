@@ -26,9 +26,16 @@ namespace PFM.Services
 
         public IList<SalaryList> GetSalaries(string userId)
         {
-            var salaries = _salaryRepository.GetList2(u => u.Currency, u => u.Country).Where(x => x.UserId == userId).ToList();
+            var salaries = _salaryRepository.GetList2().Where(x => x.UserId == userId).ToList();
 
-            var mappedSalaries = salaries.Select(Mapper.Map<SalaryList>);
+            var mappedSalaries = new List<SalaryList>();
+            salaries.ForEach(async s => {
+                var map = Mapper.Map<SalaryList>(s);
+                var country = await _countryCache.GetById(s.CountryId);
+                map.CountryName = country.Name;
+                var currency = await _currencyCache.GetById(s.CurrencyId);
+                map.CurrencySymbol = currency.Symbol;
+            });
 
             return mappedSalaries.ToList();
         }
@@ -64,7 +71,7 @@ namespace PFM.Services
 
         public SalaryDetails GetById(int id)
         {
-            var salary = _salaryRepository.GetList2(u => u.Currency).SingleOrDefault(x => x.Id == id);
+            var salary = _salaryRepository.GetList2().SingleOrDefault(x => x.Id == id);
             if (salary == null)
             {
                 return null;

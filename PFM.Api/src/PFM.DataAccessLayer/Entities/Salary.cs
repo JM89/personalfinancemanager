@@ -42,13 +42,7 @@ namespace PFM.DataAccessLayer.Entities
         [Required]
         public int CurrencyId { get; set; }
 
-        [ForeignKey("CurrencyId")]
-        public Currency Currency { get; set; }
-
         [Required]
         public int CountryId { get; set; }
-
-        [ForeignKey("CountryId")]
-        public Country Country { get; set; }
     }
 }
