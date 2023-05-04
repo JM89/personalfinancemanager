@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using PFM.Api.Contracts.Account;
 using PFM.Api.Contracts.BudgetPlan;
 using PFM.Api.Contracts.Dashboard;
 using PFM.Api.Contracts.Expense;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.MovementStrategy;
 using PFM.Services.Utils.Helpers;
@@ -25,9 +25,10 @@ namespace PFM.Services.Interfaces.Services
         private readonly IIncomeRepository _incomeRepository;
         private readonly IExpenseTypeRepository _ExpenseTypeRepository;
         private readonly IEventPublisher _eventPublisher;
+        private readonly IBankAccountCache _bankAccountCache;
 
         public ExpenseService(IExpenseRepository ExpenseRepository, IBankAccountRepository bankAccountRepository, IAtmWithdrawRepository atmWithdrawRepository, IIncomeRepository incomeRepository,
-            IExpenseTypeRepository ExpenseTypeRepository, ISavingRepository savingRepository, IEventPublisher eventPublisher)
+            IExpenseTypeRepository ExpenseTypeRepository, ISavingRepository savingRepository, IEventPublisher eventPublisher, IBankAccountCache bankAccountCache)
         {
             this._expenseRepository = ExpenseRepository;
             this._bankAccountRepository = bankAccountRepository;
@@ -36,6 +37,7 @@ namespace PFM.Services.Interfaces.Services
             this._ExpenseTypeRepository = ExpenseTypeRepository;
             this._savingRepository = savingRepository;
             this._eventPublisher = eventPublisher;
+            this._bankAccountCache = bankAccountCache;
         }
 
         public Task<bool> CreateExpenses(List<ExpenseDetails> ExpenseDetails)
@@ -125,7 +127,7 @@ namespace PFM.Services.Interfaces.Services
             return mappedExpenses.ToList();
         }
 
-        public ExpenseSummary GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate)
+        public async Task<ExpenseSummary> GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate)
         {
             var account = _bankAccountRepository.GetById(accountId, x => x.Bank, x => x.Currency);
 
@@ -258,9 +260,11 @@ namespace PFM.Services.Interfaces.Services
                 SavingValue = savings.Where(x => currentMonthInterval.IsBetween(x.DateSaving)).Sum(x => x.Amount)
             });
 
+            var accountDetails = await _bankAccountCache.GetById(account.Id);
+
             var ExpenseSummary = new ExpenseSummary()
             {
-                Account = Mapper.Map<AccountDetails>(account),
+                Account = accountDetails,
                 ExpensesByCategory = expensesByCategory.OrderByDescending(x => x.CostCurrentMonth).ToList(),
                 LabelCurrentMonth = DateTimeFormatHelper.GetMonthNameAndYear(referenceDate),
                 LabelPreviousMonth = DateTimeFormatHelper.GetMonthNameAndYear(referenceDate.AddMonths(-1)),

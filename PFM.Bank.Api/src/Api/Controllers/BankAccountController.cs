@@ -47,9 +47,10 @@ namespace Api.Controllers
         }
 
         [HttpPost("SetAsFavorite/{id}")]
-        public void SetAsFavorite(int id)
+        public bool SetAsFavorite(int id)
         {
             _bankAccountService.SetAsFavorite(id);
+            return true;
         }
     }
 }

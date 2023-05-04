@@ -19,7 +19,7 @@ namespace PFM.Services.Interfaces
 
         void ChangeDebitStatus(int id, bool debitStatus);
 
-        ExpenseSummary GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate);
+        Task<ExpenseSummary> GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate);
 
         IList<ExpenseList> GetExpenses(Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search);
     }

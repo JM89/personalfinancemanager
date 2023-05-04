@@ -22,20 +22,8 @@ namespace PFM.Services.Core.Automapper
             CreateMap<DataAccessLayer.Entities.ExpenseType, Api.Contracts.ExpenseType.ExpenseTypeList>();
             CreateMap<DataAccessLayer.Entities.ExpenseType, Api.Contracts.ExpenseType.ExpenseTypeDetails>();
 
-            CreateMap<DataAccessLayer.Entities.Country, Api.Contracts.Country.CountryList>();
-            CreateMap<DataAccessLayer.Entities.Country, Api.Contracts.Country.CountryDetails>();
-
             CreateMap<DataAccessLayer.Entities.Income, Api.Contracts.Income.IncomeList>();
             CreateMap<DataAccessLayer.Entities.Income, Api.Contracts.Income.IncomeDetails>();
-
-            CreateMap<DataAccessLayer.Entities.Bank, Api.Contracts.Bank.BankList>();
-            CreateMap<DataAccessLayer.Entities.Bank, Api.Contracts.Bank.BankDetails>();
-
-            CreateMap<DataAccessLayer.Entities.Currency, Api.Contracts.Currency.CurrencyList>();
-            CreateMap<DataAccessLayer.Entities.Currency, Api.Contracts.Currency.CurrencyDetails>();
-
-            CreateMap<DataAccessLayer.Entities.Account, Api.Contracts.Account.AccountList>();
-            CreateMap<DataAccessLayer.Entities.Account, Api.Contracts.Account.AccountDetails>();
 
             CreateMap<DataAccessLayer.Entities.BudgetPlan, Api.Contracts.BudgetPlan.BudgetPlanList>();
             CreateMap<DataAccessLayer.Entities.BudgetPlan, Api.Contracts.BudgetPlan.BudgetPlanDetails>();

@@ -3,6 +3,7 @@ using PFM.Bank.Event.Contracts.Interfaces;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.SearchParameters;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.Interfaces.Services;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace PFM.UnitTests
         protected Mock<IExpenseTypeRepository> MockExpenseTypeRepository;
         protected Mock<ISavingRepository> MockSavingRepository;
         protected Mock<IEventPublisher> MockEventPublisher;
+        protected Mock<IBankAccountCache> MockBankAccountCache;
 
         public BaseTests()
         {
@@ -53,6 +55,17 @@ namespace PFM.UnitTests
             MockEventPublisher = new Mock<IEventPublisher>();
             MockEventPublisher.Setup(x => x.PublishAsync(It.IsAny<IEvent>(), default)).ReturnsAsync(true);
 
+            MockBankAccountCache = new Mock<IBankAccountCache>();
+            MockBankAccountCache.Setup(x => x.GetById(It.IsAny<int>())).ReturnsAsync(new Bank.Api.Contracts.Account.AccountDetails()
+            {
+                Id = account.Id,
+                BankId = account.BankId,
+                CurrencyId = account.CurrencyId,
+                Name = account.Name,
+                CurrentBalance = account.CurrentBalance,
+                InitialBalance = account.InitialBalance
+            });
+
             var service = new ExpenseService(
                 MockExpenseRepository.Object,
                 MockBankAccountRepository.Object,
@@ -60,7 +73,8 @@ namespace PFM.UnitTests
                 MockIncomeRepository.Object,
                 MockExpenseTypeRepository.Object,
                 MockSavingRepository.Object,
-                MockEventPublisher.Object);
+                MockEventPublisher.Object,
+                MockBankAccountCache.Object);
             return service;
         }
     }

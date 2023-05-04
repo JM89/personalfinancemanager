@@ -54,9 +54,9 @@ namespace PFM.Api.Controllers
         }
 
         [HttpPost("GetExpenseSummary/{accountId}")]
-        public ExpenseSummary GetExpenseSummary(int accountId, [FromBody]BudgetPlanDetails budgetPlan)
+        public async Task<ExpenseSummary> GetExpenseSummary(int accountId, [FromBody]BudgetPlanDetails budgetPlan)
         {
-            return _expenseService.GetExpenseSummary(accountId, budgetPlan, DateTime.Now);
+            return await _expenseService.GetExpenseSummary(accountId, budgetPlan, DateTime.Now);
         }
 
         [HttpPost("GetExpenses")]

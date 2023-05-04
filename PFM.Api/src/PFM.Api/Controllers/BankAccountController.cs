@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PFM.Api.Contracts.Account;
-using PFM.Services.Interfaces;
+﻿using Api.Contracts.Shared;
+using Microsoft.AspNetCore.Mvc;
+using PFM.Bank.Api.Contracts.Account;
+using PFM.Services.ExternalServices.BankApi;
 
 namespace PFM.Api.Controllers
 {
@@ -8,47 +9,47 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class BankAccountController : ControllerBase
     {
-        private readonly IBankAccountService _bankAccountService;
+        private readonly IBankAccountApi _bankAccountApi;
 
-        public BankAccountController(IBankAccountService bankAccountService)
+        public BankAccountController(IBankAccountApi bankAccountApi)
         {
-            _bankAccountService = bankAccountService;
+            _bankAccountApi = bankAccountApi;
         }
 
         [HttpGet("GetList/{userId}")]
-        public IEnumerable<AccountList> GetList(string userId)
+        public async Task<ApiResponse> GetList(string userId)
         {
-            return _bankAccountService.GetAccountsByUser(userId);
+            return await _bankAccountApi.GetList(userId);
         }
 
         [HttpGet("Get/{id}")]
-        public AccountDetails Get(int id)
+        public async Task<ApiResponse> Get(int id)
         {
-            return _bankAccountService.GetById(id);
+            return await _bankAccountApi.Get(id);
         }
         
         [HttpPost("Create/{userId}")]
-        public async Task<bool> Post(string userId, [FromBody]AccountDetails createdObj)
+        public async Task<ApiResponse> Post(string userId, [FromBody]AccountDetails createdObj)
         {
-            return await _bankAccountService.CreateBankAccount(createdObj, userId);
+            return await _bankAccountApi.Create(userId, createdObj);
         }
         
         [HttpPut("Edit/{id}/{userId}")]
-        public async Task<bool> Put(int id, string userId, [FromBody]AccountDetails editedObj)
+        public async Task<ApiResponse> Put(int id, string userId, [FromBody]AccountDetails editedObj)
         {
-            return await _bankAccountService.EditBankAccount(editedObj, userId);
+            return await _bankAccountApi.Edit(id, userId, editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public async Task<bool> Delete(int id)
+        public async Task<ApiResponse> Delete(int id)
         {
-            return await _bankAccountService.DeleteBankAccount(id);
+            return await _bankAccountApi.Delete(id);
         }
 
         [HttpPost("SetAsFavorite/{id}")]
-        public void SetAsFavorite(int id)
+        public async Task<ApiResponse> SetAsFavorite(int id)
         {
-            _bankAccountService.SetAsFavorite(id);
+            return await _bankAccountApi.SetAsFavorite(id);
         }
     }
 }
