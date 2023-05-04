@@ -7,19 +7,19 @@ namespace PFM.Services.ExternalServices.BankApi
 {
     public interface IBankApi
     {
-        [Get("/api/Bank/GetList/{userId}")]
-        Task<ApiResponse> GetList(string userId);
+        [Get("/api/Bank/GetList")]
+        Task<ApiResponse> GetList();
 
         [Get("/api/Bank/Get/{id}")]
         Task<ApiResponse> Get(int id);
 
         [Post("/api/Bank/Create")]
-        Task<ApiResponse> Post(BankDetails bankDetails);
+        Task<ApiResponse> Create(BankDetails bankDetails);
 
         [Put("/api/Bank/Edit/{id}")]
-        Task<ApiResponse> Put(int id, BankDetails bankDetails);
+        Task<ApiResponse> Edit(int id, BankDetails bankDetails);
 
-        [Put("/api/Bank/Delete/{id}")]
+        [Delete("/api/Bank/Delete/{id}")]
         Task<ApiResponse> Delete(int id);
     }
 }

@@ -27,6 +27,10 @@ namespace PFM.Api.Filters
 
         public override async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+#if DEBUG
+            return;
+#endif
+
             if (_ignoreList.Any(x => x == context.HttpContext.Request.Path))
                 return;
 

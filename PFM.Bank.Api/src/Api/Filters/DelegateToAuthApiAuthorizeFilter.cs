@@ -20,6 +20,9 @@ namespace Api.Filters
 
         public override async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+#if DEBUG
+            return;
+#endif
             bool result = false;
             try
             {

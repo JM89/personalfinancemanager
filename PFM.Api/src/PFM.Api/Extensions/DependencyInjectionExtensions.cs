@@ -9,6 +9,7 @@ using PFM.Services.Events.Interfaces;
 using PFM.Services.ExternalServices.AuthApi;
 using Refit;
 using Serilog;
+using System.Text.Json;
 
 namespace PFM.Api.Extensions
 {
@@ -78,24 +79,45 @@ namespace PFM.Api.Extensions
             if (apiConfigs == null)
                 throw new Exception("DI exception: Bank API config was not found");
 
+            var refitSettings = new RefitSettings()
+            {
+                ContentSerializer = new SystemTextJsonContentSerializer(
+                    new JsonSerializerOptions()
+                    {
+                        PropertyNameCaseInsensitive = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        Converters =
+                        {
+                            new ObjectToInferredTypesConverter(),
+                        }
+                    }
+                ),
+                ExceptionFactory = httpResponse =>
+                {
+                    return Task.FromResult<Exception?>(null);
+                }
+            };
+
             services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankAccountApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankAccountApi>(refitSettings)
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<IBankAccountCache, BankAccountCache>();
 
             services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs));
+                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankApi>(refitSettings)
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<IBankCache, BankCache>();
 
             services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICurrencyApi>()
+                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICurrencyApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
                 .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<ICurrencyCache, CurrencyCache>();
 
             services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICountryApi>()
+                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICountryApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
                 .AddHttpMessageHandler<AuthHeaderHandler>(); 
             services.AddSingleton<ICountryCache, CountryCache>();

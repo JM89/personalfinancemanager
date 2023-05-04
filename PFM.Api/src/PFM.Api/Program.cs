@@ -1,5 +1,4 @@
 using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +21,7 @@ namespace PFM.Api
             builder.Services.AddTransient<AuthHeaderHandler>();
 
             builder.Services.AddControllers();
+
             builder.Services.AddMemoryCache();
 
             builder.Services
