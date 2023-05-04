@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Api.Contracts.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PFM.Api.Contracts.Bank;
-using PFM.Services.Interfaces;
+using PFM.Bank.Api.Contracts.Bank;
+using PFM.Services.ExternalServices.BankApi;
 
 namespace PFM.Api.Controllers
 {
@@ -9,41 +10,41 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class BankController : ControllerBase
     {
-        private readonly IBankService _BankService;
+        private readonly IBankApi _bankApi;
 
-        public BankController(IBankService BankService)
+        public BankController(IBankApi bankApi)
         {
-            _BankService = BankService;
+            _bankApi = bankApi;
         }
 
         [HttpGet("GetList")]
-        public IEnumerable<BankList> GetList()
+        public async Task<ApiResponse> GetList()
         {
-            return _BankService.GetBanks();
+            return await _bankApi.GetList();
         }
 
         [HttpGet("Get/{id}")]
-        public BankDetails Get(int id)
+        public async Task<ApiResponse> Get(int id)
         {
-            return _BankService.GetById(id);
+            return await _bankApi.Get(id);
         }
         
         [HttpPost("Create")]
-        public void Post([FromBody]BankDetails createdObj)
+        public async Task<ApiResponse> Post([FromBody]BankDetails createdObj)
         {
-            _BankService.CreateBank(createdObj);
+            return await _bankApi.Create(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, [FromBody]BankDetails editedObj)
+        public async Task<ApiResponse> Put(int id, [FromBody]BankDetails editedObj)
         {
-            _BankService.EditBank(editedObj);
+            return await _bankApi.Edit(id, editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public void Delete(int id)
+        public async Task<ApiResponse> Delete(int id)
         {
-            _BankService.DeleteBank(id);
+            return await _bankApi.Delete(id);
         }
     }
 }

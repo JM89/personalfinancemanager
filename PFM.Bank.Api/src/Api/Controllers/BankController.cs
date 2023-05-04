@@ -28,21 +28,25 @@ namespace Api.Controllers
         }
         
         [HttpPost("Create")]
-        public void Post([FromBody]BankDetails createdObj)
+        public bool Post([FromBody]BankDetails createdObj)
         {
             _bankService.CreateBank(createdObj);
+            return true;
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, [FromBody]BankDetails editedObj)
+        public bool Put(int id, [FromBody]BankDetails editedObj)
         {
+            editedObj.Id = id;
             _bankService.EditBank(editedObj);
+            return true;
         }
         
         [HttpDelete("Delete/{id}")]
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             _bankService.DeleteBank(id);
+            return true;
         }
     }
 }
