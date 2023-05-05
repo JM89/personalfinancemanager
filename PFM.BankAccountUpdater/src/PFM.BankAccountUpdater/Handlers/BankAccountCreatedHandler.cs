@@ -1,5 +1,4 @@
-﻿using Api.Contracts.Shared;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PFM.Bank.Api.Contracts.Account;
 using PFM.Bank.Event.Contracts;
 using PFM.BankAccountUpdater.ExternalServices.BankApi;
@@ -12,11 +11,6 @@ namespace PFM.BankAccountUpdater.Handlers
     public class BankAccountCreatedHandler : IHandler<BankAccountCreated>
     {
         private readonly Serilog.ILogger _logger;
-
-        private static string EventIdProperty = "EventId";
-        private static string BankAccountIdProperty = "BankAccountId";
-        private static string UserIdProperty = "UserId";
-
         private readonly IBankAccountApi _bankAccountApi;
 
         public BankAccountCreatedHandler(IBankAccountApi bankAccountApi, Serilog.ILogger logger)
@@ -27,18 +21,15 @@ namespace PFM.BankAccountUpdater.Handlers
 
         public async Task<bool> HandleEvent(BankAccountCreated evt)
         {
-            var bankAccountId = evt.Id;
-            var userId = evt.UserId;
-                 
             using (var op = Operation.Begin("Handle BankAccountCreated event"))
-            using (LogContext.PushProperty(EventIdProperty, evt.EventId))
-            using (LogContext.PushProperty(BankAccountIdProperty, bankAccountId))
-            using (LogContext.PushProperty(UserIdProperty, userId))
+            using (LogContext.PushProperty(nameof(evt.StreamId), evt.StreamId))
+            using (LogContext.PushProperty(nameof(evt.Id), evt.Id))
+            using (LogContext.PushProperty(nameof(evt.UserId), evt.UserId))
             {
                 AccountDetails? account = null;
                 try
                 {
-                    var response = await _bankAccountApi.Get(bankAccountId);
+                    var response = await _bankAccountApi.Get(evt.Id);
 
                     if (response == null || response.Data == null)
                         throw new Exception("Data is null");
@@ -58,7 +49,7 @@ namespace PFM.BankAccountUpdater.Handlers
 
                 try
                 {
-                    var result = await _bankAccountApi.Edit(bankAccountId, userId, account);
+                    var result = await _bankAccountApi.Edit(evt.Id, evt.UserId, account);
                     if (result.Data == null || (result.Data is bool && !(bool)result.Data))
                         throw new Exception("Result is invalid");
                 }
