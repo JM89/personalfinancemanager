@@ -4,11 +4,13 @@ namespace PFM.Bank.Event.Contracts
 {
     public class BankAccountCreated: IEvent
     {
-        public string Id => $"{StreamGroup}-{UserId}-{BankCode}-{CurrencyCode}";
+        public string EventId => $"{StreamGroup}-{Id.ToString("00000000")}";
 
-        public string CurrencyCode { get; set; }
+        public int Id { get; set; }
 
-        public string BankCode { get; set; }
+        public int CurrencyId { get; set; }
+
+        public int BankId { get; set; }
 
         public decimal CurrentBalance { get; set; }
 

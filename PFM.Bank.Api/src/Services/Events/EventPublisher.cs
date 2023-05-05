@@ -26,7 +26,7 @@ namespace Services.Events
             );
 
             var result = await _eventStoreClient.AppendToStreamAsync(
-                evt.Id,
+                evt.EventId,
                 StreamState.Any,
                 new[] { eventData },
                 cancellationToken: token

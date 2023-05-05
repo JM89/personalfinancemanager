@@ -36,16 +36,9 @@ namespace Services
                 account.CurrentBalance = account.InitialBalance;
                 account.IsFavorite = !_bankAccountRepository.GetList().Any(x => x.User_Id == userId);
 
-                var added = _bankAccountRepository.Create(account);
+                _bankAccountRepository.Create(account);
 
-                added = _bankAccountRepository.GetById(added.Id, a => a.Currency, a => a.Bank);
-
-                var evt = new BankAccountCreated() { 
-                    BankCode = added.Bank.Id.ToString(), 
-                    CurrencyCode = added.Currency.Id.ToString(), 
-                    CurrentBalance = added.CurrentBalance,
-                    UserId = added.User_Id
-                };
+                var evt = Mapper.Map<BankAccountCreated>(account);
 
                 var published = await _eventPublisher.PublishAsync(evt, default);
                 
@@ -134,13 +127,7 @@ namespace Services
                 var account = _bankAccountRepository.GetById(id, a => a.Currency, a => a.Bank);
                 _bankAccountRepository.Delete(account);
 
-                var evt = new BankAccountDeleted()
-                {
-                    BankCode = account.Bank.Id.ToString(),
-                    CurrencyCode = account.Currency.Id.ToString(),
-                    CurrentBalance = account.CurrentBalance,
-                    UserId = account.User_Id
-                };
+                var evt = Mapper.Map<BankAccountDeleted>(account);
 
                 var published = await _eventPublisher.PublishAsync(evt, default);
 

@@ -2,7 +2,7 @@
 {
     public interface IEvent
     {
-        string Id { get; }
+        string EventId { get; }
 
         string StreamGroup { get; }
     }

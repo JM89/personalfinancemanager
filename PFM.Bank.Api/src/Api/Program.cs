@@ -52,6 +52,7 @@ namespace Api
             {
                 cfg.AddProfile<ModelToEntityMapping>();
                 cfg.AddProfile<EntityToModelMapping>();
+                cfg.AddProfile<EntityToContractMapping>();
             });
 
             app.Run();
