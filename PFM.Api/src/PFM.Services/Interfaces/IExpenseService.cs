@@ -21,6 +21,6 @@ namespace PFM.Services.Interfaces
 
         Task<ExpenseSummary> GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate);
 
-        IList<ExpenseList> GetExpenses(Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search);
+        Task<IList<ExpenseList>> GetExpenses(Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search);
     }
 }

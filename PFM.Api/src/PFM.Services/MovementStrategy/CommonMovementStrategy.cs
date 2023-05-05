@@ -1,6 +1,8 @@
-﻿using PFM.Bank.Event.Contracts;
+﻿using PFM.Bank.Api.Contracts.Account;
+using PFM.Bank.Event.Contracts;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -9,15 +11,15 @@ namespace PFM.Services.MovementStrategy
 {
     public class CommonMovementStrategy : MovementStrategy
     {
-        public CommonMovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
-            : base(movement, bankAccountRepository, incomeRepository, atmWithdrawRepository, eventPublisher)
+        public CommonMovementStrategy(Movement movement, IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+            : base(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher)
         { }
 
         public override async Task<bool> Debit()
         {
             if (CurrentMovement?.SourceAccountId != null)
             {
-                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value, a => a.Currency, a => a.Bank);
+                var account = await BankAccountCache.GetById(CurrentMovement.SourceAccountId.Value);
                 return await Debit(account, CurrentMovement);
             }
             else
@@ -26,22 +28,21 @@ namespace PFM.Services.MovementStrategy
             }
         }
 
-        private async Task<bool> Debit(Account account, Movement movement)
+        private async Task<bool> Debit(AccountDetails account, Movement movement)
         {
             var evt = new BankAccountDebited()
             {
                 Id = account.Id,
-                BankId = account.Bank.Id,
-                CurrencyId = account.Currency.Id,
+                BankId = account.BankId,
+                CurrencyId = account.CurrencyId,
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance - movement.Amount,
-                UserId = account.User_Id,
+                UserId = account.UserId,
                 OperationDate = movement.Date,
                 OperationType = $"Expense via {movement.PaymentMethod}"
             };
 
             account.CurrentBalance -= movement.Amount;
-            BankAccountRepository.Update(account);
 
             return await EventPublisher.PublishAsync(evt, default);
         }
@@ -50,7 +51,7 @@ namespace PFM.Services.MovementStrategy
         {
             if (CurrentMovement?.SourceAccountId != null)
             {
-                var account = BankAccountRepository.GetById(CurrentMovement.SourceAccountId.Value, a => a.Currency, a => a.Bank);
+                var account = await BankAccountCache.GetById(CurrentMovement.SourceAccountId.Value);
                 return await Credit(account, CurrentMovement);
             }
             else
@@ -59,22 +60,21 @@ namespace PFM.Services.MovementStrategy
             }
         }
 
-        private async Task<bool> Credit(Account account, Movement movement)
+        private async Task<bool> Credit(AccountDetails account, Movement movement)
         {
             var evt = new BankAccountCredited()
             {
                 Id = account.Id,
-                BankId = account.Bank.Id,
-                CurrencyId = account.Currency.Id,
+                BankId = account.BankId,
+                CurrencyId = account.CurrencyId,
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance + movement.Amount,
-                UserId = account.User_Id,
+                UserId = account.UserId,
                 OperationDate = movement.Date,
                 OperationType = $"Expense via {movement.PaymentMethod}"
             };
 
             account.CurrentBalance += movement.Amount;
-            BankAccountRepository.Update(account);
 
             return await EventPublisher.PublishAsync(evt, default);
         }
