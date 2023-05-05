@@ -23,5 +23,7 @@
         public string BankWebsite { get; set; }
 
         public string BankIconPath { get; set; }
+
+        public string OwnerId { get; set; }
     }
 }
