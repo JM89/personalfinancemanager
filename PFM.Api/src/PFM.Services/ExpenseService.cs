@@ -101,16 +101,16 @@ namespace PFM.Services.Interfaces.Services
 
         public Task<ExpenseDetails> GetById(int id)
         {
-            var Expense = _expenseRepository
-                            .GetList2(u => u.Account.Currency, u => u.ExpenseType, u => u.PaymentMethod)
+            var expense = _expenseRepository
+                            .GetList2(u => u.ExpenseType, u => u.PaymentMethod)
                             .SingleOrDefault(x => x.Id == id);
 
-            if (Expense == null)
+            if (expense == null)
             {
                 return null;
             }
 
-            return Task.FromResult(Mapper.Map<ExpenseDetails>(Expense));
+            return Task.FromResult(Mapper.Map<ExpenseDetails>(expense));
         }
 
         public Task<bool> ChangeDebitStatus(int id, bool debitStatus)

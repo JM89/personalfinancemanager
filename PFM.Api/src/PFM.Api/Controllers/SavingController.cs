@@ -16,15 +16,15 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("GetList/{accountId}")]
-        public IEnumerable<SavingList> GetList(int accountId)
+        public async Task<IEnumerable<SavingList>> GetList(int accountId)
         {
-            return _savingService.GetSavingsByAccountId(accountId);
+            return await _savingService.GetSavingsByAccountId(accountId);
         }
 
         [HttpGet("Get/{id}")]
-        public SavingDetails Get(int id)
+        public async Task<SavingDetails> Get(int id)
         {
-            return _savingService.GetById(id);
+            return await _savingService.GetById(id);
         }
         
         [HttpPost("Create")]

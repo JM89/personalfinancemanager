@@ -22,34 +22,34 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("Get/{id}")]
-        public Task<SalaryDetails> Get(int id)
+        public async Task<SalaryDetails> Get(int id)
         {
-            return _salaryService.GetById(id);
+            return await _salaryService.GetById(id);
         }
         
         [HttpPost("Create")]
-        public Task<bool> Post([FromBody]SalaryDetails createdObj)
+        public async Task<bool> Post([FromBody]SalaryDetails createdObj)
         {
-            return _salaryService.CreateSalary(createdObj);
+            return await _salaryService.CreateSalary(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public Task<bool> Put(int id, [FromBody]SalaryDetails editedObj)
+        public async Task<bool> Put(int id, [FromBody]SalaryDetails editedObj)
         {
             editedObj.Id = id;
-            return _salaryService.EditSalary(editedObj);
+            return await _salaryService.EditSalary(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            return _salaryService.DeleteSalary(id);
+            return await _salaryService.DeleteSalary(id);
         }
 
         [HttpPost("CopySalary/{sourceId}")]
-        public Task<bool> CopySalary(int sourceId)
+        public async Task<bool> CopySalary(int sourceId)
         {
-            return _salaryService.CopySalary(sourceId);
+            return await _salaryService.CopySalary(sourceId);
         }
     }
 }

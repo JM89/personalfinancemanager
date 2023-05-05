@@ -31,21 +31,26 @@ namespace PFM.Services
             this._eventPublisher = eventPublisher;
         }
               
-        public IList<AtmWithdrawList> GetAtmWithdrawsByAccountId(int accountId)
+        public async Task<IList<AtmWithdrawList>> GetAtmWithdrawsByAccountId(int accountId)
         {
-            var atmWithdraws = _atmWithdrawRepository.GetList2(u => u.Account.Currency)
-                .Where(x => x.Account.Id == accountId)
-                .ToList();
+            var atmWithdraws = _atmWithdrawRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
 
             var expenditures = _expenditureRepository.GetList();
 
-            var mappedAtmWithdraws = atmWithdraws.Select(Mapper.Map<AtmWithdrawList>).ToList();
+            var mappedAtmWithdraws = new List<AtmWithdrawList>();
 
-            mappedAtmWithdraws.ForEach(atmWithdraw =>
+            foreach (var atmWithdraw in mappedAtmWithdraws)
             {
-                atmWithdraw.CanBeDeleted = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id);
-                atmWithdraw.CanBeEdited = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id); 
-            });
+                var map = Mapper.Map<AtmWithdrawList>(atmWithdraw);
+
+                var account = await _bankAccountCache.GetById(atmWithdraw.AccountId);
+
+                map.AccountCurrencySymbol = account.CurrencySymbol;
+                map.CanBeDeleted = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id);
+                map.CanBeEdited = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id);
+
+                mappedAtmWithdraws.Add(map);
+            }
 
             return mappedAtmWithdraws;
         }
@@ -94,7 +99,7 @@ namespace PFM.Services
             }
         }
 
-        public AtmWithdrawDetails GetById(int id)
+        public Task<AtmWithdrawDetails> GetById(int id)
         {
             var atmWithdraw = _atmWithdrawRepository.GetById(id);
 
@@ -103,14 +108,15 @@ namespace PFM.Services
                 return null;
             }
 
-            return Mapper.Map<AtmWithdrawDetails>(atmWithdraw);
+            return Task.FromResult(Mapper.Map<AtmWithdrawDetails>(atmWithdraw));
         }
                 
-        public void CloseAtmWithdraw(int id)
+        public Task<bool> CloseAtmWithdraw(int id)
         {
             var atmWithdraw = _atmWithdrawRepository.GetById(id); 
             atmWithdraw.IsClosed = true;
             _atmWithdrawRepository.Update(atmWithdraw);
+            return Task.FromResult(true);
         }
 
         public async Task<bool> DeleteAtmWithdraw(int id)
@@ -145,11 +151,12 @@ namespace PFM.Services
             }
         }
 
-        public void ChangeDebitStatus(int id, bool debitStatus)
+        public Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
             AtmWithdraw atmWithdraw = _atmWithdrawRepository.GetById(id);
             atmWithdraw.HasBeenAlreadyDebited = debitStatus;
             _atmWithdrawRepository.Update(atmWithdraw);
+            return Task.FromResult(true);
         }
     }
 }

@@ -13,9 +13,6 @@ namespace PFM.DataAccessLayer.Entities
         [Required]
         public int AccountId { get; set; }
 
-        [ForeignKey("AccountId")]
-        public Account Account { get; set; }
-
         [Required]
         public DateTime DateExpense { get; set; }
 

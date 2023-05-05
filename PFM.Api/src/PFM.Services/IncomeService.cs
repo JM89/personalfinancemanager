@@ -74,16 +74,26 @@ namespace PFM.Services
             }
         }
 
-        public IList<IncomeList> GetIncomes(int accountId)
+        public async Task<IList<IncomeList>> GetIncomes(int accountId)
         {
-            var incomes = _incomeRepository.GetList2(u => u.Account.Currency).Where(x => x.AccountId == accountId).ToList();
+            var incomes = _incomeRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
 
-            var mappedIncomes = incomes.Select(x => Mapper.Map<IncomeList>(x));
+            var mappedIncomes = new List<IncomeList>();
             
+            foreach (var income in incomes)
+            {
+                var map = Mapper.Map<IncomeList>(income);
+
+                var account = await _bankAccountCache.GetById(income.Id);
+                map.AccountCurrencySymbol = account.CurrencySymbol;
+
+                mappedIncomes.Add(map);
+            }
+
             return mappedIncomes.ToList();
         }
 
-        public IncomeDetails GetById(int id)
+        public Task<IncomeDetails> GetById(int id)
         {
             var income = _incomeRepository.GetById(id);
 
@@ -92,7 +102,7 @@ namespace PFM.Services
                 return null;
             }
 
-            return Mapper.Map<IncomeDetails>(income);
+            return Task.FromResult(Mapper.Map<IncomeDetails>(income));
         }
 
         public async Task<bool> DeleteIncome(int id)

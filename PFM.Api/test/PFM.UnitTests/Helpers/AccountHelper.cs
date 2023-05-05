@@ -1,16 +1,16 @@
-﻿using PFM.DataAccessLayer.Entities;
+﻿using PFM.Bank.Api.Contracts.Account;
 
 namespace PFM.UnitTests.Helpers
 {
     public static class AccountHelper
     {
-        public static Account CreateAccountModel(int accountId)
+        public static AccountDetails CreateAccountModel(int accountId)
         {
-            var account = new Account()
+            var account = new AccountDetails()
             {
                 Id = accountId, 
-                Bank = BankHelper.CreateBankModel(),
-                Currency = CurrencyHelper.CreateCurrencyModel()
+                BankId = 1,
+                CurrencyId = 1
             };
             return account;
         }

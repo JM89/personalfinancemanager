@@ -16,15 +16,15 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("GetList/{accountId}")]
-        public IEnumerable<IncomeList> GetList(int accountId)
+        public async Task<IEnumerable<IncomeList>> GetList(int accountId)
         {
-            return _incomeService.GetIncomes(accountId);
+            return await _incomeService.GetIncomes(accountId);
         }
 
         [HttpGet("Get/{id}")]
-        public IncomeDetails Get(int id)
+        public async Task<IncomeDetails> Get(int id)
         {
-            return _incomeService.GetById(id);
+            return await _incomeService.GetById(id);
         }
         
         [HttpPost("Create")]

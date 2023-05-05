@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using PFM.Api.Contracts.Saving;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using PFM.Api.Contracts.Saving;
 
 namespace PFM.Services.Interfaces
 {
     public interface ISavingService : IBaseService
     {
-        IList<SavingList> GetSavingsByAccountId(int accountId);
+        Task<IList<SavingList>> GetSavingsByAccountId(int accountId);
 
         Task<bool> CreateSaving(SavingDetails savingDetails);
 
-        SavingDetails GetById(int id);
+        Task<SavingDetails> GetById(int id);
 
         Task<bool> DeleteSaving(int id);
     }

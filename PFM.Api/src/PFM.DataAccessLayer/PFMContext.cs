@@ -5,13 +5,9 @@ namespace PFM.DataAccessLayer
 {
     public class PFMContext: DbContext
     {
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<Bank> Banks { get; set; }
         public DbSet<Expense> Expenses { get; set; }
-        public DbSet<Account> Accounts { get; set; }
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
-        public DbSet<Currency> Currencies { get; set; }
         public DbSet<Income> Incomes { get; set; }
         public DbSet<BudgetPlan> BudgetPlans { get; set; }
         public DbSet<AtmWithdraw> AtmWithdraws { get; set; }
@@ -35,7 +31,6 @@ namespace PFM.DataAccessLayer
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Salary>().HasOne(u => u.Tax).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Saving>().HasOne(u => u.TargetInternalAccount).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<TaxType>().HasData(new TaxType() { Id = 1, Name = "Local Tax", Description = "A tax assessed and levied by a local authority such as a county or municipality. A local tax is usually collected in the form of property taxes, and is used to fund a wide range of civic services from garbage collection to sewer maintenance. The amount of local taxes may vary widely from one jurisdiction to the next." });
             modelBuilder.Entity<TaxType>().HasData(new TaxType() { Id = 2, Name = "Property Tax", Description = "Property tax is a tax assessed on real estate. The tax is usually based on the value of the property (including the land) you own and is often assessed by local or municipal governments." });

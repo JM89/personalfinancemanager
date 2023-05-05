@@ -74,9 +74,9 @@ namespace PFM.Services
             }
         }
 
-        public SavingDetails GetById(int id)
+        public async Task<SavingDetails> GetById(int id)
         {
-            var saving = _savingRepository.GetById(id, u => u.TargetInternalAccount);
+            var saving = _savingRepository.GetById(id);
 
             if (saving == null)
             {
@@ -85,16 +85,30 @@ namespace PFM.Services
 
             var mappedSaving = Mapper.Map<SavingDetails>(saving);
 
+            var targetAccount = await _bankAccountCache.GetById(saving.TargetInternalAccountId);
+            mappedSaving.TargetInternalAccountName = targetAccount.Name;
+
             return mappedSaving;
         }
 
-        public IList<SavingList> GetSavingsByAccountId(int accountId)
+        public async Task<IList<SavingList>> GetSavingsByAccountId(int accountId)
         {
-            var savings = _savingRepository.GetList2(u => u.Account.Currency, u => u.TargetInternalAccount)
-                 .Where(x => x.Account.Id == accountId)
-                 .ToList();
+            var savings = _savingRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
 
-            var mappedSavings = savings.Select(x => Mapper.Map<SavingList>(x));
+            var mappedSavings = new List<SavingList>();
+
+            foreach (var saving in savings)
+            {
+                var map = Mapper.Map<SavingList>(saving);
+
+                var srcAccount = await _bankAccountCache.GetById(saving.AccountId);
+                map.AccountCurrencySymbol = srcAccount.CurrencySymbol;
+
+                var targetAccount = await _bankAccountCache.GetById(saving.TargetInternalAccountId);
+                map.TargetInternalAccountName = targetAccount.Name;
+
+                mappedSavings.Add(map);
+            }
 
             return mappedSavings.ToList();
         }

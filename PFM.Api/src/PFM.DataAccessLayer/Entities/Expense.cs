@@ -13,9 +13,6 @@ namespace PFM.DataAccessLayer.Entities
         [Required]
         public int AccountId { get; set; }
 
-        [ForeignKey("AccountId")]
-        public Account Account { get; set; }
-
         [Required]
         public DateTime DateExpense { get; set; }
 
@@ -47,9 +44,6 @@ namespace PFM.DataAccessLayer.Entities
         public AtmWithdraw AtmWithdraw { get; set; }
 
         public int? TargetInternalAccountId { get; set; }
-
-        [ForeignKey("TargetInternalAccountId")]
-        public Account TargetInternalAccount { get; set; }
 
         public int? GeneratedIncomeId { get; set; }
     }

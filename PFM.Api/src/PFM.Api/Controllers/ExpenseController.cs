@@ -18,9 +18,9 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("Get/{id}")]
-        public Task<ExpenseDetails> Get(int id)
+        public async Task<ExpenseDetails> Get(int id)
         {
-            return _expenseService.GetById(id);
+            return await _expenseService.GetById(id);
         }
         
         [HttpPost("Create")]
@@ -48,9 +48,9 @@ namespace PFM.Api.Controllers
         }
 
         [HttpPost("ChangeDebitStatus/{id}/{debitStatus}")]
-        public Task<bool> ChangeDebitStatus(int id, bool debitStatus)
+        public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            return _expenseService.ChangeDebitStatus(id, debitStatus);
+            return await _expenseService.ChangeDebitStatus(id, debitStatus);
         }
 
         [HttpPost("GetExpenseSummary/{accountId}")]

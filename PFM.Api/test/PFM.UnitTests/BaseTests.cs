@@ -1,4 +1,5 @@
 ﻿using Moq;
+using PFM.Bank.Api.Contracts.Account;
 using PFM.Bank.Event.Contracts.Interfaces;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
@@ -26,7 +27,7 @@ namespace PFM.UnitTests
            
         }
 
-        protected ExpenseService SetupExpenseService(Account account, List<ExpenseType> types, List<Expense> expenses,
+        protected ExpenseService SetupExpenseService(AccountDetails account, List<ExpenseType> types, List<Expense> expenses,
             List<Income> incomes, List<Saving> savings)
         {
             MockExpenseRepository = new Mock<IExpenseRepository>();
