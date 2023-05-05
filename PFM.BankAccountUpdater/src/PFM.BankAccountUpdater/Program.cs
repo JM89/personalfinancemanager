@@ -13,6 +13,7 @@ namespace PFM.BankAccountUpdater
                 {
                     services
                         .AddMemoryCache()
+                        .AddServices()
                         .AddMonitoring(build.Configuration, EnvironmentName)
                         .AddBankApi(build.Configuration)
                         .AddAuthenticationAndAuthorization(build.Configuration)

@@ -39,13 +39,22 @@ namespace PFM.BankAccountUpdater.Extensions
             return services;
         }
 
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IBankAccountService, BankAccountService>();
+
+            return services;
+        }
+
         public static IServiceCollection AddEventHandlers(this IServiceCollection services)
         {
             var eventDispatcher = new EventDispatcher(Log.Logger, services);
 
-            services.AddSingleton<IHandler<BankAccountCreated>, BankAccountCreatedHandler>();
+            services.AddSingleton<IHandler<BankAccountDebited>, BankAccountDebitedHandler>();
+            services.AddSingleton<IHandler<BankAccountCredited>, BankAccountCreditedHandler>();
 
-            eventDispatcher.Register<BankAccountCreated>();
+            eventDispatcher.Register<BankAccountDebited>();
+            eventDispatcher.Register<BankAccountCredited>();
 
             services.AddSingleton<IEventDispatcher>(eventDispatcher);
 
