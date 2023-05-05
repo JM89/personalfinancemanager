@@ -13,7 +13,7 @@ namespace PFM.BankAccountUpdater.Handlers
     {
         private readonly Serilog.ILogger _logger;
 
-        private static string IdProperty = "Id";
+        private static string EventIdProperty = "EventId";
         private static string BankAccountIdProperty = "BankAccountId";
         private static string UserIdProperty = "UserId";
 
@@ -27,12 +27,11 @@ namespace PFM.BankAccountUpdater.Handlers
 
         public async Task<bool> HandleEvent(BankAccountCreated evt)
         {
-            var bankAccountId = 2; //evt.BankAccountId
-            var userId = "1"; //evt.UserId
-            var newBalance = 1000; //evt.CurrentBalance
+            var bankAccountId = evt.Id;
+            var userId = evt.UserId;
                  
             using (var op = Operation.Begin("Handle BankAccountCreated event"))
-            using (LogContext.PushProperty(IdProperty, evt.Id))
+            using (LogContext.PushProperty(EventIdProperty, evt.EventId))
             using (LogContext.PushProperty(BankAccountIdProperty, bankAccountId))
             using (LogContext.PushProperty(UserIdProperty, userId))
             {
@@ -55,7 +54,7 @@ namespace PFM.BankAccountUpdater.Handlers
                     return false;
                 }
 
-                account.CurrentBalance = newBalance;
+                account.CurrentBalance = evt.CurrentBalance;
 
                 try
                 {

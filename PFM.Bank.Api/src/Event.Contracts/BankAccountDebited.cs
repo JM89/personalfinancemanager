@@ -5,7 +5,7 @@ namespace PFM.Bank.Event.Contracts
 {
     public class BankAccountDebited : IEvent
     {
-        public string EventId => $"{StreamGroup}-{Id.ToString("00000000")}";
+        public string StreamId => $"{StreamGroup}-{Id.ToString("00000000")}";
 
         public int Id { get; set; }
 
