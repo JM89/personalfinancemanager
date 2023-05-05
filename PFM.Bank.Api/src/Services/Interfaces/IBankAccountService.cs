@@ -8,14 +8,14 @@ namespace Services.Interfaces
     {
         Task<bool> CreateBankAccount(AccountDetails accountDetails, string userId);
 
-        IList<AccountList> GetAccountsByUser(string userId);
+        Task<List<AccountList>> GetAccountsByUser(string userId);
 
-        AccountDetails GetById(int id);
+        Task<AccountDetails> GetById(int id);
 
         Task<bool> EditBankAccount(AccountDetails accountDetails, string userId);
 
         Task<bool> DeleteBankAccount(int id);
 
-        void SetAsFavorite(int id);
+        Task<bool> SetAsFavorite(int id);
     }
 }

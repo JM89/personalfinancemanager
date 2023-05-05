@@ -84,7 +84,7 @@ namespace PFM.Services
             {
                 var map = Mapper.Map<IncomeList>(income);
 
-                var account = await _bankAccountCache.GetById(income.Id);
+                var account = await _bankAccountCache.GetById(income.AccountId);
                 map.AccountCurrencySymbol = account.CurrencySymbol;
 
                 mappedIncomes.Add(map);

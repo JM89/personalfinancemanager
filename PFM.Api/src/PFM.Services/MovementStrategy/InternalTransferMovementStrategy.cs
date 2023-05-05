@@ -50,9 +50,9 @@ namespace PFM.Services.MovementStrategy
 
             var evtCredited = new BankAccountCredited()
             {
-                Id = account.Id,
-                BankId = account.BankId,
-                CurrencyId = account.CurrencyId,
+                Id = internalAccount.Id,
+                BankId = internalAccount.BankId,
+                CurrencyId = internalAccount.CurrencyId,
                 PreviousBalance = internalAccount.CurrentBalance,
                 CurrentBalance = internalAccount.CurrentBalance + movement.Amount,
                 UserId = internalAccount.OwnerId,
@@ -117,9 +117,9 @@ namespace PFM.Services.MovementStrategy
 
             var evtDebited = new BankAccountDebited()
             {
-                Id = account.Id,
-                BankId = account.BankId,
-                CurrencyId = account.CurrencyId,
+                Id = internalAccount.Id,
+                BankId = internalAccount.BankId,
+                CurrencyId = internalAccount.CurrencyId,
                 PreviousBalance = internalAccount.CurrentBalance,
                 CurrentBalance = internalAccount.CurrentBalance - movement.Amount,
                 UserId = internalAccount.OwnerId,

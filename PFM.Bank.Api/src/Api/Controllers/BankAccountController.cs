@@ -16,15 +16,15 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetList/{userId}")]
-        public IEnumerable<AccountList> GetList(string userId)
+        public async Task<IEnumerable<AccountList>> GetList(string userId)
         {
-            return _bankAccountService.GetAccountsByUser(userId);
+            return await _bankAccountService.GetAccountsByUser(userId);
         }
 
         [HttpGet("Get/{id}")]
-        public AccountDetails Get(int id)
+        public async Task<AccountDetails> Get(int id)
         {
-            return _bankAccountService.GetById(id);
+            return await _bankAccountService.GetById(id);
         }
         
         [HttpPost("Create/{userId}")]
@@ -47,10 +47,9 @@ namespace Api.Controllers
         }
 
         [HttpPost("SetAsFavorite/{id}")]
-        public bool SetAsFavorite(int id)
+        public async Task<bool> SetAsFavorite(int id)
         {
-            _bankAccountService.SetAsFavorite(id);
-            return true;
+            return await _bankAccountService.SetAsFavorite(id);
         }
     }
 }

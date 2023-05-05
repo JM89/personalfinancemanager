@@ -4,6 +4,7 @@ using PFM.Bank.Api.Contracts.Country;
 using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Services
 {
@@ -16,7 +17,7 @@ namespace Services
             this._countryRepository = countryRepository;
         }
 
-        public IList<CountryList> GetCountries()
+        public Task<List<CountryList>> GetCountries()
         {
             var countries = _countryRepository.GetList().ToList();
 
@@ -27,10 +28,10 @@ namespace Services
                country.CanBeDeleted = false;
             });
 
-            return mappedCountries;
+            return Task.FromResult(mappedCountries);
         }
 
-        public CountryDetails GetById(int id)
+        public Task<CountryDetails> GetById(int id)
         {
             var country = _countryRepository.GetById(id);
 
@@ -39,7 +40,7 @@ namespace Services
                 return null;
             }
 
-            return Mapper.Map<CountryDetails>(country);
+            return Task.FromResult(Mapper.Map<CountryDetails>(country));
         }
     }
 }

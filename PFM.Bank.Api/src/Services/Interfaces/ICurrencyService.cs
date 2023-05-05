@@ -1,12 +1,13 @@
 ﻿using PFM.Bank.Api.Contracts.Currency;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Services.Interfaces
 {
     public interface ICurrencyService : IBaseService
     {
-        IList<CurrencyList> GetCurrencies();
+        Task<List<CurrencyList>> GetCurrencies();
 
-        CurrencyDetails GetById(int id);
+        Task<CurrencyDetails> GetById(int id);
     }
 }

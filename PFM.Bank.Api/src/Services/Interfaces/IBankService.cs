@@ -1,18 +1,19 @@
 ﻿using PFM.Bank.Api.Contracts.Bank;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Services.Interfaces
 {
     public interface IBankService : IBaseService
     {
-        IList<BankList> GetBanks();
+        Task<List<BankList>> GetBanks();
 
-        void CreateBank(BankDetails bankDetails);
+        Task<bool> CreateBank(BankDetails bankDetails);
 
-        BankDetails GetById(int id);
+        Task<BankDetails> GetById(int id);
 
-        void EditBank(BankDetails bankDetails);
+        Task<bool> EditBank(BankDetails bankDetails);
 
-        void DeleteBank(int id);
+        Task<bool> DeleteBank(int id);
     }
 }

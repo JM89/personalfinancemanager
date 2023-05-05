@@ -16,37 +16,34 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetList")]
-        public IEnumerable<BankList> GetList()
+        public async Task<IEnumerable<BankList>> GetList()
         {
-            return _bankService.GetBanks();
+            return await _bankService.GetBanks();
         }
 
         [HttpGet("Get/{id}")]
-        public BankDetails Get(int id)
+        public async Task<BankDetails> Get(int id)
         {
-            return _bankService.GetById(id);
+            return await _bankService.GetById(id);
         }
         
         [HttpPost("Create")]
-        public bool Post([FromBody]BankDetails createdObj)
+        public async Task<bool> Post([FromBody]BankDetails createdObj)
         {
-            _bankService.CreateBank(createdObj);
-            return true;
+            return await _bankService.CreateBank(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public bool Put(int id, [FromBody]BankDetails editedObj)
+        public async Task<bool> Put(int id, [FromBody]BankDetails editedObj)
         {
             editedObj.Id = id;
-            _bankService.EditBank(editedObj);
-            return true;
+            return await _bankService.EditBank(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            _bankService.DeleteBank(id);
-            return true;
+            return await _bankService.DeleteBank(id);
         }
     }
 }

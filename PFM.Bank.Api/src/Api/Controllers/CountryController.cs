@@ -16,15 +16,15 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetList")]
-        public IEnumerable<CountryList> GetList()
+        public async Task<IEnumerable<CountryList>> GetList()
         {
-            return _countryService.GetCountries();
+            return await _countryService.GetCountries();
         }
 
         [HttpGet("Get/{id}")]
-        public CountryDetails Get(int id)
+        public async Task<CountryDetails> Get(int id)
         {
-            return _countryService.GetById(id);
+            return await _countryService.GetById(id);
         }
     }
 }

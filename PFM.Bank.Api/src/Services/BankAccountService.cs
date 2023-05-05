@@ -48,7 +48,7 @@ namespace Services
             }
         }
 
-        public IList<AccountList> GetAccountsByUser(string userId)
+        public Task<List<AccountList>> GetAccountsByUser(string userId)
         {
             var accounts = _bankAccountRepository.GetList2(u => u.Currency, u => u.Bank)
                 .Where(x => x.User_Id == userId)
@@ -62,10 +62,10 @@ namespace Services
                 account.CanBeDeleted = false;
             });
 
-            return mappedAccounts;
+            return Task.FromResult(mappedAccounts);
         }
         
-        public AccountDetails GetById(int id)
+        public Task<AccountDetails> GetById(int id)
         {
             var account = _bankAccountRepository.GetList2(x => x.Currency, x => x.Bank).SingleOrDefault(x => x.Id == id);
 
@@ -74,7 +74,7 @@ namespace Services
                 return null;
             }
 
-            return Mapper.Map<AccountDetails>(account);
+            return Task.FromResult(Mapper.Map<AccountDetails>(account));
         }
 
         public Task<bool> EditBankAccount(AccountDetails accountDetails, string userId)
@@ -137,7 +137,7 @@ namespace Services
             }
         }
         
-        public void SetAsFavorite(int id)
+        public Task<bool> SetAsFavorite(int id)
         {
             var updatedList = _bankAccountRepository.GetList2();
 
@@ -147,6 +147,8 @@ namespace Services
             }
 
             _bankAccountRepository.UpdateAll(updatedList);
+
+            return Task.FromResult(true);
         }
     }
 }

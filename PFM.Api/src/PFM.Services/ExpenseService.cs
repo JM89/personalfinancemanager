@@ -63,7 +63,7 @@ namespace PFM.Services.Interfaces.Services
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var Expense = Mapper.Map<Expense>(expenseDetails);
+                var expense = Mapper.Map<Expense>(expenseDetails);
 
                 var movement = new Movement(expenseDetails);
 
@@ -71,9 +71,9 @@ namespace PFM.Services.Interfaces.Services
                 var result = await strategy.Debit();
 
                 if (movement.TargetIncomeId.HasValue)
-                    Expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
+                    expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
 
-                _expenseRepository.Create(Expense);
+                _expenseRepository.Create(expense);
 
                 scope.Complete();
 
