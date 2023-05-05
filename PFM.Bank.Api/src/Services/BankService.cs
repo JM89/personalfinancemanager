@@ -5,6 +5,7 @@ using PFM.Services.Core.Exceptions;
 using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Services
 {
@@ -19,7 +20,7 @@ namespace Services
             this._bankAccountRepository = bankAccountRepository;
         }
 
-        public IList<BankList> GetBanks()
+        public Task<List<BankList>> GetBanks()
         {
             var banks = _bankRepository.GetList2(u => u.Country).ToList();
 
@@ -31,27 +32,31 @@ namespace Services
                 bank.CanBeDeleted = !hasAccounts;
             });
 
-            return mappedBanks;
+            return Task.FromResult(mappedBanks);
         }
 
-        public void Validate(BankDetails bankDetails)
+        public Task<bool> Validate(BankDetails bankDetails)
         {
             var duplicateName = _bankRepository.GetList().Any(x => x.Name.ToLower() == bankDetails.Name.Trim().ToLower() && x.Id != bankDetails.Id);
             if (duplicateName)
             {
                 throw new BusinessException("Name", BusinessExceptionMessage.BankDuplicateName);
             }
+
+            return Task.FromResult(true);
         }
 
-        public void CreateBank(BankDetails bankDetails)
+        public async Task<bool> CreateBank(BankDetails bankDetails)
         {
-            Validate(bankDetails);
+            await Validate(bankDetails);
 
             var bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
             _bankRepository.Create(bank);
+
+            return true;
         }
 
-        public BankDetails GetById(int id)
+        public Task<BankDetails> GetById(int id)
         {
             var bank = _bankRepository.GetById(id);
 
@@ -60,22 +65,25 @@ namespace Services
                 return null;
             }
 
-            return Mapper.Map<BankDetails>(bank);
+            return Task.FromResult(Mapper.Map<BankDetails>(bank));
         }
 
-        public void EditBank(BankDetails bankDetails)
+        public async Task<bool> EditBank(BankDetails bankDetails)
         {
-            Validate(bankDetails);
+            await Validate(bankDetails);
 
             var bank = _bankRepository.GetListAsNoTracking().SingleOrDefault(x => x.Id == bankDetails.Id);
             bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
             _bankRepository.Update(bank);
+
+            return true;
         }
 
-        public void DeleteBank(int id)
+        public Task<bool> DeleteBank(int id)
         {
             var bank = _bankRepository.GetList().Find(id);
             _bankRepository.Delete(bank);
+            return Task.FromResult(true);
         }
     }
 }

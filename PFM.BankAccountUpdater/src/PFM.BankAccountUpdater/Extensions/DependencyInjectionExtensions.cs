@@ -1,11 +1,20 @@
 ﻿using EventStore.Client;
 using PFM.Bank.Event.Contracts;
+using PFM.BankAccountUpdater.Caches;
+using PFM.BankAccountUpdater.Caches.Interfaces;
 using PFM.BankAccountUpdater.Events;
 using PFM.BankAccountUpdater.Events.Interface;
 using PFM.BankAccountUpdater.Events.Settings;
+using PFM.BankAccountUpdater.ExternalServices.AuthApi;
+using PFM.BankAccountUpdater.ExternalServices.BankApi;
 using PFM.BankAccountUpdater.Handlers;
 using PFM.BankAccountUpdater.Handlers.Interfaces;
+using PFM.BankAccountUpdater.Services;
+using PFM.BankAccountUpdater.Services.Interfaces;
+using PFM.BankAccountUpdater.Settings;
+using Refit;
 using Serilog;
+using System.Text.Json;
 
 namespace PFM.BankAccountUpdater.Extensions
 {
@@ -30,11 +39,22 @@ namespace PFM.BankAccountUpdater.Extensions
             return services;
         }
 
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IBankAccountService, BankAccountService>();
+
+            return services;
+        }
+
         public static IServiceCollection AddEventHandlers(this IServiceCollection services)
         {
-            var eventDispatcher = new EventDispatcher(Log.Logger);
+            var eventDispatcher = new EventDispatcher(Log.Logger, services);
 
-            eventDispatcher.Register<BankAccountCreated>(e => (new BankAccountCreatedHandler(Log.Logger)).HandleEvent((BankAccountCreated)e));
+            services.AddSingleton<IHandler<BankAccountDebited>, BankAccountDebitedHandler>();
+            services.AddSingleton<IHandler<BankAccountCredited>, BankAccountCreditedHandler>();
+
+            eventDispatcher.Register<BankAccountDebited>();
+            eventDispatcher.Register<BankAccountCredited>();
 
             services.AddSingleton<IEventDispatcher>(eventDispatcher);
 
@@ -52,6 +72,62 @@ namespace PFM.BankAccountUpdater.Extensions
                 .AddSingleton(client)
                 .AddSingleton(subscriptionSettings)
                 .AddSingleton<IEventConsumer, EventConsumer>();
+
+            return services;
+        }
+
+        /// <summary>
+        /// Set up authentication and authorization.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
+        {
+            var authConfigs = new AuthApiSettings();
+            configuration.Bind("AuthApi", authConfigs);
+
+            services
+                .AddSingleton(authConfigs)
+                .AddTransient<AuthHeaderHandler>()
+                .AddSingleton<IAuthTokenStore, AuthTokenStore>()
+                .AddSingleton<ITokenCache, TokenCache>();
+
+            services
+                .AddRefitClient<IAuthApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(authConfigs.EndpointUrl));
+
+            return services;
+        }
+
+        public static IServiceCollection AddBankApi(this IServiceCollection services, IConfiguration configuration)
+        {
+            var apiConfigs = configuration["BankApi:EndpointUrl"];
+            if (apiConfigs == null)
+                throw new Exception("DI exception: Bank API config was not found");
+
+            var refitSettings = new RefitSettings()
+            {
+                ContentSerializer = new SystemTextJsonContentSerializer(
+                    new JsonSerializerOptions()
+                    {
+                        PropertyNameCaseInsensitive = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        Converters =
+                        {
+                            new ObjectToInferredTypesConverter(),
+                        }
+                    }
+                ),
+                ExceptionFactory = httpResponse =>
+                {
+                    return Task.FromResult<Exception?>(null);
+                }
+            };
+
+            services
+                .AddRefitClient<IBankAccountApi>(refitSettings)
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .AddHttpMessageHandler<AuthHeaderHandler>();
 
             return services;
         }

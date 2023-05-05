@@ -3,6 +3,7 @@ using PFM.Api.Contracts.AtmWithdraw;
 using PFM.Bank.Event.Contracts;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.Interfaces;
 using System.Collections.Generic;
@@ -15,36 +16,41 @@ namespace PFM.Services
     public class AtmWithdrawService : IAtmWithdrawService
     {
         private readonly IAtmWithdrawRepository _atmWithdrawRepository;
-        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IBankAccountCache _bankAccountCache;
         private readonly IExpenseRepository _expenditureRepository;
         private readonly IEventPublisher _eventPublisher;
 
         private readonly string OperationType = "ATM Withdrawal";
 
-        public AtmWithdrawService(IAtmWithdrawRepository atmWithdrawRepository, IBankAccountRepository bankAccountRepository, IExpenseRepository expenditureRepository,
+        public AtmWithdrawService(IAtmWithdrawRepository atmWithdrawRepository, IBankAccountCache bankAccountCache, IExpenseRepository expenditureRepository,
             IEventPublisher eventPublisher)
         {
             this._atmWithdrawRepository = atmWithdrawRepository;
-            this._bankAccountRepository = bankAccountRepository;
+            this._bankAccountCache = bankAccountCache;
             this._expenditureRepository = expenditureRepository;
             this._eventPublisher = eventPublisher;
         }
               
-        public IList<AtmWithdrawList> GetAtmWithdrawsByAccountId(int accountId)
+        public async Task<IList<AtmWithdrawList>> GetAtmWithdrawsByAccountId(int accountId)
         {
-            var atmWithdraws = _atmWithdrawRepository.GetList2(u => u.Account.Currency)
-                .Where(x => x.Account.Id == accountId)
-                .ToList();
+            var atmWithdraws = _atmWithdrawRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
 
             var expenditures = _expenditureRepository.GetList();
 
-            var mappedAtmWithdraws = atmWithdraws.Select(Mapper.Map<AtmWithdrawList>).ToList();
+            var mappedAtmWithdraws = new List<AtmWithdrawList>();
 
-            mappedAtmWithdraws.ForEach(atmWithdraw =>
+            foreach (var atmWithdraw in mappedAtmWithdraws)
             {
-                atmWithdraw.CanBeDeleted = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id);
-                atmWithdraw.CanBeEdited = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id); 
-            });
+                var map = Mapper.Map<AtmWithdrawList>(atmWithdraw);
+
+                var account = await _bankAccountCache.GetById(atmWithdraw.AccountId);
+
+                map.AccountCurrencySymbol = account.CurrencySymbol;
+                map.CanBeDeleted = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id);
+                map.CanBeEdited = !expenditures.Any(x => x.AtmWithdrawId == atmWithdraw.Id);
+
+                mappedAtmWithdraws.Add(map);
+            }
 
             return mappedAtmWithdraws;
         }
@@ -69,21 +75,21 @@ namespace PFM.Services
                 atmWithdraw.IsClosed = false;
                 _atmWithdrawRepository.Create(atmWithdraw);
 
-                var account = _bankAccountRepository.GetById(atmWithdraw.AccountId, a => a.Currency, a => a.Bank);
+                var account = await _bankAccountCache.GetById(atmWithdraw.AccountId);
 
                 var evt = new BankAccountDebited()
                 {
-                    BankCode = account.Bank.Id.ToString(),
-                    CurrencyCode = account.Currency.Id.ToString(),
+                    Id = account.Id,
+                    BankId = account.BankId,
+                    CurrencyId = account.CurrencyId,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance - atmWithdraw.InitialAmount,
-                    UserId = account.User_Id,
+                    UserId = account.OwnerId,
                     OperationDate = atmWithdraw.DateExpense,
                     OperationType = OperationType
                 };
 
                 account.CurrentBalance -= atmWithdraw.InitialAmount;
-                _bankAccountRepository.Update(account);
 
                 var published = await _eventPublisher.PublishAsync(evt, default);
 
@@ -93,7 +99,7 @@ namespace PFM.Services
             }
         }
 
-        public AtmWithdrawDetails GetById(int id)
+        public Task<AtmWithdrawDetails> GetById(int id)
         {
             var atmWithdraw = _atmWithdrawRepository.GetById(id);
 
@@ -102,14 +108,15 @@ namespace PFM.Services
                 return null;
             }
 
-            return Mapper.Map<AtmWithdrawDetails>(atmWithdraw);
+            return Task.FromResult(Mapper.Map<AtmWithdrawDetails>(atmWithdraw));
         }
                 
-        public void CloseAtmWithdraw(int id)
+        public Task<bool> CloseAtmWithdraw(int id)
         {
             var atmWithdraw = _atmWithdrawRepository.GetById(id); 
             atmWithdraw.IsClosed = true;
             _atmWithdrawRepository.Update(atmWithdraw);
+            return Task.FromResult(true);
         }
 
         public async Task<bool> DeleteAtmWithdraw(int id)
@@ -118,21 +125,21 @@ namespace PFM.Services
             {
                 var atmWithdraw = _atmWithdrawRepository.GetById(id);
 
-                var account = _bankAccountRepository.GetById(atmWithdraw.AccountId, a => a.Currency, a => a.Bank);
+                var account = await _bankAccountCache.GetById(atmWithdraw.AccountId);
 
                 var evt = new BankAccountCredited()
                 {
-                    BankCode = account.Bank.Id.ToString(),
-                    CurrencyCode = account.Currency.Id.ToString(),
+                    Id = account.Id,
+                    BankId = account.BankId,
+                    CurrencyId = account.CurrencyId,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance + atmWithdraw.InitialAmount,
-                    UserId = account.User_Id,
+                    UserId = account.OwnerId,
                     OperationDate = atmWithdraw.DateExpense,
                     OperationType = OperationType
                 };
 
                 account.CurrentBalance += atmWithdraw.InitialAmount;
-                _bankAccountRepository.Update(account);
 
                 _atmWithdrawRepository.Delete(atmWithdraw);
 
@@ -144,11 +151,12 @@ namespace PFM.Services
             }
         }
 
-        public void ChangeDebitStatus(int id, bool debitStatus)
+        public Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
             AtmWithdraw atmWithdraw = _atmWithdrawRepository.GetById(id);
             atmWithdraw.HasBeenAlreadyDebited = debitStatus;
             _atmWithdrawRepository.Update(atmWithdraw);
+            return Task.FromResult(true);
         }
     }
 }

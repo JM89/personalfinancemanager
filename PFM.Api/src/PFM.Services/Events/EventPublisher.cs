@@ -26,7 +26,7 @@ namespace PFM.Services.Events
             );
 
             var result = await _eventStoreClient.AppendToStreamAsync(
-                evt.Id,
+                evt.StreamId,
                 StreamState.Any,
                 new[] { eventData },
                 cancellationToken: token

@@ -10,9 +10,9 @@ namespace PFM.Services.Interfaces
 
         Task<bool> CreateIncome(IncomeDetails incomeDetails);
 
-        IList<IncomeList> GetIncomes(int accountId);
+        Task<IList<IncomeList>> GetIncomes(int accountId);
 
-        IncomeDetails GetById(int id);
+        Task<IncomeDetails> GetById(int id);
 
         Task<bool> DeleteIncome(int id);
     }

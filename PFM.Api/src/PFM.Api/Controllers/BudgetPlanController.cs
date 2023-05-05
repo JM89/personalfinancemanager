@@ -60,9 +60,9 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("BuildEmpty/{accountId}/{budgetPlanId?}")]
-        public BudgetPlanDetails Build(int accountId, int? budgetPlanId = null)
+        public async Task<BudgetPlanDetails> Build(int accountId, int? budgetPlanId = null)
         {
-            return _budgetPlanService.BuildBudgetPlan(accountId, budgetPlanId);
+            return await _budgetPlanService.BuildBudgetPlan(accountId, budgetPlanId);
         }
     }
 }

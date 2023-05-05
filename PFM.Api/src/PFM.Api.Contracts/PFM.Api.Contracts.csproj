@@ -6,4 +6,8 @@
     <PackageDescription>Contracts shared between the PFM API and Website.</PackageDescription>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="PFM.Bank.Api.Contracts" Version="3.7.1-PullRequest0099.10" />
+  </ItemGroup>
+
 </Project>

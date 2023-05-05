@@ -16,15 +16,15 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("GetList/{accountId}")]
-        public IEnumerable<AtmWithdrawList> GetList(int accountId)
+        public async Task<IEnumerable<AtmWithdrawList>> GetList(int accountId)
         {
-            return _atmWithdrawService.GetAtmWithdrawsByAccountId(accountId);
+            return await _atmWithdrawService.GetAtmWithdrawsByAccountId(accountId);
         }
 
         [HttpGet("Get/{id}")]
-        public AtmWithdrawDetails Get(int id)
+        public async Task<AtmWithdrawDetails> Get(int id)
         {
-            return _atmWithdrawService.GetById(id);
+            return await _atmWithdrawService.GetById(id);
         }
         
         [HttpPost("Create")]
@@ -46,15 +46,15 @@ namespace PFM.Api.Controllers
         }
 
         [HttpPost("CloseAtmWithdraw/{id}")]
-        public void CloseAtmWithdraw(int id)
+        public async Task<bool> CloseAtmWithdraw(int id)
         {
-            _atmWithdrawService.CloseAtmWithdraw(id);
+            return await _atmWithdrawService.CloseAtmWithdraw(id);
         }
 
         [HttpPost("CloseAtmWithdraw/{id}/debitStatus")]
-        public void ChangeDebitStatus(int id, bool debitStatus)
+        public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            _atmWithdrawService.ChangeDebitStatus(id, debitStatus);
+            return await _atmWithdrawService.ChangeDebitStatus(id, debitStatus);
         }
     }
 }

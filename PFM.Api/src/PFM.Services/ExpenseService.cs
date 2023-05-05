@@ -1,16 +1,20 @@
 ﻿using AutoMapper;
-using PFM.Api.Contracts.Account;
+using Newtonsoft.Json;
 using PFM.Api.Contracts.BudgetPlan;
 using PFM.Api.Contracts.Dashboard;
 using PFM.Api.Contracts.Expense;
+using PFM.Bank.Api.Contracts.Account;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
+using PFM.Services.ExternalServices.BankApi;
 using PFM.Services.MovementStrategy;
 using PFM.Services.Utils.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -19,51 +23,57 @@ namespace PFM.Services.Interfaces.Services
     public class ExpenseService : IExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
-        private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IAtmWithdrawRepository _atmWithdrawRepository;
         private readonly ISavingRepository _savingRepository;
         private readonly IIncomeRepository _incomeRepository;
         private readonly IExpenseTypeRepository _ExpenseTypeRepository;
         private readonly IEventPublisher _eventPublisher;
+        private readonly IBankAccountCache _bankAccountCache;
+        private readonly IBankAccountApi _bankAccountApi;
 
-        public ExpenseService(IExpenseRepository ExpenseRepository, IBankAccountRepository bankAccountRepository, IAtmWithdrawRepository atmWithdrawRepository, IIncomeRepository incomeRepository,
-            IExpenseTypeRepository ExpenseTypeRepository, ISavingRepository savingRepository, IEventPublisher eventPublisher)
+        public ExpenseService(IExpenseRepository ExpenseRepository, IAtmWithdrawRepository atmWithdrawRepository, IIncomeRepository incomeRepository,
+            IExpenseTypeRepository ExpenseTypeRepository, ISavingRepository savingRepository, IEventPublisher eventPublisher, IBankAccountCache bankAccountCache,
+            IBankAccountApi bankAccountApi)
         {
             this._expenseRepository = ExpenseRepository;
-            this._bankAccountRepository = bankAccountRepository;
             this._atmWithdrawRepository = atmWithdrawRepository;
             this._incomeRepository = incomeRepository;
             this._ExpenseTypeRepository = ExpenseTypeRepository;
             this._savingRepository = savingRepository;
             this._eventPublisher = eventPublisher;
+            this._bankAccountCache = bankAccountCache;
+            this._bankAccountApi = bankAccountApi;
         }
 
-        public Task<bool> CreateExpenses(List<ExpenseDetails> ExpenseDetails)
+        public async Task<bool> CreateExpenses(List<ExpenseDetails> ExpenseDetails)
         {
             var resultBatch = true;
-            ExpenseDetails.ForEach(async (income) => {
-                var result = await CreateExpense(income);
+
+            foreach (var expense in ExpenseDetails)
+            {
+                var result = await CreateExpense(expense);
                 if (!result)
                     resultBatch = false;
-            });
-            return Task.FromResult(resultBatch);
+            }
+
+            return resultBatch;
         }
 
         public async Task<bool> CreateExpense(ExpenseDetails expenseDetails)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var Expense = Mapper.Map<Expense>(expenseDetails);
+                var expense = Mapper.Map<Expense>(expenseDetails);
 
                 var movement = new Movement(expenseDetails);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountCache, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var result = await strategy.Debit();
 
                 if (movement.TargetIncomeId.HasValue)
-                    Expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
+                    expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
 
-                _expenseRepository.Create(Expense);
+                _expenseRepository.Create(expense);
 
                 scope.Complete();
 
@@ -80,7 +90,7 @@ namespace PFM.Services.Interfaces.Services
 
                 _expenseRepository.Delete(Expense);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(ExpenseDetails), _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(ExpenseDetails), _bankAccountCache, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var result = await strategy.Credit();
 
                 scope.Complete();
@@ -89,45 +99,49 @@ namespace PFM.Services.Interfaces.Services
             }
         }
 
-        public ExpenseDetails GetById(int id)
+        public Task<ExpenseDetails> GetById(int id)
         {
-            var Expense = _expenseRepository
-                            .GetList2(u => u.Account.Currency, u => u.ExpenseType, u => u.PaymentMethod)
+            var expense = _expenseRepository
+                            .GetList2(u => u.ExpenseType, u => u.PaymentMethod)
                             .SingleOrDefault(x => x.Id == id);
 
-            if (Expense == null)
+            if (expense == null)
             {
                 return null;
             }
 
-            return Mapper.Map<ExpenseDetails>(Expense);
+            return Task.FromResult(Mapper.Map<ExpenseDetails>(expense));
         }
 
-        public void ChangeDebitStatus(int id, bool debitStatus)
+        public Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
             var Expense = _expenseRepository.GetById(id);
             Expense.HasBeenAlreadyDebited = debitStatus;
             _expenseRepository.Update(Expense);
+            return Task.FromResult(true);
         }
 
-        public IList<ExpenseList> GetExpenses(PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
+        public async Task<IList<ExpenseList>> GetExpenses(PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
         {
             var searchParameters = Mapper.Map<PFM.DataAccessLayer.SearchParameters.ExpenseGetListSearchParameters>(search);
             var Expenses = _expenseRepository.GetByParameters(searchParameters).ToList();
 
             if (!string.IsNullOrEmpty(search.UserId))
             {
-                var accounts = _bankAccountRepository.GetList().Where(x => x.User_Id == search.UserId).Select(x => x.Id);
-                Expenses = Expenses.Where(x => accounts.Contains(x.AccountId)).ToList();
+                var accountsForUserResponse = await _bankAccountApi.GetList(search.UserId);
+                var accountsForUser = JsonConvert.DeserializeObject<List<AccountDetails>>(accountsForUserResponse.Data.ToString());
+                var filterAccounts = accountsForUser.Select(x => x.Id);
+
+                Expenses = Expenses.Where(x => filterAccounts.Contains(x.AccountId)).ToList();
             }
 
             var mappedExpenses = Expenses.Select(Mapper.Map<ExpenseList>);
             return mappedExpenses.ToList();
         }
 
-        public ExpenseSummary GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate)
+        public async Task<ExpenseSummary> GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate)
         {
-            var account = _bankAccountRepository.GetById(accountId, x => x.Bank, x => x.Currency);
+            var account = await _bankAccountCache.GetById(accountId);
 
             if (account == null)
             {
@@ -150,7 +164,7 @@ namespace PFM.Services.Interfaces.Services
             var currentMonthName = currentMonthInterval.GetSingleMonthName();
 
             // Retrieve both current month expenses and over 12 months expenses
-            var expenses = GetExpenses(new PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters
+            var expenses = await GetExpenses(new PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters
             {
                 AccountId = accountId,
                 StartDate = over12MonthsInterval.StartDate,
@@ -187,7 +201,7 @@ namespace PFM.Services.Interfaces.Services
 
                 // ReSharper disable once UseObjectOrCollectionInitializer
                 var expenseSummary = new ExpenseSummaryByCategory();
-                expenseSummary.CurrencySymbol = account.Currency.Symbol;
+                expenseSummary.CurrencySymbol = account.CurrencySymbol;
                 expenseSummary.CategoryId = category.Id;
                 expenseSummary.CategoryName = category.Name;
                 expenseSummary.CategoryColor = category.GraphColor;
@@ -258,16 +272,18 @@ namespace PFM.Services.Interfaces.Services
                 SavingValue = savings.Where(x => currentMonthInterval.IsBetween(x.DateSaving)).Sum(x => x.Amount)
             });
 
+            var accountDetails = await _bankAccountCache.GetById(account.Id);
+
             var ExpenseSummary = new ExpenseSummary()
             {
-                Account = Mapper.Map<AccountDetails>(account),
+                Account = accountDetails,
                 ExpensesByCategory = expensesByCategory.OrderByDescending(x => x.CostCurrentMonth).ToList(),
                 LabelCurrentMonth = DateTimeFormatHelper.GetMonthNameAndYear(referenceDate),
                 LabelPreviousMonth = DateTimeFormatHelper.GetMonthNameAndYear(referenceDate.AddMonths(-1)),
                 BudgetPlanName = budgetPlan != null ? budgetPlan.Name : string.Empty,
                 AccountName = account.Name,
                 DisplayDashboard = true,
-                CurrencySymbol = account.Currency.Symbol,
+                CurrencySymbol = account.CurrencySymbol,
                 HasCurrentBudgetPlan = budgetPlan != null,
                 HasExpenses = expenses.Any(),
                 HasCategories = categories.Any(),

@@ -16,15 +16,15 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetList")]
-        public IEnumerable<CurrencyList> GetList()
+        public async Task<IEnumerable<CurrencyList>> GetList()
         {
-            return _currencyService.GetCurrencies();
+            return await _currencyService.GetCurrencies();
         }
 
         [HttpGet("Get/{id}")]
-        public CurrencyDetails Get(int id)
+        public async Task<CurrencyDetails> Get(int id)
         {
-            return _currencyService.GetById(id);
+            return await _currencyService.GetById(id);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
 using System;
 
@@ -7,7 +8,7 @@ namespace PFM.Services.MovementStrategy
 {
     public static class ContextMovementStrategy
     {
-        public static MovementStrategy GetMovementStrategy(Movement movement, IBankAccountRepository bankAccountRepository, IIncomeRepository incomeRepository,
+        public static MovementStrategy GetMovementStrategy(Movement movement, IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository,
             IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
         {
             MovementStrategy strategy = null;
@@ -15,15 +16,15 @@ namespace PFM.Services.MovementStrategy
             switch (movement.PaymentMethod)
             {
                 case PaymentMethod.Cash:
-                    strategy = new CashMovementStrategy(movement, bankAccountRepository, incomeRepository, atmWithdrawRepository, eventPublisher);
+                    strategy = new CashMovementStrategy(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher);
                     break;
                 case PaymentMethod.InternalTransfer:
-                    strategy = new InternalTransferMovementStrategy(movement, bankAccountRepository, incomeRepository, atmWithdrawRepository, eventPublisher);
+                    strategy = new InternalTransferMovementStrategy(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher);
                     break;
                 case PaymentMethod.CB:
                 case PaymentMethod.DirectDebit:
                 case PaymentMethod.Transfer:
-                    strategy = new CommonMovementStrategy(movement, bankAccountRepository, incomeRepository, atmWithdrawRepository, eventPublisher);
+                    strategy = new CommonMovementStrategy(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher);
                     break;
                 default:
                     throw new ArgumentException("Unknown PaymentMethod");

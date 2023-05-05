@@ -18,9 +18,9 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("Get/{id}")]
-        public ExpenseDetails Get(int id)
+        public async Task<ExpenseDetails> Get(int id)
         {
-            return _expenseService.GetById(id);
+            return await _expenseService.GetById(id);
         }
         
         [HttpPost("Create")]
@@ -42,27 +42,27 @@ namespace PFM.Api.Controllers
         }
 
         [HttpPost("CreateMultiple")]
-        public void CreateMultiple([FromBody]List<ExpenseDetails> ExpenseDetails)
+        public async Task<bool> CreateMultiple([FromBody]List<ExpenseDetails> ExpenseDetails)
         {
-            _expenseService.CreateExpenses(ExpenseDetails);
+            return await _expenseService.CreateExpenses(ExpenseDetails);
         }
 
         [HttpPost("ChangeDebitStatus/{id}/{debitStatus}")]
-        public void ChangeDebitStatus(int id, bool debitStatus)
+        public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            _expenseService.ChangeDebitStatus(id, debitStatus);
+            return await _expenseService.ChangeDebitStatus(id, debitStatus);
         }
 
         [HttpPost("GetExpenseSummary/{accountId}")]
-        public ExpenseSummary GetExpenseSummary(int accountId, [FromBody]BudgetPlanDetails budgetPlan)
+        public async Task<ExpenseSummary> GetExpenseSummary(int accountId, [FromBody]BudgetPlanDetails budgetPlan)
         {
-            return _expenseService.GetExpenseSummary(accountId, budgetPlan, DateTime.Now);
+            return await _expenseService.GetExpenseSummary(accountId, budgetPlan, DateTime.Now);
         }
 
         [HttpPost("GetExpenses")]
-        public IList<ExpenseList> GetExpenses([FromBody]Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
+        public async Task<IList<ExpenseList>> GetExpenses([FromBody]Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
         {
-            return _expenseService.GetExpenses(search);
+            return await _expenseService.GetExpenses(search);
         }
     }
 }

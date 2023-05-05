@@ -10,22 +10,23 @@ using PFM.Api.Contracts.Saving;
 using PFM.Services.Events.Interfaces;
 using System.Transactions;
 using System.Threading.Tasks;
+using PFM.Services.Caches.Interfaces;
 
 namespace PFM.Services
 {
     public class SavingService : ISavingService
     {
         private readonly ISavingRepository _savingRepository;
-        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IBankAccountCache _bankAccountCache;
         private readonly IIncomeRepository _incomeRepository;
         private readonly IAtmWithdrawRepository _atmWithdrawRepository;
         private readonly IEventPublisher _eventPublisher;
 
-        public SavingService(ISavingRepository savingRepository, IBankAccountRepository bankAccountRepository, 
+        public SavingService(ISavingRepository savingRepository, IBankAccountCache bankAccountCache, 
              IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
         {
             this._savingRepository = savingRepository;
-            this._bankAccountRepository = bankAccountRepository;
+            this._bankAccountCache = bankAccountCache;
             this._incomeRepository = incomeRepository;
             this._atmWithdrawRepository = atmWithdrawRepository;
             this._eventPublisher = eventPublisher;
@@ -39,7 +40,7 @@ namespace PFM.Services
 
                 var movement = new Movement(savingDetails);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountCache, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var result  = await strategy.Debit();
 
                 if (!movement.TargetIncomeId.HasValue)
@@ -64,7 +65,7 @@ namespace PFM.Services
 
                 _savingRepository.Delete(saving);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(savingDetails), _bankAccountRepository, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
+                var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(savingDetails), _bankAccountCache, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
                 var result = await strategy.Credit();
 
                 scope.Complete();
@@ -73,9 +74,9 @@ namespace PFM.Services
             }
         }
 
-        public SavingDetails GetById(int id)
+        public async Task<SavingDetails> GetById(int id)
         {
-            var saving = _savingRepository.GetById(id, u => u.TargetInternalAccount);
+            var saving = _savingRepository.GetById(id);
 
             if (saving == null)
             {
@@ -84,16 +85,30 @@ namespace PFM.Services
 
             var mappedSaving = Mapper.Map<SavingDetails>(saving);
 
+            var targetAccount = await _bankAccountCache.GetById(saving.TargetInternalAccountId);
+            mappedSaving.TargetInternalAccountName = targetAccount.Name;
+
             return mappedSaving;
         }
 
-        public IList<SavingList> GetSavingsByAccountId(int accountId)
+        public async Task<IList<SavingList>> GetSavingsByAccountId(int accountId)
         {
-            var savings = _savingRepository.GetList2(u => u.Account.Currency, u => u.TargetInternalAccount)
-                 .Where(x => x.Account.Id == accountId)
-                 .ToList();
+            var savings = _savingRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
 
-            var mappedSavings = savings.Select(x => Mapper.Map<SavingList>(x));
+            var mappedSavings = new List<SavingList>();
+
+            foreach (var saving in savings)
+            {
+                var map = Mapper.Map<SavingList>(saving);
+
+                var srcAccount = await _bankAccountCache.GetById(saving.AccountId);
+                map.AccountCurrencySymbol = srcAccount.CurrencySymbol;
+
+                var targetAccount = await _bankAccountCache.GetById(saving.TargetInternalAccountId);
+                map.TargetInternalAccountName = targetAccount.Name;
+
+                mappedSavings.Add(map);
+            }
 
             return mappedSavings.ToList();
         }

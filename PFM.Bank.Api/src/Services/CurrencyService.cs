@@ -4,6 +4,7 @@ using PFM.Bank.Api.Contracts.Currency;
 using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Services
 {
@@ -16,7 +17,7 @@ namespace Services
             this._currencyRepository = currencyRepository;
         }
 
-        public IList<CurrencyList> GetCurrencies()
+        public Task<List<CurrencyList>> GetCurrencies()
         {
             var currencies = _currencyRepository.GetList().ToList();
 
@@ -27,10 +28,10 @@ namespace Services
                 currency.CanBeDeleted = false;
             });
 
-            return mappedCurrencies;
+            return Task.FromResult(mappedCurrencies);
         }
 
-        public CurrencyDetails GetById(int id)
+        public Task<CurrencyDetails> GetById(int id)
         {
             var currency = _currencyRepository.GetById(id);
 
@@ -39,7 +40,7 @@ namespace Services
                 return null;
             }
 
-            return Mapper.Map<CurrencyDetails>(currency);
+            return Task.FromResult(Mapper.Map<CurrencyDetails>(currency));
         }
     }
 }

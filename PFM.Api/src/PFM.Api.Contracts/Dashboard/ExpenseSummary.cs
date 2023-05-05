@@ -1,11 +1,10 @@
-﻿using PFM.Api.Contracts.Account;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PFM.Api.Contracts.Dashboard
 {
     public class ExpenseSummary
     {
-        public AccountDetails Account { get; set; }
+        public PFM.Bank.Api.Contracts.Account.AccountDetails Account { get; set; }
 
         public List<ExpenseSummaryByCategory> ExpensesByCategory { get; set; }
 

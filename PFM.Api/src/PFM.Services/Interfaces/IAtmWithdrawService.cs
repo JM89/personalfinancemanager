@@ -8,16 +8,16 @@ namespace PFM.Services.Interfaces
     {
         Task<bool> CreateAtmWithdraws(List<AtmWithdrawDetails> atmWithdrawDetails);
 
-        IList<AtmWithdrawList> GetAtmWithdrawsByAccountId(int accountId);
+        Task<IList<AtmWithdrawList>> GetAtmWithdrawsByAccountId(int accountId);
 
         Task<bool> CreateAtmWithdraw(AtmWithdrawDetails atmWithdrawDetails);
 
-        AtmWithdrawDetails GetById(int id);
+        Task<AtmWithdrawDetails> GetById(int id);
 
-        void CloseAtmWithdraw(int id);
+        Task<bool> CloseAtmWithdraw(int id);
 
         Task<bool> DeleteAtmWithdraw(int id);
 
-        void ChangeDebitStatus(int id, bool debitStatus);
+        Task<bool> ChangeDebitStatus(int id, bool debitStatus);
     }
 }

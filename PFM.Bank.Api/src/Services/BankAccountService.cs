@@ -36,16 +36,9 @@ namespace Services
                 account.CurrentBalance = account.InitialBalance;
                 account.IsFavorite = !_bankAccountRepository.GetList().Any(x => x.User_Id == userId);
 
-                var added = _bankAccountRepository.Create(account);
+                _bankAccountRepository.Create(account);
 
-                added = _bankAccountRepository.GetById(added.Id, a => a.Currency, a => a.Bank);
-
-                var evt = new BankAccountCreated() { 
-                    BankCode = added.Bank.Id.ToString(), 
-                    CurrencyCode = added.Currency.Id.ToString(), 
-                    CurrentBalance = added.CurrentBalance,
-                    UserId = added.User_Id
-                };
+                var evt = Mapper.Map<BankAccountCreated>(account);
 
                 var published = await _eventPublisher.PublishAsync(evt, default);
                 
@@ -55,7 +48,7 @@ namespace Services
             }
         }
 
-        public IList<AccountList> GetAccountsByUser(string userId)
+        public Task<List<AccountList>> GetAccountsByUser(string userId)
         {
             var accounts = _bankAccountRepository.GetList2(u => u.Currency, u => u.Bank)
                 .Where(x => x.User_Id == userId)
@@ -69,10 +62,10 @@ namespace Services
                 account.CanBeDeleted = false;
             });
 
-            return mappedAccounts;
+            return Task.FromResult(mappedAccounts);
         }
         
-        public AccountDetails GetById(int id)
+        public Task<AccountDetails> GetById(int id)
         {
             var account = _bankAccountRepository.GetList2(x => x.Currency, x => x.Bank).SingleOrDefault(x => x.Id == id);
 
@@ -81,7 +74,7 @@ namespace Services
                 return null;
             }
 
-            return Mapper.Map<AccountDetails>(account);
+            return Task.FromResult(Mapper.Map<AccountDetails>(account));
         }
 
         public Task<bool> EditBankAccount(AccountDetails accountDetails, string userId)
@@ -134,13 +127,7 @@ namespace Services
                 var account = _bankAccountRepository.GetById(id, a => a.Currency, a => a.Bank);
                 _bankAccountRepository.Delete(account);
 
-                var evt = new BankAccountDeleted()
-                {
-                    BankCode = account.Bank.Id.ToString(),
-                    CurrencyCode = account.Currency.Id.ToString(),
-                    CurrentBalance = account.CurrentBalance,
-                    UserId = account.User_Id
-                };
+                var evt = Mapper.Map<BankAccountDeleted>(account);
 
                 var published = await _eventPublisher.PublishAsync(evt, default);
 
@@ -150,7 +137,7 @@ namespace Services
             }
         }
         
-        public void SetAsFavorite(int id)
+        public Task<bool> SetAsFavorite(int id)
         {
             var updatedList = _bankAccountRepository.GetList2();
 
@@ -160,6 +147,8 @@ namespace Services
             }
 
             _bankAccountRepository.UpdateAll(updatedList);
+
+            return Task.FromResult(true);
         }
     }
 }

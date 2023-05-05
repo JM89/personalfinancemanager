@@ -14,15 +14,15 @@ namespace PFM.Services.ExternalServices.BankApi
         Task<ApiResponse> Get(int id);
 
         [Post("/api/BankAccount/Create/{userId}")]
-        Task<ApiResponse> Post(string userId, AccountDetails accountDetails);
+        Task<ApiResponse> Create(string userId, AccountDetails accountDetails);
 
         [Put("/api/BankAccount/Edit/{id}/{userId}")]
-        Task<ApiResponse> Put(int id, string userId, AccountDetails accountDetails);
+        Task<ApiResponse> Edit(int id, string userId, AccountDetails accountDetails);
 
-        [Put("/api/BankAccount/Delete/{id}")]
+        [Delete("/api/BankAccount/Delete/{id}")]
         Task<ApiResponse> Delete(int id);
 
-        [Post("/api/SetAsFavorite/{id}")]
+        [Post("/api/BankAccount/SetAsFavorite/{id}")]
         Task<ApiResponse> SetAsFavorite(int id);
     }
 }

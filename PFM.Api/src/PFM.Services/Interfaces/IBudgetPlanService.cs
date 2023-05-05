@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PFM.Api.Contracts.BudgetPlan;
 
 namespace PFM.Services.Interfaces
@@ -19,6 +20,6 @@ namespace PFM.Services.Interfaces
 
         void StopBudgetPlan(int value);
 
-        BudgetPlanDetails BuildBudgetPlan(int accountId, int? budgetPlanId = null);
+        Task<BudgetPlanDetails> BuildBudgetPlan(int accountId, int? budgetPlanId = null);
     }
 }

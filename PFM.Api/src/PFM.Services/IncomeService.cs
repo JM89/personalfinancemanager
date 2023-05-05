@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using PFM.Api.Contracts.Expense;
 using PFM.Api.Contracts.Income;
 using PFM.Bank.Event.Contracts;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.Interfaces;
 using System.Collections.Generic;
@@ -15,27 +17,30 @@ namespace PFM.Services
     public class IncomeService: IIncomeService
     {
         private readonly IIncomeRepository _incomeRepository;
-        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IBankAccountCache _bankAccountCache;
         private readonly IEventPublisher _eventPublisher;
 
         private readonly string OperationType = "Income";
 
-        public IncomeService(IIncomeRepository incomeRepository, IBankAccountRepository bankAccountRepository,IEventPublisher eventPublisher)
+        public IncomeService(IIncomeRepository incomeRepository, IBankAccountCache bankAccountCache,IEventPublisher eventPublisher)
         {
             this._incomeRepository = incomeRepository;
-            this._bankAccountRepository = bankAccountRepository;
+            this._bankAccountCache = bankAccountCache;
             this._eventPublisher = eventPublisher;
         }
 
-        public Task<bool> CreateIncomes(List<IncomeDetails> incomeDetails)
+        public async Task<bool> CreateIncomes(List<IncomeDetails> incomeDetails)
         {
             var resultBatch = true;
-            incomeDetails.ForEach(async (income) => {
+
+            foreach (var income in incomeDetails)
+            {
                 var result = await CreateIncome(income);
                 if (!result)
                     resultBatch = false;
-            });
-            return Task.FromResult(resultBatch); 
+            }
+
+            return resultBatch; 
         }
 
         public async Task<bool> CreateIncome(IncomeDetails incomeDetails)
@@ -45,21 +50,21 @@ namespace PFM.Services
                 var income = Mapper.Map<Income>(incomeDetails);
                 _incomeRepository.Create(income);
 
-                var account = _bankAccountRepository.GetById(income.AccountId, a => a.Currency, a => a.Bank);
+                var account = await _bankAccountCache.GetById(income.AccountId);
 
                 var evt = new BankAccountCredited()
                 {
-                    BankCode = account.Bank.Id.ToString(),
-                    CurrencyCode = account.Currency.Id.ToString(),
+                    Id = account.Id,
+                    BankId = account.BankId,
+                    CurrencyId = account.CurrencyId,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance + incomeDetails.Cost,
-                    UserId = account.User_Id,
+                    UserId = account.OwnerId,
                     OperationDate = income.DateIncome,
                     OperationType = OperationType
                 };
 
                 account.CurrentBalance += incomeDetails.Cost;
-                _bankAccountRepository.Update(account);
 
                 var published = await _eventPublisher.PublishAsync(evt, default);
 
@@ -69,16 +74,26 @@ namespace PFM.Services
             }
         }
 
-        public IList<IncomeList> GetIncomes(int accountId)
+        public async Task<IList<IncomeList>> GetIncomes(int accountId)
         {
-            var incomes = _incomeRepository.GetList2(u => u.Account.Currency).Where(x => x.AccountId == accountId).ToList();
+            var incomes = _incomeRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
 
-            var mappedIncomes = incomes.Select(x => Mapper.Map<IncomeList>(x));
+            var mappedIncomes = new List<IncomeList>();
             
+            foreach (var income in incomes)
+            {
+                var map = Mapper.Map<IncomeList>(income);
+
+                var account = await _bankAccountCache.GetById(income.AccountId);
+                map.AccountCurrencySymbol = account.CurrencySymbol;
+
+                mappedIncomes.Add(map);
+            }
+
             return mappedIncomes.ToList();
         }
 
-        public IncomeDetails GetById(int id)
+        public Task<IncomeDetails> GetById(int id)
         {
             var income = _incomeRepository.GetById(id);
 
@@ -87,7 +102,7 @@ namespace PFM.Services
                 return null;
             }
 
-            return Mapper.Map<IncomeDetails>(income);
+            return Task.FromResult(Mapper.Map<IncomeDetails>(income));
         }
 
         public async Task<bool> DeleteIncome(int id)
@@ -96,21 +111,21 @@ namespace PFM.Services
             {
                 var income = _incomeRepository.GetById(id);
 
-                var account = _bankAccountRepository.GetById(income.AccountId, a => a.Currency, a => a.Bank);
+                var account = await _bankAccountCache.GetById(income.AccountId);
 
                 var evt = new BankAccountDebited()
                 {
-                    BankCode = account.Bank.Id.ToString(),
-                    CurrencyCode = account.Currency.Id.ToString(),
+                    Id = account.Id,
+                    BankId = account.BankId,
+                    CurrencyId = account.CurrencyId,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance - income.Cost,
-                    UserId = account.User_Id,
+                    UserId = account.OwnerId,
                     OperationDate = income.DateIncome,
                     OperationType = OperationType
                 };
 
                 account.CurrentBalance -= income.Cost;
-                _bankAccountRepository.Update(account);
 
                 _incomeRepository.Delete(income);
 

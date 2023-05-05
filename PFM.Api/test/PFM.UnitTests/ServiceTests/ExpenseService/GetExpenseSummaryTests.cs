@@ -7,13 +7,14 @@ using PFM.Services.Utils.Helpers;
 using PFM.UnitTests.Fixture;
 using PFM.UnitTests.Helpers;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace PFM.UnitTests.ServiceTests.ExpenseService
 {
     public class GetExpenseSummaryTests : BaseTests, IClassFixture<AutoMapperFixture>
     {
         [Fact]
-        public void WithExpenses_Test()
+        public async Task WithExpenses_Test()
         {
             // Arrange
 
@@ -50,7 +51,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null, now);
+            var result = await service.GetExpenseSummary(1, null, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -109,7 +110,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
         }
 
         [Fact]
-        public void WithExpensesIncomesAndSavings_Test()
+        public async Task WithExpensesIncomesAndSavings_Test()
         {
             // Arrange
 
@@ -157,7 +158,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null, now);
+            var result = await service.GetExpenseSummary(1, null, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -190,7 +191,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
         }
 
         [Fact]
-        public void WithExpensesForOneCategory_Test()
+        public async Task WithExpensesForOneCategory_Test()
         {
             // Arrange
 
@@ -221,7 +222,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null, now);
+            var result = await service.GetExpenseSummary(1, null, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -268,7 +269,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
         }
 
         [Fact]
-        public void WithExpensesAndBudgetPlan_Test()
+        public async Task WithExpensesAndBudgetPlan_Test()
         {
             // Arrange
 
@@ -308,7 +309,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, budgetPlan, now);
+            var result = await service.GetExpenseSummary(1, budgetPlan, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -325,7 +326,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
         /// Happens if a category has been created after the budget plan definition. 
         /// </summary>
         [Fact]
-        public void WithExpensesAndBudgetPlanWithMissingCategory_Test()
+        public async Task WithExpensesAndBudgetPlanWithMissingCategory_Test()
         {
             // Arrange
 
@@ -364,7 +365,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, budgetPlan, now);
+            var result = await service.GetExpenseSummary(1, budgetPlan, now);
 
             // Assert
             Assert.True(result.HasExpenses);
@@ -378,7 +379,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
         }
 
         [Fact]
-        public void NoCategories_Test()
+        public async Task NoCategories_Test()
         {
             // Arrange
 
@@ -393,7 +394,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null, now);
+            var result = await service.GetExpenseSummary(1, null, now);
 
             // Assert
             Assert.False(result.HasCategories);
@@ -410,7 +411,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
         }
 
         [Fact]
-        public void NoExpenses_Test()
+        public async Task NoExpenses_Test()
         {
             // Arrange
 
@@ -435,7 +436,7 @@ namespace PFM.UnitTests.ServiceTests.ExpenseService
 
             // Act
 
-            var result = service.GetExpenseSummary(1, null, now);
+            var result = await service.GetExpenseSummary(1, null, now);
 
             // Assert
 

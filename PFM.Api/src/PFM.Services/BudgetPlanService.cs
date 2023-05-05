@@ -9,6 +9,8 @@ using PFM.DataAccessLayer.SearchParameters;
 using PFM.Api.Contracts.BudgetPlan;
 using PFM.Services.Utils.Helpers;
 using PFM.Api.Contracts.ExpenseType;
+using PFM.Services.Caches.Interfaces;
+using System.Threading.Tasks;
 
 namespace PFM.Services
 {
@@ -16,19 +18,19 @@ namespace PFM.Services
     {
         private readonly IBudgetPlanRepository _budgetPlanRepository;
         private readonly IBudgetByExpenseTypeRepository _budgetByExpenseTypeRepository;
-        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IBankAccountCache _bankAccountCache;
         private readonly IExpenseRepository _ExpenseRepository;
         private readonly IExpenseTypeRepository _ExpenseTypeRepository;
         private readonly IIncomeRepository _incomeRepository;
         private readonly ISavingRepository _savingRepository;
 
-        public BudgetPlanService(IBudgetPlanRepository budgetPlanRepository, IBudgetByExpenseTypeRepository budgetByExpenseTypeRepository, IBankAccountRepository bankAccountRepository,
+        public BudgetPlanService(IBudgetPlanRepository budgetPlanRepository, IBudgetByExpenseTypeRepository budgetByExpenseTypeRepository, IBankAccountCache bankAccountCache,
             IExpenseRepository ExpenseRepository, IExpenseTypeRepository ExpenseTypeRepository, IIncomeRepository incomeRepository, 
             ISavingRepository savingRepository)
         {
             this._budgetPlanRepository = budgetPlanRepository;
             this._budgetByExpenseTypeRepository = budgetByExpenseTypeRepository;
-            this._bankAccountRepository = bankAccountRepository;
+            this._bankAccountCache = bankAccountCache;
             this._ExpenseRepository = ExpenseRepository;
             this._ExpenseTypeRepository = ExpenseTypeRepository;
             this._incomeRepository = incomeRepository;
@@ -182,9 +184,9 @@ namespace PFM.Services
             _budgetPlanRepository.Update(budgetPlan);
         }
 
-        public BudgetPlanDetails BuildBudgetPlan(int accountId, int? budgetPlanId = null)
+        public async Task<BudgetPlanDetails> BuildBudgetPlan(int accountId, int? budgetPlanId = null)
         {
-            var currencySymbol = _bankAccountRepository.GetById(accountId, x => x.Currency).Currency.Symbol;
+            var currencySymbol = (await _bankAccountCache.GetById(accountId)).CurrencySymbol;
 
             var today = DateTime.Now;
             var over12MonthsInterval = new Interval(today, DateTimeUnitEnums.Years, 1);

@@ -22,34 +22,34 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("GetTaxesByType/{userId}/{taxTypeId}")]
-        public Task<List<TaxList>> GetTaxesByType(string userId, int taxTypeId)
+        public async Task<List<TaxList>> GetTaxesByType(string userId, int taxTypeId)
         {
-            return _taxService.GetTaxesByType(userId, taxTypeId);
+            return await _taxService.GetTaxesByType(userId, taxTypeId);
         }
 
         [HttpGet("Get/{id}")]
-        public Task<TaxDetails> Get(int id)
+        public async Task<TaxDetails> Get(int id)
         {
-            return _taxService.GetById(id);
+            return await _taxService.GetById(id);
         }
         
         [HttpPost("Create")]
-        public Task<bool> Post([FromBody]TaxDetails createdObj)
+        public async Task<bool> Post([FromBody]TaxDetails createdObj)
         {
-            return _taxService.CreateTax(createdObj);
+            return await _taxService.CreateTax(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public Task<bool> Put(int id, [FromBody]TaxDetails editedObj)
+        public async Task<bool> Put(int id, [FromBody]TaxDetails editedObj)
         {
             editedObj.Id = id;
-            return _taxService.EditTax(editedObj);
+            return await _taxService.EditTax(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            return _taxService.DeleteTax(id);
+            return await _taxService.DeleteTax(id);
         }
     }
 }
