@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PFM.Api.Contracts.Expense;
 using PFM.Api.Contracts.Income;
 using PFM.Bank.Event.Contracts;
 using PFM.DataAccessLayer.Entities;
@@ -28,15 +29,18 @@ namespace PFM.Services
             this._eventPublisher = eventPublisher;
         }
 
-        public Task<bool> CreateIncomes(List<IncomeDetails> incomeDetails)
+        public async Task<bool> CreateIncomes(List<IncomeDetails> incomeDetails)
         {
             var resultBatch = true;
-            incomeDetails.ForEach(async (income) => {
+
+            foreach (var income in incomeDetails)
+            {
                 var result = await CreateIncome(income);
                 if (!result)
                     resultBatch = false;
-            });
-            return Task.FromResult(resultBatch); 
+            }
+
+            return resultBatch; 
         }
 
         public async Task<bool> CreateIncome(IncomeDetails incomeDetails)
@@ -55,7 +59,7 @@ namespace PFM.Services
                     CurrencyId = account.CurrencyId,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance + incomeDetails.Cost,
-                    UserId = account.UserId,
+                    UserId = account.OwnerId,
                     OperationDate = income.DateIncome,
                     OperationType = OperationType
                 };
@@ -106,7 +110,7 @@ namespace PFM.Services
                     CurrencyId = account.CurrencyId,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance - income.Cost,
-                    UserId = account.UserId,
+                    UserId = account.OwnerId,
                     OperationDate = income.DateIncome,
                     OperationType = OperationType
                 };

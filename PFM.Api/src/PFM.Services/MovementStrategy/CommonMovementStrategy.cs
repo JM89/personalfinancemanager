@@ -37,7 +37,7 @@ namespace PFM.Services.MovementStrategy
                 CurrencyId = account.CurrencyId,
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance - movement.Amount,
-                UserId = account.UserId,
+                UserId = account.OwnerId,
                 OperationDate = movement.Date,
                 OperationType = $"Expense via {movement.PaymentMethod}"
             };
@@ -69,7 +69,7 @@ namespace PFM.Services.MovementStrategy
                 CurrencyId = account.CurrencyId,
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance + movement.Amount,
-                UserId = account.UserId,
+                UserId = account.OwnerId,
                 OperationDate = movement.Date,
                 OperationType = $"Expense via {movement.PaymentMethod}"
             };

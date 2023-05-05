@@ -15,9 +15,9 @@ namespace PFM.Services.Interfaces
 
         Task<bool> DeleteExpense(int id);
 
-        ExpenseDetails GetById(int id);
+        Task<ExpenseDetails> GetById(int id);
 
-        void ChangeDebitStatus(int id, bool debitStatus);
+        Task<bool> ChangeDebitStatus(int id, bool debitStatus);
 
         Task<ExpenseSummary> GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate);
 

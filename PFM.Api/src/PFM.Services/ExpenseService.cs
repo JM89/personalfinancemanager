@@ -45,15 +45,18 @@ namespace PFM.Services.Interfaces.Services
             this._bankAccountApi = bankAccountApi;
         }
 
-        public Task<bool> CreateExpenses(List<ExpenseDetails> ExpenseDetails)
+        public async Task<bool> CreateExpenses(List<ExpenseDetails> ExpenseDetails)
         {
             var resultBatch = true;
-            ExpenseDetails.ForEach(async (income) => {
-                var result = await CreateExpense(income);
+
+            foreach (var expense in ExpenseDetails)
+            {
+                var result = await CreateExpense(expense);
                 if (!result)
                     resultBatch = false;
-            });
-            return Task.FromResult(resultBatch);
+            }
+
+            return resultBatch;
         }
 
         public async Task<bool> CreateExpense(ExpenseDetails expenseDetails)
@@ -96,7 +99,7 @@ namespace PFM.Services.Interfaces.Services
             }
         }
 
-        public ExpenseDetails GetById(int id)
+        public Task<ExpenseDetails> GetById(int id)
         {
             var Expense = _expenseRepository
                             .GetList2(u => u.Account.Currency, u => u.ExpenseType, u => u.PaymentMethod)
@@ -107,14 +110,15 @@ namespace PFM.Services.Interfaces.Services
                 return null;
             }
 
-            return Mapper.Map<ExpenseDetails>(Expense);
+            return Task.FromResult(Mapper.Map<ExpenseDetails>(Expense));
         }
 
-        public void ChangeDebitStatus(int id, bool debitStatus)
+        public Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
             var Expense = _expenseRepository.GetById(id);
             Expense.HasBeenAlreadyDebited = debitStatus;
             _expenseRepository.Update(Expense);
+            return Task.FromResult(true);
         }
 
         public async Task<IList<ExpenseList>> GetExpenses(PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)

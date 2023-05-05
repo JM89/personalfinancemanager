@@ -5,6 +5,7 @@ using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.SearchParameters;
 using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
+using PFM.Services.ExternalServices.BankApi;
 using PFM.Services.Interfaces.Services;
 using System.Collections.Generic;
 
@@ -13,7 +14,6 @@ namespace PFM.UnitTests
     public class BaseTests
     {
         protected Mock<IExpenseRepository> MockExpenseRepository;
-        protected Mock<IBankAccountRepository> MockBankAccountRepository;
         protected Mock<IAtmWithdrawRepository> MockAtmWithdrawRepository;
         protected Mock<IIncomeRepository> MockIncomeRepository;
         protected Mock<IExpenseTypeRepository> MockExpenseTypeRepository;
@@ -33,11 +33,6 @@ namespace PFM.UnitTests
             MockExpenseRepository
                 .Setup(x => x.GetByParameters(It.IsAny<ExpenseGetListSearchParameters>()))
                 .Returns(expenses);
-
-            MockBankAccountRepository = new Mock<IBankAccountRepository>();
-            MockBankAccountRepository
-                .Setup(x => x.GetById(account.Id, y => y.Bank, y => y.Currency))
-                .Returns(account);
 
             MockAtmWithdrawRepository = new Mock<IAtmWithdrawRepository>();
 
@@ -68,13 +63,13 @@ namespace PFM.UnitTests
 
             var service = new ExpenseService(
                 MockExpenseRepository.Object,
-                MockBankAccountRepository.Object,
                 MockAtmWithdrawRepository.Object,
                 MockIncomeRepository.Object,
                 MockExpenseTypeRepository.Object,
                 MockSavingRepository.Object,
                 MockEventPublisher.Object,
-                MockBankAccountCache.Object);
+                MockBankAccountCache.Object, 
+                new Mock<IBankAccountApi>().Object);
             return service;
         }
     }

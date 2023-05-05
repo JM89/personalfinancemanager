@@ -18,7 +18,7 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("Get/{id}")]
-        public ExpenseDetails Get(int id)
+        public Task<ExpenseDetails> Get(int id)
         {
             return _expenseService.GetById(id);
         }
@@ -42,15 +42,15 @@ namespace PFM.Api.Controllers
         }
 
         [HttpPost("CreateMultiple")]
-        public void CreateMultiple([FromBody]List<ExpenseDetails> ExpenseDetails)
+        public async Task<bool> CreateMultiple([FromBody]List<ExpenseDetails> ExpenseDetails)
         {
-            _expenseService.CreateExpenses(ExpenseDetails);
+            return await _expenseService.CreateExpenses(ExpenseDetails);
         }
 
         [HttpPost("ChangeDebitStatus/{id}/{debitStatus}")]
-        public void ChangeDebitStatus(int id, bool debitStatus)
+        public Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            _expenseService.ChangeDebitStatus(id, debitStatus);
+            return _expenseService.ChangeDebitStatus(id, debitStatus);
         }
 
         [HttpPost("GetExpenseSummary/{accountId}")]
@@ -60,9 +60,9 @@ namespace PFM.Api.Controllers
         }
 
         [HttpPost("GetExpenses")]
-        public IList<ExpenseList> GetExpenses([FromBody]Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
+        public async Task<IList<ExpenseList>> GetExpenses([FromBody]Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
         {
-            return _expenseService.GetExpenses(search);
+            return await _expenseService.GetExpenses(search);
         }
     }
 }

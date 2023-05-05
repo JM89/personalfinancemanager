@@ -40,7 +40,7 @@ namespace PFM.Services.MovementStrategy
                 CurrencyId = account.CurrencyId,
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance - movement.Amount,
-                UserId = account.UserId,
+                UserId = account.OwnerId,
                 OperationDate = movement.Date,
                 OperationType = OperationType,
                 TargetBankAccount = $"BankAccount-{internalAccount.Id.ToString("00000000")}"
@@ -55,7 +55,7 @@ namespace PFM.Services.MovementStrategy
                 CurrencyId = account.CurrencyId,
                 PreviousBalance = internalAccount.CurrentBalance,
                 CurrentBalance = internalAccount.CurrentBalance + movement.Amount,
-                UserId = internalAccount.UserId,
+                UserId = internalAccount.OwnerId,
                 OperationDate = movement.Date,
                 OperationType = OperationType,
                 TargetBankAccount = $"BankAccount-{account.Id.ToString("00000000")}"
@@ -107,7 +107,7 @@ namespace PFM.Services.MovementStrategy
                 CurrencyId = account.CurrencyId,
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance + movement.Amount,
-                UserId = account.UserId,
+                UserId = account.OwnerId,
                 OperationDate = movement.Date,
                 OperationType = OperationType,
                 TargetBankAccount = $"BankAccount-{internalAccount.Id.ToString("00000000")}"
@@ -122,7 +122,7 @@ namespace PFM.Services.MovementStrategy
                 CurrencyId = account.CurrencyId,
                 PreviousBalance = internalAccount.CurrentBalance,
                 CurrentBalance = internalAccount.CurrentBalance - movement.Amount,
-                UserId = internalAccount.UserId,
+                UserId = internalAccount.OwnerId,
                 OperationDate = movement.Date,
                 OperationType = OperationType,
                 TargetBankAccount = $"BankAccount-{account.Id.ToString("00000000")}"

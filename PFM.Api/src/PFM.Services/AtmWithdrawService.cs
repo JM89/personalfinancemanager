@@ -79,7 +79,7 @@ namespace PFM.Services
                     CurrencyId = account.CurrencyId,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance - atmWithdraw.InitialAmount,
-                    UserId = account.UserId,
+                    UserId = account.OwnerId,
                     OperationDate = atmWithdraw.DateExpense,
                     OperationType = OperationType
                 };
@@ -128,7 +128,7 @@ namespace PFM.Services
                     CurrencyId = account.CurrencyId,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance + atmWithdraw.InitialAmount,
-                    UserId = account.UserId,
+                    UserId = account.OwnerId,
                     OperationDate = atmWithdraw.DateExpense,
                     OperationType = OperationType
                 };
