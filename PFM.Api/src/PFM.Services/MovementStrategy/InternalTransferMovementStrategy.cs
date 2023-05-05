@@ -33,8 +33,9 @@ namespace PFM.Services.MovementStrategy
         {
             var evtDebited = new BankAccountDebited()
             {
-                BankCode = account.Bank.Id.ToString(),
-                CurrencyCode = account.Currency.Id.ToString(),
+                Id = account.Id,
+                BankId = account.Bank.Id,
+                CurrencyId = account.Currency.Id,
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance - movement.Amount,
                 UserId = account.User_Id,
@@ -48,8 +49,9 @@ namespace PFM.Services.MovementStrategy
 
             var evtCredited = new BankAccountCredited()
             {
-                BankCode = internalAccount.Bank.Id.ToString(),
-                CurrencyCode = internalAccount.Currency.Id.ToString(),
+                Id = account.Id,
+                BankId = account.Bank.Id,
+                CurrencyId = account.Currency.Id,
                 PreviousBalance = internalAccount.CurrentBalance,
                 CurrentBalance = internalAccount.CurrentBalance + movement.Amount,
                 UserId = internalAccount.User_Id,
@@ -100,8 +102,9 @@ namespace PFM.Services.MovementStrategy
         {
             var evtCredited = new BankAccountCredited()
             {
-                BankCode = account.Bank.Id.ToString(),
-                CurrencyCode = account.Currency.Id.ToString(),
+                Id = account.Id,
+                BankId = account.Bank.Id,
+                CurrencyId = account.Currency.Id,
                 PreviousBalance = account.CurrentBalance,
                 CurrentBalance = account.CurrentBalance + movement.Amount,
                 UserId = account.User_Id,
@@ -115,8 +118,9 @@ namespace PFM.Services.MovementStrategy
 
             var evtDebited = new BankAccountDebited()
             {
-                BankCode = internalAccount.Bank.Id.ToString(),
-                CurrencyCode = internalAccount.Currency.Id.ToString(),
+                Id = account.Id,
+                BankId = account.Bank.Id,
+                CurrencyId = account.Currency.Id,
                 PreviousBalance = internalAccount.CurrentBalance,
                 CurrentBalance = internalAccount.CurrentBalance - movement.Amount,
                 UserId = internalAccount.User_Id,

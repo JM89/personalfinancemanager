@@ -73,8 +73,9 @@ namespace PFM.Services
 
                 var evt = new BankAccountDebited()
                 {
-                    BankCode = account.Bank.Id.ToString(),
-                    CurrencyCode = account.Currency.Id.ToString(),
+                    Id = account.Id,
+                    BankId = account.Bank.Id,
+                    CurrencyId = account.Currency.Id,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance - atmWithdraw.InitialAmount,
                     UserId = account.User_Id,
@@ -122,8 +123,9 @@ namespace PFM.Services
 
                 var evt = new BankAccountCredited()
                 {
-                    BankCode = account.Bank.Id.ToString(),
-                    CurrencyCode = account.Currency.Id.ToString(),
+                    Id = account.Id,
+                    BankId = account.Bank.Id,
+                    CurrencyId = account.Currency.Id,
                     PreviousBalance = account.CurrentBalance,
                     CurrentBalance = account.CurrentBalance + atmWithdraw.InitialAmount,
                     UserId = account.User_Id,
