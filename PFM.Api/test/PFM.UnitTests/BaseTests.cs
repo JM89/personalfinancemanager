@@ -6,9 +6,7 @@ using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.SearchParameters;
 using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
-using PFM.Services.ExternalServices.BankApi;
 using PFM.Services.Interfaces.Services;
-using PFM.Services.MovementStrategy;
 using System.Collections.Generic;
 
 namespace PFM.UnitTests
@@ -28,7 +26,7 @@ namespace PFM.UnitTests
            
         }
 
-        protected ExpenseService SetupExpenseService(AccountDetails account, List<ExpenseType> types, List<Expense> expenses,
+        protected MovementSummaryService SetupExpenseService(AccountDetails account, List<ExpenseType> types, List<Expense> expenses,
             List<Income> incomes, List<Saving> savings)
         {
             MockExpenseRepository = new Mock<IExpenseRepository>();
@@ -63,20 +61,13 @@ namespace PFM.UnitTests
                 InitialBalance = account.InitialBalance
             });
 
-            var movementStrategy = new ContextMovementStrategy(
-                MockBankAccountCache.Object,
-                MockIncomeRepository.Object,
-                MockAtmWithdrawRepository.Object, 
-                MockEventPublisher.Object);
-
-            var service = new ExpenseService(
+            var service = new MovementSummaryService(
                 MockExpenseRepository.Object,
                 MockIncomeRepository.Object,
                 MockExpenseTypeRepository.Object,
                 MockSavingRepository.Object,
-                MockBankAccountCache.Object, 
-                new Mock<IBankAccountApi>().Object,
-                movementStrategy);
+                MockBankAccountCache.Object);
+
             return service;
         }
     }

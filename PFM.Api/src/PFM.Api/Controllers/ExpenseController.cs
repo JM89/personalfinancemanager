@@ -11,10 +11,12 @@ namespace PFM.Api.Controllers
     public class ExpenseController : ControllerBase
     {
         private readonly IExpenseService _expenseService;
+        private readonly IMovementSummaryService _movementSummaryService;
 
-        public ExpenseController(IExpenseService ExpenseService)
+        public ExpenseController(IExpenseService expenseService, IMovementSummaryService movementSummaryService)
         {
-            _expenseService = ExpenseService;
+            _expenseService = expenseService;
+            _movementSummaryService = movementSummaryService;
         }
 
         [HttpGet("Get/{id}")]
@@ -56,7 +58,7 @@ namespace PFM.Api.Controllers
         [HttpPost("GetExpenseSummary/{accountId}")]
         public async Task<ExpenseSummary> GetExpenseSummary(int accountId, [FromBody]BudgetPlanDetails budgetPlan)
         {
-            return await _expenseService.GetExpenseSummary(accountId, budgetPlan, DateTime.Now);
+            return await _movementSummaryService.GetExpenseSummary(accountId, budgetPlan, DateTime.Now);
         }
 
         [HttpPost("GetExpenses")]
