@@ -26,7 +26,7 @@ namespace PFM.BankAccountUpdater.Services
                 if (response == null || response.Data == null)
                     throw new Exception("Data is null");
 
-                account = JsonConvert.DeserializeObject<AccountDetails>(response.Data.ToString());
+                account = JsonConvert.DeserializeObject<AccountDetails>(response.Data.ToString() ?? "");
 
                 if (account == null)
                     throw new Exception("Data is invalid");
@@ -34,7 +34,7 @@ namespace PFM.BankAccountUpdater.Services
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error while retrieving the bank account");
-                return false;
+                throw;
             }
 
             account.CurrentBalance = newBalance;
@@ -49,7 +49,7 @@ namespace PFM.BankAccountUpdater.Services
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error while updating the balance of the bank account");
-                return false;
+                throw;
             }
         }
     }

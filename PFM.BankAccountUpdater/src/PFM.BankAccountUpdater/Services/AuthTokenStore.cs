@@ -17,6 +17,9 @@ namespace PFM.BankAccountUpdater.Services
 
         public async Task<string> GetToken()
         {
+            ArgumentException.ThrowIfNullOrEmpty(_bankApiSettings.ClientId);
+            ArgumentException.ThrowIfNullOrEmpty(_bankApiSettings.ClientSecret);
+
             return await _tokenCache.GetToken(_bankApiSettings.ClientId, _bankApiSettings.ClientSecret);
         }
     }

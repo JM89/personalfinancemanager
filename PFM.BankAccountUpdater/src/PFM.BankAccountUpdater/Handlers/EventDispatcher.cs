@@ -27,9 +27,15 @@ namespace PFM.BankAccountUpdater.Handlers
 
         public void Dispatch(IEvent e)
         {
-            Action<IEvent> handler;
+            Action<IEvent>? handler;
             if (handlers.TryGetValue(e.GetType(), out handler))
             {
+                if (handler == null)
+                {
+                    _logger.Error("No handler available");
+                    return;
+                }
+
                 try
                 {
                     handler(e);

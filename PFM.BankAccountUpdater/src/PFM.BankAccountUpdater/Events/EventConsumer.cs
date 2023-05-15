@@ -27,10 +27,11 @@ namespace PFM.BankAccountUpdater.Events
             _logger = logger;
             _client = client;
             _settings = settings;
+
             _eventDispatcher = eventDispatcher;
             _subscriptionRetryPolicy = Policy
                .Handle<Exception>()
-               .WaitAndRetryAsync(_settings.MaxAttempt, retryAttempt => TimeSpan.FromSeconds(Math.Pow(_settings.ExponentialBackOffFactor, retryAttempt)), (ex, nextRetry, context) =>
+               .WaitAndRetryAsync(_settings.MaxAttempt ?? 3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(_settings.ExponentialBackOffFactor ?? 3, retryAttempt)), (ex, nextRetry, context) =>
                {
                    _logger.Warning($"Subscription to stream failed with message {ex.Message}, retrying in {nextRetry.TotalSeconds} seconds... ({++_retryCount}/{_settings.MaxAttempt})");
                });
@@ -42,8 +43,8 @@ namespace PFM.BankAccountUpdater.Events
             {
                 var subscription = await _subscriptionRetryPolicy.ExecuteAsync((stoppingToken) =>
                     _client.SubscribeToStreamAsync(
-                        _settings.StreamName,
-                        _settings.GroupName,
+                        _settings.StreamName ?? "UnknownStreamName",
+                        _settings.GroupName ?? "UnknownGroupName",
                         ResolveAsync, 
                         DoWhenConnectionDropped, 
                         cancellationToken: stoppingToken), 
