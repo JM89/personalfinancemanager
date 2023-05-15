@@ -25,5 +25,7 @@
         public string BankIconPath { get; set; }
 
         public string OwnerId { get; set; }
+
+        public bool IsFavorite { get; set; }
     }
 }
