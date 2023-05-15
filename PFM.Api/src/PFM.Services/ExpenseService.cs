@@ -81,13 +81,13 @@ namespace PFM.Services.Interfaces.Services
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var Expense = _expenseRepository.GetById(id);
-                var ExpenseDetails = Mapper.Map<ExpenseDetails>(Expense);
+                var expense = _expenseRepository.GetById(id);
+                var expenseDetails = Mapper.Map<ExpenseDetails>(expense);
 
-                _expenseRepository.Delete(Expense);
+                _expenseRepository.Delete(expense);
 
-                var strategy = _contextMovementStrategy.GetMovementStrategy((PFM.DataAccessLayer.Enumerations.PaymentMethod)ExpenseDetails.PaymentMethodId);
-                var result = await strategy.Credit(new Movement(ExpenseDetails));
+                var strategy = _contextMovementStrategy.GetMovementStrategy((PFM.DataAccessLayer.Enumerations.PaymentMethod)expenseDetails.PaymentMethodId);
+                var result = await strategy.Credit(new Movement(expenseDetails));
 
                 scope.Complete();
 

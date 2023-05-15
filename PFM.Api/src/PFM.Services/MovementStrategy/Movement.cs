@@ -2,6 +2,8 @@
 using PFM.DataAccessLayer.Enumerations;
 using PFM.Api.Contracts.Expense;
 using PFM.Api.Contracts.Saving;
+using PFM.Bank.Api.Contracts.Account;
+using PFM.Api.Contracts.Income;
 
 namespace PFM.Services.MovementStrategy
 {
@@ -44,6 +46,15 @@ namespace PFM.Services.MovementStrategy
             this.TargetAccountId = expenditure.TargetInternalAccountId;
             this.TargetIncomeId = expenditure.GeneratedIncomeId;
             this.AtmWithdrawId = expenditure.AtmWithdrawId;
+        }
+
+        public Movement(IncomeDetails income)
+        {
+            this.Date = income.DateIncome;
+            this.Description = income.Description;
+            this.Amount = income.Cost;
+            this.PaymentMethod = PaymentMethod.Transfer;
+            this.SourceAccountId = income.AccountId;
         }
     }
 }

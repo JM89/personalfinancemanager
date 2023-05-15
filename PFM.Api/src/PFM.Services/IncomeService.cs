@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using PFM.Api.Contracts.Expense;
 using PFM.Api.Contracts.Income;
-using PFM.Bank.Event.Contracts;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Caches.Interfaces;
-using PFM.Services.Events.Interfaces;
 using PFM.Services.Interfaces;
+using PFM.Services.MovementStrategy;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,15 +16,13 @@ namespace PFM.Services
     {
         private readonly IIncomeRepository _incomeRepository;
         private readonly IBankAccountCache _bankAccountCache;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly ContextMovementStrategy _contextMovementStrategy;
 
-        private readonly string OperationType = "Income";
-
-        public IncomeService(IIncomeRepository incomeRepository, IBankAccountCache bankAccountCache,IEventPublisher eventPublisher)
+        public IncomeService(IIncomeRepository incomeRepository, IBankAccountCache bankAccountCache, ContextMovementStrategy contextMovementStrategy)
         {
             this._incomeRepository = incomeRepository;
             this._bankAccountCache = bankAccountCache;
-            this._eventPublisher = eventPublisher;
+            this._contextMovementStrategy = contextMovementStrategy;
         }
 
         public async Task<bool> CreateIncomes(List<IncomeDetails> incomeDetails)
@@ -48,29 +44,17 @@ namespace PFM.Services
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var income = Mapper.Map<Income>(incomeDetails);
+
+                var movement = new Movement(incomeDetails);
+
+                var strategy = _contextMovementStrategy.GetMovementStrategy(DataAccessLayer.Enumerations.PaymentMethod.Transfer);
+                var result = await strategy.Credit(movement);
+
                 _incomeRepository.Create(income);
-
-                var account = await _bankAccountCache.GetById(income.AccountId);
-
-                var evt = new BankAccountCredited()
-                {
-                    Id = account.Id,
-                    BankId = account.BankId,
-                    CurrencyId = account.CurrencyId,
-                    PreviousBalance = account.CurrentBalance,
-                    CurrentBalance = account.CurrentBalance + incomeDetails.Cost,
-                    UserId = account.OwnerId,
-                    OperationDate = income.DateIncome,
-                    OperationType = OperationType
-                };
-
-                account.CurrentBalance += incomeDetails.Cost;
-
-                var published = await _eventPublisher.PublishAsync(evt, default);
 
                 scope.Complete();
 
-                return published;
+                return result;
             }
         }
 
@@ -110,30 +94,16 @@ namespace PFM.Services
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var income = _incomeRepository.GetById(id);
+                var incomeDetails = Mapper.Map<IncomeDetails>(income);
 
-                var account = await _bankAccountCache.GetById(income.AccountId);
-
-                var evt = new BankAccountDebited()
-                {
-                    Id = account.Id,
-                    BankId = account.BankId,
-                    CurrencyId = account.CurrencyId,
-                    PreviousBalance = account.CurrentBalance,
-                    CurrentBalance = account.CurrentBalance - income.Cost,
-                    UserId = account.OwnerId,
-                    OperationDate = income.DateIncome,
-                    OperationType = OperationType
-                };
-
-                account.CurrentBalance -= income.Cost;
+                var strategy = _contextMovementStrategy.GetMovementStrategy(DataAccessLayer.Enumerations.PaymentMethod.Transfer);
+                var result = await strategy.Debit(new Movement(incomeDetails));
 
                 _incomeRepository.Delete(income);
 
-                var published = await _eventPublisher.PublishAsync(evt, default);
-
                 scope.Complete();
 
-                return published;
+                return result;
             }
         }
     }
