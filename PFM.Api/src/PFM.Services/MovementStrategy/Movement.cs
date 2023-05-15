@@ -24,8 +24,6 @@ namespace PFM.Services.MovementStrategy
 
         public int? TargetIncomeId { get; set; }
 
-        public string ExpenseType { get; set; }
-
         public Movement(SavingDetails saving)
         { 
             this.Date = saving.DateSaving;
@@ -35,7 +33,6 @@ namespace PFM.Services.MovementStrategy
             this.SourceAccountId = saving.AccountId;
             this.TargetAccountId = saving.TargetInternalAccountId;
             this.TargetIncomeId = saving.GeneratedIncomeId;
-            this.ExpenseType = "Savings";
         }
 
         public Movement(ExpenseDetails expenditure)
@@ -48,7 +45,6 @@ namespace PFM.Services.MovementStrategy
             this.TargetAccountId = expenditure.TargetInternalAccountId;
             this.TargetIncomeId = expenditure.GeneratedIncomeId;
             this.AtmWithdrawId = expenditure.AtmWithdrawId;
-            this.ExpenseType = expenditure.ExpenseTypeName;
         }
 
         public Movement(IncomeDetails income)
@@ -58,7 +54,6 @@ namespace PFM.Services.MovementStrategy
             this.Amount = income.Cost;
             this.PaymentMethod = PaymentMethod.Transfer;
             this.SourceAccountId = income.AccountId;
-            this.ExpenseType = "Not Applicable";
         }
     }
 }
