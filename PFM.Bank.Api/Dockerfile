@@ -19,7 +19,7 @@ RUN dotnet dev-certs https --trust
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
-WORKDIR /app/PFM.Api
+WORKDIR /app/Api
 COPY --from=build-env /app/out .
 COPY --from=build-env /root/.dotnet/corefx/cryptography/x509stores/my/* /root/.dotnet/corefx/cryptography/x509stores/my/
 

@@ -73,7 +73,7 @@ namespace PFM.Api.Extensions
             return services;
         }
 
-        public static IServiceCollection AddBankApi(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddBankApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
         {
             var apiConfigs = configuration["BankApi:EndpointUrl"];
             if (apiConfigs == null)
@@ -98,27 +98,33 @@ namespace PFM.Api.Extensions
                 }
             };
 
+            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
+
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankAccountApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<IBankAccountCache, BankAccountCache>();
 
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<IBankCache, BankCache>();
 
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICurrencyApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<ICurrencyCache, CurrencyCache>();
 
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICountryApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>(); 
             services.AddSingleton<ICountryCache, CountryCache>();
 

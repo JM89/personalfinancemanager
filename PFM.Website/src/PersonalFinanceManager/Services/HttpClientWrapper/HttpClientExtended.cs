@@ -108,7 +108,10 @@ namespace PersonalFinanceManager.Services.HttpClientWrapper
 
         public async Task<bool> Post<TObject>(string url, TObject obj, HttpClientRequestOptions opts = null)
         {
-            return await Post<TObject, bool>(url, obj, opts);
+            var result = await Post<TObject, bool>(url, obj, opts);
+            if (!result)
+                throw new ApiException(url, "200", new Dictionary<string, List<string>>() { { "_", new List<string>() { "result was false" } }});
+            return result;
         }
 
         public async Task<TResult> Post<TObject, TResult>(string url, TObject obj, HttpClientRequestOptions opts = null)

@@ -1,5 +1,4 @@
 using PFM.BankAccountUpdater.Extensions;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
 
 namespace PFM.BankAccountUpdater
 {
@@ -19,7 +18,7 @@ namespace PFM.BankAccountUpdater
                         .AddMemoryCache()
                         .AddServices()
                         .AddMonitoring(build.Configuration, EnvironmentName)
-                        .AddBankApi(build.Configuration)
+                        .AddBankApi(build.Configuration, EnvironmentName != "Production")
                         .AddAuthenticationAndAuthorization(build.Configuration)
                         .AddEventHandlers()
                         .AddEventConsumerConfigurations(build.Configuration);
