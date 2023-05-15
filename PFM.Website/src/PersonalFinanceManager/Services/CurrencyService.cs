@@ -20,13 +20,13 @@ namespace PersonalFinanceManager.Services
 
         public async Task<IList<CurrencyListModel>> GetCurrencies()
         {
-            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Currency.CurrencyList>($"/Currency/GetList");
+            var response = await _httpClientExtended.GetList<PFM.Bank.Api.Contracts.Currency.CurrencyList>($"/Currency/GetList");
             return response.Select(AutoMapper.Mapper.Map<CurrencyListModel>).ToList();
         }
 
         public async Task<CurrencyEditModel> GetById(int id)
         {
-            var response = await _httpClientExtended.GetSingle<PFM.Api.Contracts.Currency.CurrencyDetails>($"/Currency/Get/{id}");
+            var response = await _httpClientExtended.GetSingle<PFM.Bank.Api.Contracts.Currency.CurrencyDetails>($"/Currency/Get/{id}");
             return AutoMapper.Mapper.Map<CurrencyEditModel>(response);
         }
     }

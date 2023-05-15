@@ -20,7 +20,7 @@ namespace PersonalFinanceManager.Services
 
         public async Task<IList<CountryListModel>> GetCountries()
         {
-            var response = await _httpClientExtended.GetList<PFM.Api.Contracts.Country.CountryList>($"/Country/GetList");
+            var response = await _httpClientExtended.GetList<PFM.Bank.Api.Contracts.Country.CountryList>($"/Country/GetList");
             return response.Select(AutoMapper.Mapper.Map<CountryListModel>).ToList();
         }
     }

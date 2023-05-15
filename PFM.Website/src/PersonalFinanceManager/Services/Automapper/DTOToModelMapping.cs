@@ -7,10 +7,10 @@ namespace PersonalFinanceManager.Services.Automapper
         public DTOToModelMapping()
         {
             CreateMap<PFM.Api.Contracts.UserProfile.UserProfileDetails, Models.UserProfile.UserProfileEditModel>();
-            CreateMap<PFM.Api.Contracts.Currency.CurrencyDetails, Models.Currency.CurrencyEditModel>();
-            CreateMap<PFM.Api.Contracts.Currency.CurrencyList, Models.Currency.CurrencyListModel>();
-            CreateMap<PFM.Api.Contracts.Account.AccountDetails, Models.Account.AccountEditModel>();
-            CreateMap<PFM.Api.Contracts.Account.AccountList, Models.Account.AccountListModel>();
+            CreateMap<PFM.Bank.Api.Contracts.Currency.CurrencyDetails, Models.Currency.CurrencyEditModel>();
+            CreateMap<PFM.Bank.Api.Contracts.Currency.CurrencyList, Models.Currency.CurrencyListModel>();
+            CreateMap<PFM.Bank.Api.Contracts.Account.AccountDetails, Models.Account.AccountEditModel>();
+            CreateMap<PFM.Bank.Api.Contracts.Account.AccountList, Models.Account.AccountListModel>();
             CreateMap<PFM.Api.Contracts.AccountManagement.ImportMovementDetails, Models.AccountManagement.ImportMovementEditModel>();
             CreateMap<PFM.Api.Contracts.AccountManagement.ImportMovementList, Models.AccountManagement.ImportMovementModel>();
             CreateMap<PFM.Api.Contracts.AccountManagement.ImportTypes, Models.AccountManagement.ImportTypes>();
@@ -19,8 +19,8 @@ namespace PersonalFinanceManager.Services.Automapper
                 .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense));
             CreateMap<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawList, Models.AtmWithdraw.AtmWithdrawListModel>()
                  .ForMember(dest => dest.DateExpenditure, src => src.MapFrom(opts => opts.DateExpense)); 
-            CreateMap<PFM.Api.Contracts.Bank.BankDetails, Models.Bank.BankEditModel>();
-            CreateMap<PFM.Api.Contracts.Bank.BankList, Models.Bank.BankListModel>();
+            CreateMap<PFM.Bank.Api.Contracts.Bank.BankDetails, Models.Bank.BankEditModel>();
+            CreateMap<PFM.Bank.Api.Contracts.Bank.BankList, Models.Bank.BankListModel>();
             CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails, Models.BudgetPlan.BudgetPlanEditModel>()
                 .ForMember(dest => dest.ExpenditureTypes, src => src.MapFrom(opts => opts.ExpenseTypes))
                 .ForMember(dest => dest.ExpenditureAverageMonthValue, src => src.MapFrom(opts => opts.ExpenseAverageMonthValue))
@@ -29,8 +29,8 @@ namespace PersonalFinanceManager.Services.Automapper
             CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanExpenseType, Models.BudgetPlan.BudgetPlanExpenditureType>()
                  .ForMember(dest => dest.ExpenditureType, src => src.MapFrom(opts => opts.ExpenseType));
             CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanList, Models.BudgetPlan.BudgetPlanListModel>();
-            CreateMap<PFM.Api.Contracts.Country.CountryDetails, Models.Country.CountryEditModel>();
-            CreateMap<PFM.Api.Contracts.Country.CountryList, Models.Country.CountryListModel>();
+            CreateMap<PFM.Bank.Api.Contracts.Country.CountryDetails, Models.Country.CountryEditModel>();
+            CreateMap<PFM.Bank.Api.Contracts.Country.CountryList, Models.Country.CountryListModel>();
             CreateMap<PFM.Api.Contracts.Dashboard.ExpenseSummary, Models.Dashboard.ExpenseSummaryModel>();
             CreateMap<PFM.Api.Contracts.Dashboard.ExpenseSummaryByCategory, Models.Dashboard.ExpenseSummaryByCategoryModel>();
             CreateMap<PFM.Api.Contracts.Dashboard.ExpenseSummaryByCategoryAndByMonth, Models.Dashboard.ExpenseSummaryByCategoryAndByMonthModel>();
