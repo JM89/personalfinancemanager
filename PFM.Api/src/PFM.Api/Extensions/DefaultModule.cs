@@ -7,7 +7,7 @@ namespace PFM.Api.Extensions
 {
     public class AutoFacModule: Autofac.Module
     {
-        private ContainerBuilder _builder;
+        private ContainerBuilder? _builder;
 
         protected override void Load(ContainerBuilder builder)
         {
@@ -18,12 +18,16 @@ namespace PFM.Api.Extensions
 
         private void RegisterRepositories()
         {
-            _builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(IBaseRepository<>))).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces(); 
+            var assembly = Assembly.GetAssembly(typeof(IBaseRepository<>));
+            ArgumentNullException.ThrowIfNull(assembly);
+            _builder?.RegisterAssemblyTypes(assembly).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces(); 
         }
 
         private void RegisterServices()
         {
-            _builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(IBaseService))).Where(t => t.Name.EndsWith("Service")).AsImplementedInterfaces();
+            var assembly = Assembly.GetAssembly(typeof(IBaseService));
+            ArgumentNullException.ThrowIfNull(assembly);
+            _builder?.RegisterAssemblyTypes(assembly).Where(t => t.Name.EndsWith("Service")).AsImplementedInterfaces();
         }
     }
 }

@@ -54,7 +54,7 @@ namespace PFM.Api.Filters
             }
             catch(Exception ex)
             {
-                _logger.Error("Auth API thrown an exception");
+                _logger.Error(ex, "Authentication API thrown an exception");
             }
 
             if (!result)
