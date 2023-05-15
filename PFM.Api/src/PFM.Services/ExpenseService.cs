@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json;
-using PFM.Api.Contracts.BudgetPlan;
-using PFM.Api.Contracts.Dashboard;
 using PFM.Api.Contracts.Expense;
 using PFM.Bank.Api.Contracts.Account;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Caches.Interfaces;
 using PFM.Services.ExternalServices.BankApi;
 using PFM.Services.MovementStrategy;
-using PFM.Services.Utils.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,18 +20,18 @@ namespace PFM.Services.Interfaces.Services
         private readonly IBankAccountApi _bankAccountApi;
         private readonly ContextMovementStrategy _contextMovementStrategy;
 
-        public ExpenseService(IExpenseRepository ExpenseRepository, IBankAccountApi bankAccountApi, ContextMovementStrategy contextMovementStrategy)
+        public ExpenseService(IExpenseRepository expenseRepository, IBankAccountApi bankAccountApi, ContextMovementStrategy contextMovementStrategy)
         {
-            this._expenseRepository = ExpenseRepository;
+            this._expenseRepository = expenseRepository;
             this._bankAccountApi = bankAccountApi;
             this._contextMovementStrategy = contextMovementStrategy;
         }
 
-        public async Task<bool> CreateExpenses(List<ExpenseDetails> ExpenseDetails)
+        public async Task<bool> CreateExpenses(List<ExpenseDetails> expenseDetails)
         {
             var resultBatch = true;
 
-            foreach (var expense in ExpenseDetails)
+            foreach (var expense in expenseDetails)
             {
                 var result = await CreateExpense(expense);
                 if (!result)
@@ -110,7 +106,7 @@ namespace PFM.Services.Interfaces.Services
         public async Task<IList<ExpenseList>> GetExpenses(PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
         {
             var searchParameters = Mapper.Map<PFM.DataAccessLayer.SearchParameters.ExpenseGetListSearchParameters>(search);
-            var Expenses = _expenseRepository.GetByParameters(searchParameters).ToList();
+            var expenses = _expenseRepository.GetByParameters(searchParameters).ToList();
 
             if (!string.IsNullOrEmpty(search.UserId))
             {
@@ -118,10 +114,10 @@ namespace PFM.Services.Interfaces.Services
                 var accountsForUser = JsonConvert.DeserializeObject<List<AccountDetails>>(accountsForUserResponse.Data.ToString());
                 var filterAccounts = accountsForUser.Select(x => x.Id);
 
-                Expenses = Expenses.Where(x => filterAccounts.Contains(x.AccountId)).ToList();
+                expenses = expenses.Where(x => filterAccounts.Contains(x.AccountId)).ToList();
             }
 
-            var mappedExpenses = Expenses.Select(Mapper.Map<ExpenseList>);
+            var mappedExpenses = expenses.Select(Mapper.Map<ExpenseList>);
             return mappedExpenses.ToList();
         }
     }
