@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Caches.Interfaces;
 using System;
@@ -20,12 +19,12 @@ namespace PFM.Services.Caches
             this._options = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(30));
         }
 
-        public Task<ExpenseType> GetById(int id)
+        public Task<string> GetById(int id)
         {
-            if (!this._memoryCache.TryGetValue(id, out ExpenseType value))
+            if (!this._memoryCache.TryGetValue(id, out string value))
             {
                 var response = _expenseTypeRepository.GetById(id);
-                _memoryCache.Set(id, response, _options);
+                _memoryCache.Set(id, response?.Name ?? "Unknown", _options);
             }
             return Task.FromResult(value);
         }

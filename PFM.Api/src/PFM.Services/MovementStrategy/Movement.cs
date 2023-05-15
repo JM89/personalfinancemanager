@@ -24,6 +24,8 @@ namespace PFM.Services.MovementStrategy
 
         public int? TargetIncomeId { get; set; }
 
+        public int? ExpenseTypeId { get; set; }
+
         public Movement(SavingDetails saving)
         { 
             this.Date = saving.DateSaving;
@@ -45,6 +47,7 @@ namespace PFM.Services.MovementStrategy
             this.TargetAccountId = expenditure.TargetInternalAccountId;
             this.TargetIncomeId = expenditure.GeneratedIncomeId;
             this.AtmWithdrawId = expenditure.AtmWithdrawId;
+            this.ExpenseTypeId = expenditure.ExpenseTypeId;
         }
 
         public Movement(IncomeDetails income)

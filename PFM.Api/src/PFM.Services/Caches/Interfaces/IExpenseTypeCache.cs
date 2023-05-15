@@ -5,6 +5,6 @@ namespace PFM.Services.Caches.Interfaces
 {
     public interface IExpenseTypeCache
     {
-        Task<ExpenseType> GetById(int id);
+        Task<string> GetById(int id);
     }
 }

@@ -41,6 +41,11 @@ namespace PFM.Services.MovementStrategy
                 OperationType = $"Movement via {movement.PaymentMethod}"
             };
 
+            if (movement.ExpenseTypeId.HasValue)
+            {
+                evt.MovementType = await ExpenseTypeCache.GetById(movement.ExpenseTypeId.Value);
+            }
+
             account.CurrentBalance -= movement.Amount;
 
             return await EventPublisher.PublishAsync(evt, default);
@@ -72,6 +77,11 @@ namespace PFM.Services.MovementStrategy
                 OperationDate = movement.Date,
                 OperationType = $"Movement via {movement.PaymentMethod}"
             };
+
+            if (movement.ExpenseTypeId.HasValue)
+            {
+                evt.MovementType = $"Revert: {await ExpenseTypeCache.GetById(movement.ExpenseTypeId.Value)}";
+            }
 
             account.CurrentBalance += movement.Amount;
 
