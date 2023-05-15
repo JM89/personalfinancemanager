@@ -74,7 +74,7 @@ namespace PFM.Authentication.Api.Controllers
                 return Unauthorized();
             }
 
-            string token = null;
+            string? token = null;
             if (Request.Headers.ContainsKey("Authorization"))
             {
                 var authorizationHeader = Request.Headers["Authorization"];

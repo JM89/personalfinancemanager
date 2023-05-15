@@ -3,10 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PFM.Services.ExternalServices.AuthApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PFM.Api.Filters
 {
@@ -37,7 +33,7 @@ namespace PFM.Api.Filters
             bool result = false;
             try
             {
-                string token = null;
+                string? token = null;
                 if (context.HttpContext.Request.Headers.ContainsKey("Authorization"))
                 {
                     var authorizationHeader = context.HttpContext.Request.Headers["Authorization"];
@@ -54,7 +50,7 @@ namespace PFM.Api.Filters
             }
             catch(Exception ex)
             {
-                _logger.Error("Auth API thrown an exception");
+                _logger.Error(ex, "Authentication API thrown an exception");
             }
 
             if (!result)

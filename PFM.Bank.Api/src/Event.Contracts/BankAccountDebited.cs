@@ -26,5 +26,7 @@ namespace PFM.Bank.Event.Contracts
         public string OperationType { get; set; }
 
         public string TargetBankAccount { get; set; }
+
+        public string MovementType { get; set; }
     }
 }

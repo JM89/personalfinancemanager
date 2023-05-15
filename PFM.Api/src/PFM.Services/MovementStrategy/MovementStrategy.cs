@@ -11,21 +11,19 @@ namespace PFM.Services.MovementStrategy
         protected readonly IIncomeRepository IncomeRepository;
         protected readonly IAtmWithdrawRepository AtmWithdrawRepository;
         protected readonly IEventPublisher EventPublisher;
+        protected readonly IExpenseTypeCache ExpenseTypeCache;
 
-        protected Movement CurrentMovement;
-
-        protected MovementStrategy(Movement movement, IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+        protected MovementStrategy(IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher, IExpenseTypeCache expenseTypeCache)
         { 
-            CurrentMovement = movement;
-
             this.BankAccountCache = bankAccountCache;
             this.IncomeRepository = incomeRepository;
             this.AtmWithdrawRepository = atmWithdrawRepository;
             this.EventPublisher = eventPublisher;
+            this.ExpenseTypeCache = expenseTypeCache;
         }
 
-        public abstract Task<bool> Debit();
+        public abstract Task<bool> Debit(Movement movement);
 
-        public abstract Task<bool> Credit();
+        public abstract Task<bool> Credit(Movement movement);
     }
 }

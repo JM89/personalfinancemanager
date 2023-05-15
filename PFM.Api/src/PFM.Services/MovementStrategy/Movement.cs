@@ -1,7 +1,8 @@
-﻿using System;
-using PFM.DataAccessLayer.Enumerations;
-using PFM.Api.Contracts.Expense;
+﻿using PFM.Api.Contracts.Expense;
+using PFM.Api.Contracts.Income;
 using PFM.Api.Contracts.Saving;
+using PFM.DataAccessLayer.Enumerations;
+using System;
 
 namespace PFM.Services.MovementStrategy
 {
@@ -22,6 +23,8 @@ namespace PFM.Services.MovementStrategy
         public int? AtmWithdrawId { get; set; }
 
         public int? TargetIncomeId { get; set; }
+
+        public int? ExpenseTypeId { get; set; }
 
         public Movement(SavingDetails saving)
         { 
@@ -44,6 +47,16 @@ namespace PFM.Services.MovementStrategy
             this.TargetAccountId = expenditure.TargetInternalAccountId;
             this.TargetIncomeId = expenditure.GeneratedIncomeId;
             this.AtmWithdrawId = expenditure.AtmWithdrawId;
+            this.ExpenseTypeId = expenditure.ExpenseTypeId;
+        }
+
+        public Movement(IncomeDetails income)
+        {
+            this.Date = income.DateIncome;
+            this.Description = income.Description;
+            this.Amount = income.Cost;
+            this.PaymentMethod = PaymentMethod.Transfer;
+            this.SourceAccountId = income.AccountId;
         }
     }
 }

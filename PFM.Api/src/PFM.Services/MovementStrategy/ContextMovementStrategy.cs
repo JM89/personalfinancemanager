@@ -2,35 +2,28 @@
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
-using System;
+using System.Collections.Generic;
 
 namespace PFM.Services.MovementStrategy
 {
-    public static class ContextMovementStrategy
+    public class ContextMovementStrategy
     {
-        public static MovementStrategy GetMovementStrategy(Movement movement, IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository,
-            IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+        private Dictionary<PaymentMethod, MovementStrategy> _strategies;
+        public ContextMovementStrategy(IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository,
+            IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher, IExpenseTypeCache expenseTypeCache)
         {
-            MovementStrategy strategy = null;
+            _strategies = new Dictionary<PaymentMethod, MovementStrategy>() {
+                { PaymentMethod.Cash, new CashMovementStrategy(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher, expenseTypeCache) },
+                { PaymentMethod.InternalTransfer, new InternalTransferMovementStrategy(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher, expenseTypeCache) },
+                { PaymentMethod.CB, new CommonMovementStrategy(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher, expenseTypeCache) },
+                { PaymentMethod.DirectDebit, new CommonMovementStrategy(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher, expenseTypeCache) },
+                { PaymentMethod.Transfer, new CommonMovementStrategy(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher, expenseTypeCache) }
+            };
+        }
 
-            switch (movement.PaymentMethod)
-            {
-                case PaymentMethod.Cash:
-                    strategy = new CashMovementStrategy(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher);
-                    break;
-                case PaymentMethod.InternalTransfer:
-                    strategy = new InternalTransferMovementStrategy(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher);
-                    break;
-                case PaymentMethod.CB:
-                case PaymentMethod.DirectDebit:
-                case PaymentMethod.Transfer:
-                    strategy = new CommonMovementStrategy(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher);
-                    break;
-                default:
-                    throw new ArgumentException("Unknown PaymentMethod");
-            }
-
-            return strategy;
+        public MovementStrategy GetMovementStrategy(PaymentMethod paymentMethod)
+        {
+            return _strategies.GetValueOrDefault(paymentMethod);
         }
     }
 }

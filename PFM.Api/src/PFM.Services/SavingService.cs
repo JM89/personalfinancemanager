@@ -18,18 +18,13 @@ namespace PFM.Services
     {
         private readonly ISavingRepository _savingRepository;
         private readonly IBankAccountCache _bankAccountCache;
-        private readonly IIncomeRepository _incomeRepository;
-        private readonly IAtmWithdrawRepository _atmWithdrawRepository;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly ContextMovementStrategy _contextMovementStrategy;
 
-        public SavingService(ISavingRepository savingRepository, IBankAccountCache bankAccountCache, 
-             IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+        public SavingService(ISavingRepository savingRepository, IBankAccountCache bankAccountCache, ContextMovementStrategy contextMovementStrategy)
         {
             this._savingRepository = savingRepository;
             this._bankAccountCache = bankAccountCache;
-            this._incomeRepository = incomeRepository;
-            this._atmWithdrawRepository = atmWithdrawRepository;
-            this._eventPublisher = eventPublisher;
+            this._contextMovementStrategy = contextMovementStrategy;
         }
 
         public async Task<bool> CreateSaving(SavingDetails savingDetails)
@@ -40,8 +35,8 @@ namespace PFM.Services
 
                 var movement = new Movement(savingDetails);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountCache, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                var result  = await strategy.Debit();
+                var strategy = _contextMovementStrategy.GetMovementStrategy(movement.PaymentMethod);
+                var result  = await strategy.Debit(movement);
 
                 if (!movement.TargetIncomeId.HasValue)
                     throw new ArgumentException("Target Income ID should not be null.");
@@ -65,8 +60,8 @@ namespace PFM.Services
 
                 _savingRepository.Delete(saving);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(savingDetails), _bankAccountCache, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                var result = await strategy.Credit();
+                var strategy = _contextMovementStrategy.GetMovementStrategy(DataAccessLayer.Enumerations.PaymentMethod.InternalTransfer);
+                var result = await strategy.Credit(new Movement(savingDetails));
 
                 scope.Complete();
 

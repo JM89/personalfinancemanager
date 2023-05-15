@@ -26,7 +26,7 @@ namespace Api.Filters
             bool result = false;
             try
             {
-                string token = string.Empty;
+                string? token = string.Empty;
                 if (context.HttpContext.Request.Headers.ContainsKey("Authorization"))
                 {
                     var authorizationHeader = context.HttpContext.Request.Headers["Authorization"];

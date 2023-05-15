@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Api.Contracts, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PFM.Bank.Api.Contracts.4.1.0\lib\netstandard2.0\Api.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=6.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\..\packages\AutoMapper.6.0.2\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -122,8 +125,8 @@
       <HintPath>..\..\packages\Ninject.Web.Common.OwinHost.3.2.3.0\lib\net45-full\Ninject.Web.Common.OwinHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PFM.Api.Contracts, Version=2.11.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\PFM.Api.Contracts.2.11.1-PullRequest0091.6\lib\netstandard2.0\PFM.Api.Contracts.dll</HintPath>
+    <Reference Include="PFM.Api.Contracts, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PFM.Api.Contracts.4.1.0\lib\netstandard2.0\PFM.Api.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="PFM.Authentication.Api.Contracts, Version=1.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\PFM.Authentication.Api.Contracts.1.23.0\lib\netstandard2.0\PFM.Authentication.Api.Contracts.dll</HintPath>

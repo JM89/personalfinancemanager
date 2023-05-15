@@ -5,7 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using PFM.Api.Extensions;
 using PFM.Api.Middlewares;
 using PFM.DataAccessLayer;
+using PFM.Services.Caches.Interfaces;
+using PFM.Services.Caches;
 using PFM.Services.Core.Automapper;
+using PFM.Services.MovementStrategy;
 
 namespace PFM.Api
 {
@@ -23,6 +26,10 @@ namespace PFM.Api
             builder.Services.AddControllers();
 
             builder.Services.AddMemoryCache();
+
+            builder.Services
+                .AddSingleton<ContextMovementStrategy>()
+                .AddSingleton<IExpenseTypeCache, ExpenseTypeCache>();
 
             builder.Services
                 .AddAuthenticationAndAuthorization(builder.Configuration)

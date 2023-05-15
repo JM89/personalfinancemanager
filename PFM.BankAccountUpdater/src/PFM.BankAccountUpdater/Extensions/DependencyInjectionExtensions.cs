@@ -92,6 +92,8 @@ namespace PFM.BankAccountUpdater.Extensions
                 .AddSingleton<IAuthTokenStore, AuthTokenStore>()
                 .AddSingleton<ITokenCache, TokenCache>();
 
+            ArgumentException.ThrowIfNullOrEmpty(authConfigs.EndpointUrl);
+
             services
                 .AddRefitClient<IAuthApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(authConfigs.EndpointUrl));

@@ -9,16 +9,16 @@ namespace PFM.Services.MovementStrategy
 {
     public class CashMovementStrategy : MovementStrategy
     {
-        public CashMovementStrategy(Movement movement, IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
-            : base(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher)
+        public CashMovementStrategy(IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher, IExpenseTypeCache expenseTypeCache)
+            : base(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher, expenseTypeCache)
         { }
 
-        public override async Task<bool> Debit()
+        public override async Task<bool> Debit(Movement movement)
         {
-            if (CurrentMovement?.AtmWithdrawId != null)
+            if (movement?.AtmWithdrawId != null)
             {
-                var atmWithdraw = AtmWithdrawRepository.GetById(CurrentMovement.AtmWithdrawId.Value);
-                return await Debit(atmWithdraw, CurrentMovement);
+                var atmWithdraw = AtmWithdrawRepository.GetById(movement.AtmWithdrawId.Value);
+                return await Debit(atmWithdraw, movement);
             }
             else
             {
@@ -34,12 +34,12 @@ namespace PFM.Services.MovementStrategy
             return Task.FromResult(true);
         }
 
-        public override async Task<bool> Credit()
+        public override async Task<bool> Credit(Movement movement)
         {
-            if (CurrentMovement?.AtmWithdrawId != null)
+            if (movement?.AtmWithdrawId != null)
             {
-                var atmWithdraw = AtmWithdrawRepository.GetById(CurrentMovement.AtmWithdrawId.Value);
-                return await Credit(atmWithdraw, CurrentMovement);
+                var atmWithdraw = AtmWithdrawRepository.GetById(movement.AtmWithdrawId.Value);
+                return await Credit(atmWithdraw, movement);
             }
             else
             {

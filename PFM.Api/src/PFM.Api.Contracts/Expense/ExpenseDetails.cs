@@ -16,6 +16,8 @@ namespace PFM.Api.Contracts.Expense
 
         public int ExpenseTypeId { get; set; }
 
+        public string ExpenseTypeName { get; set; }
+
         public int PaymentMethodId { get; set; }
 
         public string Description { get; set; }
