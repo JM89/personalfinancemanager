@@ -6,6 +6,7 @@ using PFM.Api.Extensions;
 using PFM.Api.Middlewares;
 using PFM.DataAccessLayer;
 using PFM.Services.Core.Automapper;
+using PFM.Services.MovementStrategy;
 
 namespace PFM.Api
 {
@@ -23,6 +24,8 @@ namespace PFM.Api
             builder.Services.AddControllers();
 
             builder.Services.AddMemoryCache();
+
+            builder.Services.AddSingleton<ContextMovementStrategy>();
 
             builder.Services
                 .AddAuthenticationAndAuthorization(builder.Configuration)

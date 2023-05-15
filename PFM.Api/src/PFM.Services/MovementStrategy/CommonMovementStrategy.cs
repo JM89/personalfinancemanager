@@ -1,6 +1,5 @@
 ﻿using PFM.Bank.Api.Contracts.Account;
 using PFM.Bank.Event.Contracts;
-using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
@@ -11,16 +10,16 @@ namespace PFM.Services.MovementStrategy
 {
     public class CommonMovementStrategy : MovementStrategy
     {
-        public CommonMovementStrategy(Movement movement, IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
-            : base(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher)
+        public CommonMovementStrategy(IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+            : base(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher)
         { }
 
-        public override async Task<bool> Debit()
+        public override async Task<bool> Debit(Movement movement)
         {
-            if (CurrentMovement?.SourceAccountId != null)
+            if (movement?.SourceAccountId != null)
             {
-                var account = await BankAccountCache.GetById(CurrentMovement.SourceAccountId.Value);
-                return await Debit(account, CurrentMovement);
+                var account = await BankAccountCache.GetById(movement.SourceAccountId.Value);
+                return await Debit(account, movement);
             }
             else
             {
@@ -47,12 +46,12 @@ namespace PFM.Services.MovementStrategy
             return await EventPublisher.PublishAsync(evt, default);
         }
 
-        public override async Task<bool> Credit()
+        public override async Task<bool> Credit(Movement movement)
         {
-            if (CurrentMovement?.SourceAccountId != null)
+            if (movement?.SourceAccountId != null)
             {
-                var account = await BankAccountCache.GetById(CurrentMovement.SourceAccountId.Value);
-                return await Credit(account, CurrentMovement);
+                var account = await BankAccountCache.GetById(movement.SourceAccountId.Value);
+                return await Credit(account, movement);
             }
             else
             {

@@ -8,6 +8,7 @@ using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
 using PFM.Services.ExternalServices.BankApi;
 using PFM.Services.Interfaces.Services;
+using PFM.Services.MovementStrategy;
 using System.Collections.Generic;
 
 namespace PFM.UnitTests
@@ -62,15 +63,20 @@ namespace PFM.UnitTests
                 InitialBalance = account.InitialBalance
             });
 
+            var movementStrategy = new ContextMovementStrategy(
+                MockBankAccountCache.Object,
+                MockIncomeRepository.Object,
+                MockAtmWithdrawRepository.Object, 
+                MockEventPublisher.Object);
+
             var service = new ExpenseService(
                 MockExpenseRepository.Object,
-                MockAtmWithdrawRepository.Object,
                 MockIncomeRepository.Object,
                 MockExpenseTypeRepository.Object,
                 MockSavingRepository.Object,
-                MockEventPublisher.Object,
                 MockBankAccountCache.Object, 
-                new Mock<IBankAccountApi>().Object);
+                new Mock<IBankAccountApi>().Object,
+                movementStrategy);
             return service;
         }
     }

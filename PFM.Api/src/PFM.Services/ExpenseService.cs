@@ -7,14 +7,12 @@ using PFM.Bank.Api.Contracts.Account;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.Caches.Interfaces;
-using PFM.Services.Events.Interfaces;
 using PFM.Services.ExternalServices.BankApi;
 using PFM.Services.MovementStrategy;
 using PFM.Services.Utils.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -23,26 +21,24 @@ namespace PFM.Services.Interfaces.Services
     public class ExpenseService : IExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
-        private readonly IAtmWithdrawRepository _atmWithdrawRepository;
         private readonly ISavingRepository _savingRepository;
         private readonly IIncomeRepository _incomeRepository;
         private readonly IExpenseTypeRepository _ExpenseTypeRepository;
-        private readonly IEventPublisher _eventPublisher;
         private readonly IBankAccountCache _bankAccountCache;
         private readonly IBankAccountApi _bankAccountApi;
+        private readonly ContextMovementStrategy _contextMovementStrategy;
 
-        public ExpenseService(IExpenseRepository ExpenseRepository, IAtmWithdrawRepository atmWithdrawRepository, IIncomeRepository incomeRepository,
-            IExpenseTypeRepository ExpenseTypeRepository, ISavingRepository savingRepository, IEventPublisher eventPublisher, IBankAccountCache bankAccountCache,
-            IBankAccountApi bankAccountApi)
+        public ExpenseService(IExpenseRepository ExpenseRepository, IIncomeRepository incomeRepository,
+            IExpenseTypeRepository ExpenseTypeRepository, ISavingRepository savingRepository, IBankAccountCache bankAccountCache,
+            IBankAccountApi bankAccountApi, ContextMovementStrategy contextMovementStrategy)
         {
             this._expenseRepository = ExpenseRepository;
-            this._atmWithdrawRepository = atmWithdrawRepository;
             this._incomeRepository = incomeRepository;
             this._ExpenseTypeRepository = ExpenseTypeRepository;
             this._savingRepository = savingRepository;
-            this._eventPublisher = eventPublisher;
             this._bankAccountCache = bankAccountCache;
             this._bankAccountApi = bankAccountApi;
+            this._contextMovementStrategy = contextMovementStrategy;
         }
 
         public async Task<bool> CreateExpenses(List<ExpenseDetails> ExpenseDetails)
@@ -67,8 +63,8 @@ namespace PFM.Services.Interfaces.Services
 
                 var movement = new Movement(expenseDetails);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(movement, _bankAccountCache, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                var result = await strategy.Debit();
+                var strategy = _contextMovementStrategy.GetMovementStrategy(movement.PaymentMethod);
+                var result = await strategy.Debit(movement);
 
                 if (movement.TargetIncomeId.HasValue)
                     expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
@@ -90,8 +86,8 @@ namespace PFM.Services.Interfaces.Services
 
                 _expenseRepository.Delete(Expense);
 
-                var strategy = ContextMovementStrategy.GetMovementStrategy(new Movement(ExpenseDetails), _bankAccountCache, _incomeRepository, _atmWithdrawRepository, _eventPublisher);
-                var result = await strategy.Credit();
+                var strategy = _contextMovementStrategy.GetMovementStrategy((PFM.DataAccessLayer.Enumerations.PaymentMethod)ExpenseDetails.PaymentMethodId);
+                var result = await strategy.Credit(new Movement(ExpenseDetails));
 
                 scope.Complete();
 

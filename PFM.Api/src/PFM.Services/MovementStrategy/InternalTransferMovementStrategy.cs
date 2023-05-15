@@ -13,17 +13,17 @@ namespace PFM.Services.MovementStrategy
     {
         private readonly string OperationType = "Internal Transfer";
 
-        public InternalTransferMovementStrategy(Movement movement, IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
-            : base(movement, bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher)
+        public InternalTransferMovementStrategy(IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
+            : base(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher)
         { }
 
-        public override async Task<bool> Debit()
+        public override async Task<bool> Debit(Movement movement)
         {
-            if (CurrentMovement?.SourceAccountId != null && CurrentMovement.TargetAccountId.HasValue)
+            if (movement?.SourceAccountId != null && movement.TargetAccountId.HasValue)
             {
-                var account = await BankAccountCache.GetById(CurrentMovement.SourceAccountId.Value);
-                var internalAccount = await BankAccountCache.GetById(CurrentMovement.TargetAccountId.Value);
-                return await Debit(account, internalAccount, CurrentMovement);
+                var account = await BankAccountCache.GetById(movement.SourceAccountId.Value);
+                var internalAccount = await BankAccountCache.GetById(movement.TargetAccountId.Value);
+                return await Debit(account, internalAccount, movement);
             }
             else
             {
@@ -84,13 +84,13 @@ namespace PFM.Services.MovementStrategy
             return published;
         }
 
-        public override async Task<bool> Credit()
+        public override async Task<bool> Credit(Movement movement)
         {
-            if (CurrentMovement?.SourceAccountId != null && CurrentMovement.TargetAccountId.HasValue)
+            if (movement?.SourceAccountId != null && movement.TargetAccountId.HasValue)
             {
-                var account = await BankAccountCache.GetById(CurrentMovement.SourceAccountId.Value);
-                var internalAccount = await BankAccountCache.GetById(CurrentMovement.TargetAccountId.Value);
-                return await Credit(account, internalAccount, CurrentMovement);
+                var account = await BankAccountCache.GetById(movement.SourceAccountId.Value);
+                var internalAccount = await BankAccountCache.GetById(movement.TargetAccountId.Value);
+                return await Credit(account, internalAccount, movement);
             }
             else
             {
