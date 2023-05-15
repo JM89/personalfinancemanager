@@ -1,4 +1,5 @@
 using PFM.BankAccountUpdater.Extensions;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
 
 namespace PFM.BankAccountUpdater
 {
@@ -9,6 +10,9 @@ namespace PFM.BankAccountUpdater
         public static void Main(string[] args)
         {
             IHost host = Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(c => {
+                    c.AddEnvironmentVariables(prefix: "APP_");
+                })
                 .ConfigureServices((build, services) =>
                 {
                     services
