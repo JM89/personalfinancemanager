@@ -35,8 +35,9 @@ Some infrastructure resources are shared accross different projects (e.g. SQL se
 
 It includes:
 - [x] SQL Server instance: a single container is used for several isolated DB, to reduce the setup time, space and memory in local machine. 
-- [x] SEQ for logging purpose
+- [x] SEQ for logging purpose.
 - [x] Localstack for AWS resources.
+- [x] EventStore for publishing/consuming events and auditing.
 
 To get started, run the following command:
 
@@ -46,30 +47,23 @@ sh ./run-locally.sh
 
 The command will also start all the application-specific docker-compose files.
 
-### Debug the main API
-
-Check the documentation [here](./PFM.Api/README.md).
-
-### Debug the Auth API
-
-Check the documentation [here](./PFM.Auth.Api/README.md).
-
 ### Start using the website
 
 1. First "Register", then login with this new user account. 
 2. Set User Profile (top menu) 
-3. Configure your data: Country, Currency, Expense Types, Bank and Accounts (Configuration menu). 
+3. Configure your data: Expense Types, Bank and Accounts (Configuration menu). 
 4. Start creating movements from the Account Management dashboard screen
 
 ## Useful Links
 
-|Resources|Docker|Debug Mode|Internal Docker|
-|---|---|---|---|
-|App - PFM.Website|:heavy_minus_sign:|[Website](http://localhost:54401)|:heavy_minus_sign:|
-|App - PFM.Api|[Api Endpoints](https://localhost:4431/api)<br/>[Swagger](https://localhost:4431/swagger/index.html)|[Api Endpoints](https://localhost:7098/api)<br/>[Swagger](https://localhost:7098/swagger/index.html)|[Api Endpoints](https://pfm-api:4431/api)|
-|App - PFM.Auth.Api|[Api Endpoints](http://localhost:5000)|[Api Endpoints](http://localhost:4000)|[Api Endpoints](http://pfm-auth-api:5000)|
-|App - PFM.Bank.Api|[Api Endpoints](https://localhost:7099/api)<br/>[Swagger](https://localhost:7099/swagger/index.html)|[Api Endpoints](https://localhost:50001/api)<br/>[Swagger](http://localhost:50001/swagger/index.html)|[Api Endpoints](http://pfm-bank-api:50001/api)|
-|SEQ|[Log Ingest](http://localhost:5341)<br/>[UI](http://localhost:80)|[Log Ingest](http://localhost:5341)<br/>[UI](http://localhost:80)|[Log Ingest](http://seq:5341)|
-|SQL Server|localhost,1433|localhost,1433|db-server,1433|
-|Localstack|[Endpoints](http://localhost:4566)|[Endpoints](http://localhost:4566)|[Endpoints](http://localstack:4566)|
-|EventStore|[Endpoints](http://localhost:2113)|[Endpoints](http://localhost:2113/)|[Endpoints](http://eventstore:2113)|
+|Resources|Docker|Debug Mode|Internal Docker|Documentation|
+|---|---|---|---|---|
+|App - PFM.Website|:heavy_minus_sign:|[Website](http://localhost:54401)|:heavy_minus_sign:|:heavy_minus_sign:|
+|App - PFM.Api|[Api Endpoints](https://localhost:4431/api)<br/>[Swagger](https://localhost:4431/swagger/index.html)|[Api Endpoints](https://localhost:7098/api)<br/>[Swagger](https://localhost:7098/swagger/index.html)|[Api Endpoints](https://pfm-api:4431/api)|[Link](./PFM.Api/README.md)|
+|App - PFM.Auth.Api|[Api Endpoints](http://localhost:5000)|[Api Endpoints](http://localhost:4000)|[Api Endpoints](http://pfm-auth-api:5000)|[Link](./PFM.Auth.Api/README.md)||
+|App - PFM.Bank.Api|[Api Endpoints](https://localhost:7099/api)<br/>[Swagger](https://localhost:7099/swagger/index.html)|[Api Endpoints](https://localhost:50001/api)<br/>[Swagger](http://localhost:50001/swagger/index.html)|[Api Endpoints](http://pfm-bank-api:50001/api)|[Link](./PFM.Bank.Api/README.md)|
+|App - PFM.Bank.Updater|:heavy_minus_sign:|:heavy_minus_sign:|:heavy_minus_sign:|[Link](./PFM.Bank.Updater/README.md)|
+|SEQ|[Log Ingest](http://localhost:5341)<br/>[UI](http://localhost:80)|[Log Ingest](http://localhost:5341)<br/>[UI](http://localhost:80)|[Log Ingest](http://seq:5341)||
+|SQL Server|localhost,1433|localhost,1433|db-server,1433||
+|Localstack|[Endpoints](http://localhost:4566)|[Endpoints](http://localhost:4566)|[Endpoints](http://localstack:4566)||
+|EventStore|[Endpoints](http://localhost:2113)|[Endpoints](http://localhost:2113/)|[Endpoints](http://eventstore:2113)||
