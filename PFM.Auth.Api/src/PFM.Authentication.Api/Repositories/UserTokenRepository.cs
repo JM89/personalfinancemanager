@@ -33,7 +33,7 @@ namespace PFM.Authentication.Api.Repositories.Implementations
         {
             try
             {
-                var existingUserToken = _db.Set<UserToken>().SingleOrDefault(x => x.Username == x.Username);
+                var existingUserToken = _db.Set<UserToken>().SingleOrDefault(x => x.Username == userToken.Username);
 
                 if (existingUserToken != null)
                 {

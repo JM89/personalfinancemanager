@@ -9,13 +9,16 @@ namespace PFM.BankAccountUpdater
         public static void Main(string[] args)
         {
             IHost host = Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(c => {
+                    c.AddEnvironmentVariables(prefix: "APP_");
+                })
                 .ConfigureServices((build, services) =>
                 {
                     services
                         .AddMemoryCache()
                         .AddServices()
                         .AddMonitoring(build.Configuration, EnvironmentName)
-                        .AddBankApi(build.Configuration)
+                        .AddBankApi(build.Configuration, EnvironmentName != "Production")
                         .AddAuthenticationAndAuthorization(build.Configuration)
                         .AddEventHandlers()
                         .AddEventConsumerConfigurations(build.Configuration);

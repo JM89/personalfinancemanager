@@ -36,14 +36,7 @@ namespace PersonalFinanceManager.Controllers
                 return Json(new List<AccountListModel>(), JsonRequestBehavior.AllowGet);
             }
             
-            var first = accountsMenu.First(x => x.IsFavorite);
-            var otherAccounts = accountsMenu.Where(x => !x.IsFavorite).OrderBy(x => x.BankName);
-
-            var generatedAccountMenu = new List<AccountListModel>();
-            generatedAccountMenu.Add(first);
-            generatedAccountMenu.AddRange(otherAccounts);
-
-            return Json(generatedAccountMenu, JsonRequestBehavior.AllowGet);
+            return Json(accountsMenu.OrderBy(x => !x.IsFavorite).OrderBy(x => x.BankName), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

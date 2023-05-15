@@ -99,7 +99,7 @@ namespace PFM.BankAccountUpdater.Extensions
             return services;
         }
 
-        public static IServiceCollection AddBankApi(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddBankApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
         {
             var apiConfigs = configuration["BankApi:EndpointUrl"];
             if (apiConfigs == null)
@@ -124,9 +124,12 @@ namespace PFM.BankAccountUpdater.Extensions
                 }
             };
 
+            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
+
             services
                 .AddRefitClient<IBankAccountApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
 
             return services;

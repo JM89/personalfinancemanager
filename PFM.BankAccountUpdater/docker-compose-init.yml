@@ -16,3 +16,13 @@ services:
     container_name: evs-sub
     networks:
       - local-network
+
+  pfm-auth-bank-updater-creds:
+    build:
+      context: ./setup/pfm-auth-creds
+      dockerfile: dockerfile
+    environment:
+      API_URL: http://pfm-auth-api:5000
+    container_name: pfm-auth-bank-updater-creds
+    networks:
+      - local-network
