@@ -10,8 +10,8 @@ namespace PFM.Services.MovementStrategy
 {
     public class CommonMovementStrategy : MovementStrategy
     {
-        public CommonMovementStrategy(IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
-            : base(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher)
+        public CommonMovementStrategy(IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher, IExpenseTypeCache expenseTypeCache)
+            : base(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher, expenseTypeCache)
         { }
 
         public override async Task<bool> Debit(Movement movement)

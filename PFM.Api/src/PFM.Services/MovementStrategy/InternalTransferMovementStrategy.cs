@@ -13,8 +13,8 @@ namespace PFM.Services.MovementStrategy
     {
         private readonly string OperationType = "Internal Transfer";
 
-        public InternalTransferMovementStrategy(IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher)
-            : base(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher)
+        public InternalTransferMovementStrategy(IBankAccountCache bankAccountCache, IIncomeRepository incomeRepository, IAtmWithdrawRepository atmWithdrawRepository, IEventPublisher eventPublisher, IExpenseTypeCache expenseTypeCache)
+            : base(bankAccountCache, incomeRepository, atmWithdrawRepository, eventPublisher, expenseTypeCache)
         { }
 
         public override async Task<bool> Debit(Movement movement)
