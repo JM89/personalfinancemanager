@@ -1,4 +1,4 @@
-name: Publish PFM Common Libraries
+name: Publish PFM Main API Contracts
 
 on:
   workflow_dispatch:

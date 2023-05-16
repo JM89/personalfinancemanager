@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>JM89</Authors>
+    <PackageId>PFM.CommonLibraries.Services</PackageId>
+    <PackageDescription>Shared resources for service layer</PackageDescription>
+  </PropertyGroup>
+
+</Project>
