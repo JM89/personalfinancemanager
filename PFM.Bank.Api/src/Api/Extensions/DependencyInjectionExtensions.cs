@@ -1,6 +1,8 @@
-﻿using EventStore.Client;
+﻿using App.Metrics;
+using EventStore.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Client;
 using Microsoft.OpenApi.Models;
 using PFM.Bank.Api.Services.ExternalServices.AuthApi;
 using Refit;
@@ -19,7 +21,7 @@ namespace Api.Extensions
         /// <param name="configuration"></param>
         /// <param name="environmentName"></param>
         /// <returns></returns>
-        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, string environmentName)
+        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, string environmentName, out IMetricsRoot metrics)
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
@@ -28,6 +30,17 @@ namespace Api.Extensions
                 .CreateLogger();
 
             services.AddSingleton(Log.Logger);
+
+            metrics = AppMetrics.CreateDefaultBuilder()
+               .OutputMetrics.AsPrometheusPlainText()
+               .OutputMetrics.AsPrometheusProtobuf()
+               .Build();
+            services
+                .AddMetrics(metrics)
+                .AddAppMetricsSystemMetricsCollector()
+                .AddAppMetricsCollectors();
+
+
             return services;
         }
 
