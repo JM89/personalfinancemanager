@@ -1,12 +1,15 @@
+using App.Metrics;
+using App.Metrics.AspNetCore;
+using App.Metrics.Formatters.Prometheus;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PFM.Api.Extensions;
-using PFM.Api.Middlewares;
+using PFM.CommonLibraries.Api.MiddleWares;
 using PFM.DataAccessLayer;
-using PFM.Services.Caches.Interfaces;
 using PFM.Services.Caches;
+using PFM.Services.Caches.Interfaces;
 using PFM.Services.Core.Automapper;
 using PFM.Services.MovementStrategy;
 
@@ -34,12 +37,24 @@ namespace PFM.Api
             builder.Services
                 .AddAuthenticationAndAuthorization(builder.Configuration)
                 .AddBankApi(builder.Configuration, builder.Environment.EnvironmentName != "Production")
-                .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName)
+                .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName, out IMetricsRoot metrics)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition()
                 .AddEventPublisherConfigurations(builder.Configuration);
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
+
+            builder.Host
+                .ConfigureMetrics(metrics)
+                .UseMetrics(
+                    options =>
+                    {
+                        options.EndpointOptions = endpointsOptions =>
+                        {
+                            endpointsOptions.MetricsTextEndpointOutputFormatter = metrics.OutputMetricsFormatters.OfType<MetricsPrometheusTextOutputFormatter>().First();
+                            endpointsOptions.MetricsEndpointOutputFormatter = metrics.OutputMetricsFormatters.OfType<MetricsPrometheusProtobufOutputFormatter>().First();
+                        };
+                    });
 
             builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
             builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacModule()));
@@ -56,8 +71,8 @@ namespace PFM.Api
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
+            app.UseMetricsAllEndpoints();
 
             app.MapControllers();
 

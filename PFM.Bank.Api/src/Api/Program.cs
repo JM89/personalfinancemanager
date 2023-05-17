@@ -1,10 +1,13 @@
 using Api.Extensions;
-using Api.Middlewares;
+using App.Metrics;
+using App.Metrics.AspNetCore;
+using App.Metrics.Formatters.Prometheus;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
+using PFM.CommonLibraries.Api.MiddleWares;
 using PFM.Services.Core.Automapper;
 
 namespace Api
@@ -21,12 +24,24 @@ namespace Api
 
             builder.Services
                 .AddAuthenticationAndAuthorization(builder.Configuration)
-                .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName)
+                .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName, out IMetricsRoot metrics)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition()
                 .AddEventPublisherConfigurations(builder.Configuration);
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
+
+            builder.Host
+                .ConfigureMetrics(metrics)
+                .UseMetrics(
+                    options =>
+                    {
+                        options.EndpointOptions = endpointsOptions =>
+                        {
+                            endpointsOptions.MetricsTextEndpointOutputFormatter = metrics.OutputMetricsFormatters.OfType<MetricsPrometheusTextOutputFormatter>().First();
+                            endpointsOptions.MetricsEndpointOutputFormatter = metrics.OutputMetricsFormatters.OfType<MetricsPrometheusProtobufOutputFormatter>().First();
+                        };
+                    });
 
             builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
             builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacModule()));
@@ -45,6 +60,7 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseMetricsAllEndpoints();
 
             app.MapControllers();
 
