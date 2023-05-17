@@ -15,7 +15,7 @@ namespace Api.Extensions
     public static class DependencyInjectionExtensions
     {
         /// <summary>
-        /// Set up logging.
+        /// Set up logging, app metrics.
         /// </summary>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
@@ -35,11 +35,11 @@ namespace Api.Extensions
                .OutputMetrics.AsPrometheusPlainText()
                .OutputMetrics.AsPrometheusProtobuf()
                .Build();
+
             services
                 .AddMetrics(metrics)
                 .AddAppMetricsSystemMetricsCollector()
                 .AddAppMetricsCollectors();
-
 
             return services;
         }
