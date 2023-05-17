@@ -22,12 +22,11 @@
     "fiscalYearStartMonth": 0,
     "gnetId": null,
     "graphTooltip": 0,
-    "id": 1,
     "links": [],
     "liveNow": false,
     "panels": [
         {
-            "datasource": null,
+            "datasource": "Prometheus",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -95,7 +94,16 @@
                     "mode": "single"
                 }
             },
-            "title": "Panel Title",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": " sum by (controller, method) (application_http_request_timer{app=\"PFM.Api\"})",
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "PFM API Request Latency",
             "type": "timeseries"
         }
     ],
@@ -111,7 +119,7 @@
     },
     "timepicker": {},
     "timezone": "",
-    "title": "MY NEW DASHBOARD 2",
-    "uid": "n4N9XB83k",
+    "title": "PFM Dashboard",
+    "uid": "n4N9XB84k",
     "version": 1
 }
