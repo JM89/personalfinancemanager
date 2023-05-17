@@ -6,7 +6,7 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PFM.Api.Extensions;
-using PFM.Api.Middlewares;
+using PFM.CommonLibraries.Api.MiddleWares;
 using PFM.DataAccessLayer;
 using PFM.Services.Caches;
 using PFM.Services.Caches.Interfaces;
