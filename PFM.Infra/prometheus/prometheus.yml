@@ -6,3 +6,12 @@ scrape_configs:
   - job_name: "prometheus"
     static_configs:
       - targets: ["localhost:9090"]
+  - job_name: "PFM-API"
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: [
+        "pfm-api:4431",
+        "pfm-bank-api:50001"
+      ]
