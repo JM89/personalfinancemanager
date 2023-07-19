@@ -67,3 +67,6 @@ The command will also start all the application-specific docker-compose files.
 |SQL Server|localhost,1433|localhost,1433|db-server,1433||
 |Localstack|[Endpoints](http://localhost:4566)|[Endpoints](http://localhost:4566)|[Endpoints](http://localstack:4566)||
 |EventStore|[Endpoints](http://localhost:2113)|[Endpoints](http://localhost:2113/)|[Endpoints](http://eventstore:2113)||
+|Prometheus|[Endpoints](http://localhost:9090)|[Endpoints](http://localhost:9090)|[Endpoints](http://prometheus:9090)|
+|Grafana|[Endpoints](http://localhost:3000)|[Endpoints](http://localhost:3000)|[Endpoints](http://grafana:3000)|
+|Keycloak|[Endpoints](http://localhost:8080)|[Endpoints](http://localhost:8080)|[Endpoints](http://keycloak:8080)|

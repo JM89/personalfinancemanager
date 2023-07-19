@@ -17,5 +17,7 @@ general.log
 **idea
 
 **.env
-**terraform**
+**terraform.tfstate**
 **.terraform**
+
+.DS_Store
