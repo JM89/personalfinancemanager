@@ -1,5 +1,4 @@
 ﻿using Api.Contracts.Shared;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PFM.Bank.Api.Contracts.Bank;
 using PFM.Services.ExternalServices.BankApi;
