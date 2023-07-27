@@ -1,0 +1,62 @@
+﻿@page "/expense-types"
+@using PFM.Website.Services
+@using PFM.Api.Contracts.ExpenseType
+@inject ExpenseTypeService ExpenseTypeService
+@inject NavigationManager NavigationManager 
+
+<PageTitle>Expense Types</PageTitle>
+
+<h1>Expense Types</h1>
+
+<p>Manage the expense types to be used when creating new expenses.</p>
+
+<button class="btn btn-primary" @onclick="Create">Add new</button>
+
+@if (expenseTypes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Show On Dashboard</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var expenseType in expenseTypes)
+            {
+                <tr>
+                    <td>@expenseType.Name</td>
+                    <td>@expenseType.ShowOnDashboard</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="(() => Edit(expenseType.Id))"><i class="oi oi-pencil"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ExpenseTypeDetails[]? expenseTypes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        expenseTypes = await ExpenseTypeService.GetAll();
+    }
+
+    void Create()
+    {
+        NavigationManager.NavigateTo("/expense-types/create");
+    }
+
+    void Edit(int id)
+    {
+        NavigationManager.NavigateTo($"/expense-types/edit/{id}");
+    }
+}
+

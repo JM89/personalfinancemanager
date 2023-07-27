@@ -1,0 +1,81 @@
+﻿@page "/expense-types/create"
+@page "/expense-types/edit/{id:int}"
+@using PFM.Website.Services
+@using PFM.Api.Contracts.ExpenseType
+@inject ExpenseTypeService ExpenseTypeService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Expense Types</PageTitle>
+
+@if (Id != null)
+{
+    <h1>Edit Expense Types</h1>
+}
+else
+{
+    <h1>Create Expense Types</h1>
+}
+
+<EditForm Model="expenseType" OnSubmit="HandleSubmit">
+    <div class="form-group row">
+        <label for="name">Name</label>
+        <div class="col-sm-10">
+            <InputText id="name" @bind-Value="expenseType.Name" class="form-control"></InputText>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="color">Graph Color</label>
+        <div class="col-sm-10">
+            <InputText id="color" @bind-Value="expenseType.GraphColor" class="form-control"></InputText>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="showOnDashboard">Show On Dashboard</label>
+        <div class="col-sm-10">
+            <InputCheckbox id="showOnDashboard" @bind-Value="expenseType.ShowOnDashboard"></InputCheckbox>
+        </div>
+    </div>
+    <br />
+    <button type="button" class="btn btn-default" @onclick="Back">Cancel</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    private ExpenseTypeDetails expenseType = new ExpenseTypeDetails() { Id = -1 };
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            expenseType = await ExpenseTypeService.GetById(Id.Value) ?? new ExpenseTypeDetails() { Id = -1 };
+        }
+    }
+
+    void Back()
+    {
+        NavigationManager.NavigateTo("/expense-types");
+    }
+
+    async Task HandleSubmit()
+    {
+        bool result = false;
+        if (!Id.HasValue)
+        {
+            result = await ExpenseTypeService.Create(expenseType);
+        }
+        else
+        {
+            result = await ExpenseTypeService.Edit(Id.Value, expenseType);
+        }
+        if (result)
+        {
+            NavigationManager.NavigateTo("/expense-types");
+        }
+    }
+}
+
