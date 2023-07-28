@@ -9,11 +9,29 @@
 
     <main>
         <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <form method="get" action="logout">
+                        <button type="submit" class="nav-link btn btn-link">Log out</button>
+                    </form>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="login?redirectUri=/">Log in</a>
+                </NotAuthorized>
+            </AuthorizeView>
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
         </div>
 
         <article class="content px-4">
-            @Body
+            <AuthorizeView>
+                <Authorized>
+                    <p>Connected as @context.User.Identity.Name !</p>
+                    @Body
+                </Authorized>
+                <NotAuthorized>
+                    <p>Not Authorized</p>
+                </NotAuthorized>
+            </AuthorizeView>
         </article>
     </main>
 </div>
