@@ -94,3 +94,27 @@ resource "keycloak_openid_client" "pfm_api_openid_client" {
     "internet_facing" = "false"
   }
 }
+
+resource "keycloak_openid_client" "pfm_bank_api_openid_client" {
+  realm_id  = keycloak_realm.realm.id
+  client_id = "pfm-bank-api"
+
+  name    = "PFM Bank API"
+  enabled = true
+
+  direct_access_grants_enabled = true
+
+  access_type = "CONFIDENTIAL"
+  valid_redirect_uris = [
+    "https://localhost:7142/signin-oidc"
+  ]
+
+  standard_flow_enabled = true
+
+  login_theme = "keycloak"
+
+  extra_config = {
+    "is_api" = "true"
+    "internet_facing" = "false"
+  }
+}
