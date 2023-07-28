@@ -1,78 +1,89 @@
-﻿using PFM.Api.Contracts.ExpenseType;
+﻿using System.Text.Json;
+using Api.Contracts.Shared;
+using PFM.Api.Contracts.ExpenseType;
+using PFM.Website.ExternalServices;
+using Refit;
 
 namespace PFM.Website.Services
 {
 	public class ExpenseTypeService
 	{
-		private IList<ExpenseTypeDetails> _expenseTypes;
+        private readonly IExpenseTypeApi _expenseTypeApi;
 
-		public ExpenseTypeService()
-		{
-			_expenseTypes = new List<ExpenseTypeDetails>()
-			{
-				new ExpenseTypeDetails()
-				{
-					Id = 1,
-					Name = "Food",
-					GraphColor = "3399FF",
-					ShowOnDashboard = false
-				},
-				new ExpenseTypeDetails()
-                {
-                    Id = 2,
-                    Name = "Energy",
-                    GraphColor = "33CC33",
-                    ShowOnDashboard = false
-                },
-				new ExpenseTypeDetails()
-                {
-                    Id = 3,
-                    Name = "Transport",
-                    GraphColor = "FF0000",
-                    ShowOnDashboard = false
-                }
-            };
+        public ExpenseTypeService(IExpenseTypeApi expenseTypeApi)
+        {
+            _expenseTypeApi = expenseTypeApi;
         }
 
-        public async Task<ExpenseTypeDetails[]> GetAll()
+        public async Task<ExpenseTypeList[]> GetAll()
         {
-            return await Task.FromResult(_expenseTypes.ToArray());
+            var apiResponse = await _expenseTypeApi.Get();
+
+            if (apiResponse.Data == null)
+            {
+                throw new NotImplementedException("todo");
+            }
+
+            var results = ReadApiResponse<IList<ExpenseTypeList>>(apiResponse);
+
+            return await Task.FromResult(results.ToArray());
         }
 
         public async Task<ExpenseTypeDetails?> GetById(int id)
         {
-            return await Task.FromResult(_expenseTypes.SingleOrDefault(x => x.Id == id));
+            var apiResponse = await _expenseTypeApi.Get(id);
+
+            if (apiResponse.Data == null)
+            {
+                throw new NotImplementedException("todo");
+            }
+
+            var result = ReadApiResponse<ExpenseTypeDetails>(apiResponse);
+
+            return await Task.FromResult(result);
         }
 
         public async Task<bool> Create(ExpenseTypeDetails expenseType)
         {
-            expenseType.Id = _expenseTypes.Max(x => x.Id) + 1;
-            _expenseTypes.Add(expenseType);
-            return await Task.FromResult(true);
+            var apiResponse = await _expenseTypeApi.Create(expenseType);
+
+            var result = ReadApiResponse<bool>(apiResponse);
+
+            return await Task.FromResult(result);
         }
 
         public async Task<bool> Edit(int id, ExpenseTypeDetails expenseType)
         {
-            var existing = await GetById(id);
+            var apiResponse = await _expenseTypeApi.Edit(id, expenseType);
 
-            if (existing == null)
-                return false;
+            var result = ReadApiResponse<bool>(apiResponse);
 
-            existing.Name = expenseType.Name;
-            existing.GraphColor = expenseType.GraphColor;
-            existing.ShowOnDashboard = expenseType.ShowOnDashboard;
-            return true;
+            return await Task.FromResult(result);
         }
 
         public async Task<bool> Delete(int id)
         {
-            var existing = await GetById(id);
+            var apiResponse = await _expenseTypeApi.Delete(id);
 
-            if (existing == null)
-                return false;
+            var result = ReadApiResponse<bool>(apiResponse);
 
-            _expenseTypes.Remove(existing);
-            return true;
+            return await Task.FromResult(result);
+
+        }
+
+        private TResult? ReadApiResponse<TResult>(ApiResponse apiResponse)
+        {
+            if (apiResponse.Data == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (typeof(TResult) == typeof(bool) && bool.TryParse(apiResponse.Data.ToString(), out bool bResult))
+            {
+                return (TResult)Convert.ChangeType(bResult, typeof(TResult));
+            }
+
+            return JsonSerializer.Deserialize<TResult>(JsonSerializer.Serialize(apiResponse.Data));
         }
     }
 }

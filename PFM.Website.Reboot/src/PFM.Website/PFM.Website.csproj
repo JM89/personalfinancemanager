@@ -11,16 +11,22 @@
   <ItemGroup>
     <None Remove="Services\" />
     <None Remove="Configurations\" />
+    <None Remove="ExternalServices\" />
+    <None Remove="ExternalServices\InMemoryStorage\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="Configurations\" />
+    <Folder Include="ExternalServices\" />
+    <Folder Include="ExternalServices\InMemoryStorage\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="PFM.Api.Contracts" Version="4.3.0" />
     <PackageReference Include="PFM.Bank.Api.Contracts" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.20" />
     <PackageReference Include="BlazorColorPicker" Version="2.3.0" />
+    <PackageReference Include="Refit" Version="7.0.0" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="Pages\ExpenseTypeList.razor">

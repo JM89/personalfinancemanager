@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using PFM.Website.ExternalServices;
+using PFM.Website.ExternalServices.InMemoryStorage;
+using Refit;
 
 namespace PFM.Website.Configurations
 {
@@ -49,6 +53,52 @@ namespace PFM.Website.Configurations
 
             return services;
 		}
-	}
+
+
+
+        public static IServiceCollection AddPfmApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
+        {
+            var useApi = configuration.GetValue<bool>("UsePfmApi");
+
+            if (!useApi)
+            {
+                services.AddSingleton<IExpenseTypeApi, ExpenseTypeInMemory>();
+                return services;
+            }
+
+            var apiConfigs = configuration["PfmApi:EndpointUrl"];
+            if (apiConfigs == null)
+                throw new Exception("DI exception: PFM API config was not found");
+
+            var refitSettings = new RefitSettings()
+            {
+                ContentSerializer = new SystemTextJsonContentSerializer(
+                    new JsonSerializerOptions()
+                    {
+                        PropertyNameCaseInsensitive = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        Converters =
+                        {
+                            new ObjectToInferredTypesConverter(),
+                        }
+                    }
+                ),
+                ExceptionFactory = httpResponse =>
+                {
+                    return Task.FromResult<Exception?>(null);
+                }
+            };
+
+            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
+
+            services
+                .AddRefitClient<ExternalServices.IExpenseTypeApi>(refitSettings)
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
+                .AddHttpMessageHandler<AuthHeaderHandler>();
+
+            return services;
+        }
+    }
 }
 

@@ -1,6 +1,5 @@
 ﻿@page "/expense-types"
 @using PFM.Website.Services
-@using PFM.Api.Contracts.ExpenseType
 @inject ExpenseTypeService ExpenseTypeService
 @inject NavigationManager NavigationManager
 
@@ -63,7 +62,7 @@ else
 }
 
 @code {
-    private ExpenseTypeDetails[]? expenseTypes;
+    private PFM.Api.Contracts.ExpenseType.ExpenseTypeList[]? expenseTypes;
 
     protected override async Task OnInitializedAsync()
     {

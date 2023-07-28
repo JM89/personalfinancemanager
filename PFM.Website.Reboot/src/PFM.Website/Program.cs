@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.IdentityModel.Tokens;
-using PFM.Website.Configurations;
+﻿using PFM.Website.Configurations;
 using PFM.Website.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +8,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<ExpenseTypeService>();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<AuthHeaderHandler>();
+
 builder.Services.AddAuth(builder.Configuration);
+builder.Services.AddPfmApi(builder.Configuration, builder.Environment.EnvironmentName != "Production");
 
 var app = builder.Build();
 

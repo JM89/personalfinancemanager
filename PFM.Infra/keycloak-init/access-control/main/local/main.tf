@@ -81,7 +81,9 @@ resource "keycloak_openid_client" "pfm_api_openid_client" {
   direct_access_grants_enabled = true
 
   access_type = "CONFIDENTIAL"
-  valid_redirect_uris = []
+  valid_redirect_uris = [
+    "https://localhost:7142/signin-oidc"
+  ]
 
   standard_flow_enabled = true
 
