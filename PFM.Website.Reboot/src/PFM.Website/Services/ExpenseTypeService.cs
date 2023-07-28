@@ -14,21 +14,21 @@ namespace PFM.Website.Services
 				{
 					Id = 1,
 					Name = "Food",
-					GraphColor = "Red",
+					GraphColor = "3399FF",
 					ShowOnDashboard = false
 				},
 				new ExpenseTypeDetails()
                 {
                     Id = 2,
                     Name = "Energy",
-                    GraphColor = "Green",
+                    GraphColor = "33CC33",
                     ShowOnDashboard = false
                 },
 				new ExpenseTypeDetails()
                 {
                     Id = 3,
                     Name = "Transport",
-                    GraphColor = "Yellow",
+                    GraphColor = "FF0000",
                     ShowOnDashboard = false
                 }
             };
