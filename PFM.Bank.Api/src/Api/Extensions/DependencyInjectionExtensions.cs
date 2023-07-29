@@ -3,10 +3,7 @@ using EventStore.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.Identity.Client;
 using Microsoft.OpenApi.Models;
-using PFM.Bank.Api.Services.ExternalServices.AuthApi;
-using Refit;
 using Serilog;
 using Services.Events;
 using Services.Events.Interfaces;
@@ -62,7 +59,7 @@ namespace Api.Extensions
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = @"http://localhost:8080/realms/pfm";
+                    options.Authority = configuration["Auth:Authority"];
                     options.Audience = "account";
                     options.RequireHttpsMetadata = false;
                 });

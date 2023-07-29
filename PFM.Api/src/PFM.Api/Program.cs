@@ -71,6 +71,8 @@ namespace PFM.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseMetricsAllEndpoints();
 

@@ -2,12 +2,12 @@
 using EventStore.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.OpenApi.Models;
 using PFM.Services.Caches;
 using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events;
 using PFM.Services.Events.Interfaces;
-using PFM.Services.ExternalServices.AuthApi;
 using Refit;
 using Serilog;
 using System.Text.Json;
@@ -55,35 +55,21 @@ namespace PFM.Api.Extensions
         /// <returns></returns>
         public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
         {
-            var authenticationApiConfigs = configuration["AuthApi:EndpointUrl"];
-            if (authenticationApiConfigs == null)
-                throw new Exception("DI exception: Authentication API config was not found");
-
-            services.AddRefitClient<IAuthApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(authenticationApiConfigs));
-
             services.AddMvc(o =>
             {
-                var authenticationApi = services.BuildServiceProvider().GetService<IAuthApi>();
-                if (authenticationApi == null)
-                    throw new Exception("DI exception: Authentication API was not injected");
-
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
-                o.Filters.Add(new Api.Filters.DelegateToAuthApiAuthorizeFilter(policy, Log.Logger, authenticationApi));
+                o.Filters.Add(new AuthorizeFilter(policy));
             });
 
             services
-                .AddAuthentication(options =>
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
+                    options.Authority = configuration["Auth:Authority"];
+                    options.Audience = "account";
+                    options.RequireHttpsMetadata = false;
                 });
+
             return services;
         }
 
