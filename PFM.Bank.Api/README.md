@@ -4,6 +4,8 @@ PFM Bank Api handles the management of banks and bank accounts, and list registe
 
 ## Getting Started
 
+First of all, the infrastructure must have been started. 
+
 ### Debug the API
 
 Open the solution and make sure you set Api as the start up project. 
@@ -14,15 +16,22 @@ The application can be found [here](http://localhost/#/events?filter=Application
 
 ### Test the API
 
-All actions require to be authenticated. Registering a new user can be done in the PFM Auth API (http://localhost:5000).
+All actions require to be authenticated.
 
-Run the following command:
+To generate a token, you can use the pre-existing user 'jess' and 'pfm-bank-api' client ID. Please note that the client secrets will be regenerated everytime the application starts. This info can be retrieved using Keycloak administration console.
 
-```shell
-curl -X POST http://localhost:5000/users/register -d "{\"username\":\"test@gmail.com\", \"password\":\"String123456!\", \"firstname\": \"\", \"lastname\":\"\" }" -H "Content-Type: application/json"
+```bash
+curl -v -L -X POST "http://localhost:8080/realms/pfm/protocol/openid-connect/token" \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'client_id=pfm-bank-api' \
+--data-urlencode 'grant_type=password' \
+--data-urlencode 'client_secret=<secret>' \
+--data-urlencode 'scope=openid' \
+--data-urlencode 'username=jess' \
+--data-urlencode 'password=<user-password>' | jq .access_token
 ```
 
-The response returned by this call is a token. 
+The bearer token generated can then be used in Swagger.
 
 Click on the "Authorize" button at the top of the page, enter "Bearer ", copy the token and Authorize:
 
