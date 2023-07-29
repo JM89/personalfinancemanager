@@ -14,7 +14,7 @@ namespace PFM.Website.Configurations
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var bearerToken = _httpContextAccessor?.HttpContext?.Request.Headers.Authorization.FirstOrDefault() ?? null;
+            var bearerToken = TokenProvider.AccessToken;
 
             if (bearerToken != null)
             {

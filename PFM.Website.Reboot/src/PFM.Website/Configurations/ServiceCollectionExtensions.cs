@@ -40,6 +40,8 @@ namespace PFM.Website.Configurations
                     options.Scope.Add("profile");
                     options.TokenValidationParameters = new TokenValidationParameters { NameClaimType = "name" };
 
+                    options.SaveTokens = true;
+
                     options.Events = new OpenIdConnectEvents
                     {
                         OnAccessDenied = context =>

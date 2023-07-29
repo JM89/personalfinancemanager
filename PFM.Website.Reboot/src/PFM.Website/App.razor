@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager UriHelper
+@using PFM.Website.Configurations
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly">
@@ -22,3 +23,17 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+@code{
+
+    [Parameter]
+    public InitialApplicationState InitialState { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        TokenProvider.AccessToken = InitialState.AccessToken;
+        TokenProvider.RefreshToken = InitialState.RefreshToken;
+
+        return base.OnInitializedAsync();
+    }
+}

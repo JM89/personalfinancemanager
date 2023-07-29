@@ -1,13 +1,12 @@
-﻿using System.Text.Json;
-using Api.Contracts.Shared;
+﻿using Api.Contracts.Shared;
+using Newtonsoft.Json;
 using PFM.Api.Contracts.ExpenseType;
 using PFM.Website.ExternalServices;
-using Refit;
 
 namespace PFM.Website.Services
 {
-	public class ExpenseTypeService
-	{
+    public class ExpenseTypeService
+    {
         private readonly IExpenseTypeApi _expenseTypeApi;
 
         public ExpenseTypeService(IExpenseTypeApi expenseTypeApi)
@@ -83,7 +82,7 @@ namespace PFM.Website.Services
                 return (TResult)Convert.ChangeType(bResult, typeof(TResult));
             }
 
-            return JsonSerializer.Deserialize<TResult>(JsonSerializer.Serialize(apiResponse.Data));
+            return JsonConvert.DeserializeObject<TResult>(apiResponse.Data.ToString());
         }
     }
 }
