@@ -8,33 +8,23 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
     public class ExpenseTypeInMemory : IExpenseTypeApi
     {
         private IList<ExpenseTypeDetails> _expenseTypes;
+        private static readonly string[] Colors = new[]
+        {
+            "3399FF", "33CC33", "FF0000",
+            "3399AA", "33AA33", "AA0000",
+            "4499FF", "33CC44", "FF0044",
+        };
 
         public ExpenseTypeInMemory()
         {
-            _expenseTypes = new List<ExpenseTypeDetails>()
+            var rng = new Random();
+            _expenseTypes = Enumerable.Range(1, 5).Select(index => new ExpenseTypeDetails
             {
-                new ExpenseTypeDetails()
-                {
-                    Id = 1,
-                    Name = "Food",
-                    GraphColor = "3399FF",
-                    ShowOnDashboard = false
-                },
-                new ExpenseTypeDetails()
-                {
-                    Id = 2,
-                    Name = "Energy",
-                    GraphColor = "33CC33",
-                    ShowOnDashboard = false
-                },
-                new ExpenseTypeDetails()
-                {
-                    Id = 3,
-                    Name = "Transport",
-                    GraphColor = "FF0000",
-                    ShowOnDashboard = false
-                }
-            };
+                Id = index,
+                Name = $"Expense Type #{index}",
+                GraphColor = Colors[rng.Next(Colors.Length)],
+                ShowOnDashboard = false
+            }).ToList();
         }
 
         public async Task<ApiResponse> Create(ExpenseTypeDetails obj)
@@ -57,7 +47,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> Edit(int id, ExpenseTypeDetails obj)
         {
-            var existing = await GetById(id);
+            var existing = _expenseTypes.SingleOrDefault(x => x.Id == id);
 
             if (existing == null)
                 return await Task.FromResult(new ApiResponse(false));
@@ -70,25 +60,14 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> Get()
         {
-            var all = JsonConvert.SerializeObject(_expenseTypes.ToList());
-            return await Task.FromResult(new ApiResponse((object)all));
+            var result = JsonConvert.SerializeObject(_expenseTypes.ToList());
+            return await Task.FromResult(new ApiResponse((object)result));
         }
 
         public async Task<ApiResponse> Get(int id)
         {
             var item = JsonConvert.SerializeObject(_expenseTypes.SingleOrDefault(x => x.Id == id));
             return await Task.FromResult(new ApiResponse((object)item));
-        }
-
-
-        public async Task<ExpenseTypeDetails[]> GetAll()
-        {
-            return await Task.FromResult(_expenseTypes.ToArray());
-        }
-
-        public async Task<ExpenseTypeDetails?> GetById(int id)
-        {
-            return await Task.FromResult(_expenseTypes.SingleOrDefault(x => x.Id == id));
         }
     }
 }
