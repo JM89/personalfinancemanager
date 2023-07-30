@@ -45,16 +45,30 @@ else
         <br />
     </div>
     <div class="form-group row" style="height:50px">
-        <label for="name" class="col-sm-2 col-form-label">Website</label>
+        <label for="website" class="col-sm-2 col-form-label">Website</label>
         <div class="col-sm-10">
-            <InputText id="name" @bind-Value="m.Website" class="form-control"></InputText>
+            <InputText id="website" @bind-Value="m.Website" class="form-control"></InputText>
         </div>
         <br />
     </div>
     <div class="form-group row" style="height:50px">
-        <label for="name" class="col-sm-2 col-form-label">Phone Number</label>
+        <label for="phoneNumber" class="col-sm-2 col-form-label">Phone Number</label>
         <div class="col-sm-10">
-            <InputText id="name" @bind-Value="m.GeneralEnquiryPhoneNumber" class="form-control"></InputText>
+            <InputText id="phoneNumber" @bind-Value="m.GeneralEnquiryPhoneNumber" class="form-control"></InputText>
+        </div>
+        <br />
+    </div>
+    <div class="form-group row" style="height:50px">
+        <label for="bank-icon" class="col-sm-2 col-form-label">Bank Icon</label>
+        <div class="col-sm-10">
+            <InputFile OnChange="@LoadBankIcon"></InputFile>
+
+            @if (bankIcon != null)
+            {
+                <p>Name: @bankIcon.Name</p>
+                <p>Size in bytes: @bankIcon.Size</p>
+                <p>Last modified date: @bankIcon.LastModified</p>
+            }
         </div>
         <br />
     </div>
@@ -70,7 +84,8 @@ else
     public int? Id { get; set; }
 
     private BankModel m = new BankModel() { GeneralEnquiryPhoneNumber = "00000000000" };
-    public IList<CountryModel> AvailableCountries = new List<CountryModel>();
+    private IList<CountryModel> AvailableCountries = new List<CountryModel>();
+    private IBrowserFile bankIcon;
 
     protected override async Task OnInitializedAsync()
     {
@@ -107,6 +122,11 @@ else
         {
             NavigationManager.NavigateTo("/banks");
         }
+    }
+
+    private void LoadBankIcon(InputFileChangeEventArgs e)
+    {
+        bankIcon = e.File;
     }
 }
 
