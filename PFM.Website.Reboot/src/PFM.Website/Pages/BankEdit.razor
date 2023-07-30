@@ -62,12 +62,10 @@ else
         <label for="bank-icon" class="col-sm-2 col-form-label">Bank Icon</label>
         <div class="col-sm-10">
             <InputFile OnChange="@LoadBankIcon"></InputFile>
-
-            @if (bankIcon != null)
+            @if (ImageUri != null)
             {
-                <p>Name: @bankIcon.Name</p>
-                <p>Size in bytes: @bankIcon.Size</p>
-                <p>Last modified date: @bankIcon.LastModified</p>
+                <img src="@ImageUri" style="width:35px" />
+                <img src="@ImageUri" style="width:50px" />
             }
         </div>
         <br />
@@ -85,7 +83,7 @@ else
 
     private BankModel m = new BankModel() { GeneralEnquiryPhoneNumber = "00000000000" };
     private IList<CountryModel> AvailableCountries = new List<CountryModel>();
-    private IBrowserFile bankIcon;
+    private string ImageUri;
 
     protected override async Task OnInitializedAsync()
     {
@@ -124,9 +122,19 @@ else
         }
     }
 
-    private void LoadBankIcon(InputFileChangeEventArgs e)
+    private async Task LoadBankIcon(InputFileChangeEventArgs e)
     {
-        bankIcon = e.File;
+        var image = await e.File.RequestImageFileAsync("image/png", 600, 600);
+
+        using Stream imageStream = image.OpenReadStream(1024 * 1024 * 10);
+
+        using MemoryStream ms = new();
+        //copy imageStream to Memory stream
+        await imageStream.CopyToAsync(ms);
+
+        //convert stream to base64
+        ImageUri = $"data:image/png;base64,{Convert.ToBase64String(ms.ToArray())}";
+        StateHasChanged();
     }
 }
 
