@@ -1,5 +1,6 @@
 ﻿using System;
 using Api.Contracts.Shared;
+using Newtonsoft.Json;
 using PFM.Api.Contracts.ExpenseType;
 
 namespace PFM.Website.ExternalServices.InMemoryStorage
@@ -69,14 +70,14 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> Get()
         {
-            var all = _expenseTypes.ToArray();
-            return await Task.FromResult(new ApiResponse(all));
+            var all = JsonConvert.SerializeObject(_expenseTypes.ToList());
+            return await Task.FromResult(new ApiResponse((object)all));
         }
 
         public async Task<ApiResponse> Get(int id)
         {
-            var item = _expenseTypes.SingleOrDefault(x => x.Id == id);
-            return await Task.FromResult(new ApiResponse(item));
+            var item = JsonConvert.SerializeObject(_expenseTypes.SingleOrDefault(x => x.Id == id));
+            return await Task.FromResult(new ApiResponse((object)item));
         }
 
 

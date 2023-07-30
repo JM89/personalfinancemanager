@@ -23,7 +23,7 @@ namespace PFM.Website.Services
                 throw new NotImplementedException("todo");
             }
 
-            var results = ReadApiResponse<IList<ExpenseTypeList>>(apiResponse);
+            var results = ReadApiResponse<List<ExpenseTypeList>>(apiResponse);
 
             return await Task.FromResult(results.ToArray());
         }

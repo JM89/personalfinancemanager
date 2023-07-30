@@ -21,3 +21,5 @@ general.log
 **.terraform**
 
 .DS_Store
+
+summary.txt
