@@ -15,6 +15,7 @@
     <None Remove="ExternalServices\InMemoryStorage\" />
     <None Remove="Models\" />
     <None Remove="Services\Mappers\" />
+    <None Remove="Components\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -24,6 +25,7 @@
     <Folder Include="wwwroot\Resources\" />
     <Folder Include="Models\" />
     <Folder Include="Services\Mappers\" />
+    <Folder Include="Components\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="PFM.Api.Contracts" Version="4.3.0" />

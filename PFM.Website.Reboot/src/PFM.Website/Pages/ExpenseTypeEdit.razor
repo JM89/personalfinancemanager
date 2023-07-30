@@ -34,10 +34,10 @@ else
     <div class="form-group row" style="height:50px">
         <label for="color" class="col-sm-2 col-form-label">Graph Color</label>
         <div class="col-sm-10">
-            <button type="button" class="btn btn-light btn-sm" @onclick="OpenModal">
+            <button type="button" class="btn btn-light btn-sm" @onclick="OpenGraphColorModal">
                 <div style="width:80px; background-color:#@expenseType.GraphColor" class="buttonColor"></div>
             </button>
-            <ColorPicker IsOpened="isOpened" Closed="ClosedEvent" MyColor="@expenseType.GraphColor">
+            <ColorPicker IsOpened="isGraphColorModalOpened" Closed="ClosedGraphColorModal" MyColor="@expenseType.GraphColor">
             </ColorPicker>
         </div>
         <br />
@@ -51,15 +51,26 @@ else
     </div>
     <br />
     <br />
-    <button type="button" class="btn btn-default" @onclick="Back">Cancel</button>
+    <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
     <button type="submit" class="btn btn-primary">Save</button>
+    @if (Id != null)
+    {
+        <br />
+        <br />
+        <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
+    }
 </EditForm>
 
+<Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+         ConfirmationMessage=@($"Are you sure you want to delete \"{expenseType.Name}\"?")>
+</Confirm>
 
 @code {
 
     [Parameter]
     public int? Id { get; set; }
+
+    protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
 
     private ExpenseTypeModel expenseType = new ExpenseTypeModel() { Id = -1, GraphColor = "E5F0F4" };
 
@@ -98,17 +109,31 @@ else
         }
     }
 
-    bool isOpened = false;
-
-    void OpenModal()
+    protected void Delete()
     {
-        isOpened = true;
+        DeleteConfirmation.Show();
     }
 
-    void ClosedEvent(string value)
+    protected async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await ExpenseTypeService.Delete(expenseType.Id);
+            NavigationManager.NavigateTo("/expense-types");
+        }
+    }
+
+    bool isGraphColorModalOpened = false;
+
+    void OpenGraphColorModal()
+    {
+        isGraphColorModalOpened = true;
+    }
+
+    void ClosedGraphColorModal(string value)
     {
         expenseType.GraphColor = value.Replace("#", "");
-        isOpened = false;
+        isGraphColorModalOpened = false;
     }
 }
 
