@@ -72,7 +72,7 @@ else
 
     protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
 
-    private ExpenseTypeModel expenseType = new ExpenseTypeModel() { Id = -1, GraphColor = "E5F0F4" };
+    private ExpenseTypeModel expenseType = new ExpenseTypeModel() { GraphColor = "E5F0F4" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -116,9 +116,9 @@ else
 
     protected async Task ConfirmDelete(bool deleteConfirmed)
     {
-        if (deleteConfirmed)
+        if (deleteConfirmed && expenseType.Id.HasValue)
         {
-            await ExpenseTypeService.Delete(expenseType.Id);
+            await ExpenseTypeService.Delete(expenseType.Id.Value);
             NavigationManager.NavigateTo("/expense-types");
         }
     }

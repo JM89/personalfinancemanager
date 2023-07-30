@@ -19,7 +19,9 @@ namespace PFM.Website.Services
         {
             if (apiResponse.Data == null)
             {
-                _logger.Error("No data returned");
+                var flattenErrors = String.Join('-', apiResponse.Errors?.Select(x => $"{x.Key}-{String.Join(';', x.Value)}") ?? new List<string>() { "No errors" });
+
+                _logger.Error(flattenErrors);
                 return default(TResult);
             }
 

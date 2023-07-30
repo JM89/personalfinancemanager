@@ -17,33 +17,33 @@ namespace PFM.Api.Controllers
         }
 
         [HttpGet("GetList")]
-        public IEnumerable<ExpenseTypeList> GetList()
+        public async Task<IEnumerable<ExpenseTypeList>> GetList()
         {
-            return _ExpenseTypeService.GetExpenseTypes();
+            return await _ExpenseTypeService.GetExpenseTypes();
         }
 
         [HttpGet("Get/{id}")]
-        public ExpenseTypeDetails Get(int id)
+        public async Task<ExpenseTypeDetails> Get(int id)
         {
-            return _ExpenseTypeService.GetById(id);
+            return await _ExpenseTypeService.GetById(id);
         }
         
         [HttpPost("Create")]
-        public void Post([FromBody]ExpenseTypeDetails createdObj)
+        public async Task<bool> Post([FromBody]ExpenseTypeDetails createdObj)
         {
-            _ExpenseTypeService.CreateExpenseType(createdObj);
+            return await _ExpenseTypeService.CreateExpenseType(createdObj);
         }
         
         [HttpPut("Edit/{id}")]
-        public void Put(int id, [FromBody]ExpenseTypeDetails editedObj)
+        public async Task<bool> Put(int id, [FromBody]ExpenseTypeDetails editedObj)
         {
-            _ExpenseTypeService.EditExpenseType(editedObj);
+            return await _ExpenseTypeService.EditExpenseType(editedObj);
         }
         
         [HttpDelete("Delete/{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            _ExpenseTypeService.DeleteExpenseType(id);
+            return await _ExpenseTypeService.DeleteExpenseType(id);
         }
     }
 }

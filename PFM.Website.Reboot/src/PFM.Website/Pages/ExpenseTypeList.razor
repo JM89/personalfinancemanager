@@ -75,8 +75,13 @@ else
         NavigationManager.NavigateTo("/expense-types/create");
     }
 
-    void Edit(int id)
+    void Edit(int? id)
     {
+        if (id == null)
+        {
+            Create();
+            return;
+        }
         NavigationManager.NavigateTo($"/expense-types/edit/{id}");
     }
 }

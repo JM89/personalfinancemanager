@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PFM.Api.Contracts.ExpenseType;
 
 namespace PFM.Services.Interfaces
 {
     public interface IExpenseTypeService : IBaseService
     {
-        IList<ExpenseTypeList> GetExpenseTypes();
+        Task<IList<ExpenseTypeList>> GetExpenseTypes();
 
-        ExpenseTypeDetails GetById(int id);
+        Task<ExpenseTypeDetails> GetById(int id);
 
-        void CreateExpenseType(ExpenseTypeDetails expenditureTypeDetails);
+        Task<bool> CreateExpenseType(ExpenseTypeDetails expenditureTypeDetails);
 
-        void EditExpenseType(ExpenseTypeDetails expenditureTypeDetails);
+        Task<bool> EditExpenseType(ExpenseTypeDetails expenditureTypeDetails);
 
-        void DeleteExpenseType(int id);
+        Task<bool> DeleteExpenseType(int id);
     }
 }
