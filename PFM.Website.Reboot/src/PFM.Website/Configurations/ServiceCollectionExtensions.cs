@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
@@ -9,7 +8,6 @@ using Serilog;
 using Refit;
 using AutoMapper;
 using PFM.Website.Services.Mappers;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace PFM.Website.Configurations
 {
@@ -79,7 +77,10 @@ namespace PFM.Website.Configurations
 
             if (!useApi)
             {
-                services.AddSingleton<IExpenseTypeApi, ExpenseTypeInMemory>();
+                services
+                    .AddSingleton<IExpenseTypeApi, ExpenseTypeInMemory>()
+                    .AddSingleton<IBankApi, BankInMemory>()
+                    .AddSingleton<ICountryApi, CountryInMemory>();
                 return services;
             }
 
@@ -109,10 +110,21 @@ namespace PFM.Website.Configurations
             var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
 
             services
-                .AddRefitClient<ExternalServices.IExpenseTypeApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
-                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
-                .AddHttpMessageHandler<AuthHeaderHandler>();
+                .AddPfmApiClient<IExpenseTypeApi>(apiConfigs, refitSettings, httpClientHandler)
+                .AddPfmApiClient<ICountryApi>(apiConfigs, refitSettings, httpClientHandler)
+                .AddPfmApiClient<IBankApi>(apiConfigs, refitSettings, httpClientHandler);
+
+            return services;
+        }
+
+        private static IServiceCollection AddPfmApiClient<T>(this IServiceCollection services, string baseUrl, RefitSettings refitSettings, HttpClientHandler httpClientHandler)
+            where T : class
+        {
+            services
+               .AddRefitClient<T>(refitSettings)
+               .ConfigureHttpClient(c => c.BaseAddress = new Uri(baseUrl))
+               .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
+               .AddHttpMessageHandler<AuthHeaderHandler>();
 
             return services;
         }

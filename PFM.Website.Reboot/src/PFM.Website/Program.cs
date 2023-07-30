@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using PFM.Website.Configurations;
+﻿using PFM.Website.Configurations;
 using PFM.Website.Services;
-using PFM.Website.Services.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +8,10 @@ builder.Configuration.AddEnvironmentVariables(prefix: "APP_");
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<ExpenseTypeService>();
+builder.Services
+    .AddSingleton<ExpenseTypeService>()
+    .AddSingleton<BankService>()
+    .AddSingleton<CountryService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<AuthHeaderHandler>();

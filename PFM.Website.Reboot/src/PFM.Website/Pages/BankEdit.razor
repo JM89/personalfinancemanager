@@ -1,0 +1,112 @@
+﻿@page "/banks/create"
+@page "/banks/edit/{id:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject BankService BankService
+@inject CountryService CountryService
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>Banks</PageTitle>
+
+@if (Id != null)
+{
+    <h1>Edit Banks</h1>
+}
+else
+{
+    <h1>Create Banks</h1>
+}
+
+<br />
+<EditForm Model="m" OnSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <div class="col-sm-8 text-danger">
+        <ValidationSummary />
+    </div>
+    <div class="form-group row" style="height:50px">
+        <label for="name" class="col-sm-2 col-form-label">Country</label>
+        <div class="col-sm-10">
+            <select class="form-control" @bind="@m.CountryId">
+                <option value=""></option>
+                @foreach (var country in @AvailableCountries)
+                {
+                    <option value="@country.Id">@country.Name</option>
+                }
+            </select>
+        </div>
+        <br />
+    </div>
+    <div class="form-group row" style="height:50px">
+        <label for="name" class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-10">
+            <InputText id="name" @bind-Value="m.Name" class="form-control"></InputText>
+        </div>
+        <br />
+    </div>
+    <div class="form-group row" style="height:50px">
+        <label for="name" class="col-sm-2 col-form-label">Website</label>
+        <div class="col-sm-10">
+            <InputText id="name" @bind-Value="m.Website" class="form-control"></InputText>
+        </div>
+        <br />
+    </div>
+    <div class="form-group row" style="height:50px">
+        <label for="name" class="col-sm-2 col-form-label">Phone Number</label>
+        <div class="col-sm-10">
+            <InputText id="name" @bind-Value="m.GeneralEnquiryPhoneNumber" class="form-control"></InputText>
+        </div>
+        <br />
+    </div>
+    <br />
+    <br />
+    <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    private BankModel m = new BankModel() { GeneralEnquiryPhoneNumber = "00000000000" };
+    public IList<CountryModel> AvailableCountries = new List<CountryModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AvailableCountries = await CountryService.GetAll();
+
+        if (!Id.HasValue)
+            return;
+
+        var model = await BankService.GetById(Id.Value);
+
+        if (model == null)
+            return;
+
+        m = model;
+    }
+
+    void Back()
+    {
+        NavigationManager.NavigateTo("/banks");
+    }
+
+    async Task HandleSubmit()
+    {
+        bool result = false;
+        if (!Id.HasValue)
+        {
+            result = await BankService.Create(m);
+        }
+        else
+        {
+            result = await BankService.Edit(Id.Value, m);
+        }
+        if (result)
+        {
+            NavigationManager.NavigateTo("/banks");
+        }
+    }
+}
+

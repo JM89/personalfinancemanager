@@ -1,31 +1,31 @@
-﻿using System;
+﻿using System.Drawing;
 using Api.Contracts.Shared;
+using AutoFixture;
 using Newtonsoft.Json;
-using PFM.Api.Contracts.ExpenseType;
+using PFM.Bank.Api.Contracts.Bank;
 
 namespace PFM.Website.ExternalServices.InMemoryStorage
 {
-    public class ExpenseTypeInMemory : IExpenseTypeApi
+    public class BankInMemory : IBankApi
     {
-        private IList<ExpenseTypeDetails> _storage;
-        private static readonly string[] Colors = new[]
+        private IList<BankDetails> _storage;
+        
+        public BankInMemory()
         {
-            "3399FF", "33CC33", "FF0000"
-        };
+            var countries = new CountryInMemory()._storage.ToList();
+            var fixture = new Fixture();
 
-        public ExpenseTypeInMemory()
-        {
             var rng = new Random();
-            _storage = Enumerable.Range(1, 5).Select(index => new ExpenseTypeDetails
-            {
-                Id = index,
-                Name = $"Expense Type #{index}",
-                GraphColor = Colors[rng.Next(Colors.Length)],
-                ShowOnDashboard = false
-            }).ToList();
+            _storage = new List<BankDetails>();
+            for (int i = 0; i <= 5; i++) {
+                var item = fixture.Build<BankDetails>()
+                    .With(x => x.CountryId, countries.ElementAt(rng.Next(countries.Count())).Id)
+                    .With(x => x.GeneralEnquiryPhoneNumber, i.ToString().PadLeft(11, '0'));
+                _storage.Add(item.Create());
+            }
         }
 
-        public async Task<ApiResponse> Create(ExpenseTypeDetails obj)
+        public async Task<ApiResponse> Create(BankDetails obj)
         {
             obj.Id = _storage.Max(x => x.Id) + 1;
             _storage.Add(obj);
@@ -43,7 +43,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             return await Task.FromResult(new ApiResponse(true));
         }
 
-        public async Task<ApiResponse> Edit(int id, ExpenseTypeDetails obj)
+        public async Task<ApiResponse> Edit(int id, BankDetails obj)
         {
             var existing = _storage.SingleOrDefault(x => x.Id == id);
 
@@ -51,8 +51,10 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                 return await Task.FromResult(new ApiResponse(false));
 
             existing.Name = obj.Name;
-            existing.GraphColor = obj.GraphColor;
-            existing.ShowOnDashboard = obj.ShowOnDashboard;
+            existing.CountryId = obj.CountryId;
+            existing.GeneralEnquiryPhoneNumber = obj.GeneralEnquiryPhoneNumber;
+            existing.Website = obj.Website;
+
             return await Task.FromResult(new ApiResponse(true));
         }
 
