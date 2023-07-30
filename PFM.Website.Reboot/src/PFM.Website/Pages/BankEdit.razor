@@ -64,12 +64,28 @@ else
             <InputFile OnChange="@LoadBankIcon"></InputFile>
             @if (ImageUri != null)
             {
-                <img src="@ImageUri" style="width:35px" />
-                <img src="@ImageUri" style="width:50px" />
+                <br /><br />
+                <div class="form-group" id="IconPathPreviewDiv">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10">
+                        <table>
+                            <tr>
+                                <td>
+                                    <img id="IconPathPreview50" src="@ImageUri" width="50" height="50" />
+                                </td>
+                                <td>
+                                    <img id="IconPathPreview18" src="@ImageUri" width="18" height="18" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             }
         </div>
         <br />
     </div>
+    <br />
+    <br />
     <br />
     <br />
     <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
@@ -81,7 +97,7 @@ else
     [Parameter]
     public int? Id { get; set; }
 
-    private BankModel m = new BankModel() { GeneralEnquiryPhoneNumber = "00000000000" };
+    private BankModel m = new BankModel() { GeneralEnquiryPhoneNumber = "00000000000", CountryId = 1, Website = "https://website.com" };
     private IList<CountryModel> AvailableCountries = new List<CountryModel>();
     private string ImageUri;
 
