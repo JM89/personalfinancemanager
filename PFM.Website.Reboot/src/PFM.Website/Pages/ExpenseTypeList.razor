@@ -1,5 +1,6 @@
 ﻿@page "/expense-types"
 @using PFM.Website.Services
+@using PFM.Website.Models
 @inject ExpenseTypeService ExpenseTypeService
 @inject NavigationManager NavigationManager
 
@@ -62,7 +63,7 @@ else
 }
 
 @code {
-    private PFM.Api.Contracts.ExpenseType.ExpenseTypeList[]? expenseTypes;
+    private List<ExpenseTypeModel> expenseTypes = new List<ExpenseTypeModel>();
 
     protected override async Task OnInitializedAsync()
     {

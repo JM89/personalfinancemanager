@@ -1,83 +1,55 @@
-﻿using Api.Contracts.Shared;
-using Newtonsoft.Json;
+﻿using AutoMapper;
 using PFM.Api.Contracts.ExpenseType;
 using PFM.Website.ExternalServices;
+using PFM.Website.Models;
 
 namespace PFM.Website.Services
 {
-    public class ExpenseTypeService
+    public class ExpenseTypeService: CoreService
     {
-        private readonly IExpenseTypeApi _expenseTypeApi;
-        private readonly Serilog.ILogger _logger;
+        private readonly IExpenseTypeApi _api;
 
-        public ExpenseTypeService(Serilog.ILogger logger, IExpenseTypeApi expenseTypeApi)
+        public ExpenseTypeService(Serilog.ILogger logger, IMapper mapper, IExpenseTypeApi api)
+            : base(logger, mapper)
         {
-            _logger = logger;
-            _expenseTypeApi = expenseTypeApi;
+            _api = api;
         }
 
-        public async Task<ExpenseTypeList[]> GetAll()
+        public async Task<List<ExpenseTypeModel>> GetAll()
         {
-            var apiResponse = await _expenseTypeApi.Get();
-
-            var results = ReadApiResponse<List<ExpenseTypeList>>(apiResponse);
-
-            return await Task.FromResult(results.ToArray());
+            var apiResponse = await _api.Get();
+            var response = ReadApiResponse<List<ExpenseTypeList>>(apiResponse) ?? new List<ExpenseTypeList>();
+            return response.Select(_mapper.Map<ExpenseTypeModel>).ToList();
         }
 
-        public async Task<ExpenseTypeDetails?> GetById(int id)
+        public async Task<ExpenseTypeModel> GetById(int id)
         {
-            var apiResponse = await _expenseTypeApi.Get(id);
-
-            var result = ReadApiResponse<ExpenseTypeDetails>(apiResponse);
-
-            return await Task.FromResult(result);
+            var apiResponse = await _api.Get(id);
+            var item = ReadApiResponse<ExpenseTypeDetails>(apiResponse);
+            return _mapper.Map<ExpenseTypeModel>(item);
         }
 
-        public async Task<bool> Create(ExpenseTypeDetails expenseType)
+        public async Task<bool> Create(ExpenseTypeModel model)
         {
-            var apiResponse = await _expenseTypeApi.Create(expenseType);
-
+            var request = _mapper.Map<ExpenseTypeDetails>(model);
+            var apiResponse = await _api.Create(request);
             var result = ReadApiResponse<bool>(apiResponse);
-
-            return await Task.FromResult(result);
+            return result;
         }
 
-        public async Task<bool> Edit(int id, ExpenseTypeDetails expenseType)
+        public async Task<bool> Edit(int id, ExpenseTypeModel model)
         {
-            var apiResponse = await _expenseTypeApi.Edit(id, expenseType);
-
+            var request = _mapper.Map<ExpenseTypeDetails>(model);
+            var apiResponse = await _api.Edit(id, request);
             var result = ReadApiResponse<bool>(apiResponse);
-
-            return await Task.FromResult(result);
+            return result;
         }
 
         public async Task<bool> Delete(int id)
         {
-            var apiResponse = await _expenseTypeApi.Delete(id);
-
+            var apiResponse = await _api.Delete(id);
             var result = ReadApiResponse<bool>(apiResponse);
-
-            return await Task.FromResult(result);
-
-        }
-
-        private TResult? ReadApiResponse<TResult>(ApiResponse apiResponse)
-        {
-            if (apiResponse.Data == null)
-            {
-                _logger.Error("No data returned");
-                return default(TResult);
-            }
-
-            _logger.Information("Read API Response of type {Type}", apiResponse.Data.GetType());
-
-            if (typeof(TResult) == typeof(bool) && bool.TryParse(apiResponse.Data.ToString(), out bool bResult))
-            {
-                return (TResult)Convert.ChangeType(bResult, typeof(TResult));
-            }
-
-            return JsonConvert.DeserializeObject<TResult>(apiResponse.Data.ToString() ?? "");
+            return result;
         }
     }
 }

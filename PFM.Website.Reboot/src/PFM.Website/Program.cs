@@ -1,5 +1,7 @@
-﻿using PFM.Website.Configurations;
+﻿using AutoMapper;
+using PFM.Website.Configurations;
 using PFM.Website.Services;
+using PFM.Website.Services.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,7 @@ builder.Services.AddTransient<AuthHeaderHandler>();
 
 builder.Services
     .AddAuth(builder.Configuration)
+    .AddObjectMapper()
     .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName)
     .AddPfmApi(builder.Configuration, builder.Environment.EnvironmentName != "Production");
 

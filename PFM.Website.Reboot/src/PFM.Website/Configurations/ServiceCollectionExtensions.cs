@@ -7,6 +7,9 @@ using PFM.Website.ExternalServices;
 using PFM.Website.ExternalServices.InMemoryStorage;
 using Serilog;
 using Refit;
+using AutoMapper;
+using PFM.Website.Services.Mappers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PFM.Website.Configurations
 {
@@ -110,6 +113,19 @@ namespace PFM.Website.Configurations
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddObjectMapper(this IServiceCollection services)
+        {
+            var configuration = new MapperConfiguration(cfg => {
+                cfg.AddProfile<ModelToResponseProfile>();
+                cfg.AddProfile<RequestToModelProfile>();
+            });
+
+            services.AddSingleton(configuration);
+            services.AddSingleton<IMapper>(configuration.CreateMapper());
 
             return services;
         }
