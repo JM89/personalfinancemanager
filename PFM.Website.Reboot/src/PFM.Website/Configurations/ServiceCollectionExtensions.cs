@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using PFM.Website.ExternalServices;
 using PFM.Website.ExternalServices.InMemoryStorage;
+using Serilog;
 using Refit;
 
 namespace PFM.Website.Configurations
@@ -56,7 +57,18 @@ namespace PFM.Website.Configurations
             return services;
 		}
 
+        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, string environmentName)
+        {
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("Environment", environmentName)
+                .CreateLogger();
 
+            services.AddSingleton(Log.Logger);
+
+            return services;
+        }
 
         public static IServiceCollection AddPfmApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
         {

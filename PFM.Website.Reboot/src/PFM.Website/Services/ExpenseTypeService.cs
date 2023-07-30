@@ -8,20 +8,17 @@ namespace PFM.Website.Services
     public class ExpenseTypeService
     {
         private readonly IExpenseTypeApi _expenseTypeApi;
+        private readonly Serilog.ILogger _logger;
 
-        public ExpenseTypeService(IExpenseTypeApi expenseTypeApi)
+        public ExpenseTypeService(Serilog.ILogger logger, IExpenseTypeApi expenseTypeApi)
         {
+            _logger = logger;
             _expenseTypeApi = expenseTypeApi;
         }
 
         public async Task<ExpenseTypeList[]> GetAll()
         {
             var apiResponse = await _expenseTypeApi.Get();
-
-            if (apiResponse.Data == null)
-            {
-                throw new NotImplementedException("todo");
-            }
 
             var results = ReadApiResponse<List<ExpenseTypeList>>(apiResponse);
 
@@ -31,11 +28,6 @@ namespace PFM.Website.Services
         public async Task<ExpenseTypeDetails?> GetById(int id)
         {
             var apiResponse = await _expenseTypeApi.Get(id);
-
-            if (apiResponse.Data == null)
-            {
-                throw new NotImplementedException("todo");
-            }
 
             var result = ReadApiResponse<ExpenseTypeDetails>(apiResponse);
 
@@ -74,15 +66,18 @@ namespace PFM.Website.Services
         {
             if (apiResponse.Data == null)
             {
-                throw new NotImplementedException();
+                _logger.Error("No data returned");
+                return default(TResult);
             }
+
+            _logger.Information("Read API Response of type {Type}", apiResponse.Data.GetType());
 
             if (typeof(TResult) == typeof(bool) && bool.TryParse(apiResponse.Data.ToString(), out bool bResult))
             {
                 return (TResult)Convert.ChangeType(bResult, typeof(TResult));
             }
 
-            return JsonConvert.DeserializeObject<TResult>(apiResponse.Data.ToString());
+            return JsonConvert.DeserializeObject<TResult>(apiResponse.Data.ToString() ?? "");
         }
     }
 }
