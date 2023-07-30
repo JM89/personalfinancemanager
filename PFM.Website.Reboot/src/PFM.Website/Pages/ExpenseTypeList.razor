@@ -25,45 +25,53 @@
 }
 else
 {
-<table class="table">
-    <colgroup>
-        <col width="3%" />
-        <col width="70%" />
-        <col width="17%" />
-        <col width="10%" />
-    </colgroup>
-    <thead>
-        <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Show On Dashboard</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var expenseType in expenseTypes)
-        {
+    <table class="table">
+        <colgroup>
+            <col width="3%" />
+            <col width="70%" />
+            <col width="17%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
             <tr>
-                <td>
-                    <svg width="20" height="10">
-                        <rect width="20" height="10" style="fill:#@expenseType.GraphColor;stroke-width:1;stroke:rgb(0,0,0)" />
-                    </svg>
-                </td>
-                <td>@expenseType.Name</td>
-                <td>
-                    <input id="showOnDashboard" type="checkbox" @bind="@expenseType.ShowOnDashboard" disabled>
-                </td>
-                <td>
-                    <button class="btn btn-light btn-sm" @onclick="(() => Edit(expenseType.Id))"><i class="fa-solid fa-pencil"></i></button>
-                </td>
+                <th></th>
+                <th>Name</th>
+                <th>Show On Dashboard</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var expenseType in expenseTypes)
+            {
+                <tr>
+                    <td>
+                        <svg width="20" height="10">
+                            <rect width="20" height="10" style="fill:#@expenseType.GraphColor;stroke-width:1;stroke:rgb(0,0,0)" />
+                        </svg>
+                    </td>
+                    <td>@expenseType.Name</td>
+                    <td>
+                        <input id="showOnDashboard" type="checkbox" @bind="@expenseType.ShowOnDashboard" disabled>
+                    </td>
+                    <td>
+                        <button class="btn btn-light btn-sm" @onclick="(() => Edit(expenseType.Id))"><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn btn-light btn-sm" @onclick="(() => Delete(expenseType))"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+             ConfirmationMessage=@($"Are you sure you want to delete \"{selectedExpenseType.Name}\"?")>
+    </Confirm>
+
 }
 
 @code {
+
     private List<ExpenseTypeModel> expenseTypes = new List<ExpenseTypeModel>();
+    private ExpenseTypeModel selectedExpenseType = new ExpenseTypeModel();
+    protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,6 +91,22 @@ else
             return;
         }
         NavigationManager.NavigateTo($"/expense-types/edit/{id}");
+    }
+
+
+    protected void Delete(ExpenseTypeModel refExpenseType)
+    {
+        selectedExpenseType = refExpenseType;
+        DeleteConfirmation.Show();
+    }
+
+    protected async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed && selectedExpenseType.Id.HasValue)
+        {
+            await ExpenseTypeService.Delete(selectedExpenseType.Id.Value);
+            NavigationManager.NavigateTo("/expense-types", true);
+        }
     }
 }
 

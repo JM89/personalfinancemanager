@@ -53,24 +53,12 @@ else
     <br />
     <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
     <button type="submit" class="btn btn-primary">Save</button>
-    @if (Id != null)
-    {
-        <br />
-        <br />
-        <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
-    }
 </EditForm>
-
-<Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
-         ConfirmationMessage=@($"Are you sure you want to delete \"{expenseType.Name}\"?")>
-</Confirm>
 
 @code {
 
     [Parameter]
     public int? Id { get; set; }
-
-    protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
 
     private ExpenseTypeModel expenseType = new ExpenseTypeModel() { GraphColor = "E5F0F4" };
 
@@ -105,20 +93,6 @@ else
         }
         if (result)
         {
-            NavigationManager.NavigateTo("/expense-types");
-        }
-    }
-
-    protected void Delete()
-    {
-        DeleteConfirmation.Show();
-    }
-
-    protected async Task ConfirmDelete(bool deleteConfirmed)
-    {
-        if (deleteConfirmed && expenseType.Id.HasValue)
-        {
-            await ExpenseTypeService.Delete(expenseType.Id.Value);
             NavigationManager.NavigateTo("/expense-types");
         }
     }
