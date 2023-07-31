@@ -62,13 +62,24 @@ else
         <label for="bank-icon" class="col-sm-2 col-form-label">Bank Icon</label>
         <div class="col-sm-10">
             <InputFile OnChange="@LoadBankIcon"></InputFile>
-            @if (m.IconPath != null)
-            {
-                <br /><br />
-                <div class="form-group" id="IconPathPreviewDiv">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-10">
-                        <table>
+            <br /><br />
+            <div class="form-group" id="IconPathPreviewDiv">
+                <div class="col-md-2"></div>
+                <div class="col-md-10">
+                    <table>
+                        @if (m.RenderedIcon != null)
+                        {
+                            <tr>
+                                <td>
+                                    <img id="IconPathPreview50" src="@m.RenderedIcon" width="50" height="50" />
+                                </td>
+                                <td>
+                                    <img id="IconPathPreview18" src="@m.RenderedIcon" width="18" height="18" />
+                                </td>
+                            </tr>
+                        }
+                        else if (m.IconPath != null)
+                        {
                             <tr>
                                 <td>
                                     <img id="IconPathPreview50" src="@m.IconPath.Replace("./wwwroot","")" width="50" height="50" />
@@ -77,10 +88,11 @@ else
                                     <img id="IconPathPreview18" src="@m.IconPath.Replace("./wwwroot","")" width="18" height="18" />
                                 </td>
                             </tr>
-                        </table>
-                    </div>
+                        }
+                        
+                    </table>
                 </div>
-            }
+            </div>
         </div>
         <br />
     </div>
@@ -151,7 +163,7 @@ else
         BankIcon = image;
 
         //convert stream to base64
-        m.IconPath = $"data:image/png;base64,{Convert.ToBase64String(ms.ToArray())}";
+        m.RenderedIcon = $"data:image/png;base64,{Convert.ToBase64String(ms.ToArray())}";
         StateHasChanged();
     }
 }

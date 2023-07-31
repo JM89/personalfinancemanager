@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿using Amazon;
+using Amazon.S3;
 using PFM.Website.Configurations;
 using PFM.Website.Persistence;
 using PFM.Website.Persistence.Implementations;
@@ -18,9 +19,18 @@ builder.Services.AddSingleton(appSettings);
 
 if (appSettings.UseRemoteStorageForBankIcons)
 {
-    builder.Services
-        .AddDefaultAWSOptions(builder.Configuration.GetAWSOptions())
-        .AddAWSService<IAmazonS3>();
+    var s3Config = new AmazonS3Config() {
+        RegionEndpoint = RegionEndpoint.GetBySystemName(appSettings.AwsRegion)
+    };
+
+    if (!string.IsNullOrEmpty(appSettings.AwsEndpointUrl))
+    {
+        s3Config.ServiceURL = appSettings.AwsEndpointUrl;
+        s3Config.AuthenticationRegion = appSettings.AwsRegion;
+        s3Config.ForcePathStyle = true;
+    }
+
+    builder.Services.AddSingleton<IAmazonS3>(new AmazonS3Client(s3Config));
 
     builder.Services
         .AddSingleton<IObjectStorageService, AwsS3Service>();

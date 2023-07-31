@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Amazon.S3;
 using Amazon.S3.Model;
-using Amazon.S3.Transfer;
 using PFM.Website.Persistence.Models;
 
 namespace PFM.Website.Persistence.Implementations
@@ -66,7 +65,7 @@ namespace PFM.Website.Persistence.Implementations
                         return new TransferFile
                         {
                             Name = p.FileName,
-                            Content = result.ToArray()
+                            Stream = result
                         };
                     }
                 }
@@ -86,18 +85,19 @@ namespace PFM.Website.Persistence.Implementations
         public async Task<string> UploadFileAsync(ObjectStorageParams p, Stream file)
         {
             try
-            { 
-                var transferRequest = new TransferUtilityUploadRequest()
+            {
+                var objs = await _client.ListObjectsV2Async(new ListObjectsV2Request() {
+                    BucketName= p.Location
+                });
+
+                var request = new PutObjectRequest()
                 {
-                    InputStream = file,
                     BucketName = p.Location,
-                    Key = p.FileName
+                    Key = p.FileName,
+                    InputStream = file
                 };
 
-                transferRequest.Metadata.Add("x-amz-meta-title", p.FileName);
-
-                var fileTransferUtility = new TransferUtility(_client);
-                await fileTransferUtility.UploadAsync(transferRequest);
+                await _client.PutObjectAsync(request);
 
                 return p.FileName;
             }

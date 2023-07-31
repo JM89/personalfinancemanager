@@ -26,14 +26,25 @@ namespace PFM.Website.Services
         {
             var apiResponse = await _api.Get();
             var response = ReadApiResponse<List<BankList>>(apiResponse) ?? new List<BankList>();
-            return response.Select(_mapper.Map<BankListModel>).ToList();
+            var models = response.Select(_mapper.Map<BankListModel>).ToList();
+            var dl = await DownloadBankIcons(models.Select(x => x.IconPath).ToArray());
+            foreach (var model in models)
+            {
+                model.RenderedIcon = dl.ContainsKey(model.IconPath) ? dl[model.IconPath] : null;
+            }
+            return models;
         }
 
         public async Task<BankEditModel> GetById(int id)
         {
             var apiResponse = await _api.Get(id);
-            var item = ReadApiResponse<BankDetails>(apiResponse);
-            return _mapper.Map<BankEditModel>(item);
+            var item = ReadApiResponse<BankDetails>(apiResponse) ?? new BankDetails();
+            var model = _mapper.Map<BankEditModel>(item);
+
+            var dl = await DownloadBankIcons(new string[] { model.IconPath });
+            model.RenderedIcon = dl.ContainsKey(model.IconPath) ? dl[model.IconPath] : null;
+
+            return model;
         }
 
         public async Task<bool> Create(BankEditModel model, IBrowserFile bankIconFileInfo)
@@ -75,10 +86,35 @@ namespace PFM.Website.Services
 
         private async Task<string> UploadBankIcon(IBrowserFile bankIconFileInfo)
         {
-            var bankIconParams = new ObjectStorageParams(bankIconFileInfo.ContentType, _settings.BankIconLocation, string.Format("{0}.png", Guid.NewGuid()));
+            var bankIconParams = new ObjectStorageParams(_settings.BankIconLocation, string.Format("{0}.png", Guid.NewGuid()));
             using Stream imageStream = bankIconFileInfo.OpenReadStream(1024 * 1024 * 10);
             var bankIconPath = await _objectStorageService.UploadFileAsync(bankIconParams, imageStream);
             return bankIconPath;
+        }
+
+        private async Task<IDictionary<string,string?>> DownloadBankIcons(string[] iconPaths)
+        {
+            var dict = new Dictionary<string, string?>();
+
+            if (!_settings.UseRemoteStorageForBankIcons)
+            {
+                return dict;
+            }
+
+            foreach (var iconPath in iconPaths)
+            {
+                var p = new ObjectStorageParams(_settings.BankIconLocation, iconPath);
+                try
+                {
+                    var dl = await _objectStorageService.DownloadFileAsync(p);
+                    dict.Add(iconPath, $"data:image/png;base64,{Convert.ToBase64String(dl.Stream.ToArray())}");
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Image {IconPath} could not be downloaded", iconPath);
+                }
+            }
+            return dict;
         }
 
         public async Task<bool> Delete(int id)

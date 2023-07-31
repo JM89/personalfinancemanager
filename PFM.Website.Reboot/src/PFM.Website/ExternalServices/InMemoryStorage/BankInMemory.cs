@@ -19,7 +19,8 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             for (int i = 0; i <= 5; i++) {
                 var item = fixture.Build<BankDetails>()
                     .With(x => x.CountryId, countries.ElementAt(rng.Next(countries.Count())).Id)
-                    .With(x => x.GeneralEnquiryPhoneNumber, i.ToString().PadLeft(11, '0'));
+                    .With(x => x.GeneralEnquiryPhoneNumber, i.ToString().PadLeft(11, '0'))
+                    .With(x => x.IconPath, "/Resources/dashboard-addExpenditures.png");
                 _storage.Add(item.Create());
             }
         }

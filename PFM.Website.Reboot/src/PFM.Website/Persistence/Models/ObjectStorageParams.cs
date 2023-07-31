@@ -7,11 +7,8 @@ namespace PFM.Website.Persistence.Models
 
         public string FileName { get; }
 
-        public string ContentType { get; }
-
-        public ObjectStorageParams(string contentType, string bucket, string filename)
+        public ObjectStorageParams(string bucket, string filename)
         {
-            ContentType = contentType;
             Location = bucket;
             FileName = filename;
         }

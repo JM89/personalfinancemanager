@@ -3,7 +3,7 @@
 	public class TransferFile
 	{
         public string Name { get; set; }
-        public byte[] Content { get; set; }
+        public MemoryStream Stream { get; set; }
     }
 }
 

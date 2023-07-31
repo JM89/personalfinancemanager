@@ -25,6 +25,8 @@ namespace PFM.Website.Models
 
         public string IconPath { get; set; }
 
+        public string? RenderedIcon { get; set; }
+
         public DisplayIcon DisplayIconFlags { get; set; }
     }
 

@@ -45,7 +45,14 @@ else
             {
                 <tr>
                     <td>
-                        <img src="@m.IconPath.Replace("./wwwroot","")" width="18" height="18" />
+                        @if (m.RenderedIcon != null)
+                        {
+                            <img src="@m.RenderedIcon" width="18" height="18" />
+                        }
+                        else
+                        {
+                            <img src="@m.IconPath.Replace("./wwwroot","")" width="18" height="18" />
+                        }
                     </td>
                     <td>@m.Name</td>
                     <td>@m.CountryName</td>
