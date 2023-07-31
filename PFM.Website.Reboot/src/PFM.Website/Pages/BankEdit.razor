@@ -62,7 +62,7 @@ else
         <label for="bank-icon" class="col-sm-2 col-form-label">Bank Icon</label>
         <div class="col-sm-10">
             <InputFile OnChange="@LoadBankIcon"></InputFile>
-            @if (ImageUri != null)
+            @if (m.IconPath != null)
             {
                 <br /><br />
                 <div class="form-group" id="IconPathPreviewDiv">
@@ -71,10 +71,10 @@ else
                         <table>
                             <tr>
                                 <td>
-                                    <img id="IconPathPreview50" src="@ImageUri" width="50" height="50" />
+                                    <img id="IconPathPreview50" src="@m.IconPath.Replace("./wwwroot","")" width="50" height="50" />
                                 </td>
                                 <td>
-                                    <img id="IconPathPreview18" src="@ImageUri" width="18" height="18" />
+                                    <img id="IconPathPreview18" src="@m.IconPath.Replace("./wwwroot","")" width="18" height="18" />
                                 </td>
                             </tr>
                         </table>
@@ -97,9 +97,9 @@ else
     [Parameter]
     public int? Id { get; set; }
 
-    private BankModel m = new BankModel() { GeneralEnquiryPhoneNumber = "00000000000", CountryId = 1, Website = "https://website.com" };
+    private BankEditModel m = new BankEditModel() { GeneralEnquiryPhoneNumber = "00000000000", CountryId = 1, Website = "https://website.com" };
     private IList<CountryModel> AvailableCountries = new List<CountryModel>();
-    private string ImageUri;
+    private IBrowserFile BankIcon;
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,11 +126,11 @@ else
         bool result = false;
         if (!Id.HasValue)
         {
-            result = await BankService.Create(m);
+            result = await BankService.Create(m, BankIcon);
         }
         else
         {
-            result = await BankService.Edit(Id.Value, m);
+            result = await BankService.Edit(Id.Value, m, BankIcon);
         }
         if (result)
         {
@@ -148,8 +148,10 @@ else
         //copy imageStream to Memory stream
         await imageStream.CopyToAsync(ms);
 
+        BankIcon = image;
+
         //convert stream to base64
-        ImageUri = $"data:image/png;base64,{Convert.ToBase64String(ms.ToArray())}";
+        m.IconPath = $"data:image/png;base64,{Convert.ToBase64String(ms.ToArray())}";
         StateHasChanged();
     }
 }

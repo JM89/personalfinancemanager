@@ -23,7 +23,7 @@ To generate a token, you can use the pre-existing user 'jess' and 'pfm-bank-api'
 ```bash
 curl -v -L -X POST "http://localhost:8080/realms/pfm/protocol/openid-connect/token" \
 -H 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'client_id=pfm-bank-api' \
+--data-urlencode 'client_id=pfm' \
 --data-urlencode 'grant_type=password' \
 --data-urlencode 'client_secret=<secret>' \
 --data-urlencode 'scope=openid' \

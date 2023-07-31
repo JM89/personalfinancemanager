@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PFM.Api.Contracts.ExpenseType;
+using PFM.Website.Configurations;
 using PFM.Website.ExternalServices;
 using PFM.Website.Models;
 
@@ -9,8 +10,8 @@ namespace PFM.Website.Services
     {
         private readonly IExpenseTypeApi _api;
 
-        public ExpenseTypeService(Serilog.ILogger logger, IMapper mapper, IExpenseTypeApi api)
-            : base(logger, mapper)
+        public ExpenseTypeService(Serilog.ILogger logger, IMapper mapper, ApplicationSettings settings, IExpenseTypeApi api)
+            : base(logger, mapper, settings)
         {
             _api = api;
         }

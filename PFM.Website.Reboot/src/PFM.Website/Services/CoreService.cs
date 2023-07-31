@@ -1,6 +1,7 @@
 ﻿using Api.Contracts.Shared;
 using AutoMapper;
 using Newtonsoft.Json;
+using PFM.Website.Configurations;
 
 namespace PFM.Website.Services
 {
@@ -8,11 +9,13 @@ namespace PFM.Website.Services
 	{
         protected readonly Serilog.ILogger _logger;
         protected IMapper _mapper;
+        protected readonly ApplicationSettings _settings;
 
-        public CoreService(Serilog.ILogger logger, IMapper mapper)
+        public CoreService(Serilog.ILogger logger, IMapper mapper, ApplicationSettings settings)
         {
             _logger = logger;
             _mapper = mapper;
+            _settings = settings;
         }
 
         protected TResult? ReadApiResponse<TResult>(ApiResponse apiResponse)

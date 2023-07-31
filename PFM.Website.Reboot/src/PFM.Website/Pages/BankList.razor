@@ -27,12 +27,16 @@ else
 {
     <table class="table">
         <colgroup>
-            <col width="90%" />
+            <col width="3%" />
+            <col width="40%" />
+            <col width="40%" />
             <col width="10%" />
         </colgroup>
         <thead>
             <tr>
+                <th></th>
                 <th>Name</th>
+                <th>Country</th>
                 <th></th>
             </tr>
         </thead>
@@ -40,7 +44,11 @@ else
             @foreach (var m in models)
             {
                 <tr>
+                    <td>
+                        <img src="@m.IconPath.Replace("./wwwroot","")" width="18" height="18" />
+                    </td>
                     <td>@m.Name</td>
+                    <td>@m.CountryName</td>
                     <td>
                         <button class="btn btn-light btn-sm" @onclick="(() => Edit(m.Id))"><i class="fa-solid fa-pencil"></i></button>
                         <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))"><i class="fa-solid fa-trash"></i></button>
@@ -57,8 +65,8 @@ else
 
 @code {
 
-    private List<BankModel> models = new List<BankModel>();
-    private BankModel selected = new BankModel();
+    private List<BankListModel> models = new List<BankListModel>();
+    private BankListModel selected = new BankListModel();
     protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -82,7 +90,7 @@ else
     }
 
 
-    protected void Delete(BankModel referenced)
+    protected void Delete(BankListModel referenced)
     {
         selected = referenced;
         DeleteConfirmation.Show();
@@ -90,9 +98,9 @@ else
 
     protected async Task ConfirmDelete(bool deleteConfirmed)
     {
-        if (deleteConfirmed && selected.Id.HasValue)
+        if (deleteConfirmed)
         {
-            await BankService.Delete(selected.Id.Value);
+            await BankService.Delete(selected.Id);
             NavigationManager.NavigateTo("/banks", true);
         }
     }

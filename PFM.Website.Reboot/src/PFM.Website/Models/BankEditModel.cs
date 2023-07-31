@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PFM.Website.Models
 {
-	public class BankModel
+	public class BankEditModel
 	{
         public int? Id { get; set; }
 

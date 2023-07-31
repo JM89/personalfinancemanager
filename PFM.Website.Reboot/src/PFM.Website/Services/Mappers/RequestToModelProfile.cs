@@ -8,8 +8,9 @@ namespace PFM.Website.Services.Mappers
 		{
             CreateMap<Models.ExpenseTypeModel, PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>();
             CreateMap<Models.CountryModel, PFM.Bank.Api.Contracts.Country.CountryDetails>();
-            CreateMap<Models.BankModel, PFM.Bank.Api.Contracts.Bank.BankDetails>();
+            CreateMap<Models.BankEditModel, PFM.Bank.Api.Contracts.Bank.BankDetails>();
+            CreateMap<Models.BankListModel, PFM.Bank.Api.Contracts.Bank.BankDetails>();
         }
-	}
+    }
 }
 

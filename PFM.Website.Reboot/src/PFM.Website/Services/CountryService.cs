@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PFM.Bank.Api.Contracts.Country;
+using PFM.Website.Configurations;
 using PFM.Website.ExternalServices;
 using PFM.Website.Models;
 
@@ -9,8 +10,8 @@ namespace PFM.Website.Services
     {
         private readonly ICountryApi _api;
 
-        public CountryService(Serilog.ILogger logger, IMapper mapper, ICountryApi api)
-            : base(logger, mapper)
+        public CountryService(Serilog.ILogger logger, IMapper mapper, ApplicationSettings settings, ICountryApi api)
+            : base(logger, mapper, settings)
         {
             _api = api;
         }

@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Api.Contracts.Shared;
+﻿using Api.Contracts.Shared;
 using AutoFixture;
 using Newtonsoft.Json;
 using PFM.Bank.Api.Contracts.Bank;
@@ -54,6 +53,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             existing.CountryId = obj.CountryId;
             existing.GeneralEnquiryPhoneNumber = obj.GeneralEnquiryPhoneNumber;
             existing.Website = obj.Website;
+            existing.IconPath = obj.IconPath;
 
             return await Task.FromResult(new ApiResponse(true));
         }
