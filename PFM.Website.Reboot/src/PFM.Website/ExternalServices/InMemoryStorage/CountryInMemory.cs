@@ -10,11 +10,10 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
         
         public CountryInMemory()
         {
-            _storage = Enumerable.Range(1, 5).Select(index => new CountryDetails
-            {
-                Id = index,
-                Name = $"Country #{index}"
-            }).ToList();
+            _storage = new List<CountryDetails>() {
+                new CountryDetails() { Id = 1, Name = "United Kingdom" },
+                new CountryDetails() { Id = 2, Name = "France" }
+            };
         }
 
         public async Task<ApiResponse> Get()

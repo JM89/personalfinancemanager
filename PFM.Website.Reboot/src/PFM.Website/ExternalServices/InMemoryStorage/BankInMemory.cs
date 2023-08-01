@@ -7,7 +7,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
     public class BankInMemory : IBankApi
     {
-        private IList<BankDetails> _storage;
+        internal IList<BankDetails> _storage;
         
         public BankInMemory()
         {
@@ -18,6 +18,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             _storage = new List<BankDetails>();
             for (int i = 0; i <= 5; i++) {
                 var item = fixture.Build<BankDetails>()
+                    .With(x => x.Id, i)
                     .With(x => x.CountryId, countries.ElementAt(rng.Next(countries.Count())).Id)
                     .With(x => x.GeneralEnquiryPhoneNumber, i.ToString().PadLeft(11, '0'))
                     .With(x => x.IconPath, "/Resources/dashboard-addExpenditures.png");

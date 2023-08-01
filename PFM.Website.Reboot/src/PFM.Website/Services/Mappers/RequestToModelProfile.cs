@@ -10,6 +10,7 @@ namespace PFM.Website.Services.Mappers
             CreateMap<Models.CountryModel, PFM.Bank.Api.Contracts.Country.CountryDetails>();
             CreateMap<Models.BankEditModel, PFM.Bank.Api.Contracts.Bank.BankDetails>();
             CreateMap<Models.BankListModel, PFM.Bank.Api.Contracts.Bank.BankDetails>();
+            CreateMap<Models.BankAccountEditModel, PFM.Bank.Api.Contracts.Account.AccountDetails>();
         }
     }
 }

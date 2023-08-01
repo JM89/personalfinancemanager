@@ -16,9 +16,9 @@ namespace PFM.Website.Services
         private readonly IObjectStorageService _objectStorageService;
         private readonly ParallelOptions _defaultParallelOptions;
 
-        public BankService(Serilog.ILogger logger, IMapper mapper, ApplicationSettings settings,
+        public BankService(Serilog.ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, ApplicationSettings settings,
             IBankApi api, IObjectStorageService objectStorageService)
-            : base(logger, mapper, settings)
+            : base(logger, mapper, httpContextAccessor, settings)
         {
             _api = api;
             _objectStorageService = objectStorageService;

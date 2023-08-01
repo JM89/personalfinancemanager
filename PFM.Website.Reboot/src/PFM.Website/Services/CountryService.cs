@@ -10,8 +10,8 @@ namespace PFM.Website.Services
     {
         private readonly ICountryApi _api;
 
-        public CountryService(Serilog.ILogger logger, IMapper mapper, ApplicationSettings settings, ICountryApi api)
-            : base(logger, mapper, settings)
+        public CountryService(Serilog.ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, ApplicationSettings settings, ICountryApi api)
+            : base(logger, mapper, httpContextAccessor, settings)
         {
             _api = api;
         }

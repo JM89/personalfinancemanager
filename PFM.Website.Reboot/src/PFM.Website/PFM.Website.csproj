@@ -20,6 +20,7 @@
     <None Remove="Persistence\" />
     <None Remove="Persistence\Implementations\" />
     <None Remove="Persistence\Models\" />
+    <None Remove="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -33,6 +34,7 @@
     <Folder Include="Persistence\" />
     <Folder Include="Persistence\Implementations\" />
     <Folder Include="Persistence\Models\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="PFM.Api.Contracts" Version="4.3.0" />
@@ -69,6 +71,12 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Update="Pages\BankList.razor">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Pages\BankList %28copy%29.razor">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Pages\BankAccountList.razor">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>

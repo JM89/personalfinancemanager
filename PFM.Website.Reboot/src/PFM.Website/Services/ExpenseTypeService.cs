@@ -10,8 +10,8 @@ namespace PFM.Website.Services
     {
         private readonly IExpenseTypeApi _api;
 
-        public ExpenseTypeService(Serilog.ILogger logger, IMapper mapper, ApplicationSettings settings, IExpenseTypeApi api)
-            : base(logger, mapper, settings)
+        public ExpenseTypeService(Serilog.ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, ApplicationSettings settings, IExpenseTypeApi api)
+            : base(logger, mapper, httpContextAccessor, settings)
         {
             _api = api;
         }
