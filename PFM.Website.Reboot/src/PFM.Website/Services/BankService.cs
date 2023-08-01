@@ -119,8 +119,26 @@ namespace PFM.Website.Services
 
         public async Task<bool> Delete(int id)
         {
+            var existing = await GetById(id);
+            if (existing == null)
+                return false;
+
             var apiResponse = await _api.Delete(id);
             var result = ReadApiResponse<bool>(apiResponse);
+
+            if (result)
+            {
+                try
+                {
+                    var p = new ObjectStorageParams(_settings.BankIconLocation, existing.IconPath);
+                    await _objectStorageService.DeleteFileAsync(p);
+                }
+                catch(Exception ex)
+                {
+                    _logger.Error(ex, "Image {IconPath} could not be deleted", existing.IconPath);
+                }
+            }
+
             return result;
         }
     }
