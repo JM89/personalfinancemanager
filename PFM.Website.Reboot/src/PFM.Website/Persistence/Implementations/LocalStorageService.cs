@@ -13,7 +13,25 @@ namespace PFM.Website.Persistence.Implementations
 
         public Task DeleteFileAsync(ObjectStorageParams p)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var path = p.FileName;
+                if (File.Exists(path) && path.Contains(p.Location))
+                {
+                    File.Delete(path);
+                }
+                return Task.CompletedTask;
+            }
+            catch (IOException ex)
+            {
+                _logger.Error(ex, "IO exception");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unhandled exception");
+                throw;
+            }
         }
 
         public Task<TransferFile> DownloadFileAsync(ObjectStorageParams p)
@@ -32,7 +50,12 @@ namespace PFM.Website.Persistence.Implementations
                 }
                 return await Task.FromResult(path);
             }
-            catch(Exception ex)
+            catch (IOException ex)
+            {
+                _logger.Error(ex, "IO exception");
+                throw;
+            }
+            catch (Exception ex)
             {
                 _logger.Error(ex, "Unhandled exception");
                 throw;
