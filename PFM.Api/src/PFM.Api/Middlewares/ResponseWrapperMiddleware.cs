@@ -1,16 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Api.Contracts.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using PFM.CommonLibraries.Api.Contracts;
 using PFM.CommonLibraries.Services.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
-namespace PFM.CommonLibraries.Api.MiddleWares
+namespace PFM.Api.Middlewares
 {
     public class ResponseWrapperMiddleware
     {
@@ -107,3 +101,4 @@ namespace PFM.CommonLibraries.Api.MiddleWares
         }
     }
 }
+

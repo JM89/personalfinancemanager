@@ -62,7 +62,7 @@ namespace PFM.Api
             var app = builder.Build();
 
             app.UseMiddleware<TimedOperationMiddleware>();
-            app.UseMiddleware<ResponseWrapperMiddleware>();
+            app.UseMiddleware<PFM.Api.Middlewares.ResponseWrapperMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {
