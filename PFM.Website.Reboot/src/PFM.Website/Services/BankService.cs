@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Concurrent;
+using AutoMapper;
 using Microsoft.AspNetCore.Components.Forms;
 using PFM.Bank.Api.Contracts.Bank;
 using PFM.Website.Configurations;
@@ -13,13 +14,15 @@ namespace PFM.Website.Services
     {
         private readonly IBankApi _api;
         private readonly IObjectStorageService _objectStorageService;
-        
+        private readonly ParallelOptions _defaultParallelOptions;
+
         public BankService(Serilog.ILogger logger, IMapper mapper, ApplicationSettings settings,
             IBankApi api, IObjectStorageService objectStorageService)
             : base(logger, mapper, settings)
         {
             _api = api;
             _objectStorageService = objectStorageService;
+            _defaultParallelOptions = new ParallelOptions() { MaxDegreeOfParallelism = 4 };
         }
 
         public async Task<List<BankListModel>> GetAll()
@@ -94,26 +97,26 @@ namespace PFM.Website.Services
 
         private async Task<IDictionary<string,string?>> DownloadBankIcons(string[] iconPaths)
         {
-            var dict = new Dictionary<string, string?>();
+            var dict = new ConcurrentDictionary<string, string?>();
 
             if (!_settings.UseRemoteStorageForBankIcons)
             {
                 return dict;
             }
 
-            foreach (var iconPath in iconPaths)
+            await Parallel.ForEachAsync(iconPaths, _defaultParallelOptions, async (iconPath, ct) =>
             {
                 var p = new ObjectStorageParams(_settings.BankIconLocation, iconPath);
                 try
                 {
                     var dl = await _objectStorageService.DownloadFileAsync(p);
-                    dict.Add(iconPath, $"data:image/png;base64,{Convert.ToBase64String(dl.Stream.ToArray())}");
+                    dict.GetOrAdd(iconPath, $"data:image/png;base64,{Convert.ToBase64String(dl.Stream.ToArray())}");
                 }
                 catch (Exception ex)
                 {
                     _logger.Error(ex, "Image {IconPath} could not be downloaded", iconPath);
                 }
-            }
+            });
             return dict;
         }
 
