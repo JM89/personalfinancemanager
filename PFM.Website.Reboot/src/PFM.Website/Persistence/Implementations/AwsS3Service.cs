@@ -40,7 +40,7 @@ namespace PFM.Website.Persistence.Implementations
             }
         }
 
-        public async Task<TransferFile> DownloadFileAsync(ObjectStorageParams p)
+        public async Task<TransferFile?> DownloadFileAsync(ObjectStorageParams p)
         {
             try
             {

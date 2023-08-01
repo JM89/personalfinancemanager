@@ -1,4 +1,5 @@
-﻿using PFM.Website.Persistence.Models;
+﻿using System.IO;
+using PFM.Website.Persistence.Models;
 
 namespace PFM.Website.Persistence.Implementations
 {
@@ -34,9 +35,37 @@ namespace PFM.Website.Persistence.Implementations
             }
         }
 
-        public Task<TransferFile> DownloadFileAsync(ObjectStorageParams p)
+        public async Task<TransferFile?> DownloadFileAsync(ObjectStorageParams p)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // TODO: Store the bytes directly in database instead of re-loading in-memory for every banks here.
+                var path = p.FileName;
+                if (!path.Contains(p.Location))
+                {
+                    return null;
+                }
+                using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    var result = new MemoryStream();
+                    await fileStream.CopyToAsync(result);
+                    return new TransferFile
+                    {
+                        Name = p.FileName,
+                        Stream = result
+                    };
+                }
+            }
+            catch (IOException ex)
+            {
+                _logger.Error(ex, "IO exception");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unhandled exception");
+                throw;
+            }
         }
 
         public async Task<string> UploadFileAsync(ObjectStorageParams p, Stream file)

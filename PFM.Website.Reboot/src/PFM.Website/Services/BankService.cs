@@ -99,18 +99,16 @@ namespace PFM.Website.Services
         {
             var dict = new ConcurrentDictionary<string, string?>();
 
-            if (!_settings.UseRemoteStorageForBankIcons)
-            {
-                return dict;
-            }
-
             await Parallel.ForEachAsync(iconPaths, _defaultParallelOptions, async (iconPath, ct) =>
             {
                 var p = new ObjectStorageParams(_settings.BankIconLocation, iconPath);
                 try
                 {
                     var dl = await _objectStorageService.DownloadFileAsync(p);
-                    dict.GetOrAdd(iconPath, $"data:image/png;base64,{Convert.ToBase64String(dl.Stream.ToArray())}");
+                    if (dl != null)
+                    {
+                        dict.GetOrAdd(iconPath, $"data:image/png;base64,{Convert.ToBase64String(dl.Stream.ToArray())}");
+                    }
                 }
                 catch (Exception ex)
                 {
