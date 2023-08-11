@@ -45,6 +45,29 @@ namespace PFM.Website.Services
             var result = ReadApiResponse<bool>(apiResponse);
             return result;
         }
+
+        public async Task<BankAccountListModel?> GetCurrentAccount(int? selectedAccount = null)
+        {
+            var apiResponse = await _api.GetList(CurrentUserId);
+            var response = ReadApiResponse<List<AccountList>>(apiResponse) ?? new List<AccountList>();
+
+            AccountList? selected = null;
+            if (selectedAccount.HasValue)
+            {
+                selected = response.SingleOrDefault(x => x.Id == selectedAccount);
+            }
+            else
+            {
+                selected = response.Where(x => !x.IsSavingAccount).OrderBy(x => x.IsFavorite).FirstOrDefault();
+            }
+
+            if (selected == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<BankAccountListModel>(selected);
+        }
     }
 }
 

@@ -1,0 +1,91 @@
+﻿@page "/incomes/create/{accountId:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject IncomeService IncomeService
+@inject BankAccountService BankAccountService
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>Incomes</PageTitle>
+
+<h1>Create Incomes</h1>
+
+<div class="row">
+    <div class="col-lg-12">
+        @if (selectedBankAccount != null)
+        {
+            <div style="text-align: left">
+                <p>@selectedBankAccount?.Name</p>
+                <p>@selectedBankAccount?.DisplayedCurrentBalance</p>
+            </div>
+        }
+    </div>
+</div>
+
+<br/>
+<EditForm Model="m" OnSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <div class="col-sm-8 text-danger">
+        <ValidationSummary />
+    </div>
+    <div class="form-group row" style="height:50px">
+        <label for="name" class="col-sm-2 col-form-label">Description</label>
+        <div class="col-sm-10">
+            <InputText id="description" @bind-Value="m.Description" class="form-control"></InputText>
+        </div>
+        <br />
+    </div>
+    <div class="form-group row" style="height:50px">
+        <label for="cost" class="col-sm-2 col-form-label">Cost</label>
+        <div class="col-sm-10">
+            <InputNumber id="cost" @bind-Value="m.Cost" class="form-control"></InputNumber>
+        </div>
+        <br />
+    </div>
+    <div class="form-group row" style="height:50px">
+        <label for="date" class="col-sm-2 col-form-label">Date</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="date" value="@m.DateIncome.ToString("yyyy-MM-dd")" @onchange="@((e) => UpdateDate(e))" />
+        </div>
+        <br />
+    </div>
+    <br />
+    <br />
+    <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public int AccountId { get; set; }
+
+    private IncomeEditModel m = new IncomeEditModel() { DateIncome = DateTime.UtcNow };
+    private BankAccountListModel? selectedBankAccount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+    }
+
+    void Back()
+    {
+        NavigationManager.NavigateTo($"/incomes/list/{AccountId}");
+    }
+
+    async Task HandleSubmit()
+    {
+        bool result = await IncomeService.Create(AccountId, m);
+        if (result)
+        {
+            NavigationManager.NavigateTo($"/incomes/list/{AccountId}");
+        }
+    }
+
+    void UpdateDate(ChangeEventArgs e)
+    {
+        var selectedDate = e.Value ?? DateTime.UtcNow;
+        m.DateIncome = DateTime.Parse(selectedDate.ToString());
+    }
+}
+

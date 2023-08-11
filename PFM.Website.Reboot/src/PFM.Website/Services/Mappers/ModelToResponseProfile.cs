@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using PFM.Website.Models;
 
 namespace PFM.Website.Services.Mappers
 {
@@ -16,7 +15,10 @@ namespace PFM.Website.Services.Mappers
             CreateMap<PFM.Bank.Api.Contracts.Currency.CurrencyList, Models.CurrencyModel>();
             CreateMap<PFM.Bank.Api.Contracts.Currency.CurrencyDetails, Models.CurrencyModel>();
             CreateMap<PFM.Bank.Api.Contracts.Account.AccountList, Models.BankAccountListModel>();
+            CreateMap<PFM.Bank.Api.Contracts.Account.AccountDetails, Models.BankAccountListModel>();
             CreateMap<PFM.Bank.Api.Contracts.Account.AccountDetails, Models.BankAccountEditModel>();
+            CreateMap<PFM.Api.Contracts.Income.IncomeList, Models.IncomeListModel>();
+            CreateMap<PFM.Api.Contracts.Income.IncomeDetails, Models.IncomeEditModel>();
         }
     }
 }

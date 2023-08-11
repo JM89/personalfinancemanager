@@ -11,6 +11,9 @@ namespace PFM.Website.Services.Mappers
             CreateMap<Models.BankEditModel, PFM.Bank.Api.Contracts.Bank.BankDetails>();
             CreateMap<Models.BankListModel, PFM.Bank.Api.Contracts.Bank.BankDetails>();
             CreateMap<Models.BankAccountEditModel, PFM.Bank.Api.Contracts.Account.AccountDetails>();
+            CreateMap<Models.BankAccountListModel, PFM.Bank.Api.Contracts.Account.AccountDetails>();
+            CreateMap<Models.IncomeEditModel, PFM.Api.Contracts.Income.IncomeDetails>();
+            CreateMap<Models.IncomeListModel, PFM.Api.Contracts.Income.IncomeList>();
         }
     }
 }

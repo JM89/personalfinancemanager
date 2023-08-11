@@ -1,5 +1,4 @@
 ﻿using Api.Contracts.Shared;
-using AutoFixture;
 using Newtonsoft.Json;
 using PFM.Bank.Api.Contracts.Account;
 using PFM.Bank.Api.Contracts.Bank;
@@ -15,15 +14,31 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public BankAccountInMemory()
         {
-            var fixture = new Fixture();
-
             var rng = new Random();
             _storage = new List<AccountDetails>();
             for (int i = 0; i <= 5; i++) {
-                var item = fixture.Build<AccountDetails>()
-                    .With(x => x.BankId, _banks.ElementAt(rng.Next(_banks.Count())).Id)
-                    .With(x => x.CurrencyId, _currencies.ElementAt(rng.Next(_currencies.Count())).Id);
-                _storage.Add(item.Create());
+                var item = new AccountDetails() {
+                    Id = i,
+                    Name = $"Current account {i}",
+                    BankId = _banks.ElementAt(rng.Next(_banks.Count())).Id,
+                    CurrencyId = _currencies.ElementAt(rng.Next(_currencies.Count())).Id,
+                    IsFavorite = i == 0,
+                    IsSavingAccount = false
+                };
+                _storage.Add(item);
+            }
+            for (int i = 5; i <= 10; i++)
+            {
+                var item = new AccountDetails()
+                {
+                    Id = i,
+                    Name = $"Saving account {i}",
+                    BankId = _banks.ElementAt(rng.Next(_banks.Count())).Id,
+                    CurrencyId = _currencies.ElementAt(rng.Next(_currencies.Count())).Id,
+                    IsFavorite = false,
+                    IsSavingAccount = true
+                };
+                _storage.Add(item);
             }
         }
 
@@ -75,6 +90,11 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> SetAsFavorite(int id)
         {
+            foreach (var existingItem in _storage)
+            {
+                existingItem.IsFavorite = false;
+            }
+
             var item = _storage.SingleOrDefault(x => x.Id == id);
 
             if (item == null)

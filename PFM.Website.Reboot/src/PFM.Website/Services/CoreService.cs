@@ -1,6 +1,7 @@
 ﻿using Api.Contracts.Shared;
 using AutoMapper;
 using Newtonsoft.Json;
+using PFM.Bank.Api.Contracts.Account;
 using PFM.Website.Configurations;
 
 namespace PFM.Website.Services

@@ -1,28 +1,68 @@
 ﻿@page "/"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject BankAccountService BankAccountService
 
-@using System.Security.Claims
-@using Microsoft.AspNetCore.Components.Authorization
-
-<p>List of user claims</p>
+<p>Dashboard</p>
 
 <AuthorizeView>
     <Authorized>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Key</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var claim in context.User.Claims)
+        <div class="row">
+            <div class="col-lg-12">
+                @if (selectedBankAccount != null)
                 {
-                    <tr>
-                        <td>@claim.Type</td>
-                        <td>@claim.Value</td>
-                    </tr>
+                    <div style="text-align: left">
+                        <p>@selectedBankAccount?.Name</p>
+                        <p>@selectedBankAccount?.DisplayedCurrentBalance</p>
+                    </div>
                 }
-            </tbody>
-        </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        @*<label style="font-size:18px;">Accounts</label>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <select id="availableAccounts"></select>
+                                </div>
+                            </div>*@
+                        @*<label style="font-size:18px;margin-top: 8px;">Movements</label>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a href="/Expenditure/Index">Manage expenses</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a href="/AtmWithdraw/Index">Manage ATM Withdraws</a>
+                                </div>
+                            </div>*@
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="/incomes/list/@selectedBankAccount?.Id">Manage incomes</a>
+                            </div>
+                        </div>
+                        @*<div class="row">
+                                <div class="col-lg-12">
+                                    <a href="/Saving/Index">Manage savings</a>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
     </Authorized>
 </AuthorizeView>
+
+
+@code {
+
+    private BankAccountListModel? selectedBankAccount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedBankAccount = await BankAccountService.GetCurrentAccount();
+    }
+}

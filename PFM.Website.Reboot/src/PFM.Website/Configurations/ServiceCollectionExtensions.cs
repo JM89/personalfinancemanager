@@ -82,7 +82,8 @@ namespace PFM.Website.Configurations
                     .AddSingleton<IBankApi, BankInMemory>()
                     .AddSingleton<ICountryApi, CountryInMemory>()
                     .AddSingleton<IBankAccountApi, BankAccountInMemory>()
-                    .AddSingleton<ICurrencyApi, CurrencyInMemory>();
+                    .AddSingleton<ICurrencyApi, CurrencyInMemory>()
+                    .AddSingleton<IIncomeApi, IncomeInMemory>();
                 return services;
             }
 
@@ -116,7 +117,8 @@ namespace PFM.Website.Configurations
                 .AddPfmApiClient<ICountryApi>(apiConfigs, refitSettings, httpClientHandler)
                 .AddPfmApiClient<IBankApi>(apiConfigs, refitSettings, httpClientHandler)
                 .AddPfmApiClient<ICurrencyApi>(apiConfigs, refitSettings, httpClientHandler)
-                .AddPfmApiClient<IBankAccountApi>(apiConfigs, refitSettings, httpClientHandler);
+                .AddPfmApiClient<IBankAccountApi>(apiConfigs, refitSettings, httpClientHandler)
+                .AddPfmApiClient<IIncomeApi>(apiConfigs, refitSettings, httpClientHandler);
 
             return services;
         }
