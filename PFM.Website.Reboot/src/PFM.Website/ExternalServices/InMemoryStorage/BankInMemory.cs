@@ -1,5 +1,4 @@
 ﻿using Api.Contracts.Shared;
-using AutoFixture;
 using Newtonsoft.Json;
 using PFM.Bank.Api.Contracts.Bank;
 
@@ -12,17 +11,19 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
         public BankInMemory()
         {
             var countries = new CountryInMemory()._storage.ToList();
-            var fixture = new Fixture();
 
             var rng = new Random();
             _storage = new List<BankDetails>();
             for (int i = 0; i <= 5; i++) {
-                var item = fixture.Build<BankDetails>()
-                    .With(x => x.Id, i)
-                    .With(x => x.CountryId, countries.ElementAt(rng.Next(countries.Count())).Id)
-                    .With(x => x.GeneralEnquiryPhoneNumber, i.ToString().PadLeft(11, '0'))
-                    .With(x => x.IconPath, "/Resources/dashboard-addExpenditures.png");
-                _storage.Add(item.Create());
+                var item = new BankDetails()
+                {
+                    Id = i,
+                    Name = $"Bank {i}",
+                    CountryId = countries.ElementAt(rng.Next(countries.Count())).Id,
+                    GeneralEnquiryPhoneNumber = i.ToString().PadLeft(11, '0'),
+                    IconPath = "/Resources/dashboard-addExpenditures.png"
+                };
+                _storage.Add(item);
             }
         }
 

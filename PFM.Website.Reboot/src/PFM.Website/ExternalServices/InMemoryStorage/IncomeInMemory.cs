@@ -11,6 +11,18 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
         public IncomeInMemory()
         {
             _storage = new List<IncomeDetails>();
+            for (int i = 1; i <= 5; i++)
+            {
+                var item = new IncomeDetails()
+                {
+                    Id = i,
+                    Description = $"Salary {i}",
+                    AccountId = 1,
+                    Cost = 100*i,
+                    DateIncome = DateTime.UtcNow.AddDays(-i)
+                };
+                _storage.Add(item);
+            }
         }
 
         public async Task<ApiResponse> Create(IncomeDetails obj)

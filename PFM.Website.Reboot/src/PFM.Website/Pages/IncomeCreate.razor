@@ -8,18 +8,22 @@
 
 <PageTitle>Incomes</PageTitle>
 
-<h1>Create Incomes</h1>
-
 <div class="row">
-    <div class="col-lg-12">
-        @if (selectedBankAccount != null)
-        {
-            <div style="text-align: left">
-                <p>@selectedBankAccount?.Name</p>
-                <p>@selectedBankAccount?.DisplayedCurrentBalance</p>
-            </div>
-        }
+    <div class="col-lg-8">
+        <h1>Create Incomes</h1>
     </div>
+    @if (selectedBankAccount != null)
+    {
+        <div class="col-lg-4" style="text-align: left">
+            <div class="alert alert-info" role="alert">
+                <label><strong>Selected account: </strong></label>
+                <br />
+                <label>@selectedBankAccount.BankName - @selectedBankAccount?.Name</label>
+                <br />
+                <label>Balance: @selectedBankAccount?.DisplayedCurrentBalance</label>
+            </div>
+        </div>
+    }
 </div>
 
 <br/>
