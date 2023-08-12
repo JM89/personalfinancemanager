@@ -1,5 +1,6 @@
 FROM ellerbrock/alpine-bash-curl-ssl:latest
 
 COPY entrypoint.sh ./
+COPY persistent-subscription.json ./
 
 ENTRYPOINT [ "bash", "./entrypoint.sh" ]

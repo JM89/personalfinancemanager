@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "PFM.BankAccountUpdater": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true
+    }
+  }
+}

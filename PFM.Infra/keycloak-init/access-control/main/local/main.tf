@@ -84,3 +84,18 @@ resource "keycloak_openid_client" "pfm_bank_account_updater_openid_client" {
     "product" = "pfm"
   }
 }
+
+resource "keycloak_openid_client" "pfm_mvt_aggregator_openid_client" {
+  realm_id  = keycloak_realm.realm.id
+  client_id = "pfm-movement-aggregator"
+
+  name    = "Service Account for PFM Movement Aggregator"
+  enabled = true
+
+  access_type              = "CONFIDENTIAL"
+  service_accounts_enabled = true
+
+  extra_config = {
+    "product" = "pfm"
+  }
+}
