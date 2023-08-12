@@ -6,6 +6,7 @@ using PFM.BankAccountUpdater.Events;
 using PFM.BankAccountUpdater.Events.Interface;
 using PFM.BankAccountUpdater.Events.Settings;
 using PFM.BankAccountUpdater.ExternalServices.AuthApi;
+using PFM.BankAccountUpdater.ExternalServices.AuthApi.Implementations;
 using PFM.BankAccountUpdater.ExternalServices.BankApi;
 using PFM.BankAccountUpdater.Handlers;
 using PFM.BankAccountUpdater.Handlers.Interfaces;
@@ -92,11 +93,9 @@ namespace PFM.BankAccountUpdater.Extensions
                 .AddSingleton<IAuthTokenStore, AuthTokenStore>()
                 .AddSingleton<ITokenCache, TokenCache>();
 
-            ArgumentException.ThrowIfNullOrEmpty(authConfigs.EndpointUrl);
-
-            services
-                .AddRefitClient<IAuthApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(authConfigs.EndpointUrl));
+            services.AddHttpClient<IAuthApi, KeycloakAuthApi>(client => {
+                client.BaseAddress = new Uri(authConfigs.EndpointUrl ?? "https://localhost");
+            });
 
             return services;
         }

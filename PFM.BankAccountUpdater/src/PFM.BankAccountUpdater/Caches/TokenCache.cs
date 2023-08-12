@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using PFM.BankAccountUpdater.Caches.Interfaces;
 using PFM.BankAccountUpdater.ExternalServices.AuthApi;
+using PFM.BankAccountUpdater.ExternalServices.AuthApi.Contracts;
 
 namespace PFM.BankAccountUpdater.Caches
 {
@@ -21,12 +22,8 @@ namespace PFM.BankAccountUpdater.Caches
         {
             if (!this._memoryCache.TryGetValue(clientId, out string? token))
             {
-                var response = await _authApi.Login(new Authentication.Api.DTOs.UserRequest()
-                {
-                    Username = clientId, 
-                    Password = clientSecret
-                });
-                token = response.Token;
+                var response = await _authApi.Login(new ClientInfo(clientId, clientSecret));
+                token = response.AccessToken;
                 _memoryCache.Set(clientId, token, _options);
             }
             return token ?? "";

@@ -51,7 +51,7 @@ resource "keycloak_openid_client" "openid_client" {
   realm_id  = keycloak_realm.realm.id
   client_id = "pfm"
 
-  name    = "PFM"
+  name    = "Client App for enabling SSO on PFM Website"
   enabled = true
 
   direct_access_grants_enabled = true
@@ -64,6 +64,21 @@ resource "keycloak_openid_client" "openid_client" {
   standard_flow_enabled = true
 
   login_theme = "keycloak"
+
+  extra_config = {
+    "product" = "pfm"
+  }
+}
+
+resource "keycloak_openid_client" "pfm_bank_account_updater_openid_client" {
+  realm_id  = keycloak_realm.realm.id
+  client_id = "pfm-bank-account-updater"
+
+  name    = "Service Account for PFM Bank Account Updater"
+  enabled = true
+
+  access_type              = "CONFIDENTIAL"
+  service_accounts_enabled = true
 
   extra_config = {
     "product" = "pfm"
