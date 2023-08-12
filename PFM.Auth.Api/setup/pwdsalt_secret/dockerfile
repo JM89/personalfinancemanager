@@ -1,6 +1,0 @@
-FROM amazon/aws-cli:2.11.13
-
-COPY entrypoint.sh ./
-COPY configs/.aws/* /root/.aws/
-
-ENTRYPOINT [ "bash", "./entrypoint.sh" ]
