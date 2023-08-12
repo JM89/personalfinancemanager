@@ -1,16 +1,16 @@
-﻿@page "/incomes/create/{accountId:int}"
+﻿@page "/savings/create/{accountId:int}"
 @using PFM.Website.Services
 @using PFM.Website.Models
-@inject IncomeService IncomeService
+@inject SavingService SavingService
 @inject BankAccountService BankAccountService
 @inject NavigationManager NavigationManager
 
 
-<PageTitle>Incomes</PageTitle>
+<PageTitle>Savings</PageTitle>
 
 <div class="row">
     <div class="col-lg-8">
-        <h1>Create Incomes</h1>
+        <h1>Create Savings</h1>
     </div>
     @if (selectedBankAccount != null)
     {
@@ -35,21 +35,27 @@
     <div class="form-group row" style="height:50px">
         <label for="date" class="col-sm-2 col-form-label">Date</label>
         <div class="col-sm-10">
-            <input class="form-control" type="date" value="@m.DateIncome.ToString("yyyy-MM-dd")" @onchange="@((e) => UpdateDate(e))" />
+            <input class="form-control" type="date" value="@m.DateSaving.ToString("yyyy-MM-dd")" @onchange="@((e) => UpdateDate(e))" />
         </div>
         <br />
     </div>
     <div class="form-group row" style="height:50px">
-        <label for="name" class="col-sm-2 col-form-label">Description</label>
+        <label for="cost" class="col-sm-2 col-form-label">Amount</label>
         <div class="col-sm-10">
-            <InputText id="description" @bind-Value="m.Description" class="form-control"></InputText>
+            <InputNumber id="cost" @bind-Value="m.Amount" class="form-control"></InputNumber>
         </div>
         <br />
     </div>
     <div class="form-group row" style="height:50px">
-        <label for="cost" class="col-sm-2 col-form-label">Cost</label>
+        <label for="name" class="col-sm-2 col-form-label">Target Account</label>
         <div class="col-sm-10">
-            <InputNumber id="cost" @bind-Value="m.Cost" class="form-control"></InputNumber>
+            <select class="form-control" @bind="@m.TargetInternalAccountId">
+                <option value=""></option>
+                @foreach (var bankAccount in @AvailableSavingAccounts)
+                {
+                    <option value="@bankAccount.Id">@bankAccount.Name</option>
+                }
+            </select>
         </div>
         <br />
     </div>
@@ -64,32 +70,35 @@
     [Parameter]
     public int AccountId { get; set; }
 
-    private IncomeEditModel m = new IncomeEditModel() { DateIncome = DateTime.UtcNow };
+    private SavingEditModel m = new SavingEditModel() { DateSaving = DateTime.UtcNow };
     private BankAccountListModel? selectedBankAccount;
+    private IList<BankAccountListModel> AvailableSavingAccounts = new List<BankAccountListModel>();
 
     protected override async Task OnInitializedAsync()
     {
         selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+        var availableBankAccounts = await BankAccountService.GetAll();
+        AvailableSavingAccounts = availableBankAccounts.Where(x => x.IsSavingAccount).ToList();
     }
 
     void Back()
     {
-        NavigationManager.NavigateTo($"/incomes/list/{AccountId}");
+        NavigationManager.NavigateTo($"/savings/list/{AccountId}");
     }
 
     async Task HandleSubmit()
     {
-        bool result = await IncomeService.Create(AccountId, m);
+        bool result = await SavingService.Create(AccountId, m);
         if (result)
         {
-            NavigationManager.NavigateTo($"/incomes/list/{AccountId}");
+            NavigationManager.NavigateTo($"/savings/list/{AccountId}");
         }
     }
 
     void UpdateDate(ChangeEventArgs e)
     {
         var selectedDate = e.Value ?? DateTime.UtcNow;
-        m.DateIncome = DateTime.Parse(selectedDate.ToString());
+        m.DateSaving = DateTime.Parse(selectedDate.ToString());
     }
 }
 

@@ -47,7 +47,8 @@ builder.Services
     .AddSingleton<CountryService>()
     .AddSingleton<BankAccountService>()
     .AddSingleton<CurrencyService>()
-    .AddSingleton<IncomeService>();
+    .AddSingleton<IncomeService>()
+    .AddSingleton<SavingService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<AuthHeaderHandler>();

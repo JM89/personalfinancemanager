@@ -1,0 +1,126 @@
+﻿@page "/savings/list/{accountId:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject SavingService SavingService
+@inject BankAccountService BankAccountService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Savings</PageTitle>
+
+
+<div class="row">
+    <div class="col-lg-8">
+        <h1>Savings</h1>
+    </div>
+    @if (selectedBankAccount != null)
+    {
+        <div class="col-lg-4" style="text-align: left">
+            <div class="alert alert-info" role="alert">
+                <label><strong>Selected account: </strong></label>
+                <br/>
+                <label>@selectedBankAccount.BankName - @selectedBankAccount?.Name</label>
+                <br/>
+                <label>Balance: @selectedBankAccount?.DisplayedCurrentBalance</label>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="col-lg-10">
+        <p>Manage the savings of a given bank account. You need at least one bank account to add new savings. Note that the system won't let you edit an existing saving, please delete and recreate so all movements appears on the bank account(s).</p>
+    </div>
+    @if (selectedBankAccount != null)
+    {
+        <div class="col-lg-2" style="text-align: right">
+            <div style="text-align: right">
+                <button class="btn btn-secondary btn-sm" @onclick="Create">Add new</button>
+            </div>
+        </div>
+    }
+</div>
+
+@if (models == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <colgroup>
+            <col width="15%" />
+            <col width="15%" />
+            <col width="25%" />
+            <col width="25%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Date Income</th>
+                <th>Cost</th>
+                <th>Description</th>
+                <th>Target Account</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in models)
+            {
+                <tr>
+                    <td>@m.DisplayedDateSaving</td>
+                    <td>@m.DisplayedAmount</td>
+                    <td>@m.Description</td>
+                    <td>@m.TargetInternalAccountName</td>
+                    <td>
+                        <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+             ConfirmationMessage=@($"Are you sure you want to delete \"{selected.Description}\"?")>
+    </Confirm>
+
+}
+
+@code {
+
+    [Parameter]
+    public int? AccountId { get; set; }
+
+    private List<SavingListModel> models = new List<SavingListModel>();
+    private SavingListModel selected = new SavingListModel();
+    protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
+    private BankAccountListModel? selectedBankAccount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+        if (selectedBankAccount != null)
+        {
+            models = await SavingService.GetAll(selectedBankAccount.Id);
+        }
+    }
+
+    void Create()
+    {
+        NavigationManager.NavigateTo($"/savings/create/{selectedBankAccount?.Id}");
+    }
+
+    protected void Delete(SavingListModel referenced)
+    {
+        selected = referenced;
+        DeleteConfirmation.Show();
+    }
+
+    protected async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await SavingService.Delete(selected.Id);
+            NavigationManager.NavigateTo($"/savings/list/{selectedBankAccount?.Id}", true);
+        }
+    }
+}
+

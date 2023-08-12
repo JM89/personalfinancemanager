@@ -8,7 +8,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
     public class BankAccountInMemory : IBankAccountApi
     {
-        private IList<AccountDetails> _storage;
+        internal IList<AccountDetails> _storage;
         private IList<CurrencyDetails> _currencies = new CurrencyInMemory()._storage.ToList();
         private IList<BankDetails> _banks = new BankInMemory()._storage.ToList();
 
@@ -16,7 +16,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
         {
             var rng = new Random();
             _storage = new List<AccountDetails>();
-            for (int i = 0; i <= 5; i++) {
+            for (int i = 0; i <= 4; i++) {
                 var item = new AccountDetails() {
                     Id = i,
                     Name = $"Current account {i}",
@@ -27,7 +27,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                 };
                 _storage.Add(item);
             }
-            for (int i = 5; i <= 10; i++)
+            for (int i = 5; i <= 9; i++)
             {
                 var item = new AccountDetails()
                 {
