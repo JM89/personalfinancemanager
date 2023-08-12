@@ -16,3 +16,15 @@ services:
     container_name: evs-sub-mvt-aggregator
     networks:
       - local-network
+
+  mvt-aggregator-db:
+    build:
+      context: ./setup/db
+      dockerfile: dockerfile
+    environment:
+      DB_SERVER_NAME: db-server
+      DB_SERVER_PORT: 1433
+      DB_SA_PASSWORD: VerySecret1234!
+    container_name: mvt-aggregator-db
+    networks:
+      - local-network
