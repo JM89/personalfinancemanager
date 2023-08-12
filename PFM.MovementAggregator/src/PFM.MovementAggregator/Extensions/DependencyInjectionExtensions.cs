@@ -1,4 +1,5 @@
 ﻿using EventStore.Client;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using PFM.Bank.Event.Contracts;
 using PFM.MovementAggregator.Caches;
 using PFM.MovementAggregator.Caches.Interfaces;
@@ -9,6 +10,8 @@ using PFM.MovementAggregator.ExternalServices.AuthApi;
 using PFM.MovementAggregator.ExternalServices.AuthApi.Implementations;
 using PFM.MovementAggregator.Handlers;
 using PFM.MovementAggregator.Handlers.Interfaces;
+using PFM.MovementAggregator.Persistence;
+using PFM.MovementAggregator.Persistence.Implementations;
 using PFM.MovementAggregator.Services;
 using PFM.MovementAggregator.Services.Interfaces;
 using PFM.MovementAggregator.Settings;
@@ -37,8 +40,14 @@ namespace PFM.MovementAggregator.Extensions
             return services;
         }
 
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
+            var appSettings = configuration.GetSection("ApplicationSettings").Get<ApplicationSettings>() ?? new ApplicationSettings();
+
+            services
+                .AddSingleton(appSettings)
+                .AddSingleton<IMovementAggregatorRepository, MovementAggregatorRepository>();
+
             return services;
         }
 

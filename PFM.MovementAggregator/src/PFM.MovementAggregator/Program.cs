@@ -16,7 +16,7 @@ namespace PFM.MovementAggregator
                 {
                     services
                         .AddMemoryCache()
-                        .AddServices()
+                        .AddServices(build.Configuration)
                         .AddMonitoring(build.Configuration, EnvironmentName)
                         .AddAuthenticationAndAuthorization(build.Configuration)
                         .AddEventHandlers()

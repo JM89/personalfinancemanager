@@ -1,5 +1,8 @@
 ﻿using PFM.Bank.Event.Contracts;
+using PFM.MovementAggregator.Handlers.Constants;
 using PFM.MovementAggregator.Handlers.Interfaces;
+using PFM.MovementAggregator.Persistence;
+using PFM.MovementAggregator.Persistence.Entities;
 using Serilog.Context;
 using SerilogTimings;
 
@@ -8,10 +11,12 @@ namespace PFM.MovementAggregator.Handlers
     public class BankAccountDebitedHandler : IHandler<BankAccountDebited>
     {
         private readonly Serilog.ILogger _logger;
+        private readonly IMovementAggregatorRepository _movementAggregatorRepository;
 
-        public BankAccountDebitedHandler(Serilog.ILogger logger)
+        public BankAccountDebitedHandler(Serilog.ILogger logger, IMovementAggregatorRepository movementAggregatorRepository)
         {
             _logger = logger;
+            _movementAggregatorRepository = movementAggregatorRepository;
         }
 
         public async Task<bool> HandleEvent(BankAccountDebited evt)
@@ -21,7 +26,27 @@ namespace PFM.MovementAggregator.Handlers
             using (LogContext.PushProperty(nameof(evt.Id), evt.Id))
             using (LogContext.PushProperty(nameof(evt.UserId), evt.UserId))
             {
-                _logger.Information("Do something with debited event");
+                var movementAggregation = new MovementAggregation()
+                {
+                    BankAccountId = int.Parse(evt.StreamId.Replace("BankAccount-", "")),
+                    MonthYearIdentifier = evt.OperationDate.ToString("yyyyMM"),
+                    AggregatedAmount = evt.PreviousBalance - evt.CurrentBalance
+                };
+
+                if (evt.TargetBankAccount != null)
+                {
+                    movementAggregation.Type = MovementTypes.Savings;
+                    movementAggregation.Category = MovementTypes.Savings;
+                }
+                else
+                {
+                    movementAggregation.Type = MovementTypes.Expenses;
+                    movementAggregation.Category = MovementTypes.Expenses;
+                }
+
+                var result = await _movementAggregatorRepository.Merge(movementAggregation);
+
+                _logger.Information($"Updated {result} rows");
 
                 op.Complete();
             }
