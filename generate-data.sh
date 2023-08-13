@@ -1,5 +1,5 @@
-client_secret="WyBWEkc9WNKbdYco7djSlVTDE2EcEors"
-api_endpoint="https://localhost:4431"
+client_secret="RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jjd"
+api_endpoint="https://localhost:7098" # "https://localhost:4431"
 
 auth_response=$(curl -L POST "http://localhost:8080/realms/pfm/protocol/openid-connect/token" -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'client_id=pfm' --data-urlencode 'grant_type=password' --data-urlencode "client_secret=$client_secret" --data-urlencode 'scope=openid' --data-urlencode 'username=jess' --data-urlencode 'password=SecurityMatters!123' )
 
@@ -17,7 +17,7 @@ create_common_expense () {
   expenseType=$1
   dateMovement=$2
   paymentMethod=$3
-  curl -v --insecure 'POST' \
+  curl -v --insecure -X 'POST' \
       "$api_endpoint/api/Expense/Create" \
         -H 'accept: text/plain' \
         -H "Authorization: Bearer $access_token" \
@@ -32,12 +32,13 @@ create_common_expense () {
           \"hasBeenAlreadyDebited\": true,
           \"paymentMethodHasBeenAlreadyDebitedOption\": true
         }"
+  sleep 5
 }
 
 create_internal_transfer_expense () {
   expenseType=$1
   dateMovement=$2
-  curl -v --insecure 'POST' \
+  curl -v --insecure -X 'POST' \
       "$api_endpoint/api/Expense/Create" \
         -H 'accept: text/plain' \
         -H "Authorization: Bearer $access_token" \
@@ -53,13 +54,14 @@ create_internal_transfer_expense () {
           \"paymentMethodHasBeenAlreadyDebitedOption\": true,
           \"targetInternalAccountId\": 2
         }"
+  sleep 5
 }
 
 create_cash_expense () {
   expenseType=$1
   dateMovement=$2
   atmWithdrawId=$3
-  curl -v --insecure 'POST' \
+  curl -v --insecure -X 'POST' \
     "$api_endpoint/api/Expense/Create" \
       -H 'accept: text/plain' \
       -H "Authorization: Bearer $access_token" \
@@ -75,6 +77,7 @@ create_cash_expense () {
         \"paymentMethodHasBeenAlreadyDebitedOption\": true,
         \"atmWithdrawId\": $atmWithdrawId
       }"
+  sleep 5
 }
 
 x=1
@@ -93,6 +96,8 @@ do
         \"dateIncome\": \"2023-0$x-01\"
     }"
 
+  sleep 5
+
   curl -v --insecure -X 'POST' \
     "$api_endpoint/api/Saving/Create" \
       -H 'accept: text/plain' \
@@ -106,6 +111,8 @@ do
         \"description\": \"Saving\"
       }"
   
+  sleep 5
+
   create_common_expense 1 "2023-0$x-03" 1
   create_common_expense 2 "2023-0$x-16" 1
   create_common_expense 2 "2023-0$x-19" 3

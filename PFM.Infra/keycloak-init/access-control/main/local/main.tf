@@ -61,6 +61,8 @@ resource "keycloak_openid_client" "openid_client" {
     "https://localhost:7142/signin-oidc"
   ]
 
+  client_secret = var.openid_client_pfm_secret
+
   standard_flow_enabled = true
 
   login_theme = "keycloak"
@@ -80,6 +82,8 @@ resource "keycloak_openid_client" "pfm_bank_account_updater_openid_client" {
   access_type              = "CONFIDENTIAL"
   service_accounts_enabled = true
 
+  client_secret = var.openid_client_pfm_bank_updater_secret
+
   extra_config = {
     "product" = "pfm"
   }
@@ -94,6 +98,8 @@ resource "keycloak_openid_client" "pfm_mvt_aggregator_openid_client" {
 
   access_type              = "CONFIDENTIAL"
   service_accounts_enabled = true
+
+  client_secret = var.openid_client_pfm_mvt_aggregator_secret
 
   extra_config = {
     "product" = "pfm"
