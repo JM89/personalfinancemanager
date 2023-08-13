@@ -1,8 +1,11 @@
-﻿using App.Metrics;
+﻿using Api.Settings;
+using App.Metrics;
 using EventStore.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Services.Events;
@@ -55,13 +58,23 @@ namespace Api.Extensions
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            var auth = configuration.GetSection("Auth").Get<AuthOptions>();
+            if (auth?.Authority == null)
+                throw new Exception("DI exception: Auth API config was not found");
+
+            Console.WriteLine($"Authority: {auth.Authority}");
+
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = configuration["Auth:Authority"];
+                    options.Authority = auth.Authority;
                     options.Audience = "account";
-                    options.RequireHttpsMetadata = false;
+                    options.RequireHttpsMetadata = auth.RequireHttpsMetadata;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = auth.ValidateIssuer
+                    };
                 });
 
             return services;

@@ -3,7 +3,9 @@ using EventStore.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PFM.Api.Settings;
 using PFM.Services.Caches;
 using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events;
@@ -61,23 +63,35 @@ namespace PFM.Api.Extensions
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            var auth = configuration.GetSection("Auth").Get<AuthOptions>();
+            if (auth?.Authority == null)
+                throw new Exception("DI exception: Auth API config was not found");
+
+            Console.WriteLine($"Authority: {auth.Authority}");
+
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = configuration["Auth:Authority"];
+                    options.Authority = auth.Authority;
                     options.Audience = "account";
-                    options.RequireHttpsMetadata = false;
+                    options.RequireHttpsMetadata = auth.RequireHttpsMetadata;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = auth.ValidateIssuer
+                    };
                 });
-
+                
             return services;
         }
 
         public static IServiceCollection AddBankApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
         {
-            var apiConfigs = configuration["BankApi:EndpointUrl"];
-            if (apiConfigs == null)
+            var endpointUrl = configuration["BankApi:EndpointUrl"];
+            if (endpointUrl == null)
                 throw new Exception("DI exception: Bank API config was not found");
+
+            Console.WriteLine($"Bank API endpoint: {endpointUrl}");
 
             var refitSettings = new RefitSettings()
             {
@@ -102,28 +116,28 @@ namespace PFM.Api.Extensions
 
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankAccountApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<IBankAccountCache, BankAccountCache>();
 
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<IBankCache, BankCache>();
 
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICurrencyApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
             services.AddSingleton<ICurrencyCache, CurrencyCache>();
 
             services
                 .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICountryApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>(); 
             services.AddSingleton<ICountryCache, CountryCache>();

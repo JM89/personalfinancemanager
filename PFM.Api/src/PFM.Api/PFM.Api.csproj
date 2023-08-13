@@ -35,8 +35,10 @@
 
   <ItemGroup>
     <None Remove="Middlewares\" />
+    <None Remove="Settings\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Middlewares\" />
+    <Folder Include="Settings\" />
   </ItemGroup>
 </Project>

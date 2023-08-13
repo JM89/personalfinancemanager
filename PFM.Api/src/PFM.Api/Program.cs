@@ -23,6 +23,11 @@ namespace PFM.Api
 
             builder.Configuration.AddEnvironmentVariables(prefix: "APP_");
 
+            if (builder.Environment.EnvironmentName != "Production")
+            {
+                Console.WriteLine(builder.Configuration.GetDebugView());
+            }
+
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddTransient<AuthHeaderHandler>();
 
