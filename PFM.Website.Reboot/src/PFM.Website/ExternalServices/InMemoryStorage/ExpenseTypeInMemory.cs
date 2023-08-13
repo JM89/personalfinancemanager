@@ -1,5 +1,4 @@
-﻿using System;
-using Api.Contracts.Shared;
+﻿using Api.Contracts.Shared;
 using Newtonsoft.Json;
 using PFM.Api.Contracts.ExpenseType;
 
@@ -7,23 +6,12 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
     public class ExpenseTypeInMemory : IExpenseTypeApi
     {
-        private IList<ExpenseTypeDetails> _storage;
-        private static readonly string[] Colors = new[]
+        internal IList<ExpenseTypeDetails> _storage = new List<ExpenseTypeDetails>()
         {
-            "3399FF", "33CC33", "FF0000"
+            new ExpenseTypeDetails() { Id = 1, Name = "Groceries", GraphColor = "3399FF", ShowOnDashboard = true },
+            new ExpenseTypeDetails() { Id = 2, Name = "Energy", GraphColor = "33CC33", ShowOnDashboard = true },
+            new ExpenseTypeDetails() { Id = 3, Name = "Transport", GraphColor = "FF0000", ShowOnDashboard = true },
         };
-
-        public ExpenseTypeInMemory()
-        {
-            var rng = new Random();
-            _storage = Enumerable.Range(1, 5).Select(index => new ExpenseTypeDetails
-            {
-                Id = index,
-                Name = $"Expense Type #{index}",
-                GraphColor = Colors[rng.Next(Colors.Length)],
-                ShowOnDashboard = false
-            }).ToList();
-        }
 
         public async Task<ApiResponse> Create(ExpenseTypeDetails obj)
         {
