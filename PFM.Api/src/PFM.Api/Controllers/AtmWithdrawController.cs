@@ -51,7 +51,7 @@ namespace PFM.Api.Controllers
             return await _atmWithdrawService.CloseAtmWithdraw(id);
         }
 
-        [HttpPost("CloseAtmWithdraw/{id}/debitStatus")]
+        [HttpPost("ChangeDebitStatus/{id}")]
         public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
             return await _atmWithdrawService.ChangeDebitStatus(id, debitStatus);

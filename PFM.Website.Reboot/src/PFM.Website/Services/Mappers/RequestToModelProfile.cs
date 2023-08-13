@@ -16,6 +16,8 @@ namespace PFM.Website.Services.Mappers
             CreateMap<Models.IncomeListModel, PFM.Api.Contracts.Income.IncomeList>();
             CreateMap<Models.SavingEditModel, PFM.Api.Contracts.Saving.SavingDetails>();
             CreateMap<Models.SavingListModel, PFM.Api.Contracts.Saving.SavingList>();
+            CreateMap<Models.AtmWithdrawEditModel, PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails>();
+            CreateMap<Models.AtmWithdrawListModel, PFM.Api.Contracts.AtmWithdraw.AtmWithdrawList>();
         }
     }
 }

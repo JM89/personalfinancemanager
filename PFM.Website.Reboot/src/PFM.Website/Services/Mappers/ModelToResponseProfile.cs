@@ -21,6 +21,8 @@ namespace PFM.Website.Services.Mappers
             CreateMap<PFM.Api.Contracts.Income.IncomeDetails, Models.IncomeEditModel>();
             CreateMap<PFM.Api.Contracts.Saving.SavingList, Models.SavingListModel>();
             CreateMap<PFM.Api.Contracts.Saving.SavingDetails, Models.SavingEditModel>();
+            CreateMap<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawList, Models.AtmWithdrawListModel>();
+            CreateMap<PFM.Api.Contracts.AtmWithdraw.AtmWithdrawDetails, Models.AtmWithdrawEditModel>();
         }
     }
 }

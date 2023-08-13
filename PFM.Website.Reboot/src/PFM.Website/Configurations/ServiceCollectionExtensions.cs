@@ -84,7 +84,8 @@ namespace PFM.Website.Configurations
                     .AddSingleton<IBankAccountApi, BankAccountInMemory>()
                     .AddSingleton<ICurrencyApi, CurrencyInMemory>()
                     .AddSingleton<IIncomeApi, IncomeInMemory>()
-                    .AddSingleton<ISavingApi, SavingInMemory>();
+                    .AddSingleton<ISavingApi, SavingInMemory>()
+                    .AddSingleton<IAtmWithdrawApi, AtmWithdrawInMemory>();
                 return services;
             }
 
@@ -120,7 +121,8 @@ namespace PFM.Website.Configurations
                 .AddPfmApiClient<ICurrencyApi>(apiConfigs, refitSettings, httpClientHandler)
                 .AddPfmApiClient<IBankAccountApi>(apiConfigs, refitSettings, httpClientHandler)
                 .AddPfmApiClient<IIncomeApi>(apiConfigs, refitSettings, httpClientHandler)
-                .AddPfmApiClient<ISavingApi>(apiConfigs, refitSettings, httpClientHandler);
+                .AddPfmApiClient<ISavingApi>(apiConfigs, refitSettings, httpClientHandler)
+                .AddPfmApiClient<IAtmWithdrawApi>(apiConfigs, refitSettings, httpClientHandler);
 
             return services;
         }
