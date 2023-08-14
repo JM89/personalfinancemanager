@@ -1,69 +1,154 @@
 ﻿@page "/"
 @using PFM.Website.Services
 @using PFM.Website.Models
+@using PFM.Website.Utils
+@using ChartJs.Blazor.PieChart
+@using ChartJs.Blazor.BarChart
+@using ChartJs.Blazor.LineChart
+@using System.Drawing
+@using Newtonsoft.Json.Linq;
+
 @inject BankAccountService BankAccountService
+@inject ExpenseTypeService ExpenseTypeService
 
 <AuthorizeView>
     <Authorized>
+
         <div class="row">
-            <div class="col-lg-8">
-                <h1>Dashboard</h1>
+            <div class="col-lg-2" style="font-size: 12px; padding: 5px; border-radius: 5px;">
+                <div class="row vignette purple">
+                    <div class="col-lg-12">
+                        @if (AvailableBankAccounts.Any())
+                        {
+                            <b><label>Accounts</label></b>
+                            <select class="form-control" style="font-size: 12px;" value="@SelectedBankAccount?.Id" @onchange="@((e) => UpdateSelected(e))">
+                                <option value=""></option>
+                                @foreach (var bankAccount in @AvailableBankAccounts)
+                                {
+                                    <option value="@bankAccount.Id">@bankAccount.Name</option>
+                                }
+                            </select>
+                            <br />
+                            <b><label>Movements</label></b>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <a href="/expenses/list/@SelectedBankAccount?.Id">Manage expenses</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <a href="/atm-withdraws/list/@SelectedBankAccount?.Id">Manage ATM Withdraws</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <a href="/incomes/list/@SelectedBankAccount?.Id">Manage incomes</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <a href="/savings/list/@SelectedBankAccount?.Id">Manage savings</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <a href="/" class="disabled">Import movements</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <b><label>Budget Plan</label></b>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <a href="/" class="disabled">Manage budget plan</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning" role="alert">
+                                To get started with your personal finance, create a <a href="/banks/create">bank</a> and <a href="/bank-accounts/create">bank account</a>.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                @if (_totalExpenseOver12Months != null)
+                {
+                    <Chart Config="_totalExpenseOver12Months"></Chart>
+                }
+            </div>
+            <div class="col-lg-5">
+                @if (_splitByMovementTypeOver6Months != null)
+                {
+                    <Chart Config="_splitByMovementTypeOver6Months"></Chart>
+                }
             </div>
         </div>
+        <hr />
+        <div class="row">
+            <div class="col-lg-2" style="font-size: 16px; padding: 5px; border-radius: 5px; color:white; text-align: right;">
+                <div class="row vignette blue">
+                    <div class="col-lg-2">
+                        <i class="fa-solid fa-upload fa-2xl"></i>
+                    </div>
+                    <div class="col-lg-10">
+                        <label>Current Month Expenses</label><br />
+                        <b><label>£0.00</label></b>
+                    </div>
+                </div>
+                <div class="row vignette green">
+                    <div class="col-lg-2">
+                        <i class="fa-solid fa-download fa-2xl"></i>
+                    </div>
+                    <div class="col-lg-10">
+                        <label>Avg Incomes</label><br />
+                        <b><label>£0.00</label></b>
+                    </div>
+                </div>
+                <div  class="row vignette blue">
+                    <div class="col-lg-2">
+                        <i class="fa-solid fa-upload fa-2xl"></i>
+                    </div>
+                    <div class="col-lg-10">
+                        <label>Avg Outcomes</label><br />
+                        <b><label>£0.00</label></b>
+                    </div>
+                </div>
+                <div  class="row vignette golden">
+                    <div class="col-lg-2">
+                        <i class="fa-solid fa-piggy-bank fa-2xl"></i>
+                    </div>
+                    <div class="col-lg-10">
+                        <label>Avg Savings</label><br />
+                        <b><label>£0.00</label></b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                @if (_expensesByCategoryOver12Months != null)
+                {
+                    <Chart Config="_expensesByCategoryOver12Months"></Chart>
+                }
+            </div>
+            <div class="col-lg-5">
+                Nothing here
+            </div>
+        </div>
+        <hr />
 
-        @if (AvailableBankAccounts.Any())
+        @if (_categoryOver12Months != null && selectedCategory != null)
         {
             <div class="row">
-                <div class="col-lg-12">
-                    Select an account
-                    <select class="form-control" value="@SelectedBankAccount?.Id" @onchange="@((e) => UpdateSelected(e))">
-                        <option value=""></option>
-                        @foreach (var bankAccount in @AvailableBankAccounts)
-                        {
-                            <option value="@bankAccount.Id">@bankAccount.Name</option>
-                        }
-                    </select>
+                <div class="col-lg-6">
+                    <Chart Config="_categoryOver12Months"></Chart>
                 </div>
-            </div>
-            <br/>
-            <br/>
-            <label>Movements</label>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <a href="/expenses/list/@SelectedBankAccount?.Id">Manage expenses</a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <a href="/atm-withdraws/list/@SelectedBankAccount?.Id">Manage ATM Withdraws</a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <a href="/incomes/list/@SelectedBankAccount?.Id">Manage incomes</a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <a href="/savings/list/@SelectedBankAccount?.Id">Manage savings</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="alert alert-warning" role="alert">
-                        To get started with your personal finance, create a <a href="/banks/create">bank</a> and <a href="/bank-accounts/create">bank account</a>.
-                    </div>
+                <div class="col-lg-6">
+                    Nothing here
                 </div>
             </div>
         }
@@ -76,16 +161,257 @@
 
     private BankAccountListModel? SelectedBankAccount;
     private IList<BankAccountListModel> AvailableBankAccounts = new List<BankAccountListModel>();
+    private IList<ExpenseTypeModel> DisplayedCategories;
 
     protected override async Task OnInitializedAsync()
     {
         SelectedBankAccount = await BankAccountService.GetCurrentAccount();
         AvailableBankAccounts = await BankAccountService.GetAll();
+        var allCategories = await ExpenseTypeService.GetAll();
+        DisplayedCategories = allCategories.Where(x => x.ShowOnDashboard).ToList();
+
+        var data = new MovementSummaryStructureTests(DisplayedCategories, new List<string> { "Incomes", "Outcomes", "Savings" });
+
+        BuildSplitByMovementTypeOver6MonthsBarChart(data);
+        BuildExpenseByCategoryOver12MonthsPieChart(data);
+        BuildTotalExpenseOver12MonthsLineChart(data);
+        BuildCategoryOver12MonthsBarChart(new ExpenseTypeModel() { Name = "Blank", GraphColor = "000000" });
     }
 
     protected async Task UpdateSelected(ChangeEventArgs referenced)
     {
         var id = Convert.ToInt32(referenced.Value);
         SelectedBankAccount = await BankAccountService.GetCurrentAccount(id);
+    }
+
+    private ExpenseTypeModel? selectedCategory;
+
+    private class MovementSummaryStructureTests
+    {
+        public IEnumerable<ExpenseTypeModel> SourceExpenseTypes;
+        public IDictionary<string, int> SummaryOver12PerCategory;
+        public IDictionary<string, decimal> SummaryOver12PerType;
+
+        public MovementSummaryStructureTests(IEnumerable<ExpenseTypeModel> expenseTypes, IEnumerable<string> movementTypes)
+        {
+            SourceExpenseTypes = expenseTypes;
+            var rng = new Random();
+            SummaryOver12PerCategory = expenseTypes
+                .Select(x => new KeyValuePair<string, int>(x.Name, rng.Next(1, 10)))
+                .ToDictionary(x => x.Key, x => x.Value);
+            SummaryOver12PerType = movementTypes
+                .Select(x => new KeyValuePair<string, decimal>(x, rng.Next(100, 1000)))
+                .ToDictionary(x => x.Key, x => x.Value);
+        }
+    }
+
+    private class PieDataPoint
+    {
+        public string Label { get; set; }
+
+        public int Value { get; set; }
+
+        public string Color { get; set; }
+    }
+
+
+    private BarConfig? _splitByMovementTypeOver6Months;
+    private BarConfig? _categoryOver12Months;
+    private LineConfig? _totalExpenseOver12Months;
+    private PieConfig? _expensesByCategoryOver12Months;
+
+    private void BuildCategoryOver12MonthsBarChart(ExpenseTypeModel selectedCategory)
+    {
+        _categoryOver12Months = new BarConfig
+        {
+            Options = new BarOptions
+            {
+                Responsive = true,
+                Legend = new Legend
+                {
+                    Position = Position.Top
+                },
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = $"Expenses for '{selectedCategory.Name}' - Over 12 Months"
+                }
+            }
+        };
+
+        IDataset<int> dataset1 = new BarDataset<int>(RandomScalingFactor(12))
+        {
+            Label = selectedCategory.Name,
+            BackgroundColor = ColorUtils.ConvertColor(selectedCategory.GraphColor, 150),
+            BorderColor = ColorUtils.ConvertColor(selectedCategory.GraphColor),
+            BorderWidth = 1
+        };
+
+        foreach (string cat in MonthYearHelper.GetXLastMonths(12, true))
+        {
+            _categoryOver12Months.Data.Labels.Add(cat);
+        }
+
+        _categoryOver12Months.Data.Datasets.Add(dataset1);
+    }
+
+    private void BuildTotalExpenseOver12MonthsLineChart(MovementSummaryStructureTests data)
+    {
+        _totalExpenseOver12Months = new LineConfig
+        {
+            Options = new LineOptions
+            {
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Expenses - Over 12 Months"
+                }
+            }
+        };
+
+        foreach (string cat in MonthYearHelper.GetXLastMonths(12, true))
+        {
+            _totalExpenseOver12Months.Data.Labels.Add(cat);
+        }
+
+        IDataset<int> dataset1 = new LineDataset<int>(RandomScalingFactor(12))
+        {
+            Label = "Actual",
+            BackgroundColor = ColorUtil.FromDrawingColor(Color.FromArgb(128, ColorUtils.Blue)),
+            BorderColor = ColorUtil.FromDrawingColor(ColorUtils.Blue),
+            BorderWidth = 1
+        };
+
+        _totalExpenseOver12Months.Data.Datasets.Add(dataset1);
+    }
+
+    private void BuildSplitByMovementTypeOver6MonthsBarChart(MovementSummaryStructureTests data)
+    {
+        _splitByMovementTypeOver6Months = new BarConfig
+        {
+            Options = new BarOptions
+            {
+                Responsive = true,
+                Legend = new Legend
+                {
+                    Position = Position.Top
+                },
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Incomes/Outcomes - Over 6 Months"
+                }
+            }
+        };
+
+        IDataset<int> dataset1 = new BarDataset<int>(RandomScalingFactor(7))
+        {
+            Label = "Incomes",
+            BackgroundColor = ColorUtil.FromDrawingColor(Color.FromArgb(128, ColorUtils.Green)),
+            BorderColor = ColorUtil.FromDrawingColor(ColorUtils.Green),
+            BorderWidth = 1
+        };
+
+        IDataset<int> dataset2 = new BarDataset<int>(RandomScalingFactor(7))
+        {
+            Label = "Outcomes",
+            BackgroundColor = ColorUtil.FromDrawingColor(Color.FromArgb(128, ColorUtils.Blue)),
+            BorderColor = ColorUtil.FromDrawingColor(ColorUtils.Blue),
+            BorderWidth = 1
+        };
+
+        IDataset<int> dataset3 = new BarDataset<int>(RandomScalingFactor(7))
+        {
+            Label = "Savings",
+            BackgroundColor = ColorUtil.FromDrawingColor(Color.FromArgb(128, ColorUtils.Golden)),
+            BorderColor = ColorUtil.FromDrawingColor(ColorUtils.Golden),
+            BorderWidth = 1
+        };
+
+        foreach (string cat in MonthYearHelper.GetXLastMonths(6, true))
+        {
+            _splitByMovementTypeOver6Months.Data.Labels.Add(cat);
+        }
+
+        _splitByMovementTypeOver6Months.Data.Datasets.Add(dataset1);
+        _splitByMovementTypeOver6Months.Data.Datasets.Add(dataset2);
+        _splitByMovementTypeOver6Months.Data.Datasets.Add(dataset3);
+    }
+
+    public static IEnumerable<int> RandomScalingFactor(int count)
+    {
+        int[] factors = new int[count];
+        for (int i = 0; i < count; i++)
+        {
+            factors[i] = new Random().Next(0, 100);
+        }
+        return factors;
+    }
+
+    private void BuildExpenseByCategoryOver12MonthsPieChart(MovementSummaryStructureTests data)
+    {
+        _expensesByCategoryOver12Months = new PieConfig
+        {
+            Options = new PieOptions
+            {
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Expenses by Category - Over 12 Months"
+                },
+                OnClick = new DelegateHandler<ChartMouseEvent>(OnClickHandler),
+            }
+        };
+
+        var pieChartData = data.SourceExpenseTypes.Select(x => new PieDataPoint()
+        {
+            Label = x.Name,
+            Color = ColorUtils.ConvertColor(x.GraphColor),
+            Value = data.SummaryOver12PerCategory[x.Name]
+        }).OrderBy(x => x.Label);
+
+        foreach (string cat in pieChartData.Select(x => x.Label))
+        {
+            _expensesByCategoryOver12Months.Data.Labels.Add(cat);
+        }
+
+        PieDataset<int> dataset = new PieDataset<int>(pieChartData.Select(x => x.Value))
+        {
+            BackgroundColor = pieChartData.Select(x => ColorUtils.ConvertColor(x.Color, 150)).ToArray(),
+            BorderColor = pieChartData.Select(x => x.Color).ToArray(),
+        };
+
+        _expensesByCategoryOver12Months.Data.Datasets.Add(dataset);
+    }
+
+    public void OnClickHandler(JObject mouseEvent, JArray activeElements)
+    {
+        foreach (JObject elem in activeElements)
+        {
+            foreach (JProperty prop in elem.GetValue("_model"))
+            {
+                if (prop.Name.Equals("label"))
+                {
+                    selectedCategory = DisplayedCategories.FirstOrDefault(x => x.Name == prop.Value.ToString());
+                    if (selectedCategory != null)
+                    {
+                        IDataset<int> dataset1 = new BarDataset<int>(RandomScalingFactor(12))
+                        {
+                            Label = selectedCategory.Name,
+                            BackgroundColor = ColorUtils.ConvertColor(selectedCategory.GraphColor, 150),
+                            BorderColor = ColorUtils.ConvertColor(selectedCategory.GraphColor),
+                            BorderWidth = 1
+                        };
+
+                        _categoryOver12Months.Data.Datasets.Clear();
+                        _categoryOver12Months.Data.Datasets.Add(dataset1);
+
+                        this.StateHasChanged();
+                    }
+                }
+            }
+        }
     }
 }
