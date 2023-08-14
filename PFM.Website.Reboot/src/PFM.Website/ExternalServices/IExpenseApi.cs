@@ -7,7 +7,7 @@ namespace PFM.Website.ExternalServices
 {
 	public interface IExpenseApi
 	{
-        [Get("/api/Expense/GetList/{accountId}")]
+        [Post("/api/Expense/GetExpenses")]
         Task<ApiResponse> GetList(ExpenseGetListSearchParameters search);
 
         [Get("/api/Expense/Get/{id}")]

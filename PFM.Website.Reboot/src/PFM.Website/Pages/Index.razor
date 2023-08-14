@@ -5,49 +5,69 @@
 
 <AuthorizeView>
     <Authorized>
-
         <div class="row">
             <div class="col-lg-8">
                 <h1>Dashboard</h1>
             </div>
-            <div class="col-lg-4">
-                <select class="form-control" value="@SelectedBankAccount?.Id" @onchange="@((e) => UpdateSelected(e))">
-                    <option value=""></option>
-                    @foreach (var bankAccount in @AvailableBankAccounts)
-                    {
-                        <option value="@bankAccount.Id">@bankAccount.Name</option>
-                    }
-                </select>
-            </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <a href="/expenses/list/@SelectedBankAccount?.Id">Manage expenses</a>
+
+        @if (AvailableBankAccounts.Any())
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    Select an account
+                    <select class="form-control" value="@SelectedBankAccount?.Id" @onchange="@((e) => UpdateSelected(e))">
+                        <option value=""></option>
+                        @foreach (var bankAccount in @AvailableBankAccounts)
+                        {
+                            <option value="@bankAccount.Id">@bankAccount.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <label>Movements</label>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a href="/expenses/list/@SelectedBankAccount?.Id">Manage expenses</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <a href="/atm-withdraws/list/@SelectedBankAccount?.Id">Manage ATM Withdraws</a>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a href="/atm-withdraws/list/@SelectedBankAccount?.Id">Manage ATM Withdraws</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <a href="/incomes/list/@SelectedBankAccount?.Id">Manage incomes</a>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a href="/incomes/list/@SelectedBankAccount?.Id">Manage incomes</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <a href="/savings/list/@SelectedBankAccount?.Id">Manage savings</a>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a href="/savings/list/@SelectedBankAccount?.Id">Manage savings</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="alert alert-warning" role="alert">
+                        To get started with your personal finance, create a <a href="/banks/create">bank</a> and <a href="/bank-accounts/create">bank account</a>.
+                    </div>
+                </div>
+            </div>
+        }
+
     </Authorized>
 </AuthorizeView>
 

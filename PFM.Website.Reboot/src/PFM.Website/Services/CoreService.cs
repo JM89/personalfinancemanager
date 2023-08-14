@@ -1,7 +1,6 @@
 ﻿using Api.Contracts.Shared;
 using AutoMapper;
 using Newtonsoft.Json;
-using PFM.Bank.Api.Contracts.Account;
 using PFM.Website.Configurations;
 
 namespace PFM.Website.Services
@@ -41,7 +40,18 @@ namespace PFM.Website.Services
             return JsonConvert.DeserializeObject<TResult>(apiResponse.Data.ToString() ?? "");
         }
 
-        protected string CurrentUserId => _httpContextAccessor.HttpContext?.User?.Identity?.Name ?? "No current user id";
+        protected string GetCurrentUserId()
+        {
+            var userName = _httpContextAccessor.HttpContext?.User?.Claims.SingleOrDefault(x => x.Type == "preferred_username")?.Value;
+
+            if (userName != null) return userName;
+
+            userName = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+
+            if (userName != null) return userName;
+
+            return "No current user id";
+        }
     }
 }
 

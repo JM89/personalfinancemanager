@@ -18,7 +18,7 @@ namespace PFM.Website.Services
 
         public async Task<List<BankAccountListModel>> GetAll()
         {
-            var apiResponse = await _api.GetList(CurrentUserId);
+            var apiResponse = await _api.GetList(GetCurrentUserId());
             var response = ReadApiResponse<List<AccountList>>(apiResponse) ?? new List<AccountList>();
             var models = response.Select(_mapper.Map<BankAccountListModel>).ToList();
             return models;
@@ -27,7 +27,7 @@ namespace PFM.Website.Services
         public async Task<bool> Create(BankAccountEditModel model)
         {
             var request = _mapper.Map<AccountDetails>(model);
-            var apiResponse = await _api.Create(CurrentUserId, request);
+            var apiResponse = await _api.Create(GetCurrentUserId(), request);
             var result = ReadApiResponse<bool>(apiResponse);
             return result;
         }
@@ -48,7 +48,7 @@ namespace PFM.Website.Services
 
         public async Task<BankAccountListModel?> GetCurrentAccount(int? selectedAccount = null)
         {
-            var apiResponse = await _api.GetList(CurrentUserId);
+            var apiResponse = await _api.GetList(GetCurrentUserId());
             var response = ReadApiResponse<List<AccountList>>(apiResponse) ?? new List<AccountList>();
 
             AccountList? selected = null;
@@ -58,7 +58,7 @@ namespace PFM.Website.Services
             }
             else
             {
-                selected = response.Where(x => !x.IsSavingAccount).OrderBy(x => x.IsFavorite).FirstOrDefault();
+                selected = response.Where(x => !x.IsSavingAccount).OrderByDescending(x => x.IsFavorite).FirstOrDefault();
             }
 
             if (selected == null)

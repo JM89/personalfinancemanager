@@ -39,7 +39,7 @@ namespace PFM.Services
 
             var mappedAtmWithdraws = new List<AtmWithdrawList>();
 
-            foreach (var atmWithdraw in mappedAtmWithdraws)
+            foreach (var atmWithdraw in atmWithdraws)
             {
                 var map = Mapper.Map<AtmWithdrawList>(atmWithdraw);
 

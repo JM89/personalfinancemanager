@@ -1,5 +1,5 @@
 client_secret="RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jjd"
-api_endpoint="https://localhost:7098" # "https://localhost:4431"
+api_endpoint="https://localhost:4431" #"https://localhost:7098" 
 
 auth_response=$(curl -L POST "http://localhost:8080/realms/pfm/protocol/openid-connect/token" -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'client_id=pfm' --data-urlencode 'grant_type=password' --data-urlencode "client_secret=$client_secret" --data-urlencode 'scope=openid' --data-urlencode 'username=jess' --data-urlencode 'password=SecurityMatters!123' )
 
@@ -81,7 +81,7 @@ create_cash_expense () {
 }
 
 x=1
-while [ $x -le 1 ]
+while [ $x -le 5 ]
 do
 
   curl -v --insecure -X 'POST' \
