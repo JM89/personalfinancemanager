@@ -26,6 +26,22 @@ namespace PFM.Website.Services
             return response.Select(_mapper.Map<ExpenseListModel>).ToList();
         }
 
+        public async Task<ExpensePagedListModel> GetPaged(int skip, int take, ExpenseSearchParamModel search)
+        {
+            var request = _mapper.Map<ExpenseGetListSearchParameters>(search);
+            var apiResponse = await _api.GetList(request);
+            var response = ReadApiResponse<List<ExpenseList>>(apiResponse) ?? new List<ExpenseList>();
+
+            // Temporary doing server paging here, should be done in the API.
+            // START PATCH--------------------------------------
+            var pagedResponse = response.Skip(skip).Take(take);
+            var countResponse = response.Count;
+            // END PATCH--------------------------------------
+
+            var models = pagedResponse.Select(_mapper.Map<ExpenseListModel>).ToList();
+            return new ExpensePagedListModel(models, countResponse);
+        }
+
         public async Task<bool> Create(int accountId, ExpenseEditModel model)
         {
             var request = _mapper.Map<ExpenseDetails>(model);

@@ -7,7 +7,6 @@
 
 <PageTitle>Expenses</PageTitle>
 
-
 <div class="row">
     <div class="col-lg-8">
         <h1>Expenses</h1>
@@ -17,9 +16,9 @@
         <div class="col-lg-4" style="text-align: left">
             <div class="alert alert-info" role="alert">
                 <label><strong>Selected account: </strong></label>
-                <br/>
+                <br />
                 <label>@selectedBankAccount.BankName - @selectedBankAccount?.Name</label>
-                <br/>
+                <br />
                 <label>Balance: @selectedBankAccount?.DisplayedCurrentBalance</label>
             </div>
         </div>
@@ -46,50 +45,79 @@
 }
 else
 {
-    <table class="table">
-        <colgroup>
-            <col width="15%" />
-            <col width="25%" />
-            <col width="20%" />
-            <col width="12%" />
-            <col width="12%" />
-            <col width="15%" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Date Expense</th>
-                <th>Description</th>
-                <th>Expense Type</th>
-                <th>Cost</th>
-                <th>Already Debited</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var m in models)
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table">
+                <colgroup>
+                    <col width="15%" />
+                    <col width="25%" />
+                    <col width="20%" />
+                    <col width="12%" />
+                    <col width="12%" />
+                    <col width="15%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Date Expense</th>
+                        <th>Description</th>
+                        <th>Expense Type</th>
+                        <th>Cost</th>
+                        <th>Already Debited</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var m in models.Expenses)
+                    {
+                        <tr>
+                            <td>@m.DisplayedDateExpense</td>
+                            <td>@m.Description</td>
+                            <td>@m.ExpenseTypeName</td>
+                            <td>@m.DisplayedCost</td>
+                            <td>
+                                @if (m.PaymentMethodHasBeenAlreadyDebitedOption)
+                                {
+                                    <input id="hasBeenAlreadyDebited" type="checkbox" @bind="@m.HasBeenAlreadyDebited" disabled>
+                                }
+                            </td>
+                            <td>
+                                @if (m.PaymentMethodHasBeenAlreadyDebitedOption)
+                                {
+                                    <button class="btn btn-light btn-sm" @onclick="(() => ChangeDebitStatus(m.Id, m.HasBeenAlreadyDebited))"><i class="fa fa-thumbs-up"></i></button>
+                                }
+                                <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if (models.Expenses.Any())
+    {
+        <p class="px-2">@models.Expenses.Count() items out of @models.Count</p>
+        <button class="btn btn-sm" @onclick="PreviousPage">Previous</button>
+        @for (int i = _currentPage - 2; i <= _currentPage + 2; i++)
+        {
+            @if (i <= 0 || i > _maxPage)
             {
-                <tr>
-                    <td>@m.DisplayedDateExpense</td>
-                    <td>@m.Description</td>
-                    <td>@m.ExpenseTypeName</td>
-                    <td>@m.DisplayedCost</td>
-                    <td>
-                        @if (m.PaymentMethodHasBeenAlreadyDebitedOption)
-                        {
-                            <input id="hasBeenAlreadyDebited" type="checkbox" @bind="@m.HasBeenAlreadyDebited" disabled>
-                        }
-                    </td>
-                    <td>
-                        @if (m.PaymentMethodHasBeenAlreadyDebitedOption)
-                        {
-                            <button class="btn btn-light btn-sm" @onclick="(() => ChangeDebitStatus(m.Id, m.HasBeenAlreadyDebited))"><i class="fa fa-thumbs-up"></i></button>
-                        }
-                        <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
+                continue;
             }
-        </tbody>
-    </table>
+            int targetPage = i;
+
+            @if (targetPage == _currentPage)
+            {
+                <span class="px-2" style="font-weight:bold;">@i</span>
+            }
+            else
+            {
+                <span class="px-2" style="cursor:pointer;" @onclick="(() => ShowPage(targetPage))">@i</span>
+            }
+        }
+        <button class="btn btn-sm" @onclick="NextPage">Next</button>
+    }
+
     <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
              ConfirmationMessage=@($"Are you sure you want to delete \"{selected.Description}\"?")>
     </Confirm>
@@ -101,19 +129,21 @@ else
     [Parameter]
     public int? AccountId { get; set; }
 
-    private List<ExpenseListModel> models = new List<ExpenseListModel>();
+    private ExpensePagedListModel models = new ExpensePagedListModel(new List<ExpenseListModel>(), 0);
     private ExpenseListModel selected = new ExpenseListModel();
     protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
     private BankAccountListModel? selectedBankAccount;
+
+    private int _currentPage = 1;
+    private int _pageSize = 10;
+    private int _maxPage;
 
     protected override async Task OnInitializedAsync()
     {
         selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
         if (selectedBankAccount != null)
         {
-            models = await ExpenseService.GetAll(new ExpenseSearchParamModel() {
-                AccountId = selectedBankAccount.Id
-            });
+            await FetchPagedData(0, _pageSize);
         }
     }
 
@@ -141,6 +171,43 @@ else
     {
         await ExpenseService.ChangeDebitStatus(id, debitStatus);
         NavigationManager.NavigateTo($"/expenses/list/{selectedBankAccount?.Id}", true);
+    }
+
+    protected async Task PreviousPage()
+    {
+        if (_currentPage < 2)
+        {
+            return;
+        }
+
+        _currentPage--;
+        await FetchPagedData(_currentPage * _pageSize - _pageSize - 1, _pageSize);
+    }
+
+    protected async Task NextPage()
+    {
+        if (_currentPage > _maxPage)
+        {
+            return;
+        }
+
+        _currentPage++;
+        await FetchPagedData(_currentPage * _pageSize - _pageSize - 1, _pageSize);
+    }
+
+    protected async Task ShowPage(int targetPage)
+    {
+        _currentPage = targetPage;
+        await FetchPagedData(_currentPage * _pageSize - _pageSize - 1, _pageSize);
+    }
+
+    private async Task FetchPagedData(int skip, int take)
+    {
+        models = await ExpenseService.GetPaged(skip, take, new ExpenseSearchParamModel()
+        {
+            AccountId = selectedBankAccount?.Id ?? 0
+        });
+        _maxPage = models.Count / _pageSize + 1;
     }
 }
 
