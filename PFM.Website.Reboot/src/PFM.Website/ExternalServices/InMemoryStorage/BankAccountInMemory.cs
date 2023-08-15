@@ -17,11 +17,14 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             var rng = new Random();
             _storage = new List<AccountDetails>();
             for (int i = 0; i <= 4; i++) {
+                var currency = _currencies.ElementAt(rng.Next(_currencies.Count()));
                 var item = new AccountDetails() {
                     Id = i,
                     Name = $"Current account {i}",
                     BankId = _banks.ElementAt(rng.Next(_banks.Count())).Id,
-                    CurrencyId = _currencies.ElementAt(rng.Next(_currencies.Count())).Id,
+                    CurrencyId = currency.Id,
+                    CurrencyName = currency.Name,
+                    CurrencySymbol = currency.Symbol,
                     IsFavorite = i == 0,
                     IsSavingAccount = false
                 };

@@ -24,6 +24,13 @@ namespace PFM.Website.Services
             return models;
         }
 
+        public async Task<BankAccountEditModel> GetById(int id)
+        {
+            var apiResponse = await _api.Get(id);
+            var item = ReadApiResponse<AccountDetails>(apiResponse);
+            return _mapper.Map<BankAccountEditModel>(item);
+        }
+
         public async Task<bool> Create(BankAccountEditModel model)
         {
             var request = _mapper.Map<AccountDetails>(model);

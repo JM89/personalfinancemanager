@@ -1,0 +1,38 @@
+﻿@inherits VignetteMovementTypeSummaryBase
+
+<div class="row vignette blue">
+    <div class="col-lg-2">
+        <i class="fa-solid fa-upload fa-2xl"></i>
+    </div>
+    <div class="col-lg-10">
+        <label>Current Month Expenses</label><br />
+        <b><label>@CurrencySymbol@(String.Format("{0:0.00}", @Model.TotalExpensesCurrentMonth))</label></b>
+    </div>
+</div>
+<div class="row vignette green">
+    <div class="col-lg-2">
+        <i class="fa-solid fa-download fa-2xl"></i>
+    </div>
+    <div class="col-lg-10">
+        <label>Avg Incomes</label><br />
+        <b><label>@CurrencySymbol@(String.Format("{0:0.00}", @Model.AverageIncomesOver12Months))</label></b>
+    </div>
+</div>
+<div class="row vignette blue">
+    <div class="col-lg-2">
+        <i class="fa-solid fa-upload fa-2xl"></i>
+    </div>
+    <div class="col-lg-10">
+        <label>Avg Outcomes</label><br />
+        <b><label>@CurrencySymbol@(String.Format("{0:0.00}", @Model.AverageExpensesOver12Months))</label></b>
+    </div>
+</div>
+<div class="row vignette golden">
+    <div class="col-lg-2">
+        <i class="fa-solid fa-piggy-bank fa-2xl"></i>
+    </div>
+    <div class="col-lg-10">
+        <label>Avg Savings</label><br />
+        <b><label>@CurrencySymbol@(String.Format("{0:0.00}", @Model.AverageSavingsOver12Months))</label></b>
+    </div>
+</div>

@@ -37,11 +37,20 @@ namespace PFM.Website.Services
             var apiResponse = await _api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
+            var expenses = response.Where(x => x.Type == "Expenses");
+            decimal averageExpensesOver12Months = expenses.Any() ? expenses.Average(x => x.AggregatedAmount) : 0;
+
+            var incomes = response.Where(x => x.Type == "Incomes");
+            decimal averageIncomesOver12Months = incomes.Any() ? incomes.Average(x => x.AggregatedAmount) : 0;
+
+            var savings = response.Where(x => x.Type == "Savings");
+            decimal averageSavingsOver12Months = savings.Any() ? savings.Average(x => x.AggregatedAmount) : 0;
+
             return new DashboardMovementTypeSummaryModel(
-                response.Last().AggregatedAmount,
-                response.Where(x => x.Type == "Expenses").Average(x => x.AggregatedAmount),
-                response.Where(x => x.Type == "Incomes").Average(x => x.AggregatedAmount),
-                response.Where(x => x.Type == "Savings").Average(x => x.AggregatedAmount)
+                response.Any() ? response.Last().AggregatedAmount : 0,
+                averageExpensesOver12Months,
+                averageIncomesOver12Months,
+                averageSavingsOver12Months
             );
         }
 
