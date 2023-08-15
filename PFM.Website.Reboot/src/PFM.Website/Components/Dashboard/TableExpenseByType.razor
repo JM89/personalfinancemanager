@@ -1,0 +1,44 @@
+﻿@inherits TableExpenseByTypeBase
+
+@using PFM.Website.Models
+
+<b><label>Details for '@SelectedExpenseType?.Name'</label></b>
+
+
+@if (models == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table">
+                <colgroup>
+                    <col width="20%" />
+                    <col width="50%" />
+                    <col width="20%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Date Expense</th>
+                        <th>Description</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var m in models.List)
+                    {
+                        <tr>
+                            <td>@m.DisplayedDateExpense</td>
+                            <td>@m.Description</td>
+                            <td>@m.DisplayedCost</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<PagingFooter @ref="PagingFooter" FetchDataCallback="FetchExpenses" PageSize="@PageSize" T="ExpenseListModel"></PagingFooter>

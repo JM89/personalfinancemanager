@@ -112,7 +112,15 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> GetList(ExpenseGetListSearchParameters search)
         {
-            var result = JsonConvert.SerializeObject(_storage.Where(x => x.AccountId == search.AccountId).ToList());
+            var data = _storage.Where(x => x.AccountId == search.AccountId);
+
+            if (search.ExpenseTypeId.HasValue)
+            {
+                data = data.Where(x => x.ExpenseTypeId == search.ExpenseTypeId);
+            }
+
+            var result = JsonConvert.SerializeObject(data.ToList());
+
             return await Task.FromResult(new ApiResponse((object)result));
         }
 

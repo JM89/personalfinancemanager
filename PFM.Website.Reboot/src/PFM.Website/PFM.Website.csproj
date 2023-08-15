@@ -21,6 +21,7 @@
     <None Remove="Persistence\Implementations\" />
     <None Remove="Persistence\Models\" />
     <None Remove="Utils\" />
+    <None Remove="Components\Dashboard\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -35,6 +36,7 @@
     <Folder Include="Persistence\Implementations\" />
     <Folder Include="Persistence\Models\" />
     <Folder Include="Utils\" />
+    <Folder Include="Components\Dashboard\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="PFM.Api.Contracts" Version="4.3.0" />
