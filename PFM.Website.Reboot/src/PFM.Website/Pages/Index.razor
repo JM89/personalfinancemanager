@@ -3,11 +3,9 @@
 @using PFM.Website.Services
 @using PFM.Website.Models
 @using PFM.Website.Utils
-@using ChartJs.Blazor.PieChart
 @using ChartJs.Blazor.BarChart
 @using ChartJs.Blazor.LineChart
 @using System.Drawing
-@using Newtonsoft.Json.Linq;
 @using PFM.Website.Components.Dashboard
 
 @inject BankAccountService BankAccountService
@@ -133,10 +131,7 @@
                 </div>
             </div>
             <div class="col-lg-5">
-                @if (_expensesByCategoryOver12Months != null)
-                {
-                    <Chart Config="_expensesByCategoryOver12Months"></Chart>
-                }
+                <PieChartExpenseTypeSummary AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></PieChartExpenseTypeSummary>
             </div>
             <div class="col-lg-5">
                 Nothing here
@@ -183,7 +178,6 @@
         var data = new MovementSummaryStructureTests(DisplayedCategories, new List<string> { "Incomes", "Outcomes", "Savings" });
 
         BuildSplitByMovementTypeOver6MonthsBarChart(data);
-        BuildExpenseByCategoryOver12MonthsPieChart(data);
         BuildTotalExpenseOver12MonthsLineChart(data);
     }
 
@@ -192,6 +186,14 @@
         var id = Convert.ToInt32(referenced.Value);
         selectedCategory = null;
         NavigationManager.NavigateTo($"/{id}", true);
+    }
+
+    public async Task UpdateChartsForCategory(ExpenseTypeModel category)
+    {
+        await BarChartExpenseTypeOvertime.ReloadComponent(category.Id.Value);
+        await TableExpenseByType.ReloadComponent(category.Id.Value);
+        selectedCategory = category;
+        this.StateHasChanged();
     }
 
     private ExpenseTypeModel? selectedCategory;
@@ -215,19 +217,9 @@
         }
     }
 
-    private class PieDataPoint
-    {
-        public string Label { get; set; }
-
-        public int Value { get; set; }
-
-        public string Color { get; set; }
-    }
-
     private BarConfig? _splitByMovementTypeOver6Months;
     //private BarConfig? _categoryOver12Months;
     private LineConfig? _totalExpenseOver12Months;
-    private PieConfig? _expensesByCategoryOver12Months;
 
     private void BuildTotalExpenseOver12MonthsLineChart(MovementSummaryStructureTests data)
     {
@@ -321,62 +313,5 @@
             factors[i] = new Random().Next(0, 100);
         }
         return factors;
-    }
-
-    private void BuildExpenseByCategoryOver12MonthsPieChart(MovementSummaryStructureTests data)
-    {
-        _expensesByCategoryOver12Months = new PieConfig
-        {
-            Options = new PieOptions
-            {
-                Responsive = true,
-                Title = new OptionsTitle
-                {
-                    Display = true,
-                    Text = "Expenses by Category - Over 12 Months"
-                },
-                OnClick = new DelegateHandler<ChartMouseEvent>(async (e, j) => await OnClickHandler(e, j)),
-            }
-        };
-
-        var pieChartData = data.SourceExpenseTypes.Select(x => new PieDataPoint()
-        {
-            Label = x.Name,
-            Color = ColorUtils.ConvertColor(x.GraphColor),
-            Value = data.SummaryOver12PerCategory[x.Name]
-        }).OrderBy(x => x.Label);
-
-        foreach (string cat in pieChartData.Select(x => x.Label))
-        {
-            _expensesByCategoryOver12Months.Data.Labels.Add(cat);
-        }
-
-        PieDataset<int> dataset = new PieDataset<int>(pieChartData.Select(x => x.Value))
-        {
-            BackgroundColor = pieChartData.Select(x => ColorUtils.ConvertColor(x.Color, 150)).ToArray(),
-            BorderColor = pieChartData.Select(x => x.Color).ToArray(),
-        };
-
-        _expensesByCategoryOver12Months.Data.Datasets.Add(dataset);
-    }
-
-    public async Task OnClickHandler(JObject mouseEvent, JArray activeElements)
-    {
-        foreach (JObject elem in activeElements)
-        {
-            foreach (JProperty prop in elem.GetValue("_model"))
-            {
-                if (prop.Name.Equals("label"))
-                {
-                    selectedCategory = DisplayedCategories.FirstOrDefault(x => x.Name == prop.Value.ToString());
-                    if (selectedCategory != null && selectedCategory.Id.HasValue)
-                    {
-                        await BarChartExpenseTypeOvertime.ReloadComponent(selectedCategory.Id.Value);
-                        await TableExpenseByType.ReloadComponent(selectedCategory.Id.Value);
-                        this.StateHasChanged();
-                    }
-                }
-            }
-        }
     }
 }

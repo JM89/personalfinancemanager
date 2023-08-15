@@ -66,7 +66,7 @@ namespace PFM.Website.Components.Dashboard
                         Responsive = true,
                         Legend = new Legend
                         {
-                            Position = Position.Top
+                            Display = false
                         },
                         Title = new OptionsTitle
                         {
