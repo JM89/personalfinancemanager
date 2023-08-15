@@ -58,6 +58,7 @@ namespace PFM.Website.Components.Dashboard
 
         public async Task ReloadComponent(int expenseTypeId)
         {
+            ExpenseTypeId = expenseTypeId;
             SelectedExpenseType = await ExpenseTypeService.GetById(expenseTypeId);
             await FetchExpenses(0);
         }
