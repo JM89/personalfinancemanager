@@ -1,0 +1,26 @@
+﻿@typeparam T
+@inherits PagingFooterBase<T>
+
+@if (Model != null && Model.List != null && Model.List.Any())
+{
+    <p class="px-2">@Model.List.Count() items out of @Model.Count</p>
+    <button class="btn btn-sm" @onclick="PreviousPage">Previous</button>
+    @for (int i = @CurrentPage - 2; i <= @CurrentPage + 2; i++)
+    {
+        @if (i <= 0 || i > @MaxPage)
+        {
+            continue;
+        }
+        int targetPage = i;
+
+        @if (targetPage == @CurrentPage)
+        {
+            <span class="px-2" style="font-weight:bold;">@i</span>
+        }
+        else
+        {
+            <span class="px-2" style="cursor:pointer;" @onclick="(() => ShowPage(targetPage))">@i</span>
+        }
+    }
+    <button class="btn btn-sm" @onclick="NextPage">Next</button>
+}

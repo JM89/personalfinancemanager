@@ -67,7 +67,7 @@ else
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var m in models.Expenses)
+                    @foreach (var m in models.List)
                     {
                         <tr>
                             <td>@m.DisplayedDateExpense</td>
@@ -93,57 +93,37 @@ else
             </table>
         </div>
     </div>
-
-    @if (models.Expenses.Any())
-    {
-        <p class="px-2">@models.Expenses.Count() items out of @models.Count</p>
-        <button class="btn btn-sm" @onclick="PreviousPage">Previous</button>
-        @for (int i = _currentPage - 2; i <= _currentPage + 2; i++)
-        {
-            @if (i <= 0 || i > _maxPage)
-            {
-                continue;
-            }
-            int targetPage = i;
-
-            @if (targetPage == _currentPage)
-            {
-                <span class="px-2" style="font-weight:bold;">@i</span>
-            }
-            else
-            {
-                <span class="px-2" style="cursor:pointer;" @onclick="(() => ShowPage(targetPage))">@i</span>
-            }
-        }
-        <button class="btn btn-sm" @onclick="NextPage">Next</button>
-    }
-
-    <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
-             ConfirmationMessage=@($"Are you sure you want to delete \"{selected.Description}\"?")>
-    </Confirm>
-
 }
+
+<PagingFooter @ref="PagingFooter" FetchDataCallback="FetchExpenses" PageSize="@PageSize" T="ExpenseListModel"></PagingFooter>
+
+<Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+         ConfirmationMessage=@($"Are you sure you want to delete \"{selected.Description}\"?")>
+</Confirm>
 
 @code {
 
     [Parameter]
     public int? AccountId { get; set; }
 
-    private ExpensePagedListModel models = new ExpensePagedListModel(new List<ExpenseListModel>(), 0);
+    private PagedModel<ExpenseListModel> models = new PagedModel<ExpenseListModel>(new List<ExpenseListModel>(), 0);
     private ExpenseListModel selected = new ExpenseListModel();
     protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
+    protected PFM.Website.Components.PagingFooterBase<ExpenseListModel> PagingFooter { get; set; }
     private BankAccountListModel? selectedBankAccount;
 
-    private int _currentPage = 1;
-    private int _pageSize = 10;
-    private int _maxPage;
+    public int PageSize = 10;
 
     protected override async Task OnInitializedAsync()
     {
         selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
-        if (selectedBankAccount != null)
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
         {
-            await FetchPagedData(0, _pageSize);
+            await FetchExpenses(0);
         }
     }
 
@@ -173,41 +153,15 @@ else
         NavigationManager.NavigateTo($"/expenses/list/{selectedBankAccount?.Id}", true);
     }
 
-    protected async Task PreviousPage()
+    private async Task FetchExpenses(int skip)
     {
-        if (_currentPage < 2)
-        {
-            return;
-        }
-
-        _currentPage--;
-        await FetchPagedData(_currentPage * _pageSize - _pageSize - 1, _pageSize);
-    }
-
-    protected async Task NextPage()
-    {
-        if (_currentPage > _maxPage)
-        {
-            return;
-        }
-
-        _currentPage++;
-        await FetchPagedData(_currentPage * _pageSize - _pageSize - 1, _pageSize);
-    }
-
-    protected async Task ShowPage(int targetPage)
-    {
-        _currentPage = targetPage;
-        await FetchPagedData(_currentPage * _pageSize - _pageSize - 1, _pageSize);
-    }
-
-    private async Task FetchPagedData(int skip, int take)
-    {
-        models = await ExpenseService.GetPaged(skip, take, new ExpenseSearchParamModel()
+        models = await ExpenseService.GetPaged(skip, PageSize, new ExpenseSearchParamModel()
         {
             AccountId = selectedBankAccount?.Id ?? 0
         });
-        _maxPage = models.Count / _pageSize + 1;
+        this.StateHasChanged();
+
+        PagingFooter.RefreshModel(models);
     }
 }
 
