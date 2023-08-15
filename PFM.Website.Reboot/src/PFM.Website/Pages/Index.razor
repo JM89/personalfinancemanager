@@ -4,7 +4,6 @@
 @using PFM.Website.Models
 @using PFM.Website.Utils
 @using ChartJs.Blazor.BarChart
-@using ChartJs.Blazor.LineChart
 @using System.Drawing
 @using PFM.Website.Components.Dashboard
 
@@ -78,10 +77,7 @@
                 </div>
             </div>
             <div class="col-lg-5">
-                @if (_totalExpenseOver12Months != null)
-                {
-                    <Chart Config="_totalExpenseOver12Months"></Chart>
-                }
+                <LineChartExpenseOvertime @ref="LineChartExpenseOvertime" AccountId="@SelectedBankAccount?.Id"></LineChartExpenseOvertime>
             </div>
             <div class="col-lg-5">
                 @if (_splitByMovementTypeOver6Months != null)
@@ -93,10 +89,10 @@
         <hr />
         <div class="row">
             <div class="col-lg-2" style="font-size: 16px; padding: 5px; border-radius: 5px; color:white; text-align: right;">
-                <VignetteMovementTypeSummary AccountId="@SelectedBankAccount?.Id" ></VignetteMovementTypeSummary>
+                <VignetteMovementTypeSummary @ref="VignetteMovementTypeSummary" AccountId="@SelectedBankAccount?.Id" ></VignetteMovementTypeSummary>
             </div>
             <div class="col-lg-5">
-                <PieChartExpenseTypeSummary AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></PieChartExpenseTypeSummary>
+                <PieChartExpenseTypeSummary @ref="PieChartExpenseTypeSummary" AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></PieChartExpenseTypeSummary>
             </div>
             <div class="col-lg-5">
                 Nothing here
@@ -132,6 +128,9 @@
 
     protected TableExpenseByTypeBase TableExpenseByType { get; set; }
     protected BarChartExpenseTypeOvertimeBase BarChartExpenseTypeOvertime { get; set; }
+    protected VignetteMovementTypeSummaryBase VignetteMovementTypeSummary { get; set; }
+    protected PieChartExpenseTypeSummaryBase PieChartExpenseTypeSummary { get; set; }
+    protected LineChartExpenseOvertimeBase LineChartExpenseOvertime { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -143,7 +142,6 @@
         var data = new MovementSummaryStructureTests(DisplayedCategories, new List<string> { "Incomes", "Outcomes", "Savings" });
 
         BuildSplitByMovementTypeOver6MonthsBarChart(data);
-        BuildTotalExpenseOver12MonthsLineChart(data);
     }
 
     protected async Task UpdateSelected(ChangeEventArgs referenced)
@@ -183,39 +181,7 @@
     }
 
     private BarConfig? _splitByMovementTypeOver6Months;
-    //private BarConfig? _categoryOver12Months;
-    private LineConfig? _totalExpenseOver12Months;
 
-    private void BuildTotalExpenseOver12MonthsLineChart(MovementSummaryStructureTests data)
-    {
-        _totalExpenseOver12Months = new LineConfig
-        {
-            Options = new LineOptions
-            {
-                Responsive = true,
-                Title = new OptionsTitle
-                {
-                    Display = true,
-                    Text = "Expenses - Over 12 Months"
-                }
-            }
-        };
-
-        foreach (string cat in MonthYearHelper.GetXLastMonths(12, true))
-        {
-            _totalExpenseOver12Months.Data.Labels.Add(cat);
-        }
-
-        IDataset<int> dataset1 = new LineDataset<int>(RandomScalingFactor(12))
-        {
-            Label = "Actual",
-            BackgroundColor = ColorUtil.FromDrawingColor(Color.FromArgb(128, ColorUtils.Blue)),
-            BorderColor = ColorUtil.FromDrawingColor(ColorUtils.Blue),
-            BorderWidth = 1
-        };
-
-        _totalExpenseOver12Months.Data.Datasets.Add(dataset1);
-    }
 
     private void BuildSplitByMovementTypeOver6MonthsBarChart(MovementSummaryStructureTests data)
     {
