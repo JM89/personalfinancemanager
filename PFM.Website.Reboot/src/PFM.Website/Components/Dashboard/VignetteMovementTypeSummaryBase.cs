@@ -1,10 +1,4 @@
-﻿using System.Linq;
-using ChartJs.Blazor.Common;
-using ChartJs.Blazor.Common.Handlers;
-using ChartJs.Blazor.Interop;
-using ChartJs.Blazor.PieChart;
-using Microsoft.AspNetCore.Components;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Components;
 using PFM.Website.Models;
 using PFM.Website.Services;
 using PFM.Website.Utils;
