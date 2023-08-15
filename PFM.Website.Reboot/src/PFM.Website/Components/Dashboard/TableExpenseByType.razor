@@ -2,14 +2,7 @@
 
 @using PFM.Website.Models
 
-<b><label>Details for '@SelectedExpenseType?.Name'</label></b>
-
-
-@if (models == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
+@if (ExpenseTypeId != null && models != null && models.List != null)
 {
     <div class="row">
         <div class="col-lg-12">

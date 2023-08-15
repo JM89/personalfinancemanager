@@ -144,17 +144,18 @@
         </div>
         <hr />
 
-        @if (_categoryOver12Months != null && selectedCategory != null)
+        @if (selectedCategory != null)
         {
-            <div class="row">
-                <div class="col-lg-6">
-                    <Chart Config="_categoryOver12Months"></Chart>
-                </div>
-                <div class="col-lg-6">
-                    <TableExpenseByType @ref="TableExpenseByType" ExpenseTypeId="@selectedCategory?.Id" AccountId="@SelectedBankAccount?.Id"></TableExpenseByType>
-                </div>
-            </div>
+            <b><label style="font-size:12px;">Details for '@selectedCategory?.Name'</label></b>
         }
+        <div class="row">
+            <div class="col-lg-6">
+                <BarChartExpenseTypeOvertime @ref="BarChartExpenseTypeOvertime" ExpenseTypeId="@selectedCategory?.Id" AccountId="@SelectedBankAccount?.Id"></BarChartExpenseTypeOvertime>
+            </div>
+            <div class="col-lg-6">
+                <TableExpenseByType @ref="TableExpenseByType" ExpenseTypeId="@selectedCategory?.Id" AccountId="@SelectedBankAccount?.Id"></TableExpenseByType>
+            </div>
+        </div>
 
     </Authorized>
 </AuthorizeView>
@@ -170,6 +171,7 @@
     private IList<ExpenseTypeModel> DisplayedCategories;
 
     protected TableExpenseByTypeBase TableExpenseByType { get; set; }
+    protected BarChartExpenseTypeOvertimeBase BarChartExpenseTypeOvertime { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -183,12 +185,12 @@
         BuildSplitByMovementTypeOver6MonthsBarChart(data);
         BuildExpenseByCategoryOver12MonthsPieChart(data);
         BuildTotalExpenseOver12MonthsLineChart(data);
-        BuildCategoryOver12MonthsBarChart(new ExpenseTypeModel() { Name = "Blank", GraphColor = "000000" });
     }
 
     protected async Task UpdateSelected(ChangeEventArgs referenced)
     {
         var id = Convert.ToInt32(referenced.Value);
+        selectedCategory = null;
         NavigationManager.NavigateTo($"/{id}", true);
     }
 
@@ -222,46 +224,10 @@
         public string Color { get; set; }
     }
 
-
     private BarConfig? _splitByMovementTypeOver6Months;
-    private BarConfig? _categoryOver12Months;
+    //private BarConfig? _categoryOver12Months;
     private LineConfig? _totalExpenseOver12Months;
     private PieConfig? _expensesByCategoryOver12Months;
-
-    private void BuildCategoryOver12MonthsBarChart(ExpenseTypeModel selectedCategory)
-    {
-        _categoryOver12Months = new BarConfig
-        {
-            Options = new BarOptions
-            {
-                Responsive = true,
-                Legend = new Legend
-                {
-                    Position = Position.Top
-                },
-                Title = new OptionsTitle
-                {
-                    Display = true,
-                    Text = $"Expenses for '{selectedCategory.Name}' - Over 12 Months"
-                }
-            }
-        };
-
-        IDataset<int> dataset1 = new BarDataset<int>(RandomScalingFactor(12))
-        {
-            Label = selectedCategory.Name,
-            BackgroundColor = ColorUtils.ConvertColor(selectedCategory.GraphColor, 150),
-            BorderColor = ColorUtils.ConvertColor(selectedCategory.GraphColor),
-            BorderWidth = 1
-        };
-
-        foreach (string cat in MonthYearHelper.GetXLastMonths(12, true))
-        {
-            _categoryOver12Months.Data.Labels.Add(cat);
-        }
-
-        _categoryOver12Months.Data.Datasets.Add(dataset1);
-    }
 
     private void BuildTotalExpenseOver12MonthsLineChart(MovementSummaryStructureTests data)
     {
@@ -403,21 +369,11 @@
                 if (prop.Name.Equals("label"))
                 {
                     selectedCategory = DisplayedCategories.FirstOrDefault(x => x.Name == prop.Value.ToString());
-                    if (selectedCategory != null)
+                    if (selectedCategory != null && selectedCategory.Id.HasValue)
                     {
-                        IDataset<int> dataset1 = new BarDataset<int>(RandomScalingFactor(12))
-                        {
-                            Label = selectedCategory.Name,
-                            BackgroundColor = ColorUtils.ConvertColor(selectedCategory.GraphColor, 150),
-                            BorderColor = ColorUtils.ConvertColor(selectedCategory.GraphColor),
-                            BorderWidth = 1
-                        };
-
-                        _categoryOver12Months.Data.Datasets.Clear();
-                        _categoryOver12Months.Data.Datasets.Add(dataset1);
-
+                        await BarChartExpenseTypeOvertime.ReloadComponent(selectedCategory.Id.Value);
+                        await TableExpenseByType.ReloadComponent(selectedCategory.Id.Value);
                         this.StateHasChanged();
-                        await TableExpenseByType.ReloadComponent();
                     }
                 }
             }

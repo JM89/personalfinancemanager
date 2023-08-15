@@ -14,7 +14,6 @@ namespace PFM.Website.Components.Dashboard
 
         protected PagedModel<ExpenseListModel> models = new PagedModel<ExpenseListModel>(new List<ExpenseListModel>(), 0);
         protected PagingFooterBase<ExpenseListModel> PagingFooter { get; set; }
-        protected BankAccountListModel? SelectedBankAccount;
         protected ExpenseTypeModel? SelectedExpenseType;
         protected int PageSize = 5;
 
@@ -24,12 +23,8 @@ namespace PFM.Website.Components.Dashboard
         [Inject]
         protected ExpenseTypeService ExpenseTypeService { get; set; } = default!;
 
-        [Inject]
-        protected BankAccountService BankAccountService { get; set; } = default!;
-
         protected override async Task OnInitializedAsync()
         {
-            SelectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
             if (ExpenseTypeId.HasValue)
             {
                 SelectedExpenseType = await ExpenseTypeService.GetById(ExpenseTypeId.Value);
@@ -46,6 +41,11 @@ namespace PFM.Website.Components.Dashboard
 
         protected async Task FetchExpenses(int skip)
         {
+            if (ExpenseTypeId == null)
+            {
+                return;
+            }
+
             models = await ExpenseService.GetPaged(skip, PageSize, new ExpenseSearchParamModel()
             {
                 AccountId = AccountId,
@@ -56,13 +56,10 @@ namespace PFM.Website.Components.Dashboard
             PagingFooter.RefreshModel(models);
         }
 
-        public async Task ReloadComponent()
+        public async Task ReloadComponent(int expenseTypeId)
         {
-            if (ExpenseTypeId.HasValue)
-            {
-                SelectedExpenseType = await ExpenseTypeService.GetById(ExpenseTypeId.Value);
-                await FetchExpenses(0);
-            }
+            SelectedExpenseType = await ExpenseTypeService.GetById(expenseTypeId);
+            await FetchExpenses(0);
         }
     }
 }

@@ -51,7 +51,8 @@ builder.Services
     .AddSingleton<SavingService>()
     .AddSingleton<AtmWithdrawService>()
     .AddSingleton<ExpenseService>()
-    .AddSingleton<PaymentMethodService>();
+    .AddSingleton<PaymentMethodService>()
+    .AddSingleton<MovementSummaryService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<AuthHeaderHandler>();
