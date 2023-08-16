@@ -4,9 +4,10 @@
 @inject ExpenseTypeService ExpenseTypeService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Expense Types</PageTitle>
+<PageTitle>PFM - Expense Types</PageTitle>
 
-<h1>Expense Types</h1>
+<h3>Expense Types</h3>
+<hr />
 
 <div class="row">
     <div class="col-lg-10">
@@ -27,17 +28,15 @@ else
 {
     <table class="table">
         <colgroup>
-            <col width="3%" />
             <col width="70%" />
             <col width="17%" />
             <col width="10%" />
         </colgroup>
         <thead>
             <tr>
-                <th></th>
                 <th>Name</th>
                 <th>Show On Dashboard</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -45,11 +44,11 @@ else
             {
                 <tr>
                     <td>
-                        <svg width="20" height="10">
+                        <svg width="20" height="15">
                             <rect width="20" height="10" style="fill:#@expenseType.GraphColor;stroke-width:1;stroke:rgb(0,0,0)" />
-                        </svg>
+                        </svg>&nbsp;&nbsp;
+                        @expenseType.Name
                     </td>
-                    <td>@expenseType.Name</td>
                     <td>
                         <input id="showOnDashboard" type="checkbox" @bind="@expenseType.ShowOnDashboard" disabled>
                     </td>

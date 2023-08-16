@@ -13,7 +13,6 @@
                     <div class="col-lg-12">
                         <table class="table">
                             <colgroup>
-                                <col witdh="3%" />
                                 <col width="50%" />
                                 <col width="10%" />
                                 <col width="10%" />
@@ -22,7 +21,6 @@
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th></th>
                                     <th>Expense Type</th>
                                     <th>Actual</th>
                                     <th>Expected</th>
@@ -38,8 +36,8 @@
                                             <svg width="20" height="10">
                                                 <rect width="20" height="10" style="fill:#@(ExpenseTypes.SingleOrDefault(x => x.Name == m.ExpenseTypeName)?.GraphColor);stroke-width:1;stroke:rgb(0,0,0)" />
                                             </svg>
+                                            @m.ExpenseTypeName
                                         </td>
-                                        <td>@m.ExpenseTypeName</td>
                                         <td align="right">
                                             @CurrencySymbol@(String.Format("{0:0.00}", m.Actual))
                                             <br />

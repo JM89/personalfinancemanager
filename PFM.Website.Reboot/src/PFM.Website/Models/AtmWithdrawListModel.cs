@@ -19,11 +19,11 @@ namespace PFM.Website.Models
 
         public bool IsClosed { get; set; }
 
-        public string DisplayedInitialAmount => this.AccountCurrencySymbol + this.InitialAmount;
+        public string DisplayedInitialAmount => this.AccountCurrencySymbol + String.Format("{0:0.00}", this.InitialAmount);
 
         public decimal CurrentAmount { get; set; }
 
-        public string DisplayedCurrentAmount => this.AccountCurrencySymbol + this.CurrentAmount;
+        public string DisplayedCurrentAmount => this.AccountCurrencySymbol + String.Format("{0:0.00}", this.CurrentAmount);
 
         public bool HasBeenAlreadyDebited { get; set; }
 

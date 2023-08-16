@@ -4,9 +4,10 @@
 @inject BankService BankService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Banks</PageTitle>
+<PageTitle>PFM - Banks</PageTitle>
 
-<h1>Banks</h1>
+<h3>Banks</h3>
+<hr />
 
 <div class="row">
     <div class="col-lg-10">
@@ -27,17 +28,15 @@ else
 {
     <table class="table">
         <colgroup>
-            <col width="3%" />
             <col width="40%" />
             <col width="40%" />
             <col width="10%" />
         </colgroup>
         <thead>
             <tr>
-                <th></th>
                 <th>Name</th>
                 <th>Country</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -52,9 +51,9 @@ else
                         else
                         {
                             <img src="/Resources/dashboard-addExpenditures.png" width="18" height="18" />
-                        }
+                        }&nbsp;&nbsp;
+                        @m.Name
                     </td>
-                    <td>@m.Name</td>
                     <td>@m.CountryName</td>
                     <td>
                         <button class="btn btn-light btn-sm" @onclick="(() => Edit(m.Id))"><i class="fa-solid fa-pencil"></i></button>

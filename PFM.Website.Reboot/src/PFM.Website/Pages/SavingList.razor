@@ -5,12 +5,13 @@
 @inject BankAccountService BankAccountService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Savings</PageTitle>
+<PageTitle>PFM - Savings</PageTitle>
 
 
 <div class="row">
     <div class="col-lg-8">
-        <h1>Savings</h1>
+        <h3>Savings</h3>
+        <hr />
     </div>
     @if (selectedBankAccount != null)
     {
@@ -57,10 +58,10 @@ else
         <thead>
             <tr>
                 <th>Date Income</th>
-                <th>Cost</th>
+                <th style="text-align: right">Cost</th>
                 <th>Description</th>
                 <th>Target Account</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>

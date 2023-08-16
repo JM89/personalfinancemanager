@@ -1,4 +1,6 @@
-﻿namespace PFM.Website.Models
+﻿using System.Reflection;
+
+namespace PFM.Website.Models
 {
 	public class IncomeListModel
 	{
@@ -14,7 +16,7 @@
         {
             get
             {
-                return AccountCurrencySymbol + this.Cost;
+                return AccountCurrencySymbol + String.Format("{0:0.00}", this.Cost);
             }
         }
 

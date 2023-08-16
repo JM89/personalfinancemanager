@@ -4,9 +4,10 @@
 @inject BankAccountService BankAccountService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Bank accounts</PageTitle>
+<PageTitle>PFM - Bank accounts</PageTitle>
 
-<h1>Bank accounts</h1>
+<h3>Bank Accounts</h3>
+<hr />
 
 <div class="row">
     <div class="col-lg-10">
@@ -27,7 +28,6 @@ else
 {
     <table class="table">
         <colgroup>
-            <col width="2%" />
             <col width="23%" />
             <col width="20%" />
             <col width="15%" />
@@ -38,13 +38,12 @@ else
         </colgroup>
         <thead>
             <tr>
-                <th></th>
                 <th>Name</th>
                 <th>Bank</th>
                 <th>Currency</th>
                 <th>Current Balance</th>
                 <th>Saving account</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -52,12 +51,12 @@ else
             {
                 <tr>
                     <td>
+                        @m.Name&nbsp;
                         @if (m.IsFavorite)
                         {
                             <i class="fa-solid fa-star" aria-hidden="true" style="color:#ffca00"></i>
                         }
                     </td>
-                    <td>@m.Name</td>
                     <td>@m.BankName</td>
                     <td>@m.CurrencyName</td>
                     <td>@m.DisplayedCurrentBalance</td>

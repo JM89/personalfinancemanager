@@ -5,12 +5,13 @@
 @inject BankAccountService BankAccountService
 @inject NavigationManager NavigationManager
 
-<PageTitle>ATM Withdraws</PageTitle>
+<PageTitle>PFM - ATM Withdraws</PageTitle>
 
 
 <div class="row">
     <div class="col-lg-8">
-        <h1>ATM Withdraws</h1>
+        <h3>ATM Withdraws</h3>
+        <hr />
     </div>
     @if (selectedBankAccount != null)
     {
@@ -62,7 +63,7 @@ else
                 <th>Initial Amount</th>
                 <th>Current Amount</th>
                 <th>Already Debited</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -71,8 +72,8 @@ else
                 <tr>
                     <td>@m.DisplayedDateExpense</td>
                     <td>@m.Description</td>
-                    <td>@m.DisplayedInitialAmount</td>
-                    <td>@m.DisplayedCurrentAmount</td>
+                    <td style="text-align: right">@m.DisplayedInitialAmount</td>
+                    <td style="text-align: right">@m.DisplayedCurrentAmount</td>
                     <td>
                         <input id="hasBeenAlreadyDebited" type="checkbox" @bind="@m.HasBeenAlreadyDebited" disabled>
                     </td>

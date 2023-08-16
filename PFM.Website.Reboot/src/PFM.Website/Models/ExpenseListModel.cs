@@ -33,7 +33,7 @@ namespace PFM.Website.Models
         {
             get
             {
-                return this.AccountCurrencySymbol + this.Cost;
+                return this.AccountCurrencySymbol + String.Format("{0:0.00}", this.Cost);
             }
         }
 

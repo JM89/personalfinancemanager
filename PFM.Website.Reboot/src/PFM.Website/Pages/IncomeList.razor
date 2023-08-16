@@ -5,12 +5,12 @@
 @inject BankAccountService BankAccountService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Incomes</PageTitle>
-
+<PageTitle>PFM - Incomes</PageTitle>
 
 <div class="row">
     <div class="col-lg-8">
-        <h1>Incomes</h1>
+        <h3>Incomes</h3>
+        <hr />
     </div>
     @if (selectedBankAccount != null)
     {
@@ -58,7 +58,7 @@ else
                 <th>Date Income</th>
                 <th>Cost</th>
                 <th>Description</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -66,7 +66,7 @@ else
             {
                 <tr>
                     <td>@m.DisplayedDateIncome</td>
-                    <td>@m.DisplayedCost</td>
+                    <td style="text-align: right">@m.DisplayedCost</td>
                     <td>@m.Description</td>
                     <td>
                         <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))"><i class="fa-solid fa-trash"></i></button>

@@ -5,11 +5,12 @@
 @inject BankAccountService BankAccountService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Expenses</PageTitle>
+<PageTitle>PFM - Expenses</PageTitle>
 
 <div class="row">
     <div class="col-lg-8">
-        <h1>Expenses</h1>
+        <h3>Expenses</h3>
+        <hr />
     </div>
     @if (selectedBankAccount != null)
     {
@@ -63,7 +64,7 @@ else
                         <th>Expense Type</th>
                         <th>Cost</th>
                         <th>Already Debited</th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +74,7 @@ else
                             <td>@m.DisplayedDateExpense</td>
                             <td>@m.Description</td>
                             <td>@m.ExpenseTypeName</td>
-                            <td>@m.DisplayedCost</td>
+                            <td style="text-align: right">@m.DisplayedCost</td>
                             <td>
                                 @if (m.PaymentMethodHasBeenAlreadyDebitedOption)
                                 {
