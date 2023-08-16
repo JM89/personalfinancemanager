@@ -62,8 +62,7 @@ namespace PFM.Website.Components.Dashboard
                         Responsive = true,
                         Title = new OptionsTitle
                         {
-                            Display = true,
-                            Text = "Split Expenses by Category (last 12 Months)"
+                            Display = false
                         },
                         Legend = new Legend() { Display = false },
                         OnClick = new DelegateHandler<ChartMouseEvent>(async (e, j) => await OnClickHandler(e, j)),

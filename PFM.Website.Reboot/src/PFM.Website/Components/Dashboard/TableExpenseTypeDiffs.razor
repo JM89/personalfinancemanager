@@ -2,71 +2,80 @@
 
 @using PFM.Website.Models
 
-@if (Models != null && Models.List != null && Models.List.Any())
-{
-    <div class="row">
-        <div class="col-lg-12">
-            <table class="table">
-                <colgroup>
-                    <col witdh="3%" />
-                    <col width="50%" />
-                    <col width="10%" />
-                    <col width="10%" />
-                    <col width="10%" />
-                    <col width="10%" />
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Expense Type</th>
-                        <th>Actual</th>
-                        <th>Expected</th>
-                        <th>Last Month</th>
-                        <th>Average (Last 12 Months)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var m in Models.List)
-                    {
-                        <tr @onclick="async() => await CategoryClicked(m.ExpenseTypeName)" style="cursor:pointer;">
-                            <td>
-                                <svg width="20" height="10">
-                                    <rect width="20" height="10" style="fill:#@(ExpenseTypes.SingleOrDefault(x => x.Name == m.ExpenseTypeName)?.GraphColor);stroke-width:1;stroke:rgb(0,0,0)" />
-                                </svg>
-                            </td>
-                            <td>@m.ExpenseTypeName</td>
-                            <td align="right">
-                                @CurrencySymbol@(String.Format("{0:0.00}", m.Actual))
-                                <br />
-                                <label style="font-size: x-small;"></label>
-                            </td>
-                            <td align="right">
-                                @CurrencySymbol@(String.Format("{0:0.00}", m.Expected))
-                                <br />
-                                <label style="font-size: x-small;@(GetFontColorBasedOnDiff(m.ExpectedDiff))">
-                                    @CurrencySymbol@(String.Format("{0:0.00}", m.ExpectedDiff))
-                                </label>
-                            </td>
-                            <td align="right">
-                                @CurrencySymbol@(String.Format("{0:0.00}", m.PreviousMonth))
-                                <br />
-                                <label style="font-size: x-small;@(GetFontColorBasedOnDiff(m.PreviousMonthDiff))">
-                                    @CurrencySymbol@(String.Format("{0:0.00}", m.PreviousMonthDiff))
-                                </label>
-                            </td>
-                            <td align="right">
-                                @CurrencySymbol@(String.Format("{0:0.00}", m.Average))
-                                <br />
-                                <label style="font-size: x-small;@(GetFontColorBasedOnDiff(m.AverageDiff))">
-                                    @CurrencySymbol@(String.Format("{0:0.00}", m.AverageDiff))
-                                </label>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-}
 
-<PagingFooter @ref="PagingFooter" FetchDataCallback="FetchData" PageSize="@PageSize" T="ExpenseTypeDiffsModel"></PagingFooter>
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">
+
+            @if (Models != null && Models.List != null && Models.List.Any())
+            {
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table">
+                            <colgroup>
+                                <col witdh="3%" />
+                                <col width="50%" />
+                                <col width="10%" />
+                                <col width="10%" />
+                                <col width="10%" />
+                                <col width="10%" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Expense Type</th>
+                                    <th>Actual</th>
+                                    <th>Expected</th>
+                                    <th>Last Month</th>
+                                    <th>Average (Last 12 Months)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var m in Models.List)
+                                {
+                                    <tr @onclick="async() => await CategoryClicked(m.ExpenseTypeName)" style="cursor:pointer;">
+                                        <td>
+                                            <svg width="20" height="10">
+                                                <rect width="20" height="10" style="fill:#@(ExpenseTypes.SingleOrDefault(x => x.Name == m.ExpenseTypeName)?.GraphColor);stroke-width:1;stroke:rgb(0,0,0)" />
+                                            </svg>
+                                        </td>
+                                        <td>@m.ExpenseTypeName</td>
+                                        <td align="right">
+                                            @CurrencySymbol@(String.Format("{0:0.00}", m.Actual))
+                                            <br />
+                                            <label style="font-size: x-small;"></label>
+                                        </td>
+                                        <td align="right">
+                                            @CurrencySymbol@(String.Format("{0:0.00}", m.Expected))
+                                            <br />
+                                            <label style="font-size: x-small;@(GetFontColorBasedOnDiff(m.ExpectedDiff))">
+                                                @CurrencySymbol@(String.Format("{0:0.00}", m.ExpectedDiff))
+                                            </label>
+                                        </td>
+                                        <td align="right">
+                                            @CurrencySymbol@(String.Format("{0:0.00}", m.PreviousMonth))
+                                            <br />
+                                            <label style="font-size: x-small;@(GetFontColorBasedOnDiff(m.PreviousMonthDiff))">
+                                                @CurrencySymbol@(String.Format("{0:0.00}", m.PreviousMonthDiff))
+                                            </label>
+                                        </td>
+                                        <td align="right">
+                                            @CurrencySymbol@(String.Format("{0:0.00}", m.Average))
+                                            <br />
+                                            <label style="font-size: x-small;@(GetFontColorBasedOnDiff(m.AverageDiff))">
+                                                @CurrencySymbol@(String.Format("{0:0.00}", m.AverageDiff))
+                                            </label>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            <PagingFooter @ref="PagingFooter" FetchDataCallback="FetchData" PageSize="@PageSize" T="ExpenseTypeDiffsModel"></PagingFooter>
+
+        </p>
+    </div>
+</div>

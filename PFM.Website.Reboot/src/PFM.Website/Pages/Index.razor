@@ -11,6 +11,9 @@
 <AuthorizeView>
     <Authorized>
 
+        <h3>Account Management Dashboard</h3>
+        <hr/>
+
         <div class="row">
             <div class="col-lg-2" style="font-size: 12px; padding: 5px; border-radius: 5px;">
                <VignetteActions @ref="VignetteActions" AccountId="@SelectedBankAccount?.Id" AccountSelected="UpdateChartsForAccount"></VignetteActions>
@@ -24,21 +27,22 @@
         </div>
         <hr />
         <div class="row">
-            <div class="col-lg-2" style="font-size: 16px; padding: 5px; border-radius: 5px; color:white; text-align: right;">
-                <VignetteMovementTypeSummary @ref="VignetteMovementTypeSummary" AccountId="@SelectedBankAccount?.Id" ></VignetteMovementTypeSummary>
-            </div>
+            <h6>Split by Categories</h6>
             <div class="col-lg-4">
                 <PieChartExpenseTypeSummary @ref="PieChartExpenseTypeSummary" AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></PieChartExpenseTypeSummary>
             </div>
             <div class="col-lg-6">
                 <TableExpenseTypeDiffs @ref="TableExpenseTypeDiffs" AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></TableExpenseTypeDiffs>
             </div>
+            <div class="col-lg-2" style="font-size: 16px; padding: 5px; border-radius: 5px; color:white; text-align: right;">
+                <VignetteMovementTypeSummary @ref="VignetteMovementTypeSummary" AccountId="@SelectedBankAccount?.Id"></VignetteMovementTypeSummary>
+            </div>
         </div>
         <hr />
 
         @if (SelectedCategory != null)
         {
-            <b><label style="font-size:12px;">Details for '@SelectedCategory?.Name'</label></b>
+            <h6>Details for '@SelectedCategory?.Name'</h6>
         }
         <div class="row">
             <div class="col-lg-6">

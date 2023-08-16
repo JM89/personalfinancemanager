@@ -2,36 +2,45 @@
 
 @using PFM.Website.Models
 
-@if (ExpenseTypeId != null && models != null && models.List != null)
-{
-    <div class="row">
-        <div class="col-lg-12">
-            <table class="table">
-                <colgroup>
-                    <col width="20%" />
-                    <col width="50%" />
-                    <col width="20%" />
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>Date Expense</th>
-                        <th>Description</th>
-                        <th>Cost</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var m in models.List)
-                    {
-                        <tr>
-                            <td>@m.DisplayedDateExpense</td>
-                            <td>@m.Description</td>
-                            <td>@m.DisplayedCost</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-}
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">
+            @if (ExpenseTypeId != null && models != null && models.List != null)
+            {
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table">
+                            <colgroup>
+                                <col width="20%" />
+                                <col width="50%" />
+                                <col width="20%" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Date Expense</th>
+                                    <th>Description</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var m in models.List)
+                                {
+                                    <tr>
+                                        <td>@m.DisplayedDateExpense</td>
+                                        <td>@m.Description</td>
+                                        <td>@m.DisplayedCost</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
 
-<PagingFooter @ref="PagingFooter" FetchDataCallback="FetchExpenses" PageSize="@PageSize" T="ExpenseListModel"></PagingFooter>
+            <PagingFooter @ref="PagingFooter" FetchDataCallback="FetchExpenses" PageSize="@PageSize" T="ExpenseListModel"></PagingFooter>
+
+        </p>
+    </div>
+</div>
+
+

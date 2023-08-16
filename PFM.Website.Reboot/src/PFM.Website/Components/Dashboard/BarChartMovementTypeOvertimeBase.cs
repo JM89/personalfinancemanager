@@ -52,12 +52,11 @@ namespace PFM.Website.Components.Dashboard
                         Responsive = true,
                         Legend = new Legend
                         {
-                            Position = Position.Top
+                            Position = Position.Bottom
                         },
                         Title = new OptionsTitle
                         {
-                            Display = true,
-                            Text = "Incomes/Outcomes - Over 6 Months"
+                            Display = false
                         }
                     }
                 };

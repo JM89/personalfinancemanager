@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using ChartJs.Blazor.BarChart;
 using ChartJs.Blazor.Common;
+using ChartJs.Blazor.Common.Enums;
 using ChartJs.Blazor.LineChart;
 using ChartJs.Blazor.Util;
 using Microsoft.AspNetCore.Components;
@@ -52,10 +53,13 @@ namespace PFM.Website.Components.Dashboard
                     Options = new LineOptions
                     {
                         Responsive = true,
+                        Legend = new Legend
+                        {
+                            Position = Position.Bottom
+                        },
                         Title = new OptionsTitle
                         {
-                            Display = true,
-                            Text = "Expenses - Over 12 Months"
+                            Display = false
                         }
                     }
                 };
@@ -66,7 +70,7 @@ namespace PFM.Website.Components.Dashboard
                 }
             }
 
-            var dataset = new BarDataset<decimal>(model.Aggregates.Values.Select(x =>x.Actual))
+            var dataset1 = new LineDataset<decimal>(model.Aggregates.Values.Select(x =>x.Actual))
             {
                 Label = "Actual",
                 BackgroundColor = ColorUtil.FromDrawingColor(Color.FromArgb(128, ColorUtils.Blue)),
@@ -74,8 +78,17 @@ namespace PFM.Website.Components.Dashboard
                 BorderWidth = 1
             };
 
+            var dataset2 = new BarDataset<decimal>(model.Aggregates.Values.Select(x => x.Expected))
+            {
+                Label = "Expected",
+                BackgroundColor = ColorUtil.FromDrawingColor(Color.FromArgb(128, ColorUtils.Grey)),
+                BorderColor = ColorUtil.FromDrawingColor(ColorUtils.Grey),
+                BorderWidth = 1
+            };
+
             ChartConfig.Data.Datasets.Clear();
-            ChartConfig.Data.Datasets.Add(dataset);
+            ChartConfig.Data.Datasets.Add(dataset1);
+            ChartConfig.Data.Datasets.Add(dataset2);
         }
     }
 }
