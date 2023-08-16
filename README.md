@@ -2,7 +2,7 @@
 
 PFM is a web application to manage your personal finance and visualise your expenses in a dashboard.
 
-![PFM.png](./Documentation/Pictures/PFM.png)
+![PFM.png](./Documentation/Pictures/PFM-Reboot.png)
 
 The main features are: 
 * Management of bank accounts

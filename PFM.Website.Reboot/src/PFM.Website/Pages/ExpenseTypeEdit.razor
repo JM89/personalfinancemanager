@@ -20,42 +20,54 @@ else
     <hr />
 }
 
-<br />
-<EditForm Model="expenseType" OnSubmit="HandleSubmit">
-    <DataAnnotationsValidator />
-    <div class="col-sm-8 text-danger">
-        <ValidationSummary />
-    </div>
-    <div class="form-group row" style="height:50px">
-        <label for="name" class="col-sm-2 col-form-label">Name</label>
-        <div class="col-sm-10">
-            <InputText id="name" @bind-Value="expenseType.Name" class="form-control"></InputText>
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">
+                <div class="col-lg-6">
+                    <EditForm Model="expenseType" OnSubmit="HandleSubmit">
+                        <DataAnnotationsValidator />
+                        <div class="col-sm-8 text-danger">
+                            <ValidationSummary />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="name" class="col-sm-3 col-form-label">Name</label>
+                            <div class="col-sm-9">
+                                <InputText id="name" @bind-Value="expenseType.Name" class="form-control"></InputText>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="color" class="col-sm-3 col-form-label">Graph Color</label>
+                            <div class="col-sm-9">
+                                <button type="button" class="btn btn-light btn-sm" @onclick="OpenGraphColorModal">
+                                    <div style="width:80px; background-color:#@expenseType.GraphColor" class="buttonColor"></div>
+                                </button>
+                                <ColorPicker IsOpened="isGraphColorModalOpened" Closed="ClosedGraphColorModal" MyColor="@expenseType.GraphColor">
+                                </ColorPicker>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="showOnDashboard" class="col-sm-3 col-form-label">Show On Dashboard</label>
+                            <div class="col-sm-9">
+                                <InputCheckbox id="showOnDashboard" @bind-Value="expenseType.ShowOnDashboard"></InputCheckbox>
+                            </div>
+                            <br />
+                        </div>
+                        <br />
+                        <br />
+                        <div style="text-align:right;">
+                            <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </p>
         </div>
-        <br />
     </div>
-    <div class="form-group row" style="height:50px">
-        <label for="color" class="col-sm-2 col-form-label">Graph Color</label>
-        <div class="col-sm-10">
-            <button type="button" class="btn btn-light btn-sm" @onclick="OpenGraphColorModal">
-                <div style="width:80px; background-color:#@expenseType.GraphColor" class="buttonColor"></div>
-            </button>
-            <ColorPicker IsOpened="isGraphColorModalOpened" Closed="ClosedGraphColorModal" MyColor="@expenseType.GraphColor">
-            </ColorPicker>
-        </div>
-        <br />
-    </div>
-    <div class="form-group row" style="height:50px">
-        <label for="showOnDashboard" class="col-sm-2 col-form-label">Show On Dashboard</label>
-        <div class="col-sm-10">
-            <InputCheckbox id="showOnDashboard" @bind-Value="expenseType.ShowOnDashboard"></InputCheckbox>
-        </div>
-        <br />
-    </div>
-    <br />
-    <br />
-    <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
-    <button type="submit" class="btn btn-primary">Save</button>
-</EditForm>
+</div>
+
 
 @code {
 

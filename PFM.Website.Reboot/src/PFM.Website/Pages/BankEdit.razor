@@ -20,79 +20,91 @@ else
     <hr />
 }
 
-<br />
-<EditForm Model="m" OnSubmit="HandleSubmit">
-    <DataAnnotationsValidator />
-    <div class="col-sm-8 text-danger">
-        <ValidationSummary />
-    </div>
-    <div class="form-group row" style="height:50px">
-        <label for="name" class="col-sm-2 col-form-label">Country</label>
-        <div class="col-sm-10">
-            <select class="form-control" @bind="@m.CountryId">
-                <option value=""></option>
-                @foreach (var country in @AvailableCountries)
-                {
-                    <option value="@country.Id">@country.Name</option>
-                }
-            </select>
-        </div>
-        <br />
-    </div>
-    <div class="form-group row" style="height:50px">
-        <label for="name" class="col-sm-2 col-form-label">Name</label>
-        <div class="col-sm-10">
-            <InputText id="name" @bind-Value="m.Name" class="form-control"></InputText>
-        </div>
-        <br />
-    </div>
-    <div class="form-group row" style="height:50px">
-        <label for="website" class="col-sm-2 col-form-label">Website</label>
-        <div class="col-sm-10">
-            <InputText id="website" @bind-Value="m.Website" class="form-control"></InputText>
-        </div>
-        <br />
-    </div>
-    <div class="form-group row" style="height:50px">
-        <label for="phoneNumber" class="col-sm-2 col-form-label">Phone Number</label>
-        <div class="col-sm-10">
-            <InputText id="phoneNumber" @bind-Value="m.GeneralEnquiryPhoneNumber" class="form-control"></InputText>
-        </div>
-        <br />
-    </div>
-    <div class="form-group row" style="height:50px">
-        <label for="bank-icon" class="col-sm-2 col-form-label">Bank Icon</label>
-        <div class="col-sm-10">
-            <InputFile OnChange="@LoadBankIcon"></InputFile>
-            <br /><br />
-            <div class="form-group" id="IconPathPreviewDiv">
-                <div class="col-md-2"></div>
-                <div class="col-md-10">
-                    <table>
-                        @if (m.RenderedIcon != null)
-                        {
-                            <tr>
-                                <td>
-                                    <img id="IconPathPreview50" src="@m.RenderedIcon" width="50" height="50" />
-                                </td>
-                                <td>
-                                    <img id="IconPathPreview18" src="@m.RenderedIcon" width="18" height="18" />
-                                </td>
-                            </tr>
-                        }
-                    </table>
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">
+                <div class="col-lg-6">
+                    <EditForm Model="m" OnSubmit="HandleSubmit">
+                        <DataAnnotationsValidator />
+                        <div class="col-sm-8 text-danger">
+                            <ValidationSummary />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="name" class="col-sm-3 col-form-label">Country</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" @bind="@m.CountryId">
+                                    <option value=""></option>
+                                    @foreach (var country in @AvailableCountries)
+                                    {
+                                        <option value="@country.Id">@country.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="name" class="col-sm-3 col-form-label">Name</label>
+                            <div class="col-sm-9">
+                                <InputText id="name" @bind-Value="m.Name" class="form-control"></InputText>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="website" class="col-sm-3 col-form-label">Website</label>
+                            <div class="col-sm-9">
+                                <InputText id="website" @bind-Value="m.Website" class="form-control"></InputText>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="phoneNumber" class="col-sm-3 col-form-label">Phone Number</label>
+                            <div class="col-sm-9">
+                                <InputText id="phoneNumber" @bind-Value="m.GeneralEnquiryPhoneNumber" class="form-control"></InputText>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="bank-icon" class="col-sm-3 col-form-label">Bank Icon</label>
+                            <div class="col-sm-9">
+                                <InputFile OnChange="@LoadBankIcon"></InputFile>
+                                <br /><br />
+                                <div class="form-group" id="IconPathPreviewDiv">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-10">
+                                        <table>
+                                            @if (m.RenderedIcon != null)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <img id="IconPathPreview50" src="@m.RenderedIcon" width="50" height="50" />
+                                                    </td>
+                                                    <td>
+                                                        <img id="IconPathPreview18" src="@m.RenderedIcon" width="18" height="18" />
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <div style="text-align:right;">
+                            <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </EditForm>
                 </div>
-            </div>
+            </p>
         </div>
-        <br />
     </div>
-    <br />
-    <br />
-    <br />
-    <br />
-    <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
-    <button type="submit" class="btn btn-primary">Save</button>
-</EditForm>
+</div>
+
 
 @code {
 
