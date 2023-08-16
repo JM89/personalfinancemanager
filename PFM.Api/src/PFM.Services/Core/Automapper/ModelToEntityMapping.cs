@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PFM.Services.Core.Automapper
 {
@@ -13,6 +8,8 @@ namespace PFM.Services.Core.Automapper
         {
             CreateMap<Api.Contracts.Expense.ExpenseDetails, DataAccessLayer.Entities.Expense>();
             CreateMap<Api.Contracts.Expense.ExpenseList, DataAccessLayer.Entities.Expense>();
+
+            CreateMap<Api.Contracts.MovementSummary.MovementSummary, DataAccessLayer.Entities.MovementSummary>();
 
             CreateMap<Api.Contracts.AtmWithdraw.AtmWithdrawList, DataAccessLayer.Entities.AtmWithdraw>();
             CreateMap<Api.Contracts.AtmWithdraw.AtmWithdrawDetails, DataAccessLayer.Entities.AtmWithdraw>();

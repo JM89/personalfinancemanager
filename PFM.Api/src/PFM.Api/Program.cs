@@ -2,6 +2,7 @@ using App.Metrics;
 using App.Metrics.AspNetCore;
 using App.Metrics.Formatters.Prometheus;
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,9 @@ namespace PFM.Api
                 .AddEventPublisherConfigurations(builder.Configuration);
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
+
+            var appSettings = builder.Configuration.GetSection("DataSettings").Get<DataSettings>() ?? new DataSettings();
+            builder.Services.AddSingleton(appSettings);
 
             builder.Host
                 .ConfigureMetrics(metrics)

@@ -1,12 +1,12 @@
-﻿using PFM.Api.Contracts.BudgetPlan;
-using PFM.Api.Contracts.Dashboard;
-using System;
+﻿using PFM.Api.Contracts.MovementSummary;
+using PFM.Api.Contracts.SearchParameters;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PFM.Services.Interfaces
 {
     public interface IMovementSummaryService : IBaseService
     {
-        Task<ExpenseSummary> GetExpenseSummary(int accountId, BudgetPlanDetails budgetPlan, DateTime referenceDate);
+        Task<IList<MovementSummary>> GetMovementSummaryOverTime(MovementSummarySearchParameters search);
     }
 }
