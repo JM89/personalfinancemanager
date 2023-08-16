@@ -46,13 +46,12 @@ namespace PFM.Website.Components.Dashboard
             if (!AccountId.HasValue && SelectedExpenseType == null)
                 return;
 
-            var model = await MovementSummaryService.GetExpenseTypeOvertime(new MovementSummarySearchParamModel()
-            {
-                BankAccountId = AccountId.Value,
-                MonthYearIdentifiers = Months.ToList(),
-                OptionalCategory = SelectedExpenseType.Name,
-                OptionalType = "Expenses"
-            });
+            var model = await MovementSummaryService.GetExpenseTypeOvertime(
+                new MovementSummarySearchParamModel(AccountId.Value, Months)
+                {
+                    OptionalCategory = SelectedExpenseType.Name,
+                    OptionalType = "Expenses"
+                });
 
             if (model == null)
                 return;

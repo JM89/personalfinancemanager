@@ -3,6 +3,7 @@ using PFM.Website.Configurations;
 using PFM.Website.ExternalServices;
 using PFM.Website.ExternalServices.Contracts;
 using PFM.Website.Models;
+using PFM.Website.Utils;
 
 namespace PFM.Website.Services
 {
@@ -100,6 +101,33 @@ namespace PFM.Website.Services
                 .OrderBy(x => x.Key)
                 .ToDictionary(x => x.Key, y => y.ToList().Sum(x => x.AggregatedAmount));
             return new DashboardExpenseTypeOvertimeModel(data);
+        }
+
+        public async Task<DashboardExpenseTypeDiffsModel> GetExpenseTypePaged(int skip, int take, MovementSummarySearchParamModel search)
+        {
+            if (search.OptionalType == null)
+            {
+                throw new InvalidOperationException($"{nameof(search.OptionalType)} must be set.");
+            }
+
+            var request = _mapper.Map<MovementSummarySearchParams>(search);
+            var apiResponse = await _api.GetMovementSummaryOvertime(request);
+            var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
+
+            var previousMonthIdentifier = MonthYearHelper.ConvertToYYYYMM(DateTime.UtcNow.AddMonths(-1));
+
+            var responseByCategories = response.GroupBy(x => x.Category);
+            var pagedByCategories = responseByCategories.Skip(skip).Take(take);
+
+            var data = pagedByCategories
+                .Select(x => new ExpenseTypeDiffsModel() {
+                    ExpenseTypeName = x.Key,
+                    Actual = x.Any() ? x.Last().AggregatedAmount : 0,
+                    Expected = 0, // Budget
+                    Average = x.Any(y => y.MonthYearIdentifier == previousMonthIdentifier) ? x.Average(x => x.AggregatedAmount) : 0,
+                }).ToList();
+
+            return new DashboardExpenseTypeDiffsModel(new PagedModel<ExpenseTypeDiffsModel>(data, responseByCategories.Count()));
         }
     }
 }

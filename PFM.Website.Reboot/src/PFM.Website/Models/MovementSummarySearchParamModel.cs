@@ -2,13 +2,19 @@
 {
 	public class MovementSummarySearchParamModel
     {
-		public int BankAccountId { get; set; }
+		public int BankAccountId { get; }
 
-        public IList<string> MonthYearIdentifiers { get; set; }
+        public IEnumerable<string> MonthYearIdentifiers { get; }
 
         public string? OptionalCategory { get; set; }
 
         public string? OptionalType { get; set; }
+
+        public MovementSummarySearchParamModel(int bankAccountId, IEnumerable<string> monthYearIdentifiers)
+        {
+            BankAccountId = bankAccountId;
+            MonthYearIdentifiers = monthYearIdentifiers;
+        }
     }
 }
 

@@ -37,11 +37,8 @@ namespace PFM.Website.Components.Dashboard
             if (!AccountId.HasValue)
                 return;
 
-            var model = await MovementSummaryService.GetMovementTypeOverTimeModel(new MovementSummarySearchParamModel()
-            {
-                BankAccountId = AccountId.Value,
-                MonthYearIdentifiers = Months.ToList()
-            });
+            var model = await MovementSummaryService.GetMovementTypeOverTimeModel(
+                new MovementSummarySearchParamModel(AccountId.Value, Months));
 
             if (model == null)
                 return;

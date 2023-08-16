@@ -27,11 +27,11 @@
             <div class="col-lg-2" style="font-size: 16px; padding: 5px; border-radius: 5px; color:white; text-align: right;">
                 <VignetteMovementTypeSummary @ref="VignetteMovementTypeSummary" AccountId="@SelectedBankAccount?.Id" ></VignetteMovementTypeSummary>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-4">
                 <PieChartExpenseTypeSummary @ref="PieChartExpenseTypeSummary" AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></PieChartExpenseTypeSummary>
             </div>
-            <div class="col-lg-5">
-                Nothing here
+            <div class="col-lg-6">
+                <TableExpenseTypeDiffs @ref="TableExpenseTypeDiffs" AccountId="@SelectedBankAccount?.Id"></TableExpenseTypeDiffs>
             </div>
         </div>
         <hr />
@@ -68,6 +68,7 @@
     protected LineChartExpenseOvertimeBase LineChartExpenseOvertime { get; set; }
     protected BarChartMovementTypeOvertimeBase BarChartMovementTypeOvertime { get; set; }
     protected VignetteActionsBase VignetteActions { get; set; }
+    protected TableExpenseTypeDiffsBase TableExpenseTypeDiffs { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

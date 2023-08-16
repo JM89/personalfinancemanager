@@ -1,0 +1,43 @@
+﻿@inherits TableExpenseTypeDiffsBase
+
+@using PFM.Website.Models
+
+@if (Models != null && Models.List != null)
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="10%" />
+                    <col width="10%" />
+                    <col width="10%" />
+                    <col width="10%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Expense Type</th>
+                        <th>Actual</th>
+                        <th>Expected</th>
+                        <th>Last Month</th>
+                        <th>Average (Last 12 Months)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var m in Models.List)
+                    {
+                        <tr>
+                            <td>@m.ExpenseTypeName</td>
+                            <td>@(String.Format("{0:0.00}", m.Actual))</td>
+                            <td>@(String.Format("{0:0.00}", m.Expected))</td>
+                            <td>@(String.Format("{0:0.00}", m.PreviousMonth))</td>
+                            <td>@(String.Format("{0:0.00}", m.Average))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<PagingFooter @ref="PagingFooter" FetchDataCallback="FetchData" PageSize="@PageSize" T="ExpenseTypeDiffsModel"></PagingFooter>

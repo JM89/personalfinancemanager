@@ -30,11 +30,8 @@ namespace PFM.Website.Components.Dashboard
             {
                 CurrencySymbol = (await BankAccountService.GetById(AccountId.Value))?.CurrencySymbol ?? "";
 
-                Model = await MovementSummaryService.GetMovementTypeSummary(new MovementSummarySearchParamModel()
-                {
-                    BankAccountId = AccountId.Value,
-                    MonthYearIdentifiers = Months.ToList()
-                });
+                Model = await MovementSummaryService.GetMovementTypeSummary(
+                    new MovementSummarySearchParamModel(AccountId.Value, Months));
             }
         }
     }

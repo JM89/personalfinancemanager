@@ -36,13 +36,23 @@
                 var asterisk = includeCurrent && startMonth.Month == today.Month ? "*" : "";
                 var label = uiFriendly ?
                     $"{_shortMonthNames[startMonth.Month]} {startMonth.Year.ToString().Substring(2)}{asterisk}":
-                    $"{startMonth.Year}{startMonth.Month.ToString().PadLeft(2, '0')}";
+                    $"{ConvertToYYYYMM(startMonth)}";
 
                 labels.Add(label);
                 startMonth = startMonth.AddMonths(1);
             }
 
             return labels;
+        }
+
+        public static string ConvertToYYYYMM(DateOnly dt)
+        {
+            return $"{dt.Year}{dt.Month.ToString().PadLeft(2, '0')}";
+        }
+
+        public static string ConvertToYYYYMM(DateTime dt)
+        {
+            return ConvertToYYYYMM(DateOnly.FromDateTime(dt));
         }
     }
 }

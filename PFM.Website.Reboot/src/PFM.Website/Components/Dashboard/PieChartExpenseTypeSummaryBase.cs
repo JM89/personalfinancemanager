@@ -44,12 +44,11 @@ namespace PFM.Website.Components.Dashboard
             if (!AccountId.HasValue)
                 return;
 
-            var model = await MovementSummaryService.GetExpenseTypeSummary(new MovementSummarySearchParamModel()
-            {
-                BankAccountId = AccountId.Value,
-                MonthYearIdentifiers = Months.ToList(),
-                OptionalType = "Expenses"
-            });
+            var model = await MovementSummaryService.GetExpenseTypeSummary(
+                new MovementSummarySearchParamModel(AccountId.Value, Months)
+                {
+                    OptionalType = "Expenses"
+                });
 
             if (model == null)
                 return;
