@@ -87,10 +87,10 @@ To speed up the development of the front-end part, I used an in-memory storage i
 
 The API URLs can be found here:
 
-|Resources|Docker|Debug Mode|Internal Docker|Documentation|
-|---|---|---|---|---|
-|App - PFM.Api|[Api Endpoints](https://localhost:4431/api)<br/>[Swagger](https://localhost:4431/swagger/index.html)|[Api Endpoints](https://localhost:7098/api)<br/>[Swagger](https://localhost:7098/swagger/index.html)|[Api Endpoints](https://pfm-api:4431/api)|[Link](./PFM.Api/README.md)|
-|App - PFM.Bank.Api|[Api Endpoints](https://localhost:7099/api)<br/>[Swagger](https://localhost:7099/swagger/index.html)|[Api Endpoints](https://localhost:50001/api)<br/>[Swagger](http://localhost:50001/swagger/index.html)|[Api Endpoints](http://pfm-bank-api:50001/api)|[Link](./PFM.Bank.Api/README.md)|
+|Resources|Docker|Debug Mode|Internal Docker|
+|---|---|---|---|
+|App - PFM.Api|[Api Endpoints](https://localhost:4431/api)<br/>[Swagger](https://localhost:4431/swagger/index.html)|[Api Endpoints](https://localhost:7098/api)<br/>[Swagger](https://localhost:7098/swagger/index.html)|[Api Endpoints](https://pfm-api:4431/api)|
+|App - PFM.Bank.Api|[Api Endpoints](https://localhost:7099/api)<br/>[Swagger](https://localhost:7099/swagger/index.html)|[Api Endpoints](https://localhost:50001/api)<br/>[Swagger](http://localhost:50001/swagger/index.html)|[Api Endpoints](http://pfm-bank-api:50001/api)|
 
 ### Debug the APIs
 
@@ -106,6 +106,14 @@ curl -v -L -X POST "http://localhost:8080/realms/pfm/protocol/openid-connect/tok
 --data-urlencode 'username=jess' \
 --data-urlencode 'password=SecurityMatters!123' | jq .access_token
 ```
+
+The bearer token generated can then be used in Swagger.
+
+Click on the "Authorize" button at the top of the page, enter "Bearer ", copy the token and Authorize:
+
+![](../Documentation/Pictures/API-BearerToken.PNG)
+
+You can now access the actions.
 
 ### Generate some data
 
