@@ -19,8 +19,9 @@ namespace PFM.Website.Components.Dashboard
         protected PagedModel<ExpenseTypeDiffsModel> Models = new PagedModel<ExpenseTypeDiffsModel>(new List<ExpenseTypeDiffsModel>(), 0);
         protected PagingFooterBase<ExpenseTypeDiffsModel> PagingFooter { get; set; }
         protected List<ExpenseTypeModel> ExpenseTypes;
-        protected int PageSize = 5;
+        protected int PageSize = 4;
         protected string CurrencySymbol = "";
+        protected string LastMonthLabel = "";
 
         private IEnumerable<string> Months;
         private const int Duration = 12;
@@ -37,6 +38,7 @@ namespace PFM.Website.Components.Dashboard
 
         protected override async Task OnInitializedAsync()
         {
+            LastMonthLabel = MonthYearHelper.ConvertToUiFriendly(DateTime.UtcNow.AddMonths(-1));
             Months = MonthYearHelper.GetXLastMonths(Duration, IncludeCurrentMonth, false);
             ExpenseTypes = (await ExpenseTypeService.GetAll()).Where(x => x.ShowOnDashboard).ToList();
             if (AccountId.HasValue)

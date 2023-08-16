@@ -35,7 +35,7 @@
             {
                 var asterisk = includeCurrent && startMonth.Month == today.Month ? "*" : "";
                 var label = uiFriendly ?
-                    $"{_shortMonthNames[startMonth.Month]} {startMonth.Year.ToString().Substring(2)}{asterisk}":
+                    $"{ConvertToUiFriendly(startMonth)}{asterisk}":
                     $"{ConvertToYYYYMM(startMonth)}";
 
                 labels.Add(label);
@@ -53,6 +53,16 @@
         public static string ConvertToYYYYMM(DateTime dt)
         {
             return ConvertToYYYYMM(DateOnly.FromDateTime(dt));
+        }
+
+        public static string ConvertToUiFriendly(DateOnly dt)
+        {
+            return $"{_shortMonthNames[dt.Month]} {dt.Year.ToString().Substring(2)}";
+        }
+
+        public static string ConvertToUiFriendly(DateTime dt)
+        {
+            return ConvertToUiFriendly(DateOnly.FromDateTime(dt));
         }
     }
 }
