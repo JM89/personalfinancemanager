@@ -9,6 +9,8 @@
         public string? OptionalType { get; set; }
 
         public string? OptionalCategory { get; set; }
+
+        public IList<string>? ExcludedCategories { get; set; }
     }
 }
 

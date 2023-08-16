@@ -18,9 +18,15 @@
 
         public decimal Expected { get; set; }
 
+		public decimal ExpectedDiff => Actual - Expected;
+
         public decimal PreviousMonth { get; set; }
 
+        public decimal PreviousMonthDiff => Actual - PreviousMonth;
+
         public decimal Average { get; set; }
+
+        public decimal AverageDiff => Actual - Average;
     }
 }
 

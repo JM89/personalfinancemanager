@@ -10,6 +10,8 @@
 
         public string? OptionalType { get; set; }
 
+        public IList<string>? ExcludedCategories { get; set; }
+
         public MovementSummarySearchParamModel(int bankAccountId, IEnumerable<string> monthYearIdentifiers)
         {
             BankAccountId = bankAccountId;

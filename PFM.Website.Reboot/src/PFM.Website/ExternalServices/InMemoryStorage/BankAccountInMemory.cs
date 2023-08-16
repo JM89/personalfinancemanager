@@ -25,7 +25,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                     CurrencyId = currency.Id,
                     CurrencyName = currency.Name,
                     CurrencySymbol = currency.Symbol,
-                    IsFavorite = i == 0,
+                    IsFavorite = i == 1,
                     IsSavingAccount = false
                 };
                 _storage.Add(item);

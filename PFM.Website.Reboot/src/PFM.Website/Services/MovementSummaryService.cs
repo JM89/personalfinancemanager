@@ -10,12 +10,14 @@ namespace PFM.Website.Services
     public class MovementSummaryService : CoreService
     {
         private readonly IMovementSummaryApi _api;
+        private readonly IExpenseTypeApi _expenseApi;
 
         public MovementSummaryService(Serilog.ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor,
-            ApplicationSettings settings, IMovementSummaryApi api)
+            ApplicationSettings settings, IMovementSummaryApi api, IExpenseTypeApi expenseApi)
             : base(logger, mapper, httpContextAccessor, settings)
         {
             _api = api;
+            _expenseApi = expenseApi;
         }
 
         public async Task<DashboardExpenseTypeSummaryModel> GetExpenseTypeSummary(MovementSummarySearchParamModel search)
@@ -124,7 +126,8 @@ namespace PFM.Website.Services
                     ExpenseTypeName = x.Key,
                     Actual = x.Any() ? x.Last().AggregatedAmount : 0,
                     Expected = 0, // Budget
-                    Average = x.Any(y => y.MonthYearIdentifier == previousMonthIdentifier) ? x.Average(x => x.AggregatedAmount) : 0,
+                    PreviousMonth = x.Any(y => y.MonthYearIdentifier == previousMonthIdentifier) ? x.Where(y => y.MonthYearIdentifier == previousMonthIdentifier).Sum(x => x.AggregatedAmount) : 0,
+                    Average = x.Any() ? x.Average(x => x.AggregatedAmount) : 0
                 }).ToList();
 
             return new DashboardExpenseTypeDiffsModel(new PagedModel<ExpenseTypeDiffsModel>(data, responseByCategories.Count()));

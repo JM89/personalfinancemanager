@@ -13,10 +13,14 @@ namespace PFM.Website.Components.Dashboard
         [Parameter]
         public int? AccountId { get; set; }
 
+        [Parameter]
+        public EventCallback<ExpenseTypeModel> CategorySelected { get; set; }
+
         protected PagedModel<ExpenseTypeDiffsModel> Models = new PagedModel<ExpenseTypeDiffsModel>(new List<ExpenseTypeDiffsModel>(), 0);
         protected PagingFooterBase<ExpenseTypeDiffsModel> PagingFooter { get; set; }
-        protected ExpenseTypeModel? SelectedExpenseType;
+        protected List<ExpenseTypeModel> ExpenseTypes;
         protected int PageSize = 5;
+        protected string CurrencySymbol = "";
 
         private IEnumerable<string> Months;
         private const int Duration = 12;
@@ -28,13 +32,16 @@ namespace PFM.Website.Components.Dashboard
         [Inject]
         protected ExpenseTypeService ExpenseTypeService { get; set; } = default!;
 
+        [Inject]
+        protected BankAccountService BankAccountService { get; set; } = default!;
+
         protected override async Task OnInitializedAsync()
         {
             Months = MonthYearHelper.GetXLastMonths(Duration, IncludeCurrentMonth, false);
-
-            if (ExpenseTypeId.HasValue)
+            ExpenseTypes = (await ExpenseTypeService.GetAll()).Where(x => x.ShowOnDashboard).ToList();
+            if (AccountId.HasValue)
             {
-                SelectedExpenseType = await ExpenseTypeService.GetById(ExpenseTypeId.Value);
+                CurrencySymbol = (await BankAccountService.GetById(AccountId.Value))?.CurrencySymbol ?? "";
             }
         }
 
@@ -53,17 +60,49 @@ namespace PFM.Website.Components.Dashboard
                 return;
             }
 
+            var excludeCategories = (await ExpenseTypeService.GetAll())
+                .Where(x => !x.ShowOnDashboard)
+                .Select(x => x.Name)
+                .ToList();
+
             var model = await MovementSummaryService.GetExpenseTypePaged(skip, PageSize,
                 new MovementSummarySearchParamModel(AccountId.Value, Months)
                 {
-                    OptionalType = "Expenses"
-                });
+                    OptionalType = "Expenses",
+                    ExcludedCategories = excludeCategories
+             });
 
             Models = model.PagedList;
 
             this.StateHasChanged();
 
             PagingFooter.RefreshModel(Models);
+        }
+
+        protected string GetFontColorBasedOnDiff(decimal diff)
+        {
+            var color = "E0E0E0";
+
+            if (diff > 0)
+            {
+                color = "FF3333";
+            }
+
+            if (diff < 0)
+            {
+                color = "009900";
+            }
+
+            return $"color:#{color}";
+        }
+
+        protected async Task CategoryClicked(string expenseTypeName)
+        {
+            var selectedCategory = ExpenseTypes.FirstOrDefault(x => x.Name == expenseTypeName);
+            if (selectedCategory != null && selectedCategory.Id.HasValue)
+            {
+                await CategorySelected.InvokeAsync(selectedCategory);
+            }
         }
     }
 }

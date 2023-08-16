@@ -11,6 +11,12 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             new ExpenseTypeDetails() { Id = 1, Name = "Groceries", GraphColor = "3399FF", ShowOnDashboard = true },
             new ExpenseTypeDetails() { Id = 2, Name = "Energy", GraphColor = "33CC33", ShowOnDashboard = true },
             new ExpenseTypeDetails() { Id = 3, Name = "Transport", GraphColor = "FF0000", ShowOnDashboard = true },
+            new ExpenseTypeDetails() { Id = 4, Name = "Healthcare & Wellbeing", GraphColor = "0066CC", ShowOnDashboard = true },
+            new ExpenseTypeDetails() { Id = 5, Name = "Leisure", GraphColor = "CCFFCC", ShowOnDashboard = true },
+            new ExpenseTypeDetails() { Id = 6, Name = "Telephone, TV, Internet", GraphColor = "E5CCFF", ShowOnDashboard = true },
+            new ExpenseTypeDetails() { Id = 7, Name = "Mortgage & Rent", GraphColor = "FF6666", ShowOnDashboard = true },
+            new ExpenseTypeDetails() { Id = 8, Name = "House", GraphColor = "FFCCE5", ShowOnDashboard = true },
+            new ExpenseTypeDetails() { Id = 9, Name = "Savings", GraphColor = "000000", ShowOnDashboard = false }
         };
 
         public async Task<ApiResponse> Create(ExpenseTypeDetails obj)

@@ -71,6 +71,11 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                 data = data.Where(x => x.Type == search.OptionalType);
             }
 
+            if (search.ExcludedCategories != null && search.ExcludedCategories.Any())
+            {
+                data = data.Where(x => !search.ExcludedCategories.Contains(x.Category));
+            }
+
             var result = JsonConvert.SerializeObject(data.ToList());
 
             return await Task.FromResult(new ApiResponse((object)result));

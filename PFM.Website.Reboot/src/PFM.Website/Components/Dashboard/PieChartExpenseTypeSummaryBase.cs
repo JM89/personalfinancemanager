@@ -65,7 +65,9 @@ namespace PFM.Website.Components.Dashboard
                             Display = true,
                             Text = "Split Expenses by Category (last 12 Months)"
                         },
+                        Legend = new Legend() { Display = false },
                         OnClick = new DelegateHandler<ChartMouseEvent>(async (e, j) => await OnClickHandler(e, j)),
+                        AspectRatio = 1.25
                     }
                 };
             }

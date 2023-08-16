@@ -31,7 +31,7 @@
                 <PieChartExpenseTypeSummary @ref="PieChartExpenseTypeSummary" AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></PieChartExpenseTypeSummary>
             </div>
             <div class="col-lg-6">
-                <TableExpenseTypeDiffs @ref="TableExpenseTypeDiffs" AccountId="@SelectedBankAccount?.Id"></TableExpenseTypeDiffs>
+                <TableExpenseTypeDiffs @ref="TableExpenseTypeDiffs" AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></TableExpenseTypeDiffs>
             </div>
         </div>
         <hr />
