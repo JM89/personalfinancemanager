@@ -48,7 +48,7 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unhandled exception while merging movements");
+                _logger.Error(ex, "Unhandled exception while getting the movements");
                 throw;
             }
         }

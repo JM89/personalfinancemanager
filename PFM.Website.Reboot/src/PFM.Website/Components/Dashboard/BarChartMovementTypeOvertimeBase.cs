@@ -23,13 +23,25 @@ namespace PFM.Website.Components.Dashboard
         [Inject]
         protected MovementSummaryService MovementSummaryService { get; set; } = default!;
 
+        [Inject]
+        protected BankAccountService BankAccountService { get; set; } = default!;
+
         private const int Duration = 12;
         private const bool IncludeCurrentMonth = true;
 
         protected override async Task OnInitializedAsync()
         {
             Months = MonthYearHelper.GetXLastMonths(Duration, IncludeCurrentMonth, false);
-            await FetchData();
+
+            if (!AccountId.HasValue)
+            {
+                AccountId = (await BankAccountService.GetCurrentAccount(AccountId))?.Id;
+            }
+
+            if (AccountId.HasValue)
+            {
+                await FetchData();
+            }
         }
 
         protected async Task FetchData()
@@ -67,7 +79,10 @@ namespace PFM.Website.Components.Dashboard
                 }
             }
 
-            var incomeDataset = model.Aggregates.Select(x => x.Value.IncomesAmount);
+            var modelWithMissingValues = Months
+                .GroupJoin(model.Aggregates, month => month, aggr => aggr.Key, (x, y) => y.DefaultIfEmpty());
+
+            var incomeDataset = modelWithMissingValues.SelectMany(x => x.Select(y => y.Value?.IncomesAmount ?? 0).ToList()); 
             var dataset1 = new BarDataset<decimal>(incomeDataset)
             {
                 Label = "Incomes",
@@ -76,7 +91,7 @@ namespace PFM.Website.Components.Dashboard
                 BorderWidth = 1
             };
 
-            var outcomeDataset = model.Aggregates.Select(x => x.Value.ExpensesAmount);
+            var outcomeDataset = modelWithMissingValues.SelectMany(x => x.Select(y => y.Value?.ExpensesAmount ?? 0).ToList());
             var dataset2 = new BarDataset<decimal>(outcomeDataset)
             {
                 Label = "Outcomes",
@@ -85,7 +100,7 @@ namespace PFM.Website.Components.Dashboard
                 BorderWidth = 1
             };
 
-            var savingDataset = model.Aggregates.Select(x => x.Value.SavingsAmount);
+            var savingDataset = modelWithMissingValues.SelectMany(x => x.Select(y => y.Value?.SavingsAmount ?? 0).ToList());
             var dataset3 = new BarDataset<decimal>(savingDataset)
             {
                 Label = "Savings",

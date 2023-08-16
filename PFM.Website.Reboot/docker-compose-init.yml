@@ -35,6 +35,7 @@ services:
       APP_Auth__Authority: http://keycloak:8080/realms/pfm
       APP_Auth__ValidateIssuer: false
       APP_BankApi__EndpointUrl: https://pfm-bank-api:50001
+      APP_DataSettings__DbConnection: Server=db-server,1433;Database=PFM_MVT_AGGR_DB;User Id=PFM_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
     container_name: pfm-api
     ports:
       - "4431:4431"
