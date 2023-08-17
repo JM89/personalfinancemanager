@@ -1,0 +1,63 @@
+﻿@inherits VignetteActionsBase
+
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">
+            @if (AvailableBankAccounts.Any())
+            {
+                <b><label>Accounts</label></b>
+                <select class="form-control" style="font-size: 12px;" value="@SelectedBankAccount?.Id" @onchange="@((e) => UpdateSelected(e))">
+                    <option value=""></option>
+                    @foreach (var bankAccount in @AvailableBankAccounts)
+                    {
+                        <option value="@bankAccount.Id">@bankAccount.Name</option>
+                    }
+                </select>
+                <br />
+                <b><label>Movements</label></b>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/expenses/list/@SelectedBankAccount?.Id">Manage expenses</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/atm-withdraws/list/@SelectedBankAccount?.Id">Manage ATM Withdraws</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/incomes/list/@SelectedBankAccount?.Id">Manage incomes</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/savings/list/@SelectedBankAccount?.Id">Manage savings</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/" class="disabled">Import movements</a>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <b><label>Budget Plan</label></b>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/" class="disabled">Manage budget plan</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    To get started with your personal finance, create a <a href="/banks/create">bank</a> and <a href="/bank-accounts/create">bank account</a>.
+                </div>
+            }
+        </p>
+    </div>
+</div>

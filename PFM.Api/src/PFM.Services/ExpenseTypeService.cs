@@ -5,6 +5,7 @@ using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Api.Contracts.ExpenseType;
+using System.Threading.Tasks;
 
 namespace PFM.Services
 {
@@ -19,7 +20,7 @@ namespace PFM.Services
             this._expenditureRepository = expenditureRepository;
         }
 
-        public IList<ExpenseTypeList> GetExpenseTypes()
+        public async Task<IList<ExpenseTypeList>> GetExpenseTypes()
         {
             var expenditures = _expenditureRepository.GetList();
 
@@ -32,10 +33,10 @@ namespace PFM.Services
                 expenditureType.CanBeDeleted = !expenditures.Any(x => x.ExpenseTypeId == expenditureType.Id);
             });
 
-            return mappedExpenditureTypes;
+            return await Task.FromResult(mappedExpenditureTypes);
         }
 
-        public ExpenseTypeDetails GetById(int id)
+        public async Task<ExpenseTypeDetails> GetById(int id)
         {
             var expenditureType = _expenditureTypeRepository.GetById(id);
 
@@ -44,28 +45,31 @@ namespace PFM.Services
                 return null;
             }
 
-            return Mapper.Map<ExpenseTypeDetails>(expenditureType);
+            return await Task.FromResult(Mapper.Map<ExpenseTypeDetails>(expenditureType));
         }
 
-        public void CreateExpenseType(ExpenseTypeDetails expenditureTypeDetails)
+        public async Task<bool> CreateExpenseType(ExpenseTypeDetails expenditureTypeDetails)
         {
             var expenditureType = Mapper.Map<ExpenseType>(expenditureTypeDetails);
             _expenditureTypeRepository.Create(expenditureType);
+            return await Task.FromResult(true);
         }
 
-        public void EditExpenseType(ExpenseTypeDetails expenditureTypeDetails)
+        public async Task<bool> EditExpenseType(ExpenseTypeDetails expenditureTypeDetails)
         {
             var expenditureType = _expenditureTypeRepository.GetById(expenditureTypeDetails.Id);
             expenditureType.Name = expenditureTypeDetails.Name;
             expenditureType.GraphColor = expenditureTypeDetails.GraphColor;
             expenditureType.ShowOnDashboard = expenditureTypeDetails.ShowOnDashboard;
             _expenditureTypeRepository.Update(expenditureType);
+            return await Task.FromResult(true);
         }
 
-        public void DeleteExpenseType(int id)
+        public async Task<bool> DeleteExpenseType(int id)
         {
             var expenditureType = _expenditureTypeRepository.GetById(id);
             _expenditureTypeRepository.Delete(expenditureType);
+            return await Task.FromResult(true);
         }
     }
 }

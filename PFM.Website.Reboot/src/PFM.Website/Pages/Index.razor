@@ -1,0 +1,96 @@
+﻿@page "/"
+@page "/{accountId:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@using PFM.Website.Components.Dashboard
+
+@inject BankAccountService BankAccountService
+@inject ExpenseTypeService ExpenseTypeService
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+    <Authorized>
+
+        <h3>Account Management Dashboard</h3>
+        <hr/>
+
+        <div class="row">
+            <div class="col-lg-2" style="font-size: 12px; padding: 5px; border-radius: 5px;">
+               <VignetteActions @ref="VignetteActions" AccountId="@SelectedBankAccount?.Id" AccountSelected="UpdateChartsForAccount"></VignetteActions>
+            </div>
+            <div class="col-lg-5">
+                <LineChartExpenseOvertime @ref="LineChartExpenseOvertime" AccountId="@SelectedBankAccount?.Id"></LineChartExpenseOvertime>
+            </div>
+            <div class="col-lg-5">
+                <BarChartMovementTypeOvertime @ref="BarChartMovementTypeOvertime" AccountId="@SelectedBankAccount?.Id"></BarChartMovementTypeOvertime>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h6>Split by Categories</h6>
+            <div class="col-lg-4">
+                <PieChartExpenseTypeSummary @ref="PieChartExpenseTypeSummary" AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></PieChartExpenseTypeSummary>
+            </div>
+            <div class="col-lg-6">
+                <TableExpenseTypeDiffs @ref="TableExpenseTypeDiffs" AccountId="@SelectedBankAccount?.Id" CategorySelected="UpdateChartsForCategory"></TableExpenseTypeDiffs>
+            </div>
+            <div class="col-lg-2" style="font-size: 16px; padding: 5px; border-radius: 5px; color:white; text-align: right;">
+                <VignetteMovementTypeSummary @ref="VignetteMovementTypeSummary" AccountId="@SelectedBankAccount?.Id"></VignetteMovementTypeSummary>
+            </div>
+        </div>
+        <hr />
+
+        @if (SelectedCategory != null)
+        {
+            <h6>Details for '@SelectedCategory?.Name'</h6>
+        }
+        <div class="row">
+            <div class="col-lg-6">
+                <BarChartExpenseTypeOvertime @ref="BarChartExpenseTypeOvertime" ExpenseTypeId="@SelectedCategory?.Id" AccountId="@SelectedBankAccount?.Id"></BarChartExpenseTypeOvertime>
+            </div>
+            <div class="col-lg-6">
+                <TableExpenseByType @ref="TableExpenseByType" ExpenseTypeId="@SelectedCategory?.Id" AccountId="@SelectedBankAccount?.Id"></TableExpenseByType>
+            </div>
+        </div>
+
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+
+    [Parameter]
+    public int? AccountId { get; set; }
+
+    private BankAccountListModel? SelectedBankAccount;
+    private ExpenseTypeModel? SelectedCategory;
+
+    protected TableExpenseByTypeBase TableExpenseByType { get; set; }
+    protected BarChartExpenseTypeOvertimeBase BarChartExpenseTypeOvertime { get; set; }
+    protected VignetteMovementTypeSummaryBase VignetteMovementTypeSummary { get; set; }
+    protected PieChartExpenseTypeSummaryBase PieChartExpenseTypeSummary { get; set; }
+    protected LineChartExpenseOvertimeBase LineChartExpenseOvertime { get; set; }
+    protected BarChartMovementTypeOvertimeBase BarChartMovementTypeOvertime { get; set; }
+    protected VignetteActionsBase VignetteActions { get; set; }
+    protected TableExpenseTypeDiffsBase TableExpenseTypeDiffs { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SelectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+    }
+
+    protected async Task UpdateChartsForAccount(int accountId)
+    {
+        SelectedBankAccount = null;
+        SelectedCategory = null;
+        NavigationManager.NavigateTo($"/{accountId}", true);
+    }
+
+    public async Task UpdateChartsForCategory(ExpenseTypeModel category)
+    {
+        await BarChartExpenseTypeOvertime.ReloadComponent(category.Id.Value);
+        await TableExpenseByType.ReloadComponent(category.Id.Value);
+        SelectedCategory = category;
+        this.StateHasChanged();
+    }
+}

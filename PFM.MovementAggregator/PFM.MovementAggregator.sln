@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33617.297
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.MovementAggregator", "src\PFM.MovementAggregator\PFM.MovementAggregator.csproj", "{56708BAA-9C3F-42BD-9BF3-B329957DCF1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B12157A1-8C8C-4C16-A10E-BD7B7EB79459}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{56708BAA-9C3F-42BD-9BF3-B329957DCF1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56708BAA-9C3F-42BD-9BF3-B329957DCF1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56708BAA-9C3F-42BD-9BF3-B329957DCF1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56708BAA-9C3F-42BD-9BF3-B329957DCF1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{56708BAA-9C3F-42BD-9BF3-B329957DCF1A} = {B12157A1-8C8C-4C16-A10E-BD7B7EB79459}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {70C81897-54D1-43F9-BE3B-72775DBEC3E4}
+	EndGlobalSection
+EndGlobal

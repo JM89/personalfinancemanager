@@ -1,11 +1,12 @@
-﻿using App.Metrics;
+﻿using Api.Settings;
+using App.Metrics;
 using EventStore.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using PFM.Bank.Api.Services.ExternalServices.AuthApi;
-using Refit;
 using Serilog;
 using Services.Events;
 using Services.Events.Interfaces;
@@ -51,35 +52,31 @@ namespace Api.Extensions
         /// <returns></returns>
         public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
         {
-            var authenticationApiConfigs = configuration["AuthApi:EndpointUrl"];
-            if (authenticationApiConfigs == null)
-                throw new Exception("DI exception: Authentication API config was not found");
-
-            services.AddRefitClient<IAuthApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(authenticationApiConfigs));
-
             services.AddMvc(o =>
             {
-                var authenticationApi = services.BuildServiceProvider().GetService<IAuthApi>();
-                if (authenticationApi == null)
-                    throw new Exception("DI exception: Authentication API was not injected");
-
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
-                o.Filters.Add(new Api.Filters.DelegateToAuthApiAuthorizeFilter(policy, Log.Logger, authenticationApi));
+                o.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            var auth = configuration.GetSection("Auth").Get<AuthOptions>();
+            if (auth?.Authority == null)
+                throw new Exception("DI exception: Auth API config was not found");
+
+            Console.WriteLine($"Authority: {auth.Authority}");
+
             services
-                .AddAuthentication(options =>
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
+                    options.Authority = auth.Authority;
+                    options.Audience = "account";
+                    options.RequireHttpsMetadata = auth.RequireHttpsMetadata;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = auth.ValidateIssuer
+                    };
                 });
+
             return services;
         }
 

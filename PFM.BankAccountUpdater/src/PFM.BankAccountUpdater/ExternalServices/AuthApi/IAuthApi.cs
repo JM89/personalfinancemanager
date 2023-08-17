@@ -1,11 +1,10 @@
-﻿using PFM.Authentication.Api.DTOs;
-using Refit;
+﻿using PFM.BankAccountUpdater.ExternalServices.AuthApi.Contracts;
 
 namespace PFM.BankAccountUpdater.ExternalServices.AuthApi
 {
-    public interface IAuthApi
-    {
-        [Post("/users/authenticate")]
-        Task<UserResponse> Login(UserRequest model);
+	public interface IAuthApi
+	{
+        Task<ClientToken> Login(ClientInfo info);
     }
 }
+

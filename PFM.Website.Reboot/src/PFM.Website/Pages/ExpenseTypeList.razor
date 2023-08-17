@@ -1,0 +1,111 @@
+﻿@page "/expense-types"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject ExpenseTypeService ExpenseTypeService
+@inject NavigationManager NavigationManager
+
+<PageTitle>PFM - Expense Types</PageTitle>
+
+<h3>Expense Types</h3>
+<hr />
+
+<div class="row">
+    <div class="col-lg-10">
+        <p>Manage the expense types to be used when creating new expenses. Note that the system won't let you delete an expense type already in use.</p>
+    </div>
+    <div class="col-lg-2" style="text-align: right">
+        <div style="text-align: right">
+            <button class="btn btn-secondary btn-sm" @onclick="Create">Add new</button>
+        </div>
+    </div>
+</div>
+
+@if (expenseTypes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <colgroup>
+            <col width="70%" />
+            <col width="17%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Show On Dashboard</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var expenseType in expenseTypes)
+            {
+                <tr>
+                    <td>
+                        <svg width="20" height="15">
+                            <rect width="20" height="10" style="fill:#@expenseType.GraphColor;stroke-width:1;stroke:rgb(0,0,0)" />
+                        </svg>&nbsp;&nbsp;
+                        @expenseType.Name
+                    </td>
+                    <td>
+                        <input id="showOnDashboard" type="checkbox" @bind="@expenseType.ShowOnDashboard" disabled>
+                    </td>
+                    <td>
+                        <button class="btn btn-light btn-sm" @onclick="(() => Edit(expenseType.Id))"><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn btn-light btn-sm" @onclick="(() => Delete(expenseType))"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+             ConfirmationMessage=@($"Are you sure you want to delete \"{selectedExpenseType.Name}\"?")>
+    </Confirm>
+
+}
+
+@code {
+
+    private List<ExpenseTypeModel> expenseTypes = new List<ExpenseTypeModel>();
+    private ExpenseTypeModel selectedExpenseType = new ExpenseTypeModel();
+    protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        expenseTypes = await ExpenseTypeService.GetAll();
+    }
+
+    void Create()
+    {
+        NavigationManager.NavigateTo("/expense-types/create");
+    }
+
+    void Edit(int? id)
+    {
+        if (id == null)
+        {
+            Create();
+            return;
+        }
+        NavigationManager.NavigateTo($"/expense-types/edit/{id}");
+    }
+
+
+    protected void Delete(ExpenseTypeModel refExpenseType)
+    {
+        selectedExpenseType = refExpenseType;
+        DeleteConfirmation.Show();
+    }
+
+    protected async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed && selectedExpenseType.Id.HasValue)
+        {
+            await ExpenseTypeService.Delete(selectedExpenseType.Id.Value);
+            NavigationManager.NavigateTo("/expense-types", true);
+        }
+    }
+}
+

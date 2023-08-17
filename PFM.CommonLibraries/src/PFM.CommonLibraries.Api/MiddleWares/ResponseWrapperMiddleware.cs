@@ -62,9 +62,22 @@ namespace PFM.CommonLibraries.Api.MiddleWares
                     memoryStream.Seek(0, SeekOrigin.Begin);
 
                     var readToEnd = new StreamReader(memoryStream).ReadToEnd();
-                    var objResult = JsonConvert.DeserializeObject(readToEnd);
-                    var result = new ApiResponse(objResult);
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(result, _serializeOptions));
+
+                    // When calls are forwarded to another API and API response is returned.
+                    var apiResponse = new ApiResponse();
+                    try
+                    {
+                        apiResponse = JsonConvert.DeserializeObject<ApiResponse>(readToEnd);
+                    }
+                    catch (Exception) { }
+
+                    if (apiResponse?.Data == null && apiResponse?.Errors == null)
+                    {
+                        var objResult = JsonConvert.DeserializeObject(readToEnd);
+                        apiResponse = new ApiResponse(objResult);
+                    }
+
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(apiResponse, _serializeOptions));
                 }
                 catch (BusinessException ex)
                 {

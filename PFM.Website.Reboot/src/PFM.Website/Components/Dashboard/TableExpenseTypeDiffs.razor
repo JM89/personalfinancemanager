@@ -1,0 +1,89 @@
+﻿@inherits TableExpenseTypeDiffsBase
+
+@using PFM.Website.Models
+
+
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">
+
+            @if (Models != null && Models.List != null && Models.List.Any())
+            {
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table" style="font-size:12px;">
+                            <colgroup>
+                                <col width="40%" />
+                                <col width="15%" />
+                                <col width="15%" />
+                                <col width="15%" />
+                                <col width="15%" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Expense Type</th>
+                                    <th>Actual</th>
+                                    <th>Expected</th>
+                                    <th>
+                                        @LastMonthLabel
+                                        <label style="font-size: x-small;">
+                                            <em>Last Month</em>
+                                        </label>
+                                    </th>
+                                    <th>
+                                        Average
+                                        <label style="font-size: x-small;">
+                                            <em>Last 12 Months</em>
+                                        </label>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var m in Models.List)
+                                {
+                                    <tr @onclick="async() => await CategoryClicked(m.ExpenseTypeName)" style="cursor:pointer;">
+                                        <td>
+                                            <svg width="20" height="10">
+                                                <rect width="20" height="10" style="fill:#@(ExpenseTypes.SingleOrDefault(x => x.Name == m.ExpenseTypeName)?.GraphColor);stroke-width:1;stroke:rgb(0,0,0)" />
+                                            </svg>
+                                            @m.ExpenseTypeName
+                                        </td>
+                                        <td align="right">
+                                            @CurrencySymbol@(String.Format("{0:0.00}", m.Actual))
+                                            <br />
+                                            <label style="font-size: x-small;"></label>
+                                        </td>
+                                        <td align="right">
+                                            @CurrencySymbol@(String.Format("{0:0.00}", m.Expected))
+                                            <br />
+                                            <label style="font-size: x-small;@(GetFontColorBasedOnDiff(m.ExpectedDiff))">
+                                                @CurrencySymbol@(String.Format("{0:0.00}", m.ExpectedDiff))
+                                            </label>
+                                        </td>
+                                        <td align="right">
+                                            @CurrencySymbol@(String.Format("{0:0.00}", m.PreviousMonth))
+                                            <br />
+                                            <label style="font-size: x-small;@(GetFontColorBasedOnDiff(m.PreviousMonthDiff))">
+                                                @CurrencySymbol@(String.Format("{0:0.00}", m.PreviousMonthDiff))
+                                            </label>
+                                        </td>
+                                        <td align="right">
+                                            @CurrencySymbol@(String.Format("{0:0.00}", m.Average))
+                                            <br />
+                                            <label style="font-size: x-small;@(GetFontColorBasedOnDiff(m.AverageDiff))">
+                                                @CurrencySymbol@(String.Format("{0:0.00}", m.AverageDiff))
+                                            </label>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            <PagingFooter @ref="PagingFooter" FetchDataCallback="FetchData" PageSize="@PageSize" T="ExpenseTypeDiffsModel"></PagingFooter>
+
+        </p>
+    </div>
+</div>

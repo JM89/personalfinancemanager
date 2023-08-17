@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PFM.Api.Contracts.BudgetPlan;
-using PFM.Api.Contracts.Dashboard;
 using PFM.Api.Contracts.Expense;
 using PFM.Services.Interfaces;
 
@@ -11,12 +9,10 @@ namespace PFM.Api.Controllers
     public class ExpenseController : ControllerBase
     {
         private readonly IExpenseService _expenseService;
-        private readonly IMovementSummaryService _movementSummaryService;
 
-        public ExpenseController(IExpenseService expenseService, IMovementSummaryService movementSummaryService)
+        public ExpenseController(IExpenseService expenseService)
         {
             _expenseService = expenseService;
-            _movementSummaryService = movementSummaryService;
         }
 
         [HttpGet("Get/{id}")]
@@ -53,12 +49,6 @@ namespace PFM.Api.Controllers
         public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
             return await _expenseService.ChangeDebitStatus(id, debitStatus);
-        }
-
-        [HttpPost("GetExpenseSummary/{accountId}")]
-        public async Task<ExpenseSummary> GetExpenseSummary(int accountId, [FromBody]BudgetPlanDetails budgetPlan)
-        {
-            return await _movementSummaryService.GetExpenseSummary(accountId, budgetPlan, DateTime.Now);
         }
 
         [HttpPost("GetExpenses")]

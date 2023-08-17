@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PFM.Services.Core.Automapper
 {
@@ -12,6 +7,7 @@ namespace PFM.Services.Core.Automapper
         public SearchParametersMapping()
         {
             CreateMap<Api.Contracts.SearchParameters.ExpenseGetListSearchParameters, DataAccessLayer.SearchParameters.ExpenseGetListSearchParameters>();
+            CreateMap<Api.Contracts.SearchParameters.MovementSummarySearchParameters, DataAccessLayer.SearchParameters.MovementSummarySearchParameters>();
         }
     }
 }

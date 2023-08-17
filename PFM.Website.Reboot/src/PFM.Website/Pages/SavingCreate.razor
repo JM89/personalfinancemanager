@@ -1,0 +1,117 @@
+﻿@page "/savings/create/{accountId:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject SavingService SavingService
+@inject BankAccountService BankAccountService
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>PFM - Savings</PageTitle>
+
+<div class="row">
+    <div class="col-lg-8">
+        <h3>Create Saving</h3>
+        <hr />
+    </div>
+    @if (selectedBankAccount != null)
+    {
+        <div class="col-lg-4" style="text-align: left">
+            <div class="alert alert-info" role="alert">
+                <label><strong>Selected account: </strong></label>
+                <br />
+                <label>@selectedBankAccount.BankName - @selectedBankAccount?.Name</label>
+                <br />
+                <label>Balance: @selectedBankAccount?.DisplayedCurrentBalance</label>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">
+                <div class="col-lg-6">
+                    <EditForm Model="m" OnSubmit="HandleSubmit">
+                        <DataAnnotationsValidator />
+                        <div class="col-sm-8 text-danger">
+                            <ValidationSummary />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="date" class="col-sm-3 col-form-label">Date</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="date" value="@m.DateSaving.ToString("yyyy-MM-dd")" @onchange="@((e) => UpdateDate(e))" />
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="cost" class="col-sm-3 col-form-label">Amount</label>
+                            <div class="col-sm-9">
+                                <InputNumber id="cost" @bind-Value="m.Amount" class="form-control"></InputNumber>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="name" class="col-sm-3 col-form-label">Target Account</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" @bind="@m.TargetInternalAccountId">
+                                    <option value=""></option>
+                                    @foreach (var bankAccount in @AvailableSavingAccounts)
+                                    {
+                                        <option value="@bankAccount.Id">@bankAccount.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <br />
+                        </div>
+                        <br />
+                        <br />
+                        <div style="text-align:right;">
+                            <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public int AccountId { get; set; }
+
+    private SavingEditModel m = new SavingEditModel() { DateSaving = DateTime.UtcNow };
+    private BankAccountListModel? selectedBankAccount;
+    private IList<BankAccountListModel> AvailableSavingAccounts = new List<BankAccountListModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+        var availableBankAccounts = await BankAccountService.GetAll();
+        AvailableSavingAccounts = availableBankAccounts.Where(x => x.IsSavingAccount).ToList();
+    }
+
+    void Back()
+    {
+        NavigationManager.NavigateTo($"/savings/list/{AccountId}");
+    }
+
+    async Task HandleSubmit()
+    {
+        bool result = await SavingService.Create(AccountId, m);
+        if (result)
+        {
+            NavigationManager.NavigateTo($"/savings/list/{AccountId}");
+        }
+    }
+
+    void UpdateDate(ChangeEventArgs e)
+    {
+        var selectedDate = e.Value ?? DateTime.UtcNow;
+        m.DateSaving = DateTime.Parse(selectedDate.ToString());
+    }
+}
+

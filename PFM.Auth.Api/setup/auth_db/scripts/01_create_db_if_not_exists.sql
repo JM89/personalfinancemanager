@@ -1,8 +1,0 @@
-USE master
-GO
-
-IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'PFM_AUTH_DB')
-BEGIN
-    CREATE DATABASE [PFM_AUTH_DB]
-END
-GO

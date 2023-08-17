@@ -19,23 +19,6 @@ services:
     networks:
       - local-network
 
-  pfm-auth-api:
-    build:
-      context: ../PFM.Auth.Api
-      dockerfile: Dockerfile
-    environment:
-      ASPNETCORE_URLS: http://+:5000
-      APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
-      APP_ConnectionStrings__PFMConnection: Server=db-server,1433;Database=PFM_AUTH_DB;User Id=PFM_AUTH_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
-      APP_AppSettings__AwsEndpointUrl: http://localstack:4566
-      AWS_ACCESS_KEY_ID: XX
-      AWS_SECRET_ACCESS_KEY: XX
-    container_name: pfm-auth-api
-    ports:
-      - "5000:5000"
-    networks:
-      - local-network
-
   pfm-bank-api:
     build:
       context: ../PFM.Bank.Api
@@ -48,7 +31,8 @@ services:
       APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
       APP_ConnectionStrings__PFMConnection: Server=db-server,1433;Database=PFM_BANK_DB;User Id=PFM_BANK_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
       APP_ConnectionStrings__EventStoreConnection: esdb://eventstore:2113?tls=false
-      APP_AuthApi__EndpointUrl: http://pfm-auth-api:5000
+      APP_Auth__Authority: http://keycloak:8080/realms/pfm
+      APP_Auth__ValidateIssuer: false
       AWS_ACCESS_KEY_ID: XX
       AWS_SECRET_ACCESS_KEY: XX
     container_name: pfm-bank-api

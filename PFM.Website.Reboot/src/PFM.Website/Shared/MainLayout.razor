@@ -1,0 +1,37 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>PFM.Website</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    Hello, @context.User.Claims.SingleOrDefault(x => x.Type == "preferred_username")?.Value!
+                    <form method="get" action="logout">
+                        <button type="submit" class="nav-link btn btn-link">Log out</button>
+                    </form>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="login?redirectUri=/">Log in</a>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+
+        <article class="content px-4">
+            <AuthorizeView>
+                <Authorized>
+                    @Body
+                </Authorized>
+                <NotAuthorized>
+                    <p>Not Authorized</p>
+                </NotAuthorized>
+            </AuthorizeView>
+        </article>
+    </main>
+</div>
+

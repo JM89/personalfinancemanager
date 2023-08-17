@@ -10,4 +10,10 @@
     <PackageReference Include="PFM.Bank.Api.Contracts" Version="4.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="MovementSummary\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MovementSummary\" />
+  </ItemGroup>
 </Project>

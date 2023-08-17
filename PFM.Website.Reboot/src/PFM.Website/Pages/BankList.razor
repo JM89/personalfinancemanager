@@ -1,0 +1,114 @@
+﻿@page "/banks"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject BankService BankService
+@inject NavigationManager NavigationManager
+
+<PageTitle>PFM - Banks</PageTitle>
+
+<h3>Banks</h3>
+<hr />
+
+<div class="row">
+    <div class="col-lg-10">
+        <p>Manage the banks to be used when creating new bank accounts. Note that the system won't let you delete a bank already in use.</p>
+    </div>
+    <div class="col-lg-2" style="text-align: right">
+        <div style="text-align: right">
+            <button class="btn btn-secondary btn-sm" @onclick="Create">Add new</button>
+        </div>
+    </div>
+</div>
+
+@if (models == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <colgroup>
+            <col width="40%" />
+            <col width="40%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Country</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in models)
+            {
+                <tr>
+                    <td>
+                        @if (m.RenderedIcon != null)
+                        {
+                            <img src="@m.RenderedIcon" width="18" height="18" />
+                        }
+                        else
+                        {
+                            <img src="/Resources/dashboard-addExpenditures.png" width="18" height="18" />
+                        }&nbsp;&nbsp;
+                        @m.Name
+                    </td>
+                    <td>@m.CountryName</td>
+                    <td>
+                        <button class="btn btn-light btn-sm" @onclick="(() => Edit(m.Id))"><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+             ConfirmationMessage=@($"Are you sure you want to delete \"{selected.Name}\"?")>
+    </Confirm>
+
+}
+
+@code {
+
+    private List<BankListModel> models = new List<BankListModel>();
+    private BankListModel selected = new BankListModel();
+    protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        models = await BankService.GetAll();
+    }
+
+    void Create()
+    {
+        NavigationManager.NavigateTo("/banks/create");
+    }
+
+    void Edit(int? id)
+    {
+        if (id == null)
+        {
+            Create();
+            return;
+        }
+        NavigationManager.NavigateTo($"/banks/edit/{id}");
+    }
+
+
+    protected void Delete(BankListModel referenced)
+    {
+        selected = referenced;
+        DeleteConfirmation.Show();
+    }
+
+    protected async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await BankService.Delete(selected.Id);
+            NavigationManager.NavigateTo("/banks", true);
+        }
+    }
+}
+

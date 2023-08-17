@@ -1,0 +1,127 @@
+﻿@page "/bank-accounts"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject BankAccountService BankAccountService
+@inject NavigationManager NavigationManager
+
+<PageTitle>PFM - Bank accounts</PageTitle>
+
+<h3>Bank Accounts</h3>
+<hr />
+
+<div class="row">
+    <div class="col-lg-10">
+        <p>Manage the bank accounts, required to record your first debit/credit movements. Note that the system won't let you edit or delete a bank account already in use.</p>
+    </div>
+    <div class="col-lg-2" style="text-align: right">
+        <div style="text-align: right">
+            <button class="btn btn-secondary btn-sm" @onclick="Create">Add new</button>
+        </div>
+    </div>
+</div>
+
+@if (models == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <colgroup>
+            <col width="23%" />
+            <col width="20%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Bank</th>
+                <th>Currency</th>
+                <th>Current Balance</th>
+                <th>Saving account</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in models)
+            {
+                <tr>
+                    <td>
+                        @m.Name&nbsp;
+                        @if (m.IsFavorite)
+                        {
+                            <i class="fa-solid fa-star" aria-hidden="true" style="color:#ffca00"></i>
+                        }
+                    </td>
+                    <td>@m.BankName</td>
+                    <td>@m.CurrencyName</td>
+                    <td>@m.DisplayedCurrentBalance</td>
+                    <td>
+                        <input id="savingAccount" type="checkbox" @bind="@m.IsSavingAccount" disabled>
+                    </td>
+                    <td>
+                        @if (!m.IsFavorite)
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => SetAsFavorite(m.Id))"><i class="fa-solid fa-star"></i></button>
+                        }
+                        @if (m.CanBeDeleted)
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))"><i class="fa-solid fa-trash"></i></button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))" disabled><i class="fa-solid fa-trash"></i></button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+             ConfirmationMessage=@($"Are you sure you want to delete \"{selected.Name}\"?")>
+    </Confirm>
+
+}
+
+@code {
+
+    private List<BankAccountListModel> models = new List<BankAccountListModel>();
+    private BankAccountListModel selected = new BankAccountListModel();
+    protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        models = await BankAccountService.GetAll();
+    }
+
+    void Create()
+    {
+        NavigationManager.NavigateTo("/bank-accounts/create");
+    }
+
+    protected async void SetAsFavorite(int id)
+    {
+        await BankAccountService.SetAsFavorite(id);
+        NavigationManager.NavigateTo("/bank-accounts", true);
+    }
+
+    protected void Delete(BankAccountListModel referenced)
+    {
+        selected = referenced;
+        DeleteConfirmation.Show();
+    }
+
+    protected async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await BankAccountService.Delete(selected.Id);
+            NavigationManager.NavigateTo("/bank-accounts", true);
+        }
+    }
+}
+

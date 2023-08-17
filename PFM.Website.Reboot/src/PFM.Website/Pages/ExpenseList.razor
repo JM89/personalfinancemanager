@@ -1,0 +1,168 @@
+﻿@page "/expenses/list/{accountId:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject ExpenseService ExpenseService
+@inject BankAccountService BankAccountService
+@inject NavigationManager NavigationManager
+
+<PageTitle>PFM - Expenses</PageTitle>
+
+<div class="row">
+    <div class="col-lg-8">
+        <h3>Expenses</h3>
+        <hr />
+    </div>
+    @if (selectedBankAccount != null)
+    {
+        <div class="col-lg-4" style="text-align: left">
+            <div class="alert alert-info" role="alert">
+                <label><strong>Selected account: </strong></label>
+                <br />
+                <label>@selectedBankAccount.BankName - @selectedBankAccount?.Name</label>
+                <br />
+                <label>Balance: @selectedBankAccount?.DisplayedCurrentBalance</label>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="col-lg-10">
+        <p>Manage the expenses of a given bank account. You need at least one bank account to add new expenses. Note that the system won't let you edit an existing expenses, please delete and recreate so all movements appears on the bank account(s).</p>
+    </div>
+    @if (selectedBankAccount != null)
+    {
+        <div class="col-lg-2" style="text-align: right">
+            <div style="text-align: right">
+                <button class="btn btn-secondary btn-sm" @onclick="Create">Add new</button>
+            </div>
+        </div>
+    }
+</div>
+
+@if (models == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table">
+                <colgroup>
+                    <col width="15%" />
+                    <col width="25%" />
+                    <col width="20%" />
+                    <col width="12%" />
+                    <col width="12%" />
+                    <col width="15%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Date Expense</th>
+                        <th>Description</th>
+                        <th>Expense Type</th>
+                        <th>Cost</th>
+                        <th>Already Debited</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var m in models.List)
+                    {
+                        <tr>
+                            <td>@m.DisplayedDateExpense</td>
+                            <td>@m.Description</td>
+                            <td>@m.ExpenseTypeName</td>
+                            <td style="text-align: right">@m.DisplayedCost</td>
+                            <td>
+                                @if (m.PaymentMethodHasBeenAlreadyDebitedOption)
+                                {
+                                    <input id="hasBeenAlreadyDebited" type="checkbox" @bind="@m.HasBeenAlreadyDebited" disabled>
+                                }
+                            </td>
+                            <td>
+                                @if (m.PaymentMethodHasBeenAlreadyDebitedOption)
+                                {
+                                    <button class="btn btn-light btn-sm" @onclick="(() => ChangeDebitStatus(m.Id, m.HasBeenAlreadyDebited))"><i class="fa fa-thumbs-up"></i></button>
+                                }
+                                <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<PagingFooter @ref="PagingFooter" FetchDataCallback="FetchExpenses" PageSize="@PageSize" T="ExpenseListModel"></PagingFooter>
+
+<Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+         ConfirmationMessage=@($"Are you sure you want to delete \"{selected.Description}\"?")>
+</Confirm>
+
+@code {
+
+    [Parameter]
+    public int? AccountId { get; set; }
+
+    private PagedModel<ExpenseListModel> models = new PagedModel<ExpenseListModel>(new List<ExpenseListModel>(), 0);
+    private ExpenseListModel selected = new ExpenseListModel();
+    protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
+    protected PFM.Website.Components.PagingFooterBase<ExpenseListModel> PagingFooter { get; set; }
+    private BankAccountListModel? selectedBankAccount;
+
+    public int PageSize = 10;
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await FetchExpenses(0);
+        }
+    }
+
+    void Create()
+    {
+        NavigationManager.NavigateTo($"/expenses/create/{selectedBankAccount?.Id}");
+    }
+
+    protected void Delete(ExpenseListModel referenced)
+    {
+        selected = referenced;
+        DeleteConfirmation.Show();
+    }
+
+    protected async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await ExpenseService.Delete(selected.Id);
+            NavigationManager.NavigateTo($"/expenses/list/{selectedBankAccount?.Id}", true);
+        }
+    }
+
+    protected async void ChangeDebitStatus(int id, bool debitStatus)
+    {
+        await ExpenseService.ChangeDebitStatus(id, debitStatus);
+        NavigationManager.NavigateTo($"/expenses/list/{selectedBankAccount?.Id}", true);
+    }
+
+    private async Task FetchExpenses(int skip)
+    {
+        models = await ExpenseService.GetPaged(skip, PageSize, new ExpenseSearchParamModel()
+        {
+            AccountId = selectedBankAccount?.Id ?? 0
+        });
+        this.StateHasChanged();
+
+        PagingFooter.RefreshModel(models);
+    }
+}
+

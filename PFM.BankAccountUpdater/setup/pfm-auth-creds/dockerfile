@@ -1,5 +1,0 @@
-FROM ellerbrock/alpine-bash-curl-ssl:latest
-
-COPY entrypoint.sh ./
-
-ENTRYPOINT [ "bash", "./entrypoint.sh" ]

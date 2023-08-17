@@ -49,24 +49,59 @@ data "keycloak_role" "offline_access" {
 
 resource "keycloak_openid_client" "openid_client" {
   realm_id  = keycloak_realm.realm.id
-  client_id = "pfm-api"
+  client_id = "pfm"
 
-  name    = "PFM API"
+  name    = "Client App for enabling SSO on PFM Website"
   enabled = true
 
   direct_access_grants_enabled = true
 
   access_type = "CONFIDENTIAL"
   valid_redirect_uris = [
-    "http://localhost:8080/openid-callback"
+    "https://localhost:7142/signin-oidc"
   ]
+
+  client_secret = var.openid_client_pfm_secret
 
   standard_flow_enabled = true
 
   login_theme = "keycloak"
 
   extra_config = {
-    "is_api" = "true"
-    "internet_facing" = "false"
+    "product" = "pfm"
+  }
+}
+
+resource "keycloak_openid_client" "pfm_bank_account_updater_openid_client" {
+  realm_id  = keycloak_realm.realm.id
+  client_id = "pfm-bank-account-updater"
+
+  name    = "Service Account for PFM Bank Account Updater"
+  enabled = true
+
+  access_type              = "CONFIDENTIAL"
+  service_accounts_enabled = true
+
+  client_secret = var.openid_client_pfm_bank_updater_secret
+
+  extra_config = {
+    "product" = "pfm"
+  }
+}
+
+resource "keycloak_openid_client" "pfm_mvt_aggregator_openid_client" {
+  realm_id  = keycloak_realm.realm.id
+  client_id = "pfm-movement-aggregator"
+
+  name    = "Service Account for PFM Movement Aggregator"
+  enabled = true
+
+  access_type              = "CONFIDENTIAL"
+  service_accounts_enabled = true
+
+  client_secret = var.openid_client_pfm_mvt_aggregator_secret
+
+  extra_config = {
+    "product" = "pfm"
   }
 }

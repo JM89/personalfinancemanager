@@ -1,0 +1,123 @@
+﻿@page "/incomes/list/{accountId:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject IncomeService IncomeService
+@inject BankAccountService BankAccountService
+@inject NavigationManager NavigationManager
+
+<PageTitle>PFM - Incomes</PageTitle>
+
+<div class="row">
+    <div class="col-lg-8">
+        <h3>Incomes</h3>
+        <hr />
+    </div>
+    @if (selectedBankAccount != null)
+    {
+        <div class="col-lg-4" style="text-align: left">
+            <div class="alert alert-info" role="alert">
+                <label><strong>Selected account: </strong></label>
+                <br/>
+                <label>@selectedBankAccount.BankName - @selectedBankAccount?.Name</label>
+                <br/>
+                <label>Balance: @selectedBankAccount?.DisplayedCurrentBalance</label>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="col-lg-10">
+        <p>Manage the incomes of a given bank account. You need at least one bank account to add new incomes. Note that the system won't let you edit an existing income, please delete and recreate so all movements appears on the bank account(s).</p>
+    </div>
+    @if (selectedBankAccount != null)
+    {
+        <div class="col-lg-2" style="text-align: right">
+            <div style="text-align: right">
+                <button class="btn btn-secondary btn-sm" @onclick="Create">Add new</button>
+            </div>
+        </div>
+    }
+</div>
+
+@if (models == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <colgroup>
+            <col width="15%" />
+            <col width="15%" />
+            <col width="50%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Date Income</th>
+                <th>Cost</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in models)
+            {
+                <tr>
+                    <td>@m.DisplayedDateIncome</td>
+                    <td style="text-align: right">@m.DisplayedCost</td>
+                    <td>@m.Description</td>
+                    <td>
+                        <button class="btn btn-light btn-sm" @onclick="(() => Delete(m))"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete"
+             ConfirmationMessage=@($"Are you sure you want to delete \"{selected.Description}\"?")>
+    </Confirm>
+
+}
+
+@code {
+
+    [Parameter]
+    public int? AccountId { get; set; }
+
+    private List<IncomeListModel> models = new List<IncomeListModel>();
+    private IncomeListModel selected = new IncomeListModel();
+    protected PFM.Website.Components.ConfirmBase DeleteConfirmation { get; set; }
+    private BankAccountListModel? selectedBankAccount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+        if (selectedBankAccount != null)
+        {
+            models = await IncomeService.GetAll(selectedBankAccount.Id);
+        }
+    }
+
+    void Create()
+    {
+        NavigationManager.NavigateTo($"/incomes/create/{selectedBankAccount?.Id}");
+    }
+
+    protected void Delete(IncomeListModel referenced)
+    {
+        selected = referenced;
+        DeleteConfirmation.Show();
+    }
+
+    protected async Task ConfirmDelete(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await IncomeService.Delete(selected.Id);
+            NavigationManager.NavigateTo($"/incomes/list/{selectedBankAccount?.Id}", true);
+        }
+    }
+}
+

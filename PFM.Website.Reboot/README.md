@@ -1,0 +1,3 @@
+# PFM Website Reboot
+
+The new website uses Keycloak for authentication purpose. Keycloak must be started and the initialization script must have run beforehand. Once the infrastructure is started, access to the client info in Keycloak on this [URL](http://localhost:8080/admin/master/console/#/pfm/clients), select `pfm-website` and find the client secret in the Credentials tab. Copy the secret to the appSettings.json file to get started. Keep in mind that the secret regenerates everytime the infrastructure restarts. After this, you can run the website and use the 'jess' user created in the initialization script for accessing the secured pages in PFM website.

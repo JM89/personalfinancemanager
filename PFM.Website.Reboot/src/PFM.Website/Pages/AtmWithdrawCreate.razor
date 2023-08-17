@@ -1,0 +1,110 @@
+﻿@page "/atm-withdraws/create/{accountId:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject BankAccountService BankAccountService
+@inject AtmWithdrawService AtmWithdrawService
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>PFM - ATM Withdraws</PageTitle>
+
+<div class="row">
+    <div class="col-lg-8">
+        <h3>Create ATM Withdraw</h3>
+        <hr />
+    </div>
+    @if (selectedBankAccount != null)
+    {
+        <div class="col-lg-4" style="text-align: left">
+            <div class="alert alert-info" role="alert">
+                <label><strong>Selected account: </strong></label>
+                <br />
+                <label>@selectedBankAccount.BankName - @selectedBankAccount?.Name</label>
+                <br />
+                <label>Balance: @selectedBankAccount?.DisplayedCurrentBalance</label>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="card" >
+        <div class="card-body">
+            <p class="card-text">
+                <div class="col-lg-6">
+                    <EditForm Model="m" OnSubmit="HandleSubmit">
+                        <DataAnnotationsValidator />
+                        <div class="col-sm-8 text-danger">
+                            <ValidationSummary />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="date" class="col-sm-3 col-form-label">Date</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="date" value="@m.DateExpense.ToString("yyyy-MM-dd")" @onchange="@((e) => UpdateDate(e))" />
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="cost" class="col-sm-3 col-form-label">Amount</label>
+                            <div class="col-sm-9">
+                                <InputNumber id="cost" @bind-Value="m.InitialAmount" class="form-control"></InputNumber>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="alreadyDebited" class="col-sm-3 col-form-label">Already Debited</label>
+                            <div class="col-sm-9">
+                                <InputCheckbox id="alreadyDebited" @bind-Value="m.HasBeenAlreadyDebited"></InputCheckbox>
+                            </div>
+                            <br />
+                        </div>
+                        <br />
+                        <br />
+                        <div style="text-align:right;">
+                            <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </p>
+        </div>
+    </div>
+    
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public int AccountId { get; set; }
+
+    private AtmWithdrawEditModel m = new AtmWithdrawEditModel() { DateExpense = DateTime.UtcNow };
+    private BankAccountListModel? selectedBankAccount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+    }
+
+    void Back()
+    {
+        NavigationManager.NavigateTo($"/atm-withdraws/list/{AccountId}");
+    }
+
+    async Task HandleSubmit()
+    {
+        bool result = await AtmWithdrawService.Create(AccountId, m);
+        if (result)
+        {
+            NavigationManager.NavigateTo($"/atm-withdraws/list/{AccountId}");
+        }
+    }
+
+    void UpdateDate(ChangeEventArgs e)
+    {
+        var selectedDate = e.Value ?? DateTime.UtcNow;
+        m.DateExpense = DateTime.Parse(selectedDate.ToString());
+    }
+}
+

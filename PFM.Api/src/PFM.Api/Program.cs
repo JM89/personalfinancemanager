@@ -2,6 +2,7 @@ using App.Metrics;
 using App.Metrics.AspNetCore;
 using App.Metrics.Formatters.Prometheus;
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,11 @@ namespace PFM.Api
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Configuration.AddEnvironmentVariables(prefix: "APP_");
+
+            if (builder.Environment.EnvironmentName != "Production")
+            {
+                Console.WriteLine(builder.Configuration.GetDebugView());
+            }
 
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddTransient<AuthHeaderHandler>();
@@ -44,6 +50,9 @@ namespace PFM.Api
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
 
+            var appSettings = builder.Configuration.GetSection("DataSettings").Get<DataSettings>() ?? new DataSettings();
+            builder.Services.AddSingleton(appSettings);
+
             builder.Host
                 .ConfigureMetrics(metrics)
                 .UseMetrics(
@@ -62,7 +71,7 @@ namespace PFM.Api
             var app = builder.Build();
 
             app.UseMiddleware<TimedOperationMiddleware>();
-            app.UseMiddleware<ResponseWrapperMiddleware>();
+            app.UseMiddleware<PFM.Api.Middlewares.ResponseWrapperMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {
@@ -71,6 +80,8 @@ namespace PFM.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseMetricsAllEndpoints();
 
