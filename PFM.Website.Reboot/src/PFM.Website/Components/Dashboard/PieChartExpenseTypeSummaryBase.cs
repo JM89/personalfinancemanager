@@ -36,7 +36,14 @@ namespace PFM.Website.Components.Dashboard
         {
             Months = MonthYearHelper.GetXLastMonths(Duration, IncludeCurrentMonth, false);
             Categories = (await ExpenseTypeService.GetAll()).Where(x => x.ShowOnDashboard);
-            await FetchData();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await FetchData();
+            }
         }
 
         protected async Task FetchData()

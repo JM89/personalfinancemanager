@@ -21,8 +21,16 @@ namespace PFM.Website.Components.Dashboard
 
         protected override async Task OnInitializedAsync()
         {
-            SelectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
             AvailableBankAccounts = await BankAccountService.GetAll();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                SelectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+                this.StateHasChanged();
+            }
         }
 
         public async Task UpdateSelected(ChangeEventArgs referenced)

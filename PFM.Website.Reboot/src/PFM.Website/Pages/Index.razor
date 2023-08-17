@@ -81,6 +81,7 @@
 
     protected async Task UpdateChartsForAccount(int accountId)
     {
+        SelectedBankAccount = null;
         SelectedCategory = null;
         NavigationManager.NavigateTo($"/{accountId}", true);
     }

@@ -23,22 +23,17 @@ namespace PFM.Website.Components.Dashboard
         [Inject]
         protected MovementSummaryService MovementSummaryService { get; set; } = default!;
 
-        [Inject]
-        protected BankAccountService BankAccountService { get; set; } = default!;
-
         private const int Duration = 12;
         private const bool IncludeCurrentMonth = true;
 
         protected override async Task OnInitializedAsync()
         {
             Months = MonthYearHelper.GetXLastMonths(Duration, IncludeCurrentMonth, false);
+        }
 
-            if (!AccountId.HasValue)
-            {
-                AccountId = (await BankAccountService.GetCurrentAccount(AccountId))?.Id;
-            }
-
-            if (AccountId.HasValue)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
             {
                 await FetchData();
             }
@@ -46,6 +41,9 @@ namespace PFM.Website.Components.Dashboard
 
         protected async Task FetchData()
         {
+            if (!AccountId.HasValue)
+                return;
+
             var model = await MovementSummaryService.GetExpenseOvertime(
                 new MovementSummarySearchParamModel(AccountId.Value, Months)
                 {
@@ -107,6 +105,8 @@ namespace PFM.Website.Components.Dashboard
             ChartConfig.Data.Datasets.Clear();
             ChartConfig.Data.Datasets.Add(dataset1);
             ChartConfig.Data.Datasets.Add(dataset2);
+
+            this.StateHasChanged();
         }
     }
 }
