@@ -1,5 +1,5 @@
 client_secret="RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jjd"
-api_endpoint="https://localhost:4431" #"https://localhost:7098" 
+api_endpoint="https://localhost:4431" #"https://localhost:7098" #
 
 auth_response=$(curl -L POST "http://localhost:8080/realms/pfm/protocol/openid-connect/token" -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'client_id=pfm' --data-urlencode 'grant_type=password' --data-urlencode "client_secret=$client_secret" --data-urlencode 'scope=openid' --data-urlencode 'username=jess' --data-urlencode 'password=SecurityMatters!123' )
 
@@ -17,6 +17,7 @@ create_common_expense () {
   expenseType=$1
   dateMovement=$2
   paymentMethod=$3
+  cost=$4
   curl -v --insecure -X 'POST' \
       "$api_endpoint/api/Expense/Create" \
         -H 'accept: text/plain' \
@@ -25,19 +26,20 @@ create_common_expense () {
         -d "{
           \"accountId\": 1,
           \"dateExpense\": \"$dateMovement\",
-          \"cost\": 10,
+          \"cost\": $cost,
           \"expenseTypeId\": $expenseType,
           \"paymentMethodId\": $paymentMethod,
           \"description\": \"Common Expense for expense type $expenseType\",
           \"hasBeenAlreadyDebited\": true,
           \"paymentMethodHasBeenAlreadyDebitedOption\": true
         }"
-  sleep 5
+  sleep 2
 }
 
 create_internal_transfer_expense () {
   expenseType=$1
   dateMovement=$2
+  cost=$3
   curl -v --insecure -X 'POST' \
       "$api_endpoint/api/Expense/Create" \
         -H 'accept: text/plain' \
@@ -46,7 +48,7 @@ create_internal_transfer_expense () {
         -d "{
           \"accountId\": 1,
           \"dateExpense\": \"$dateMovement\",
-          \"cost\": 100,
+          \"cost\": $cost,
           \"expenseTypeId\": $expenseType,
           \"paymentMethodId\": 5,
           \"description\": \"Internal Transfer account 1 to 2 for expense type $expenseType\",
@@ -54,13 +56,14 @@ create_internal_transfer_expense () {
           \"paymentMethodHasBeenAlreadyDebitedOption\": true,
           \"targetInternalAccountId\": 2
         }"
-  sleep 5
+  sleep 2
 }
 
 create_cash_expense () {
   expenseType=$1
   dateMovement=$2
   atmWithdrawId=$3
+  cost=$4
   curl -v --insecure -X 'POST' \
     "$api_endpoint/api/Expense/Create" \
       -H 'accept: text/plain' \
@@ -69,7 +72,7 @@ create_cash_expense () {
       -d "{
         \"accountId\": 1,
         \"dateExpense\": \"$dateMovement\",
-        \"cost\": 0.50,
+        \"cost\": $cost,
         \"expenseTypeId\": $expenseType,
         \"paymentMethodId\": 2,
         \"description\": \"Cash Expense for expense type $expenseType\",
@@ -77,7 +80,7 @@ create_cash_expense () {
         \"paymentMethodHasBeenAlreadyDebitedOption\": true,
         \"atmWithdrawId\": $atmWithdrawId
       }"
-  sleep 5
+  sleep 2
 }
 
 x=1
@@ -96,7 +99,7 @@ do
         \"dateIncome\": \"2023-0$x-01\"
     }"
 
-  sleep 5
+  sleep 2
 
   curl -v --insecure -X 'POST' \
     "$api_endpoint/api/Saving/Create" \
@@ -111,16 +114,18 @@ do
         \"description\": \"Saving\"
       }"
   
-  sleep 5
+  sleep 2
 
-  create_common_expense 1 "2023-0$x-03" 1
-  create_common_expense 2 "2023-0$x-16" 1
-  create_common_expense 2 "2023-0$x-19" 3
-  create_common_expense 2 "2023-0$x-21" 4
-  create_internal_transfer_expense 3 "2023-0$x-02"
-  create_cash_expense 1 "2023-0$x-11" 1
-  create_cash_expense 2 "2023-0$x-19" 1
-  create_cash_expense 2 "2023-0$x-21" 2
+  cost=$(( $x*100 ))
+
+  create_common_expense 1 "2023-0$x-03" 1 $cost
+  create_common_expense 2 "2023-0$x-16" 1 $cost
+  create_common_expense 2 "2023-0$x-19" 3 $cost
+  create_common_expense 3 "2023-0$x-21" 4 $cost
+  create_internal_transfer_expense 3 "2023-0$x-02" $cost
+  create_cash_expense 1 "2023-0$x-11" 1 $x
+  create_cash_expense 2 "2023-0$x-19" 1 $x
+  create_cash_expense 2 "2023-0$x-21" 2 $x
 
   x=$(( $x + 1 ))
 done

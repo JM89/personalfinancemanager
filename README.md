@@ -23,7 +23,7 @@ The evolution of the architecture is documented in this wiki page: [System Archi
 You will need the following tools installed on your development machine:
 [x] Docker
 [x] .NET 7
-[x] jq command line
+[x] `jq` command line
 
 #### GitHub Package Access
 
@@ -39,11 +39,11 @@ To simplify the setup, the secrets for Keycloak have been hard-coded. In a norma
 
 |Property|Value|Description|
 |---|---|---|
-|admin|SecurityMatters12456!|Administrator Password|
-|jess|SecurityMatters12456!|PFM Default User|
-|pfm|RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jjd|App client for PFM Website|
-|pfm-bank-account-updater|RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jje|Service account for Bank Account Updater|
-|pfm-mvt-aggregator|RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jjf|Service account for Movement Aggregator|
+|admin|`SecurityMatters12456!`|Administrator Password|
+|jess|`SecurityMatters!123`|PFM Default User|
+|pfm|`RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jjd`|App client for PFM Website|
+|pfm-bank-account-updater|`RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jje`|Service account for Bank Account Updater|
+|pfm-mvt-aggregator|`RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jjf`|Service account for Movement Aggregator|
 
 #### Shared infrastructure
 
@@ -75,15 +75,15 @@ To speed up the development of the front-end part, I used an in-memory storage i
 
 |Property|Default Value|Configration|
 |---|---|---|
-|AuthOptions:Authority|http://localhost:8080/realms/pfm|SSO Authority|
-|AuthOptions:ClientId|pfm|PFM Client ID|
-|AuthOptions:ClientId|RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jjd|PFM Client Secret|
-|UsePfmApi|false|If disabled, use in-memory storage|
-|EndpointUrl|https://localhost:4431/|PFM API Docker Endpoint.|
-|ApplicationSettings:UseRemoteStorageForBankIcons|false|If disabled, use local system. We need to put metrics to measure latency and optimise before re-enabling this. |
-|ApplicationSettings:BankIconLocation|./wwwroot/Resources/bank_icons|If UseRemoteStorageForBankIcons is enabled, use the s3 bucket name for the location: pfm-website-bank-icons|
-|ApplicationSettings:AwsRegion|eu-west-2|If UseRemoteStorageForBankIcons is enabled, s3 bucket AWS region (localstack init setup)|
-|ApplicationSettings:AwsEndpointUrl|http://localhost:4566|If UseRemoteStorageForBankIcons is enabled, s3 bucket AWS endpoint url (localstack init setup)|
+|`AuthOptions:Authority`|http://localhost:8080/realms/pfm|SSO Authority|
+|`AuthOptions:ClientId`|pfm|PFM Client ID|
+|`AuthOptions:ClientId`|RTkyA3RNh4cHHhS8ftXe17WOQu9a0Jjd|PFM Client Secret|
+|`UsePfmApi`|false|If disabled, use in-memory storage|
+|`PfmApi:EndpointUrl`|https://localhost:4431/|PFM API Docker Endpoint.|
+|`ApplicationSettings:UseRemoteStorageForBankIcons`|false|If disabled, use local system. We need to put metrics to measure latency and optimise before re-enabling this. |
+|`ApplicationSettings:BankIconLocation`|./wwwroot/Resources/bank_icons|If UseRemoteStorageForBankIcons is enabled, use the s3 bucket name for the location: pfm-website-bank-icons|
+|`ApplicationSettings:AwsRegion`|eu-west-2|If UseRemoteStorageForBankIcons is enabled, s3 bucket AWS region (localstack init setup)|
+|`ApplicationSettings:AwsEndpointUrl`|http://localhost:4566|If UseRemoteStorageForBankIcons is enabled, s3 bucket AWS endpoint url (localstack init setup)|
 
 The API URLs can be found here:
 

@@ -24,7 +24,8 @@ namespace PFM.Services.Caches
             if (!this._memoryCache.TryGetValue(id, out string value))
             {
                 var response = _expenseTypeRepository.GetById(id);
-                _memoryCache.Set(id, response?.Name ?? "Unknown", _options);
+                value = response?.Name ?? "Unknown";
+                _memoryCache.Set(id, value, _options);
             }
             return Task.FromResult(value);
         }

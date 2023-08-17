@@ -28,7 +28,7 @@ namespace PFM.MovementAggregator.Handlers
             {
                 var movementAggregation = new MovementAggregation()
                 {
-                    BankAccountId = int.Parse(evt.StreamId.Replace("BankAccount-", "")),
+                    BankAccountId = evt.Id,
                     Type = MovementTypes.Incomes,
                     Category = MovementTypes.Incomes,
                     MonthYearIdentifier = evt.OperationDate.ToString("yyyyMM"),

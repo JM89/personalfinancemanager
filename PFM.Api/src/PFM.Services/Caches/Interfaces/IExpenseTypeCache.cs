@@ -1,5 +1,4 @@
-﻿using PFM.DataAccessLayer.Entities;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace PFM.Services.Caches.Interfaces
 {

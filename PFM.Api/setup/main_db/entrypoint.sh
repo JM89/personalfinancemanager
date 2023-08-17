@@ -9,7 +9,7 @@ for ((n=$COUNT_ATTEMPT;n>0;n--)) ; do
         break
     fi
     echo "Next connection attempt in 1s"
-    sleep 5
+    sleep 2
 done
 
 [[ $n == 0 ]] && echo "Failed connection to DB server: $DB_SERVER_NAME,$DB_SERVER_PORT" && exit 1

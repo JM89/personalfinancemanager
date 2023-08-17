@@ -29,6 +29,7 @@ namespace PFM.Services.Caches
                 value = JsonConvert.DeserializeObject<AccountDetails>(apiResponse.Data.ToString());
                 _memoryCache.Set(id, value, _options);
             }
+
             return value;
         }
     }

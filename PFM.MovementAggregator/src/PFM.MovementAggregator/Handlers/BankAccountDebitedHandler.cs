@@ -28,7 +28,7 @@ namespace PFM.MovementAggregator.Handlers
             {
                 var movementAggregation = new MovementAggregation()
                 {
-                    BankAccountId = int.Parse(evt.StreamId.Replace("BankAccount-", "")),
+                    BankAccountId = evt.Id,
                     MonthYearIdentifier = evt.OperationDate.ToString("yyyyMM"),
                     AggregatedAmount = evt.PreviousBalance - evt.CurrentBalance
                 };
@@ -41,7 +41,7 @@ namespace PFM.MovementAggregator.Handlers
                 else
                 {
                     movementAggregation.Type = MovementTypes.Expenses;
-                    movementAggregation.Category = MovementTypes.Expenses;
+                    movementAggregation.Category = evt.MovementType ?? "Unknown";
                 }
 
                 var result = await _movementAggregatorRepository.Merge(movementAggregation);
