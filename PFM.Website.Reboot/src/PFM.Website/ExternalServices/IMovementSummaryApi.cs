@@ -1,5 +1,5 @@
 ﻿using Api.Contracts.Shared;
-using PFM.Website.ExternalServices.Contracts;
+using PFM.Api.Contracts.SearchParameters;
 using Refit;
 
 namespace PFM.Website.ExternalServices
@@ -7,7 +7,7 @@ namespace PFM.Website.ExternalServices
 	public interface IMovementSummaryApi
 	{
         [Post("/api/MovementSummary/GetList")]
-        Task<ApiResponse> GetMovementSummaryOvertime(MovementSummarySearchParams searchParams);
+        Task<ApiResponse> GetMovementSummaryOvertime(MovementSummarySearchParameters searchParams);
     }
 }
 
