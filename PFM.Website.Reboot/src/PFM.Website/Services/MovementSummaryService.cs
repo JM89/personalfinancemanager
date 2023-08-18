@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using PFM.Website.Configurations;
 using PFM.Website.ExternalServices;
-using PFM.Website.ExternalServices.Contracts;
+using PFM.Api.Contracts.MovementSummary;
+using PFM.Api.Contracts.SearchParameters;
 using PFM.Website.Models;
 using PFM.Website.Utils;
 
@@ -10,19 +11,17 @@ namespace PFM.Website.Services
     public class MovementSummaryService : CoreService
     {
         private readonly IMovementSummaryApi _api;
-        private readonly IExpenseTypeApi _expenseApi;
 
         public MovementSummaryService(Serilog.ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor,
-            ApplicationSettings settings, IMovementSummaryApi api, IExpenseTypeApi expenseApi)
+            ApplicationSettings settings, IMovementSummaryApi api)
             : base(logger, mapper, httpContextAccessor, settings)
         {
             _api = api;
-            _expenseApi = expenseApi;
         }
 
         public async Task<DashboardExpenseTypeSummaryModel> GetExpenseTypeSummary(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParams>(search);
+            var request = _mapper.Map<MovementSummarySearchParameters>(search);
             var apiResponse = await _api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
@@ -36,7 +35,7 @@ namespace PFM.Website.Services
 
         public async Task<DashboardMovementTypeSummaryModel> GetMovementTypeSummary(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParams>(search);
+            var request = _mapper.Map<MovementSummarySearchParameters>(search);
             var apiResponse = await _api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
@@ -59,7 +58,7 @@ namespace PFM.Website.Services
 
         public async Task<DashboardMovementTypeOvertimeModel> GetMovementTypeOverTimeModel(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParams>(search);
+            var request = _mapper.Map<MovementSummarySearchParameters>(search);
             var apiResponse = await _api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
@@ -78,7 +77,7 @@ namespace PFM.Website.Services
 
         public async Task<DashboardExpenseOvertimeModel> GetExpenseOvertime(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParams>(search);
+            var request = _mapper.Map<MovementSummarySearchParameters>(search);
             var apiResponse = await _api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
@@ -95,7 +94,7 @@ namespace PFM.Website.Services
 
         public async Task<DashboardExpenseTypeOvertimeModel> GetExpenseTypeOvertime(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParams>(search);
+            var request = _mapper.Map<MovementSummarySearchParameters>(search);
             var apiResponse = await _api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
             var data = response
@@ -112,7 +111,7 @@ namespace PFM.Website.Services
                 throw new InvalidOperationException($"{nameof(search.OptionalType)} must be set.");
             }
 
-            var request = _mapper.Map<MovementSummarySearchParams>(search);
+            var request = _mapper.Map<MovementSummarySearchParameters>(search);
             var apiResponse = await _api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 

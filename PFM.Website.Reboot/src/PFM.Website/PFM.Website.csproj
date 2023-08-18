@@ -22,7 +22,6 @@
     <None Remove="Persistence\Models\" />
     <None Remove="Utils\" />
     <None Remove="Components\Dashboard\" />
-    <None Remove="ExternalServices\Contracts\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -38,11 +37,10 @@
     <Folder Include="Persistence\Models\" />
     <Folder Include="Utils\" />
     <Folder Include="Components\Dashboard\" />
-    <Folder Include="ExternalServices\Contracts\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="PFM.Api.Contracts" Version="4.3.0" />
-    <PackageReference Include="PFM.Bank.Api.Contracts" Version="4.3.0" />
+    <PackageReference Include="PFM.Api.Contracts" Version="5.2.0" />
+    <PackageReference Include="PFM.Bank.Api.Contracts" Version="5.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.20" />
     <PackageReference Include="BlazorColorPicker" Version="2.3.0" />
     <PackageReference Include="Refit" Version="7.0.0" />

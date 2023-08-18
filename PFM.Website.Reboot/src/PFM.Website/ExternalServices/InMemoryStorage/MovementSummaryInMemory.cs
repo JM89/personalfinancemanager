@@ -1,8 +1,9 @@
 ﻿using Api.Contracts.Shared;
 using Newtonsoft.Json;
 using PFM.Api.Contracts.ExpenseType;
-using PFM.Website.ExternalServices.Contracts;
 using PFM.Website.Utils;
+using PFM.Api.Contracts.MovementSummary;
+using PFM.Api.Contracts.SearchParameters;
 
 namespace PFM.Website.ExternalServices.InMemoryStorage
 {
@@ -57,7 +58,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             }
         }
 
-        public async Task<ApiResponse> GetMovementSummaryOvertime(MovementSummarySearchParams search)
+        public async Task<ApiResponse> GetMovementSummaryOvertime(MovementSummarySearchParameters search)
         {
             var data = _storage.Where(x => x.BankAccountId == search.BankAccountId && search.MonthYearIdentifiers.Contains(x.MonthYearIdentifier));
 
