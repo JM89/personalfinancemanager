@@ -50,7 +50,8 @@ namespace Services
 
         public Task<List<AccountList>> GetAccountsByUser(string userId)
         {
-            var accounts = _bankAccountRepository.GetList2(u => u.Currency, u => u.Bank)
+            var accounts = _bankAccountRepository
+                .GetList2(u => u.Currency, u => u.Bank)
                 .Where(x => x.User_Id == userId)
                 .ToList();
 

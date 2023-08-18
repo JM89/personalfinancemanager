@@ -15,10 +15,10 @@ namespace Api.Controllers
             _bankService = bankService;
         }
 
-        [HttpGet("GetList")]
-        public async Task<IEnumerable<BankList>> GetList()
+        [HttpGet("GetList/{userId}")]
+        public async Task<IEnumerable<BankList>> GetList(string userId)
         {
-            return await _bankService.GetBanks();
+            return await _bankService.GetBanks(userId);
         }
 
         [HttpGet("Get/{id}")]
@@ -27,17 +27,17 @@ namespace Api.Controllers
             return await _bankService.GetById(id);
         }
         
-        [HttpPost("Create")]
-        public async Task<bool> Post([FromBody]BankDetails createdObj)
+        [HttpPost("Create/{userId}")]
+        public async Task<bool> Post(string userId, [FromBody]BankDetails createdObj)
         {
-            return await _bankService.CreateBank(createdObj);
+            return await _bankService.CreateBank(createdObj, userId);
         }
         
-        [HttpPut("Edit/{id}")]
-        public async Task<bool> Put(int id, [FromBody]BankDetails editedObj)
+        [HttpPut("Edit/{id}/{userId}")]
+        public async Task<bool> Put(int id, string userId, [FromBody]BankDetails editedObj)
         {
             editedObj.Id = id;
-            return await _bankService.EditBank(editedObj);
+            return await _bankService.EditBank(editedObj, userId);
         }
         
         [HttpDelete("Delete/{id}")]

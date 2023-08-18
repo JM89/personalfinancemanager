@@ -10,7 +10,8 @@ namespace PFM.Services.Core.Automapper
             CreateMap<DataAccessLayer.Entities.Country, PFM.Bank.Api.Contracts.Country.CountryDetails>();
 
             CreateMap<DataAccessLayer.Entities.Bank, PFM.Bank.Api.Contracts.Bank.BankList>();
-            CreateMap<DataAccessLayer.Entities.Bank, PFM.Bank.Api.Contracts.Bank.BankDetails>();
+            CreateMap<DataAccessLayer.Entities.Bank, PFM.Bank.Api.Contracts.Bank.BankDetails>()
+                .ForMember(a => a.OwnerId, opt => opt.MapFrom(x => x.User_Id));
 
             CreateMap<DataAccessLayer.Entities.Currency, PFM.Bank.Api.Contracts.Currency.CurrencyList>();
             CreateMap<DataAccessLayer.Entities.Currency, PFM.Bank.Api.Contracts.Currency.CurrencyDetails>();

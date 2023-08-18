@@ -18,5 +18,7 @@ namespace DataAccessLayer.Entities
         public string Website { get; set; }
 
         public string GeneralEnquiryPhoneNumber { get; set; }
+
+        public string User_Id { get; set; }
     }
 }

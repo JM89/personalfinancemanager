@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PFM.DataAccessLayer.Entities
 {
@@ -14,5 +12,7 @@ namespace PFM.DataAccessLayer.Entities
 
         [Required]
         public bool ShowOnDashboard { get; set; }
+
+        public string User_Id { get; set; }
     }
 }

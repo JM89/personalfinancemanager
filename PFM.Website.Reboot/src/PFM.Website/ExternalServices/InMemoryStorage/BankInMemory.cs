@@ -27,7 +27,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             }
         }
 
-        public async Task<ApiResponse> Create(BankDetails obj)
+        public async Task<ApiResponse> Create(string userId, BankDetails obj)
         {
             obj.Id = _storage.Max(x => x.Id) + 1;
             _storage.Add(obj);
@@ -45,7 +45,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             return await Task.FromResult(new ApiResponse(true));
         }
 
-        public async Task<ApiResponse> Edit(int id, BankDetails obj)
+        public async Task<ApiResponse> Edit(int id, string userId, BankDetails obj)
         {
             var existing = _storage.SingleOrDefault(x => x.Id == id);
 
@@ -61,7 +61,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             return await Task.FromResult(new ApiResponse(true));
         }
 
-        public async Task<ApiResponse> Get()
+        public async Task<ApiResponse> Get(string userId)
         {
             var result = JsonConvert.SerializeObject(_storage.ToList());
             return await Task.FromResult(new ApiResponse((object)result));

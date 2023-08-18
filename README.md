@@ -89,7 +89,7 @@ The API URLs can be found here:
 
 |Resources|Docker|Debug Mode|Internal Docker|
 |---|---|---|---|
-|App - PFM.Api|[Api Endpoints](https://localhost:4431/api)<br/>[Swagger](https://localhost:4431/swagger/index.html)|[Api Endpoints](https://localhost:7098/api)<br/>[Swagger](https://localhost:7098/swagger/index.html)|[Api Endpoints](https://pfm-api:4431/api)|
+|App - PFM.Api|[Api Endpoints](https://localhost:4431/api)<br/>[Swagger](https://localhost:4431/swagger/index.html)|[Api Endpoints](https://localhost:7098/api)<br/>[Swagger](https://localhost:4431/swagger/index.html)|[Api Endpoints](https://pfm-api:4431/api)|
 |App - PFM.Bank.Api|[Api Endpoints](https://localhost:7099/api)<br/>[Swagger](https://localhost:7099/swagger/index.html)|[Api Endpoints](https://localhost:50001/api)<br/>[Swagger](http://localhost:50001/swagger/index.html)|[Api Endpoints](http://pfm-bank-api:50001/api)|
 
 ### Debug the APIs
