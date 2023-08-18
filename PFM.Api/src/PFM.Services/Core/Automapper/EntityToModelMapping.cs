@@ -20,7 +20,8 @@ namespace PFM.Services.Core.Automapper
             CreateMap<DataAccessLayer.Entities.AtmWithdraw, Api.Contracts.AtmWithdraw.AtmWithdrawList>();
 
             CreateMap<DataAccessLayer.Entities.ExpenseType, Api.Contracts.ExpenseType.ExpenseTypeList>();
-            CreateMap<DataAccessLayer.Entities.ExpenseType, Api.Contracts.ExpenseType.ExpenseTypeDetails>();
+            CreateMap<DataAccessLayer.Entities.ExpenseType, Api.Contracts.ExpenseType.ExpenseTypeDetails>()
+                .ForMember(a => a.OwnerId, opt => opt.MapFrom(x => x.User_Id)); 
 
             CreateMap<DataAccessLayer.Entities.Income, Api.Contracts.Income.IncomeList>();
             CreateMap<DataAccessLayer.Entities.Income, Api.Contracts.Income.IncomeDetails>();

@@ -17,6 +17,8 @@ namespace PFM.Bank.Api.Contracts.Bank
         public string IconPath { get; set; }
 
         public DisplayIcon DisplayIconFlags { get; set; }
+
+        public string OwnerId { get; set; }
     }
 
     [Flags]

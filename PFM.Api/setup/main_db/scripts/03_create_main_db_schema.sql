@@ -109,6 +109,7 @@ BEGIN
 		[Name] [nvarchar](max) NOT NULL,
 		[GraphColor] [nvarchar](max) NOT NULL,
 		[ShowOnDashboard] [bit] NOT NULL,
+		[User_Id] [nvarchar](max) NULL,
 	CONSTRAINT [PK_ExpenseTypes] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC

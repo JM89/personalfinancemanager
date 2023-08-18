@@ -20,9 +20,12 @@ namespace Services
             this._bankAccountRepository = bankAccountRepository;
         }
 
-        public Task<List<BankList>> GetBanks()
+        public Task<List<BankList>> GetBanks(string userId)
         {
-            var banks = _bankRepository.GetList2(u => u.Country).ToList();
+            var banks = _bankRepository
+                .GetList2(u => u.Country)
+                .Where(x => x.User_Id == userId)
+                .ToList();
 
             var mappedBanks = banks.Select(x => Mapper.Map<BankList>(x)).ToList();
 
@@ -46,11 +49,13 @@ namespace Services
             return Task.FromResult(true);
         }
 
-        public async Task<bool> CreateBank(BankDetails bankDetails)
+        public async Task<bool> CreateBank(BankDetails bankDetails, string userId)
         {
             await Validate(bankDetails);
 
             var bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
+            bank.User_Id = userId;
+
             _bankRepository.Create(bank);
 
             return true;
@@ -68,12 +73,14 @@ namespace Services
             return Task.FromResult(Mapper.Map<BankDetails>(bank));
         }
 
-        public async Task<bool> EditBank(BankDetails bankDetails)
+        public async Task<bool> EditBank(BankDetails bankDetails, string userId)
         {
             await Validate(bankDetails);
 
             var bank = _bankRepository.GetListAsNoTracking().SingleOrDefault(x => x.Id == bankDetails.Id);
             bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
+            bank.User_Id = userId;
+
             _bankRepository.Update(bank);
 
             return true;

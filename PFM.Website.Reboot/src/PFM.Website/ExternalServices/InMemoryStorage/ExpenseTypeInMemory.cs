@@ -19,7 +19,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             new ExpenseTypeDetails() { Id = 9, Name = "Savings", GraphColor = "000000", ShowOnDashboard = false }
         };
 
-        public async Task<ApiResponse> Create(ExpenseTypeDetails obj)
+        public async Task<ApiResponse> Create(string userId, ExpenseTypeDetails obj)
         {
             obj.Id = _storage.Max(x => x.Id) + 1;
             _storage.Add(obj);
@@ -37,7 +37,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             return await Task.FromResult(new ApiResponse(true));
         }
 
-        public async Task<ApiResponse> Edit(int id, ExpenseTypeDetails obj)
+        public async Task<ApiResponse> Edit(int id, string userId, ExpenseTypeDetails obj)
         {
             var existing = _storage.SingleOrDefault(x => x.Id == id);
 
@@ -50,7 +50,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             return await Task.FromResult(new ApiResponse(true));
         }
 
-        public async Task<ApiResponse> Get()
+        public async Task<ApiResponse> Get(string userId)
         {
             var result = JsonConvert.SerializeObject(_storage.ToList());
             return await Task.FromResult(new ApiResponse((object)result));

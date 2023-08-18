@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.ExpenseType;
 using PFM.Services.Interfaces;
 
@@ -9,41 +8,42 @@ namespace PFM.Api.Controllers
     [Route("api/[controller]")]
     public class ExpenseTypeController : ControllerBase
     {
-        private readonly IExpenseTypeService _ExpenseTypeService;
+        private readonly IExpenseTypeService _expenseTypeService;
 
         public ExpenseTypeController(IExpenseTypeService ExpenseTypeService)
         {
-            _ExpenseTypeService = ExpenseTypeService;
+            _expenseTypeService = ExpenseTypeService;
         }
 
-        [HttpGet("GetList")]
-        public async Task<IEnumerable<ExpenseTypeList>> GetList()
+        [HttpGet("GetList/{userId}")]
+        public async Task<IEnumerable<ExpenseTypeList>> GetList(string userId)
         {
-            return await _ExpenseTypeService.GetExpenseTypes();
+            return await _expenseTypeService.GetExpenseTypes(userId);
         }
 
         [HttpGet("Get/{id}")]
         public async Task<ExpenseTypeDetails> Get(int id)
         {
-            return await _ExpenseTypeService.GetById(id);
+            return await _expenseTypeService.GetById(id);
         }
         
-        [HttpPost("Create")]
-        public async Task<bool> Post([FromBody]ExpenseTypeDetails createdObj)
+        [HttpPost("Create/{userId}")]
+        public async Task<bool> Post(string userId, [FromBody]ExpenseTypeDetails createdObj)
         {
-            return await _ExpenseTypeService.CreateExpenseType(createdObj);
+            return await _expenseTypeService.CreateExpenseType(createdObj, userId);
         }
         
-        [HttpPut("Edit/{id}")]
-        public async Task<bool> Put(int id, [FromBody]ExpenseTypeDetails editedObj)
+        [HttpPut("Edit/{id}/{userId}")]
+        public async Task<bool> Put(int id, string userId, [FromBody]ExpenseTypeDetails editedObj)
         {
-            return await _ExpenseTypeService.EditExpenseType(editedObj);
+            editedObj.Id = id;
+            return await _expenseTypeService.EditExpenseType(editedObj, userId);
         }
         
         [HttpDelete("Delete/{id}")]
         public async Task<bool> Delete(int id)
         {
-            return await _ExpenseTypeService.DeleteExpenseType(id);
+            return await _expenseTypeService.DeleteExpenseType(id);
         }
     }
 }

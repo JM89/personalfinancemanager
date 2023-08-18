@@ -27,7 +27,7 @@ namespace PFM.Website.Services
 
         public async Task<List<BankListModel>> GetAll()
         {
-            var apiResponse = await _api.Get();
+            var apiResponse = await _api.Get(GetCurrentUserId());
             var response = ReadApiResponse<List<BankList>>(apiResponse) ?? new List<BankList>();
             var models = response.Select(_mapper.Map<BankListModel>).ToList();
             var dl = await DownloadBankIcons(models.Select(x => x.IconPath).ToArray());
@@ -62,7 +62,7 @@ namespace PFM.Website.Services
             var request = _mapper.Map<BankDetails>(model);
             request.IconPath = iconPath;
 
-            var apiResponse = await _api.Create(request);
+            var apiResponse = await _api.Create(GetCurrentUserId(), request);
             var result = ReadApiResponse<bool>(apiResponse);
             return result;
         }
@@ -82,7 +82,7 @@ namespace PFM.Website.Services
                 request.IconPath = iconPath;
             }
 
-            var apiResponse = await _api.Edit(id, request);
+            var apiResponse = await _api.Edit(id, GetCurrentUserId(), request);
             var result = ReadApiResponse<bool>(apiResponse);
             return result;
         }

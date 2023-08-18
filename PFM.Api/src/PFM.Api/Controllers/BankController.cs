@@ -1,5 +1,4 @@
 ﻿using Api.Contracts.Shared;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PFM.Bank.Api.Contracts.Bank;
 using PFM.Services.ExternalServices.BankApi;
@@ -17,10 +16,10 @@ namespace PFM.Api.Controllers
             _bankApi = bankApi;
         }
 
-        [HttpGet("GetList")]
-        public async Task<ApiResponse> GetList()
+        [HttpGet("GetList/{userId}")]
+        public async Task<ApiResponse> GetList(string userId)
         {
-            return await _bankApi.GetList();
+            return await _bankApi.GetList(userId);
         }
 
         [HttpGet("Get/{id}")]
@@ -29,16 +28,16 @@ namespace PFM.Api.Controllers
             return await _bankApi.Get(id);
         }
         
-        [HttpPost("Create")]
-        public async Task<ApiResponse> Post([FromBody]BankDetails createdObj)
+        [HttpPost("Create/{userId}")]
+        public async Task<ApiResponse> Post(string userId, [FromBody]BankDetails createdObj)
         {
-            return await _bankApi.Create(createdObj);
+            return await _bankApi.Create(userId, createdObj);
         }
         
-        [HttpPut("Edit/{id}")]
-        public async Task<ApiResponse> Put(int id, [FromBody]BankDetails editedObj)
+        [HttpPut("Edit/{id}/{userId}")]
+        public async Task<ApiResponse> Put(int id, string userId, [FromBody]BankDetails editedObj)
         {
-            return await _bankApi.Edit(id, editedObj);
+            return await _bankApi.Edit(id, userId, editedObj);
         }
         
         [HttpDelete("Delete/{id}")]

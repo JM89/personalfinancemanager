@@ -35,6 +35,7 @@ BEGIN
 		[CountryId] [int] NOT NULL,
 		[Website] [nvarchar](max) NULL,
 		[GeneralEnquiryPhoneNumber] [nvarchar](max) NULL,
+		[User_Id] [nvarchar](max) NULL,
 	CONSTRAINT [PK_Banks] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC

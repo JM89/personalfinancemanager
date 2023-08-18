@@ -9,5 +9,7 @@
         public string GraphColor { get; set; }
 
         public bool ShowOnDashboard { get; set; }
+
+        public string OwnerId { get; set; }
     }
 }

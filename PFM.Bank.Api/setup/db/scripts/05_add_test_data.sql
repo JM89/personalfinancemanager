@@ -3,8 +3,8 @@ GO
 
 SET IDENTITY_INSERT [dbo].[Banks] ON
 
-INSERT INTO [dbo].[Banks] (Id, [Name],[IconPath],[CountryId],[Website],[GeneralEnquiryPhoneNumber])
-VALUES (1, 'Goodlife Bancorp','/Resources/bank_icons/default.png',1,'https://goodlife-bankcorp.co.uk',07000000000)
+INSERT INTO [dbo].[Banks] (Id, [Name],[IconPath],[CountryId],[Website],[GeneralEnquiryPhoneNumber], User_Id)
+VALUES (1, 'Goodlife Bancorp','/Resources/bank_icons/default.png',1,'https://goodlife-bankcorp.co.uk',07000000000, 'jess')
 
 SET IDENTITY_INSERT [dbo].[Banks] OFF
 

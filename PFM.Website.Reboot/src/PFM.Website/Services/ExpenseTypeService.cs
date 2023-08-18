@@ -18,7 +18,7 @@ namespace PFM.Website.Services
 
         public async Task<List<ExpenseTypeModel>> GetAll()
         {
-            var apiResponse = await _api.Get();
+            var apiResponse = await _api.Get(GetCurrentUserId());
             var response = ReadApiResponse<List<ExpenseTypeList>>(apiResponse) ?? new List<ExpenseTypeList>();
             return response.Select(_mapper.Map<ExpenseTypeModel>).ToList();
         }
@@ -33,7 +33,7 @@ namespace PFM.Website.Services
         public async Task<bool> Create(ExpenseTypeModel model)
         {
             var request = _mapper.Map<ExpenseTypeDetails>(model);
-            var apiResponse = await _api.Create(request);
+            var apiResponse = await _api.Create(GetCurrentUserId(), request);
             var result = ReadApiResponse<bool>(apiResponse);
             return result;
         }
@@ -41,7 +41,7 @@ namespace PFM.Website.Services
         public async Task<bool> Edit(int id, ExpenseTypeModel model)
         {
             var request = _mapper.Map<ExpenseTypeDetails>(model);
-            var apiResponse = await _api.Edit(id, request);
+            var apiResponse = await _api.Edit(id, GetCurrentUserId(), request);
             var result = ReadApiResponse<bool>(apiResponse);
             return result;
         }
