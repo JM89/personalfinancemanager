@@ -88,7 +88,8 @@ namespace PFM.Website.Configurations
                     .AddSingleton<IAtmWithdrawApi, AtmWithdrawInMemory>()
                     .AddSingleton<IExpenseApi, ExpenseInMemory>()
                     .AddSingleton<IPaymentMethodApi, PaymentMethodInMemory>()
-                    .AddSingleton<IMovementSummaryApi, MovementSummaryInMemory>();
+                    .AddSingleton<IMovementSummaryApi, MovementSummaryInMemory>()
+                    .AddSingleton<IBudgetPlanApi, BudgetPlanInMemory>();
                 return services;
             }
 
@@ -128,7 +129,8 @@ namespace PFM.Website.Configurations
                 .AddPfmApiClient<IAtmWithdrawApi>(apiConfigs, refitSettings, httpClientHandler)
                 .AddPfmApiClient<IExpenseApi>(apiConfigs, refitSettings, httpClientHandler)
                 .AddPfmApiClient<IPaymentMethodApi>(apiConfigs, refitSettings, httpClientHandler)
-                .AddPfmApiClient<IMovementSummaryApi>(apiConfigs, refitSettings, httpClientHandler);
+                .AddPfmApiClient<IMovementSummaryApi>(apiConfigs, refitSettings, httpClientHandler)
+                .AddPfmApiClient<IBudgetPlanApi>(apiConfigs, refitSettings, httpClientHandler);
 
             return services;
         }

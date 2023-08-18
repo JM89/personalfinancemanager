@@ -22,6 +22,9 @@ namespace PFM.Website.Services.Mappers
             CreateMap<Models.ExpenseListModel, PFM.Api.Contracts.Expense.ExpenseList>();
             CreateMap<Models.ExpenseSearchParamModel, PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters>();
             CreateMap<Models.MovementSummarySearchParamModel, PFM.Api.Contracts.SearchParameters.MovementSummarySearchParameters>();
+            CreateMap<Models.BudgetPlanEditModel, PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails>();
+            CreateMap<Models.BudgetPlanExpenseTypeEditModel, PFM.Api.Contracts.BudgetPlan.BudgetPlanExpenseType>();
+            CreateMap<Models.BudgetPlanListModel, PFM.Api.Contracts.BudgetPlan.BudgetPlanList>();
         }
     }
 }

@@ -26,6 +26,9 @@ namespace PFM.Website.Services.Mappers
             CreateMap<PFM.Api.Contracts.Expense.ExpenseList, Models.ExpenseListModel>();
             CreateMap<PFM.Api.Contracts.Expense.ExpenseDetails, Models.ExpenseEditModel>();
             CreateMap<PFM.Api.Contracts.PaymentMethod.PaymentMethodList, Models.PaymentMethodListModel>();
+            CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanList, Models.BudgetPlanListModel>();
+            CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails, Models.BudgetPlanEditModel>();
+            CreateMap<PFM.Api.Contracts.BudgetPlan.BudgetPlanExpenseType, Models.BudgetPlanExpenseTypeEditModel>();
         }
     }
 }
