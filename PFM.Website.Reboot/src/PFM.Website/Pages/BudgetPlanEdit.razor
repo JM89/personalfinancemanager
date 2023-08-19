@@ -1,0 +1,149 @@
+﻿@page "/budget-plans/create/{accountId:int}"
+@page "/budget-plans/view/{accountId:int}/{id:int}"
+@page "/budget-plans/edit/{accountId:int}/{id:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject BankService BankService
+@inject BudgetPlanService BudgetPlanService
+@inject ExpenseTypeService ExpenseTypeService
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>PFM - Budget Plans</PageTitle>
+
+@if (ViewMode)
+{
+    <h3>View Budget Plan</h3>
+    <hr />
+}
+else if (Id != null)
+{
+    <h3>Edit Budget Plan</h3>
+    <hr />
+}
+else
+{
+    <h3>Create Budget Plan</h3>
+    <hr />
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">
+                <div class="col-lg-12">
+                    <EditForm Model="m" OnSubmit="HandleSubmit">
+                        <DataAnnotationsValidator />
+                        <div class="col-sm-8 text-danger">
+                            <ValidationSummary />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="name" class="col-sm-3 col-form-label">Name</label>
+                            <div class="col-sm-9">
+                                <InputText id="name" @bind-Value="m.Name" class="form-control" disabled="@ViewMode"></InputText>
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="split" class="col-sm-3 col-form-label">Split</label>
+                            <div class="col-sm-9">
+                                <table class="table">
+                                    <colgroup>
+                                        <col width="50%" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Expected Value</th>
+                                            <th>Current Month</th>
+                                            <th>Previous Month</th>
+                                            <th>Average Month</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var expenseType in AvailableExpenseTypes)
+                                        {
+                                            BudgetPlanExpenseTypeEditModel matchingType = m.ExpenseTypes.SingleOrDefault(x => x.ExpenseType?.Name == expenseType.Name) ?? new BudgetPlanExpenseTypeEditModel() { ExpenseType = expenseType };
+
+                                            <tr>
+                                                <td>@expenseType.Name</td>
+                                                <td><InputNumber id="@expenseType.Id" @bind-Value="matchingType.ExpectedValue" class="form-control" disabled="@ViewMode"></InputNumber></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br />
+                        </div>
+
+
+                        <br />
+                        <div style="text-align:right;">
+                            <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    [Parameter]
+    public int AccountId { get; set; }
+
+    private BudgetPlanEditModel m = new BudgetPlanEditModel() { ExpenseTypes = new List<BudgetPlanExpenseTypeEditModel>() };
+    private IList<ExpenseTypeModel> AvailableExpenseTypes = new List<ExpenseTypeModel>();
+
+    private bool ViewMode;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewMode = Id.HasValue && NavigationManager.Uri.Contains("view");
+        AvailableExpenseTypes = await ExpenseTypeService.GetAll();
+
+        if (!Id.HasValue)
+            return;
+
+        var model = await BudgetPlanService.GetById(Id.Value);
+
+        if (model == null)
+            return;
+
+        m = model;
+    }
+
+    void Back()
+    {
+        NavigationManager.NavigateTo($"/budget-plans/list/{AccountId}");
+    }
+
+    async Task HandleSubmit()
+    {
+        bool result = false;
+        if (!Id.HasValue)
+        {
+            result = await BudgetPlanService.Create(AccountId, m);
+        }
+        else
+        {
+            m.Id = Id.Value;
+            result = await BudgetPlanService.Edit(AccountId, m);
+        }
+        if (result)
+        {
+            NavigationManager.NavigateTo($"/budget-plans/list/{AccountId}");
+        }
+    }
+}
+

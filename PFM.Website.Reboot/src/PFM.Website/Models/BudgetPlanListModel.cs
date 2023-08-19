@@ -14,6 +14,22 @@ namespace PFM.Website.Models
         public DateTime? PlannedStartDate { get; set; }
 
         public bool CanBeChanged => !StartDate.HasValue;
+
+        public string DisplayedStartDate
+        {
+            get
+            {
+                return this.StartDate?.ToString("yyyy-MM-dd") ?? "";
+            }
+        }
+
+        public string DisplayedEndDate
+        {
+            get
+            {
+                return this.EndDate?.ToString("yyyy-MM-dd") ?? "";
+            }
+        }
     }
 }
 
