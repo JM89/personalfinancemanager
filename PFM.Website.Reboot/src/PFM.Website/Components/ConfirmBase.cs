@@ -7,6 +7,9 @@ namespace PFM.Website.Components
         protected bool ShowConfirmation { get; set; }
 
         [Parameter]
+        public string Action { get; set; } = "Delete";
+
+        [Parameter]
         public string ConfirmationTitle { get; set; } = "Confirm Delete";
 
         [Parameter]

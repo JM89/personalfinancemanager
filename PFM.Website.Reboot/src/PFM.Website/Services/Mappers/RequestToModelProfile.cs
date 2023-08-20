@@ -7,6 +7,7 @@ namespace PFM.Website.Services.Mappers
 		public RequestToModelProfile()
 		{
             CreateMap<Models.ExpenseTypeModel, PFM.Api.Contracts.ExpenseType.ExpenseTypeDetails>();
+            CreateMap<Models.ExpenseTypeModel, PFM.Api.Contracts.ExpenseType.ExpenseTypeList>();
             CreateMap<Models.CountryModel, PFM.Bank.Api.Contracts.Country.CountryDetails>();
             CreateMap<Models.BankEditModel, PFM.Bank.Api.Contracts.Bank.BankDetails>();
             CreateMap<Models.BankListModel, PFM.Bank.Api.Contracts.Bank.BankDetails>();
@@ -22,6 +23,9 @@ namespace PFM.Website.Services.Mappers
             CreateMap<Models.ExpenseListModel, PFM.Api.Contracts.Expense.ExpenseList>();
             CreateMap<Models.ExpenseSearchParamModel, PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters>();
             CreateMap<Models.MovementSummarySearchParamModel, PFM.Api.Contracts.SearchParameters.MovementSummarySearchParameters>();
+            CreateMap<Models.BudgetPlanEditModel, PFM.Api.Contracts.BudgetPlan.BudgetPlanDetails>();
+            CreateMap<Models.BudgetPlanExpenseTypeEditModel, PFM.Api.Contracts.BudgetPlan.BudgetPlanExpenseType>();
+            CreateMap<Models.BudgetPlanListModel, PFM.Api.Contracts.BudgetPlan.BudgetPlanList>();
         }
     }
 }

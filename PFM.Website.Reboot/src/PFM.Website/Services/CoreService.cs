@@ -30,8 +30,6 @@ namespace PFM.Website.Services
                 return default(TResult);
             }
 
-            _logger.Information("Read API Response of type {Type}", apiResponse.Data.GetType());
-
             if (typeof(TResult) == typeof(bool) && bool.TryParse(apiResponse.Data.ToString(), out bool bResult))
             {
                 return (TResult)Convert.ChangeType(bResult, typeof(TResult));

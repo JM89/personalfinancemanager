@@ -1,0 +1,310 @@
+﻿@page "/budget-plans/create/{accountId:int}"
+@page "/budget-plans/view/{accountId:int}/{id:int}"
+@page "/budget-plans/edit/{accountId:int}/{id:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@using PFM.Website.Utils
+@inject BankAccountService BankAccountService
+@inject BudgetPlanService BudgetPlanService
+@inject ExpenseTypeService ExpenseTypeService
+@inject MovementSummaryService MovementSummaryService
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>PFM - Budget Plans</PageTitle>
+
+@if (ViewMode)
+{
+    <h3>View Budget Plan</h3>
+    <hr />
+}
+else if (Id != null)
+{
+    <h3>Edit Budget Plan</h3>
+    <hr />
+}
+else
+{
+    <h3>Create Budget Plan</h3>
+    <hr />
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">
+                <div class="col-lg-12">
+                    <EditForm Model="m" OnSubmit="HandleSubmit">
+                        <DataAnnotationsValidator />
+                        <div class="col-sm-8 text-danger">
+                            <ValidationSummary />
+                        </div>
+                        <div class="form-group row" style="height:50px">
+                            <label for="name" class="col-sm-3 col-form-label">Name</label>
+                            <div class="col-sm-9">
+                                <InputText id="name" @bind-Value="m.Name" class="form-control" disabled="@ViewMode"></InputText>
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="split" class="col-sm-3 col-form-label">Split</label>
+                            <div class="col-sm-9">
+                                <table class="table" style="text-align:right;">
+                                    <colgroup>
+                                        <col width="50%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr style="text-align:left;">
+                                            <th>Name</th>
+                                            <th>Expected Value</th>
+                                            @if (m.PreviousBudgetPlan != null)
+                                            {
+                                                <th>
+                                                    @m.PreviousBudgetPlan.Name
+                                                    <label style="font-size: x-small;">
+                                                        <em>Budget Plan</em>
+                                                    </label>
+                                                </th>
+                                            }
+                                            else
+                                            {
+                                                <th>
+                                                    N/A
+                                                    <label style="font-size: x-small;">
+                                                        <em>Budget Plan</em>
+                                                    </label>
+                                                </th>
+                                            }
+                                            <th>
+                                                @(MonthYearHelper.GetXLastMonths(1, false, true).SingleOrDefault() ?? "N/A")
+                                                <label style="font-size: x-small;">
+                                                    <em>Last Months</em>
+                                                </label>
+                                            </th>
+                                            <th>
+                                                Average Month
+                                                <label style="font-size: x-small;">
+                                                    <em>Last 6 Months</em>
+                                                </label>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var expenseType in m.ExpenseTypes)
+                                        {
+                                            <tr>
+                                                <td style="text-align:left;">@expenseType.ExpenseType.Name</td>
+                                                <td><InputNumber id="@expenseType.ExpenseType.Id" @bind-Value="@expenseType.ExpectedValue" class="form-control text-align-right" disabled="@ViewMode"></InputNumber></td>
+
+                                                <td>
+                                                    @if (m.PreviousBudgetPlan != null)
+                                                    {
+                                                        @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan.ExpenseTypes.SingleOrDefault(x => x.ExpenseType.Id == expenseType.ExpenseType.Id)?.ExpectedValue, CurrencySymbol));
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (ExpenseTypeAverage.Any())
+                                                    {
+                                                        @(DecimalFormatHelper.GetDisplayDecimalValue(ExpenseTypeAverage.SingleOrDefault(x => x.Key == expenseType.ExpenseType.Name).Value, CurrencySymbol));
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (ExpenseTypePreviousMonth.Any())
+                                                    {
+                                                        @(DecimalFormatHelper.GetDisplayDecimalValue(ExpenseTypePreviousMonth.SingleOrDefault(x => x.Key == expenseType.ExpenseType.Name).Value, CurrencySymbol));
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <table class="table" style="text-align:right;">
+                                    <colgroup>
+                                        <col width="50%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <td><b>Total expenses</b></td>
+                                            <td>
+                                                <input type="text" value="@m.ExpectedExpenses" class="form-control text-align-right" disabled="true" />
+                                            </td>
+                                            <td>
+                                                @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.ExpectedExpenses, CurrencySymbol))
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Total savings</b></td>
+                                            <td>
+                                                <InputNumber id="@m.Id" @bind-Value="@m.ExpectedSavings" class="form-control text-align-right" disabled="@ViewMode"></InputNumber>
+                                            </td>
+                                            <td>
+                                                @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.ExpectedSavings, CurrencySymbol))
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Total incomes</b></td>
+                                            <td>
+                                                <InputNumber id="@m.Id" @bind-Value="@m.ExpectedIncomes" class="form-control text-align-right" disabled="@ViewMode"></InputNumber>
+                                            </td>
+                                            <td>
+                                                @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.ExpectedIncomes, CurrencySymbol))
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:right;"><b>Total</b></td>
+                                            @if (m.Total < 0)
+                                            {
+                                                <td style="background-color: #a82118; color:white;">
+                                                    <b>@m.Total</b>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td style="background-color: #3d6929; color: white; ">
+                                                    <b>@m.Total</b>
+                                                </td>
+                                            }
+                                            <td>
+                                                @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.Total, CurrencySymbol))
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <br />
+                        </div>
+
+
+                        <br />
+                        <div style="text-align:right;">
+                            <button type="button" class="btn btn-secondary" @onclick="Back">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    [Parameter]
+    public int AccountId { get; set; }
+
+    private BudgetPlanEditModel m;
+    private string CurrencySymbol = "";
+    private bool ViewMode;
+
+    private IDictionary<string, decimal> ExpenseTypeAverage = new Dictionary<string, decimal>();
+    private IDictionary<string, decimal> ExpenseTypePreviousMonth = new Dictionary<string, decimal>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewMode = Id.HasValue && NavigationManager.Uri.Contains("view");
+        CurrencySymbol = (await BankAccountService.GetById(AccountId))?.CurrencySymbol ?? "";
+
+        var existingBudgetPlans = await BudgetPlanService.GetAll(AccountId);
+
+        await SetHistoricData();
+
+        if (!Id.HasValue)
+        {
+            m = await BuildEmpty(existingBudgetPlans);
+            return;
+        }
+
+        var model = await BudgetPlanService.GetById(Id.Value);
+        model.PreviousBudgetPlan = await GetPreviousBudgetPlan(existingBudgetPlans, model.Id, model.StartDate ?? DateTime.UtcNow);
+
+        if (model == null)
+            return;
+
+        m = model;
+    }
+
+    protected async Task SetHistoricData()
+    {
+        var movementSummaryAverage = await MovementSummaryService.GetExpenseTypeSummary(
+           new MovementSummarySearchParamModel(AccountId, MonthYearHelper.GetXLastMonths(6, false, false))
+       );
+
+        ExpenseTypeAverage = movementSummaryAverage.Aggregates ?? new Dictionary<string, decimal>();
+
+        var movementSummaryLastMonth = await MovementSummaryService.GetExpenseTypeSummary(
+            new MovementSummarySearchParamModel(AccountId, MonthYearHelper.GetXLastMonths(1, false, false))
+        );
+
+        ExpenseTypePreviousMonth = movementSummaryAverage.Aggregates ?? new Dictionary<string, decimal>();
+    }
+
+    protected async Task<BudgetPlanEditModel> BuildEmpty(List<BudgetPlanListModel> existingBudgetPlans)
+    {
+        var model = new BudgetPlanEditModel();
+
+        model.PreviousBudgetPlan = await GetPreviousBudgetPlan(existingBudgetPlans, null, DateTime.UtcNow);
+
+        var availableExpenseTypes = (await ExpenseTypeService.GetAll()).Where(x => x.ShowOnDashboard);
+        model.ExpenseTypes = availableExpenseTypes.Select(x => new BudgetPlanExpenseTypeEditModel()
+        {
+            ExpenseType = new ExpenseTypeModel() { Id = x.Id, Name = x.Name },
+            ExpectedValue = 0
+        }).ToList();
+
+        return model;
+    }
+
+    protected async Task<BudgetPlanEditModel?> GetPreviousBudgetPlan(List<BudgetPlanListModel> existingBudgetPlans, int? id, DateTime startDate)
+    {
+        var previousBudgetPlans = existingBudgetPlans.Where(x => x.Id != id && x.StartDate < startDate);
+        var previousBudgetPlan = previousBudgetPlans.Any() ? await BudgetPlanService.GetById(previousBudgetPlans.Last().Id) : default(BudgetPlanEditModel);
+        return previousBudgetPlan;
+    }
+
+    void Back()
+    {
+        NavigationManager.NavigateTo($"/budget-plans/list/{AccountId}");
+    }
+
+    async Task HandleSubmit()
+    {
+        bool result = false;
+        if (!Id.HasValue)
+        {
+            result = await BudgetPlanService.Create(AccountId, m);
+        }
+        else
+        {
+            m.Id = Id.Value;
+            result = await BudgetPlanService.Edit(AccountId, m);
+        }
+        if (result)
+        {
+            NavigationManager.NavigateTo($"/budget-plans/list/{AccountId}");
+        }
+    }
+}
+

@@ -1,0 +1,153 @@
+﻿@page "/budget-plans/list/{accountId:int}"
+@using PFM.Website.Services
+@using PFM.Website.Models
+@inject BudgetPlanService BudgetPlanService
+@inject BankAccountService BankAccountService
+@inject NavigationManager NavigationManager
+
+<PageTitle>PFM - Budget Plans</PageTitle>
+
+<h3>Budget Plans</h3>
+<hr />
+
+<div class="row">
+    <div class="col-lg-10">
+        <p>Manage the budget plan of a given bank account. You need at least one bank account to add new budget plan. </p>
+    </div>
+    <div class="col-lg-2" style="text-align: right">
+        <div style="text-align: right">
+            <button class="btn btn-secondary btn-sm" @onclick="Create">Add new</button>
+        </div>
+    </div>
+</div>
+
+@if (models == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <colgroup>
+            <col width="50%" />
+            <col width="20%" />
+            <col width="20%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in models)
+            {
+                <tr>
+                    <td>@m.Name</td>
+                    <td>@m.DisplayedStartDate</td>
+                    <td>@m.DisplayedEndDate</td>
+                    <td>
+                        @if (m.CanBeChanged)
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => Edit(m.Id))"><i class="fa-solid fa-pencil"></i></button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => View(m.Id))"><i class="fa-solid fa-eye"></i></button>
+                        }
+                        &nbsp;
+                        @if (!m.StartDate.HasValue)
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => Start(m))"><i class="fa-solid fa-play"></i></button>
+                        }
+                        else if (m.StartDate.HasValue && !m.EndDate.HasValue)
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => Stop(m))"><i class="fa-solid fa-stop"></i></button>
+                        }
+                        &nbsp;
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <Confirm @ref="StopConfirmation" ConfirmationChanged="ConfirmStop" Action="Stop" ConfirmationTitle="Stop a budget plan"
+             ConfirmationMessage=@($"Are you sure you want to stop \"{selected?.Name}\"?")>
+    </Confirm>
+    <Confirm @ref="StartConfirmation" ConfirmationChanged="ConfirmStart" Action="Start" ConfirmationTitle="Start a budget plan"
+             ConfirmationMessage=@($"{StartBudgetWarning} - Are you sure you want to start \"{selected?.Name}\"?")>
+    </Confirm>
+
+}
+
+@code {
+
+    [Parameter]
+    public int AccountId { get; set; }
+
+    private List<BudgetPlanListModel> models = new List<BudgetPlanListModel>();
+    private BudgetPlanListModel? selected;
+    private BankAccountListModel? selectedBankAccount;
+    protected PFM.Website.Components.ConfirmBase StopConfirmation { get; set; }
+    protected PFM.Website.Components.ConfirmBase StartConfirmation { get; set; }
+
+    private string StartBudgetWarning =@"
+       Start date is planned to be " + DateTime.UtcNow.ToString("yyyy-MM-dd") + @".
+       This action will stop your ongoing plan. 
+       You cannot edit the plan anymore once it is started. 
+    ";
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+        models = await BudgetPlanService.GetAll(AccountId);
+    }
+
+    void Create()
+    {
+        NavigationManager.NavigateTo($"/budget-plans/create/{AccountId}");
+    }
+
+    void Edit(int id)
+    {
+        NavigationManager.NavigateTo($"/budget-plans/edit/{AccountId}/{id}");
+    }
+
+    void View(int id)
+    {
+        NavigationManager.NavigateTo($"/budget-plans/view/{AccountId}/{id}");
+    }
+
+    protected void Start(BudgetPlanListModel referenced)
+    {
+        selected = referenced;
+        StartConfirmation.Show();
+    }
+
+    protected async Task ConfirmStart(bool stopConfirmed)
+    {
+        if (stopConfirmed && selected != null)
+        {
+            await BudgetPlanService.Start(selected.Id, AccountId);
+            NavigationManager.NavigateTo($"/budget-plans/list/{AccountId}", true);
+        }
+    }
+
+    protected void Stop(BudgetPlanListModel referenced)
+    {
+        selected = referenced;
+        StopConfirmation.Show();
+    }
+
+    protected async Task ConfirmStop(bool stopConfirmed)
+    {
+        if (stopConfirmed && selected != null)
+        {
+            await BudgetPlanService.Stop(selected.Id);
+            NavigationManager.NavigateTo($"/budget-plans/list/{AccountId}", true);
+        }
+    }
+}
+
