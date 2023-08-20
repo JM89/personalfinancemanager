@@ -7,6 +7,7 @@
 @inject BankAccountService BankAccountService
 @inject BudgetPlanService BudgetPlanService
 @inject ExpenseTypeService ExpenseTypeService
+@inject MovementSummaryService MovementSummaryService
 @inject NavigationManager NavigationManager
 
 
@@ -62,45 +63,62 @@ else
                                             <th>Name</th>
                                             <th>Expected Value</th>
                                             @if (m.PreviousBudgetPlan != null)
-                                            {
+                                                {
                                                 <th>
                                                     @m.PreviousBudgetPlan.Name
                                                     <label style="font-size: x-small;">
                                                         <em>Budget Plan</em>
                                                     </label>
                                                 </th>
-                                            }
-                                            else
-                                            {
+                                                }
+                                                else
+                                                {
                                                 <th>
                                                     N/A
                                                     <label style="font-size: x-small;">
                                                         <em>Budget Plan</em>
                                                     </label>
                                                 </th>
-                                            }
-                                            <th>Previous Month</th>
-                                            <th>Average Month</th>
+                                                }
+                                            <th>
+                                                @(MonthYearHelper.GetXLastMonths(1, false, true).SingleOrDefault() ?? "N/A")
+                                                <label style="font-size: x-small;">
+                                                    <em>Last Months</em>
+                                                </label>
+                                            </th>
+                                            <th>
+                                                Average Month
+                                                <label style="font-size: x-small;">
+                                                    <em>Last 6 Months</em>
+                                                </label>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var expenseType in m.ExpenseTypes)
-                                        {
+                                            {
                                             <tr>
                                                 <td style="text-align:left;">@expenseType.ExpenseType.Name</td>
                                                 <td><InputNumber id="@expenseType.ExpenseType.Id" @bind-Value="@expenseType.ExpectedValue" class="form-control" disabled="@ViewMode"></InputNumber></td>
-                                                @if (m.PreviousBudgetPlan != null)
-                                                {
-                                                    <td>
-                                                        @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan.ExpenseTypes.SingleOrDefault(x => x.ExpenseType.Id == expenseType.ExpenseType.Id)?.ExpectedValue, CurrencySymbol))
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    <td></td>
-                                                }
-                                                <td></td>
-                                                <td></td>
+                                                
+                                                <td>
+                                                     @if (m.PreviousBudgetPlan != null)
+                                                     {
+                                                        @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan.ExpenseTypes.SingleOrDefault(x => x.ExpenseType.Id == expenseType.ExpenseType.Id)?.ExpectedValue, CurrencySymbol));
+                                                     }
+                                                </td>
+                                                <td>
+                                                    @if (ExpenseTypeAverage.Any())
+                                                    {
+                                                        @(DecimalFormatHelper.GetDisplayDecimalValue(ExpenseTypeAverage.SingleOrDefault(x => x.Key == expenseType.ExpenseType.Name).Value, CurrencySymbol));
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (ExpenseTypePreviousMonth.Any())
+                                                    {
+                                                        @(DecimalFormatHelper.GetDisplayDecimalValue(ExpenseTypePreviousMonth.SingleOrDefault(x => x.Key == expenseType.ExpenseType.Name).Value, CurrencySymbol));
+                                                    }
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>
@@ -163,7 +181,7 @@ else
                                                 </td>
                                             }
                                             <td>
-                                               @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.Total, CurrencySymbol))
+                                                @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.Total, CurrencySymbol))
                                             </td>
                                             <td></td>
                                             <td></td>
@@ -201,12 +219,17 @@ else
     private string CurrencySymbol = "";
     private bool ViewMode;
 
+    private IDictionary<string, decimal> ExpenseTypeAverage = new Dictionary<string, decimal>();
+    private IDictionary<string, decimal> ExpenseTypePreviousMonth = new Dictionary<string, decimal>();
+
     protected override async Task OnInitializedAsync()
     {
         ViewMode = Id.HasValue && NavigationManager.Uri.Contains("view");
         CurrencySymbol = (await BankAccountService.GetById(AccountId))?.CurrencySymbol ?? "";
 
         var existingBudgetPlans = await BudgetPlanService.GetAll(AccountId);
+
+        await SetHistoricData();
 
         if (!Id.HasValue)
         {
@@ -221,6 +244,21 @@ else
             return;
 
         m = model;
+    }
+
+    protected async Task SetHistoricData()
+    {
+        var movementSummaryAverage = await MovementSummaryService.GetExpenseTypeSummary(
+           new MovementSummarySearchParamModel(AccountId, MonthYearHelper.GetXLastMonths(6, false, false))
+       );
+
+        ExpenseTypeAverage = movementSummaryAverage.Aggregates ?? new Dictionary<string, decimal>();
+
+        var movementSummaryLastMonth = await MovementSummaryService.GetExpenseTypeSummary(
+            new MovementSummarySearchParamModel(AccountId, MonthYearHelper.GetXLastMonths(1, false, false))
+        );
+
+        ExpenseTypePreviousMonth = movementSummaryAverage.Aggregates ?? new Dictionary<string, decimal>();
     }
 
     protected async Task<BudgetPlanEditModel> BuildEmpty(List<BudgetPlanListModel> existingBudgetPlans)
