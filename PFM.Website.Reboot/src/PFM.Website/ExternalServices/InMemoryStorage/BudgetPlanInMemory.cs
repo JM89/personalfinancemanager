@@ -12,54 +12,56 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public BudgetPlanInMemory()
         {
-            var budgetPlanExpenseType = _expenseTypes.Select(x => new BudgetPlanExpenseType()
-            {
-                ExpenseType = new ExpenseTypeList() { Id = x.Id, Name = x.Name },
-                ExpectedValue = 0,
-                PreviousMonthValue = 0,
-                CurrentBudgetPlanValue = 0,
-                AverageMonthValue = 0
-            }).ToList();
+            var today = DateTime.UtcNow;
+            var yearsBack = new DateTime(today.Year-5, 1, 1);
 
-            _storage = new List<BudgetPlanDetails>()
+            _storage = new List<BudgetPlanDetails>();
+
+            var random = new Random();
+            //BudgetPlanDetails previousPlan = null;
+            for (int i = 1; i <= 5; i++)
             {
-                new BudgetPlanDetails()
+                //var previousPlanValue = previousPlan != null ? previousPlan.ExpenseTypes : new List<BudgetPlanExpenseType>();
+
+                var budgetPlanExpenseType = _expenseTypes.Select(x => new BudgetPlanExpenseType()
                 {
-                    Id = 1,
-                    Name = "Plan 2022",
-                    StartDate = new DateTime(2022,01,01),
-                    EndDate = new DateTime(2022,12,12),
-                    ExpenseTypes = budgetPlanExpenseType
-                },
-                new BudgetPlanDetails()
+                    ExpenseType = new ExpenseTypeList() { Id = x.Id, Name = x.Name },
+                    ExpectedValue = random.Next(50, 300),
+                    //CurrentBudgetPlanValue = previousPlanValue.SingleOrDefault(y => y.ExpenseType.Name == x.Name)?.ExpectedValue ?? 0,
+                }).ToList();
+
+
+                var budgetPlan = new BudgetPlanDetails()
                 {
-                    Id = 2,
-                    Name = "Plan 2023 Q1",
-                    StartDate = new DateTime(2023,01,01),
-                    EndDate = new DateTime(2023,03,31),
-                    ExpenseTypes = budgetPlanExpenseType
-                },
-                new BudgetPlanDetails()
-                {
-                    Id = 3,
-                    Name = "Plan 2023 Q2",
-                    StartDate = new DateTime(2023,04,01),
-                    EndDate = new DateTime(2023,06,30),
-                    ExpenseTypes = budgetPlanExpenseType
-                },
-                new BudgetPlanDetails()
-                {
-                    Id = 4,
-                    Name = "Plan 2023 EOY",
-                    PlannedStartDate = new DateTime(2023,07,01),
-                    ExpenseTypes = budgetPlanExpenseType
-                }
-            };
+                    Id = i,
+                    Name = $"Plan {yearsBack.Year}",
+                    StartDate = i != 5 ? yearsBack : null,
+                    EndDate = i != 5 ? yearsBack.AddYears(1).AddSeconds(-1) : null,
+                    PlannedStartDate = i == 5 ? yearsBack : null,
+                    ExpenseTypes = budgetPlanExpenseType,
+                    //HasCurrentBudgetPlan = previousPlan != null,
+                    //BudgetPlanName = previousPlan?.Name,
+                    //ExpenseCurrentBudgetPlanValue = previousPlan?.ExpenseTypes?.Sum(x => x.ExpectedValue) ?? 0,
+                    IncomeCurrentBudgetPlanValue = 2500,
+                    SavingCurrentBudgetPlanValue = 1500
+                };
+
+                //previousPlan = budgetPlan;
+                yearsBack = yearsBack.AddYears(1);
+                _storage.Add(budgetPlan);
+            }
         }
 
         public async Task<ApiResponse> Create(int accountId, BudgetPlanDetails obj)
         {
             obj.Id = _storage.Max(x => x.Id) + 1;
+            //var previousPlan = _storage.Last();
+            //obj.HasCurrentBudgetPlan = true;
+            //obj.BudgetPlanName = previousPlan.Name;
+            //obj.ExpenseCurrentBudgetPlanValue = previousPlan?.ExpenseCurrentBudgetPlanValue;
+            //obj.IncomeCurrentBudgetPlanValue = previousPlan?.IncomeCurrentBudgetPlanValue;
+            //obj.SavingCurrentBudgetPlanValue = previousPlan?.SavingCurrentBudgetPlanValue;
+
             _storage.Add(obj);
             return await Task.FromResult(new ApiResponse(true));
         }
@@ -73,6 +75,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
             existing.Name = obj.Name;
             existing.PlannedStartDate = obj.PlannedStartDate;
+            existing.ExpenseTypes = obj.ExpenseTypes;
 
             return await Task.FromResult(new ApiResponse(true));
         }

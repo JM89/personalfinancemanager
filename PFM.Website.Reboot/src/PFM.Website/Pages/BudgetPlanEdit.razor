@@ -51,25 +51,38 @@ else
                                 <table class="table">
                                     <colgroup>
                                         <col width="50%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
                                     </colgroup>
                                     <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>Expected Value</th>
-                                            <th>Current Month</th>
+                                            @if (m.PreviousBudgetPlan != null)
+                                            {
+                                                <th>
+                                                    @m.PreviousBudgetPlan.Name
+                                                    <label style="font-size: x-small;">
+                                                        <em>Budget Plan</em>
+                                                    </label>
+                                                </th>
+                                            }
                                             <th>Previous Month</th>
                                             <th>Average Month</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var expenseType in AvailableExpenseTypes)
+                                        @foreach (var expenseType in m.ExpenseTypes)
                                         {
-                                            BudgetPlanExpenseTypeEditModel matchingType = m.ExpenseTypes.SingleOrDefault(x => x.ExpenseType?.Name == expenseType.Name) ?? new BudgetPlanExpenseTypeEditModel() { ExpenseType = expenseType };
-
                                             <tr>
-                                                <td>@expenseType.Name</td>
-                                                <td><InputNumber id="@expenseType.Id" @bind-Value="matchingType.ExpectedValue" class="form-control" disabled="@ViewMode"></InputNumber></td>
-                                                <td></td>
+                                                <td>@expenseType.ExpenseType.Name</td>
+                                                <td><InputNumber id="@expenseType.ExpenseType.Id" @bind-Value="@expenseType.ExpectedValue" class="form-control" disabled="@ViewMode"></InputNumber></td>
+                                                @if (m.PreviousBudgetPlan != null)
+                                                {
+                                                    <td>@m.PreviousBudgetPlan.ExpenseTypes.SingleOrDefault(x => x.ExpenseType.Id == expenseType.ExpenseType.Id)?.ExpectedValue</td>
+                                                }
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -102,18 +115,19 @@ else
     [Parameter]
     public int AccountId { get; set; }
 
-    private BudgetPlanEditModel m = new BudgetPlanEditModel() { ExpenseTypes = new List<BudgetPlanExpenseTypeEditModel>() };
-    private IList<ExpenseTypeModel> AvailableExpenseTypes = new List<ExpenseTypeModel>();
+    private BudgetPlanEditModel m;
 
     private bool ViewMode;
 
     protected override async Task OnInitializedAsync()
     {
         ViewMode = Id.HasValue && NavigationManager.Uri.Contains("view");
-        AvailableExpenseTypes = await ExpenseTypeService.GetAll();
 
         if (!Id.HasValue)
+        {
+            m = await BuildEmpty();
             return;
+        }
 
         var model = await BudgetPlanService.GetById(Id.Value);
 
@@ -121,6 +135,23 @@ else
             return;
 
         m = model;
+    }
+
+    protected async Task<BudgetPlanEditModel> BuildEmpty()
+    {
+        var model = new BudgetPlanEditModel();
+
+        var existingBudgetPlans = await BudgetPlanService.GetAll(AccountId);
+        model.PreviousBudgetPlan = existingBudgetPlans.Any() ? await BudgetPlanService.GetById(existingBudgetPlans.Last().Id) : default(BudgetPlanEditModel);
+
+        var availableExpenseTypes = await ExpenseTypeService.GetAll();
+        model.ExpenseTypes = availableExpenseTypes.Select(x => new BudgetPlanExpenseTypeEditModel()
+        {
+            ExpenseType = new ExpenseTypeModel() { Id = x.Id, Name = x.Name },
+            ExpectedValue = 0
+        }).ToList();
+
+        return model;
     }
 
     void Back()
