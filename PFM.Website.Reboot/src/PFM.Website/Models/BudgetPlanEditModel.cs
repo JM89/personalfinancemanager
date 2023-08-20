@@ -41,8 +41,6 @@ namespace PFM.Website.Models
 
         public BudgetPlanEditModel? PreviousBudgetPlan { get; set; }
 
-        public string CurrencySymbol { get; set; }
-
         public IEnumerable<BudgetPlanExpenseTypeEditModel> ExpenseTypes { get; set; }
     }
 }

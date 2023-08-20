@@ -3,7 +3,8 @@
 @page "/budget-plans/edit/{accountId:int}/{id:int}"
 @using PFM.Website.Services
 @using PFM.Website.Models
-@inject BankService BankService
+@using PFM.Website.Utils
+@inject BankAccountService BankAccountService
 @inject BudgetPlanService BudgetPlanService
 @inject ExpenseTypeService ExpenseTypeService
 @inject NavigationManager NavigationManager
@@ -48,7 +49,7 @@ else
                         <div class="form-group row">
                             <label for="split" class="col-sm-3 col-form-label">Split</label>
                             <div class="col-sm-9">
-                                <table class="table">
+                                <table class="table" style="text-align:right;">
                                     <colgroup>
                                         <col width="50%" />
                                         <col width="10%" />
@@ -57,7 +58,7 @@ else
                                         <col width="10%" />
                                     </colgroup>
                                     <thead>
-                                        <tr>
+                                        <tr style="text-align:left;">
                                             <th>Name</th>
                                             <th>Expected Value</th>
                                             @if (m.PreviousBudgetPlan != null)
@@ -86,11 +87,13 @@ else
                                         @foreach (var expenseType in m.ExpenseTypes)
                                         {
                                             <tr>
-                                                <td>@expenseType.ExpenseType.Name</td>
+                                                <td style="text-align:left;">@expenseType.ExpenseType.Name</td>
                                                 <td><InputNumber id="@expenseType.ExpenseType.Id" @bind-Value="@expenseType.ExpectedValue" class="form-control" disabled="@ViewMode"></InputNumber></td>
                                                 @if (m.PreviousBudgetPlan != null)
                                                 {
-                                                    <td>@m.PreviousBudgetPlan.ExpenseTypes.SingleOrDefault(x => x.ExpenseType.Id == expenseType.ExpenseType.Id)?.ExpectedValue</td>
+                                                    <td>
+                                                        @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan.ExpenseTypes.SingleOrDefault(x => x.ExpenseType.Id == expenseType.ExpenseType.Id)?.ExpectedValue, CurrencySymbol))
+                                                    </td>
                                                 }
                                                 else
                                                 {
@@ -102,8 +105,8 @@ else
                                         }
                                     </tbody>
                                 </table>
-                                <hr/>
-                                <table class="table">
+                                <hr />
+                                <table class="table" style="text-align:right;">
                                     <colgroup>
                                         <col width="50%" />
                                         <col width="10%" />
@@ -113,45 +116,54 @@ else
                                     </colgroup>
                                     <tbody>
                                         <tr>
-                                            <td style="text-align:right;"><b>Total expenses</b></td>
+                                            <td><b>Total expenses</b></td>
                                             <td>
                                                 <input type="text" value="@m.ExpectedExpenses" class="form-control" disabled="true" />
                                             </td>
                                             <td>
-                                                @m.PreviousBudgetPlan?.ExpectedExpenses
+                                                @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.ExpectedExpenses, CurrencySymbol))
                                             </td>
                                             <td></td>
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align:right;"><b>Total savings</b></td>
+                                            <td><b>Total savings</b></td>
                                             <td>
                                                 <InputNumber id="@m.Id" @bind-Value="@m.ExpectedSavings" class="form-control" disabled="@ViewMode"></InputNumber>
                                             </td>
                                             <td>
-                                                @m.PreviousBudgetPlan?.ExpectedSavings
+                                                @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.ExpectedSavings, CurrencySymbol))
                                             </td>
                                             <td></td>
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align:right;"><b>Total incomes</b></td>
+                                            <td><b>Total incomes</b></td>
                                             <td>
                                                 <InputNumber id="@m.Id" @bind-Value="@m.ExpectedIncomes" class="form-control" disabled="@ViewMode"></InputNumber>
                                             </td>
                                             <td>
-                                                @m.PreviousBudgetPlan?.ExpectedIncomes
+                                                @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.ExpectedIncomes, CurrencySymbol))
                                             </td>
                                             <td></td>
                                             <td></td>
                                         </tr>
                                         <tr>
                                             <td style="text-align:right;"><b>Total</b></td>
+                                            @if (m.Total < 0)
+                                            {
+                                                <td style="background-color: #a82118; color:white;">
+                                                    <b>@m.Total</b>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td style="background-color: #3d6929; color: white; ">
+                                                    <b>@m.Total</b>
+                                                </td>
+                                            }
                                             <td>
-                                                <b>@m.Total</b>
-                                            </td>
-                                            <td>
-                                                @m.PreviousBudgetPlan?.Total
+                                               @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.Total, CurrencySymbol))
                                             </td>
                                             <td></td>
                                             <td></td>
@@ -186,12 +198,13 @@ else
     public int AccountId { get; set; }
 
     private BudgetPlanEditModel m;
-
+    private string CurrencySymbol = "";
     private bool ViewMode;
 
     protected override async Task OnInitializedAsync()
     {
         ViewMode = Id.HasValue && NavigationManager.Uri.Contains("view");
+        CurrencySymbol = (await BankAccountService.GetById(AccountId))?.CurrencySymbol ?? "";
 
         var existingBudgetPlans = await BudgetPlanService.GetAll(AccountId);
 
