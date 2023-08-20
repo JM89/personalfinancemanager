@@ -15,9 +15,25 @@ namespace PFM.Website.Models
 
         public DateTime? PlannedStartDate { get; set; }
 
+        public decimal ExpectedExpenses
+        {
+            get
+            {
+                return ExpenseTypes.Any() ? ExpenseTypes.Sum(x => x.ExpectedValue) : 0;
+            }
+        }
+
         public decimal ExpectedIncomes { get; set; }
 
         public decimal ExpectedSavings { get; set; }
+
+        public decimal Total
+        {
+            get
+            {
+                return ExpectedIncomes - ExpectedExpenses - ExpectedSavings; 
+            }
+        }
 
         // Coming from Movement Summary
         public BudgetPlanValueSet PreviousMonth { get; set; } = new BudgetPlanValueSet();

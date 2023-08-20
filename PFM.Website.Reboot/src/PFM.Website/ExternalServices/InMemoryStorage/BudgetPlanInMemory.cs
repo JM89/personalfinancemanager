@@ -35,8 +35,8 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                     EndDate = i != 5 ? yearsBack.AddYears(1).AddSeconds(-1) : null,
                     PlannedStartDate = i == 5 ? yearsBack : null,
                     ExpenseTypes = budgetPlanExpenseType,
-                    IncomeCurrentBudgetPlanValue = 2500,
-                    SavingCurrentBudgetPlanValue = 1500
+                    ExpectedIncomes = 2500,
+                    ExpectedSavings = 1500
                 };
 
                 yearsBack = yearsBack.AddYears(1);

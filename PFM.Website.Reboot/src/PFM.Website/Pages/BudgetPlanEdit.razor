@@ -102,6 +102,63 @@ else
                                         }
                                     </tbody>
                                 </table>
+                                <hr/>
+                                <table class="table">
+                                    <colgroup>
+                                        <col width="50%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <td style="text-align:right;"><b>Total expenses</b></td>
+                                            <td>
+                                                <input type="text" value="@m.ExpectedExpenses" class="form-control" disabled="true" />
+                                            </td>
+                                            <td>
+                                                @m.PreviousBudgetPlan?.ExpectedExpenses
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:right;"><b>Total savings</b></td>
+                                            <td>
+                                                <InputNumber id="@m.Id" @bind-Value="@m.ExpectedSavings" class="form-control" disabled="@ViewMode"></InputNumber>
+                                            </td>
+                                            <td>
+                                                @m.PreviousBudgetPlan?.ExpectedSavings
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:right;"><b>Total incomes</b></td>
+                                            <td>
+                                                <InputNumber id="@m.Id" @bind-Value="@m.ExpectedIncomes" class="form-control" disabled="@ViewMode"></InputNumber>
+                                            </td>
+                                            <td>
+                                                @m.PreviousBudgetPlan?.ExpectedIncomes
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:right;"><b>Total</b></td>
+                                            <td>
+                                                <b>@m.Total</b>
+                                            </td>
+                                            <td>
+                                                @m.PreviousBudgetPlan?.Total
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
                             </div>
                             <br />
                         </div>
@@ -145,9 +202,7 @@ else
         }
 
         var model = await BudgetPlanService.GetById(Id.Value);
-        var startDate = model.StartDate ?? DateTime.UtcNow;
-        var previousBudgetPlans = existingBudgetPlans.Where(x => x.Id != model.Id && x.StartDate < startDate);
-        model.PreviousBudgetPlan = previousBudgetPlans.Any() ? await BudgetPlanService.GetById(previousBudgetPlans.Last().Id) : default(BudgetPlanEditModel);
+        model.PreviousBudgetPlan = await GetPreviousBudgetPlan(existingBudgetPlans, model.Id, model.StartDate ?? DateTime.UtcNow);
 
         if (model == null)
             return;
@@ -159,9 +214,9 @@ else
     {
         var model = new BudgetPlanEditModel();
 
-        model.PreviousBudgetPlan = existingBudgetPlans.Any() ? await BudgetPlanService.GetById(existingBudgetPlans.Last().Id) : default(BudgetPlanEditModel);
+        model.PreviousBudgetPlan = await GetPreviousBudgetPlan(existingBudgetPlans, null, DateTime.UtcNow);
 
-        var availableExpenseTypes = await ExpenseTypeService.GetAll();
+        var availableExpenseTypes = (await ExpenseTypeService.GetAll()).Where(x => x.ShowOnDashboard);
         model.ExpenseTypes = availableExpenseTypes.Select(x => new BudgetPlanExpenseTypeEditModel()
         {
             ExpenseType = new ExpenseTypeModel() { Id = x.Id, Name = x.Name },
@@ -169,6 +224,13 @@ else
         }).ToList();
 
         return model;
+    }
+
+    protected async Task<BudgetPlanEditModel?> GetPreviousBudgetPlan(List<BudgetPlanListModel> existingBudgetPlans, int? id, DateTime startDate)
+    {
+        var previousBudgetPlans = existingBudgetPlans.Where(x => x.Id != id && x.StartDate < startDate);
+        var previousBudgetPlan = previousBudgetPlans.Any() ? await BudgetPlanService.GetById(previousBudgetPlans.Last().Id) : default(BudgetPlanEditModel);
+        return previousBudgetPlan;
     }
 
     void Back()
