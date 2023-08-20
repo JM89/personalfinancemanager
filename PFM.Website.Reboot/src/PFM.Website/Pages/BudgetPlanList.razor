@@ -58,11 +58,27 @@ else
                         {
                             <button class="btn btn-light btn-sm" @onclick="(() => View(m.Id))"><i class="fa-solid fa-eye"></i></button>
                         }
+                        &nbsp;
+                        @if (!m.StartDate.HasValue)
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => Start(m))"><i class="fa-solid fa-play"></i></button>
+                        }
+                        else if (m.StartDate.HasValue && !m.EndDate.HasValue)
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => Stop(m))"><i class="fa-solid fa-stop"></i></button>
+                        }
+                        &nbsp;
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    <Confirm @ref="StopConfirmation" ConfirmationChanged="ConfirmStop" Action="Stop"
+             ConfirmationMessage=@($"Are you sure you want to stop \"{selected?.Name}\"?")>
+    </Confirm>
+    <Confirm @ref="StartConfirmation" ConfirmationChanged="ConfirmStart" Action="Start"
+             ConfirmationMessage=@($"{StartBudgetWarning} - Are you sure you want to start \"{selected?.Name}\"?")>
+    </Confirm>
 
 }
 
@@ -72,7 +88,16 @@ else
     public int AccountId { get; set; }
 
     private List<BudgetPlanListModel> models = new List<BudgetPlanListModel>();
+    private BudgetPlanListModel? selected;
     private BankAccountListModel? selectedBankAccount;
+    protected PFM.Website.Components.ConfirmBase StopConfirmation { get; set; }
+    protected PFM.Website.Components.ConfirmBase StartConfirmation { get; set; }
+
+    private string StartBudgetWarning =@"
+       Start date is planned to be " + DateTime.UtcNow.ToString("yyyy-MM-dd") + @".
+       This action will stop your ongoing plan. 
+       You cannot edit the plan anymore once it is started. 
+    ";
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,16 +120,34 @@ else
         NavigationManager.NavigateTo($"/budget-plans/view/{AccountId}/{id}");
     }
 
-    protected async void Start(int id)
+    protected void Start(BudgetPlanListModel referenced)
     {
-        await BudgetPlanService.Start(id, AccountId);
-        NavigationManager.NavigateTo($"/budget-plans/{AccountId}", true);
+        selected = referenced;
+        StartConfirmation.Show();
     }
 
-    protected async void Stop(int id)
+    protected async Task ConfirmStart(bool stopConfirmed)
     {
-        await BudgetPlanService.Stop(id);
-        NavigationManager.NavigateTo($"/budget-plans/{AccountId}", true);
+        if (stopConfirmed && selected != null)
+        {
+            await BudgetPlanService.Start(selected.Id, AccountId);
+            NavigationManager.NavigateTo($"/budget-plans/list/{AccountId}", true);
+        }
+    }
+
+    protected void Stop(BudgetPlanListModel referenced)
+    {
+        selected = referenced;
+        StopConfirmation.Show();
+    }
+
+    protected async Task ConfirmStop(bool stopConfirmed)
+    {
+        if (stopConfirmed && selected != null)
+        {
+            await BudgetPlanService.Stop(selected.Id);
+            NavigationManager.NavigateTo($"/budget-plans/list/{AccountId}", true);
+        }
     }
 }
 
