@@ -23,7 +23,6 @@ namespace PFM.Website.Models
         public BudgetPlanValueSet PreviousMonth { get; set; } = new BudgetPlanValueSet();
         public BudgetPlanValueSet AverageMonth { get; set; } = new BudgetPlanValueSet();
 
-        // Coming from previous budget data (Budget API)
         public BudgetPlanEditModel? PreviousBudgetPlan { get; set; }
 
         public string CurrencySymbol { get; set; }

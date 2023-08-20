@@ -69,6 +69,15 @@ else
                                                     </label>
                                                 </th>
                                             }
+                                            else
+                                            {
+                                                <th>
+                                                    N/A
+                                                    <label style="font-size: x-small;">
+                                                        <em>Budget Plan</em>
+                                                    </label>
+                                                </th>
+                                            }
                                             <th>Previous Month</th>
                                             <th>Average Month</th>
                                         </tr>
@@ -82,6 +91,10 @@ else
                                                 @if (m.PreviousBudgetPlan != null)
                                                 {
                                                     <td>@m.PreviousBudgetPlan.ExpenseTypes.SingleOrDefault(x => x.ExpenseType.Id == expenseType.ExpenseType.Id)?.ExpectedValue</td>
+                                                }
+                                                else
+                                                {
+                                                    <td></td>
                                                 }
                                                 <td></td>
                                                 <td></td>
@@ -123,13 +136,18 @@ else
     {
         ViewMode = Id.HasValue && NavigationManager.Uri.Contains("view");
 
+        var existingBudgetPlans = await BudgetPlanService.GetAll(AccountId);
+
         if (!Id.HasValue)
         {
-            m = await BuildEmpty();
+            m = await BuildEmpty(existingBudgetPlans);
             return;
         }
 
         var model = await BudgetPlanService.GetById(Id.Value);
+        var startDate = model.StartDate ?? DateTime.UtcNow;
+        var previousBudgetPlans = existingBudgetPlans.Where(x => x.Id != model.Id && x.StartDate < startDate);
+        model.PreviousBudgetPlan = previousBudgetPlans.Any() ? await BudgetPlanService.GetById(previousBudgetPlans.Last().Id) : default(BudgetPlanEditModel);
 
         if (model == null)
             return;
@@ -137,11 +155,10 @@ else
         m = model;
     }
 
-    protected async Task<BudgetPlanEditModel> BuildEmpty()
+    protected async Task<BudgetPlanEditModel> BuildEmpty(List<BudgetPlanListModel> existingBudgetPlans)
     {
         var model = new BudgetPlanEditModel();
 
-        var existingBudgetPlans = await BudgetPlanService.GetAll(AccountId);
         model.PreviousBudgetPlan = existingBudgetPlans.Any() ? await BudgetPlanService.GetById(existingBudgetPlans.Last().Id) : default(BudgetPlanEditModel);
 
         var availableExpenseTypes = await ExpenseTypeService.GetAll();

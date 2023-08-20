@@ -50,10 +50,13 @@ else
                     <td>@m.DisplayedStartDate</td>
                     <td>@m.DisplayedEndDate</td>
                     <td>
-                        <button class="btn btn-light btn-sm" @onclick="(() => View(m.Id))"><i class="fa-solid fa-eye"></i></button>
                         @if (m.CanBeChanged)
                         {
                             <button class="btn btn-light btn-sm" @onclick="(() => Edit(m.Id))"><i class="fa-solid fa-pencil"></i></button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-light btn-sm" @onclick="(() => View(m.Id))"><i class="fa-solid fa-eye"></i></button>
                         }
                     </td>
                 </tr>

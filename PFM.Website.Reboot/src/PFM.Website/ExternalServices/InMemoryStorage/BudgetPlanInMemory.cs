@@ -13,21 +13,17 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
         public BudgetPlanInMemory()
         {
             var today = DateTime.UtcNow;
-            var yearsBack = new DateTime(today.Year-5, 1, 1);
+            var yearsBack = new DateTime(today.Year-4, 1, 1);
 
             _storage = new List<BudgetPlanDetails>();
 
             var random = new Random();
-            //BudgetPlanDetails previousPlan = null;
             for (int i = 1; i <= 5; i++)
             {
-                //var previousPlanValue = previousPlan != null ? previousPlan.ExpenseTypes : new List<BudgetPlanExpenseType>();
-
                 var budgetPlanExpenseType = _expenseTypes.Select(x => new BudgetPlanExpenseType()
                 {
                     ExpenseType = new ExpenseTypeList() { Id = x.Id, Name = x.Name },
                     ExpectedValue = random.Next(50, 300),
-                    //CurrentBudgetPlanValue = previousPlanValue.SingleOrDefault(y => y.ExpenseType.Name == x.Name)?.ExpectedValue ?? 0,
                 }).ToList();
 
 
@@ -39,14 +35,10 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                     EndDate = i != 5 ? yearsBack.AddYears(1).AddSeconds(-1) : null,
                     PlannedStartDate = i == 5 ? yearsBack : null,
                     ExpenseTypes = budgetPlanExpenseType,
-                    //HasCurrentBudgetPlan = previousPlan != null,
-                    //BudgetPlanName = previousPlan?.Name,
-                    //ExpenseCurrentBudgetPlanValue = previousPlan?.ExpenseTypes?.Sum(x => x.ExpectedValue) ?? 0,
                     IncomeCurrentBudgetPlanValue = 2500,
                     SavingCurrentBudgetPlanValue = 1500
                 };
 
-                //previousPlan = budgetPlan;
                 yearsBack = yearsBack.AddYears(1);
                 _storage.Add(budgetPlan);
             }
@@ -55,13 +47,6 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
         public async Task<ApiResponse> Create(int accountId, BudgetPlanDetails obj)
         {
             obj.Id = _storage.Max(x => x.Id) + 1;
-            //var previousPlan = _storage.Last();
-            //obj.HasCurrentBudgetPlan = true;
-            //obj.BudgetPlanName = previousPlan.Name;
-            //obj.ExpenseCurrentBudgetPlanValue = previousPlan?.ExpenseCurrentBudgetPlanValue;
-            //obj.IncomeCurrentBudgetPlanValue = previousPlan?.IncomeCurrentBudgetPlanValue;
-            //obj.SavingCurrentBudgetPlanValue = previousPlan?.SavingCurrentBudgetPlanValue;
-
             _storage.Add(obj);
             return await Task.FromResult(new ApiResponse(true));
         }
