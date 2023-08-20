@@ -63,23 +63,23 @@ else
                                             <th>Name</th>
                                             <th>Expected Value</th>
                                             @if (m.PreviousBudgetPlan != null)
-                                                {
+                                            {
                                                 <th>
                                                     @m.PreviousBudgetPlan.Name
                                                     <label style="font-size: x-small;">
                                                         <em>Budget Plan</em>
                                                     </label>
                                                 </th>
-                                                }
-                                                else
-                                                {
+                                            }
+                                            else
+                                            {
                                                 <th>
                                                     N/A
                                                     <label style="font-size: x-small;">
                                                         <em>Budget Plan</em>
                                                     </label>
                                                 </th>
-                                                }
+                                            }
                                             <th>
                                                 @(MonthYearHelper.GetXLastMonths(1, false, true).SingleOrDefault() ?? "N/A")
                                                 <label style="font-size: x-small;">
@@ -96,16 +96,16 @@ else
                                     </thead>
                                     <tbody>
                                         @foreach (var expenseType in m.ExpenseTypes)
-                                            {
+                                        {
                                             <tr>
                                                 <td style="text-align:left;">@expenseType.ExpenseType.Name</td>
-                                                <td><InputNumber id="@expenseType.ExpenseType.Id" @bind-Value="@expenseType.ExpectedValue" class="form-control" disabled="@ViewMode"></InputNumber></td>
-                                                
+                                                <td><InputNumber id="@expenseType.ExpenseType.Id" @bind-Value="@expenseType.ExpectedValue" class="form-control text-align-right" disabled="@ViewMode"></InputNumber></td>
+
                                                 <td>
-                                                     @if (m.PreviousBudgetPlan != null)
-                                                     {
+                                                    @if (m.PreviousBudgetPlan != null)
+                                                    {
                                                         @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan.ExpenseTypes.SingleOrDefault(x => x.ExpenseType.Id == expenseType.ExpenseType.Id)?.ExpectedValue, CurrencySymbol));
-                                                     }
+                                                    }
                                                 </td>
                                                 <td>
                                                     @if (ExpenseTypeAverage.Any())
@@ -136,7 +136,7 @@ else
                                         <tr>
                                             <td><b>Total expenses</b></td>
                                             <td>
-                                                <input type="text" value="@m.ExpectedExpenses" class="form-control" disabled="true" />
+                                                <input type="text" value="@m.ExpectedExpenses" class="form-control text-align-right" disabled="true" />
                                             </td>
                                             <td>
                                                 @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.ExpectedExpenses, CurrencySymbol))
@@ -147,7 +147,7 @@ else
                                         <tr>
                                             <td><b>Total savings</b></td>
                                             <td>
-                                                <InputNumber id="@m.Id" @bind-Value="@m.ExpectedSavings" class="form-control" disabled="@ViewMode"></InputNumber>
+                                                <InputNumber id="@m.Id" @bind-Value="@m.ExpectedSavings" class="form-control text-align-right" disabled="@ViewMode"></InputNumber>
                                             </td>
                                             <td>
                                                 @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.ExpectedSavings, CurrencySymbol))
@@ -158,7 +158,7 @@ else
                                         <tr>
                                             <td><b>Total incomes</b></td>
                                             <td>
-                                                <InputNumber id="@m.Id" @bind-Value="@m.ExpectedIncomes" class="form-control" disabled="@ViewMode"></InputNumber>
+                                                <InputNumber id="@m.Id" @bind-Value="@m.ExpectedIncomes" class="form-control text-align-right" disabled="@ViewMode"></InputNumber>
                                             </td>
                                             <td>
                                                 @(DecimalFormatHelper.GetDisplayDecimalValue(@m.PreviousBudgetPlan?.ExpectedIncomes, CurrencySymbol))

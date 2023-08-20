@@ -73,10 +73,10 @@ else
             }
         </tbody>
     </table>
-    <Confirm @ref="StopConfirmation" ConfirmationChanged="ConfirmStop" Action="Stop"
+    <Confirm @ref="StopConfirmation" ConfirmationChanged="ConfirmStop" Action="Stop" ConfirmationTitle="Stop a budget plan"
              ConfirmationMessage=@($"Are you sure you want to stop \"{selected?.Name}\"?")>
     </Confirm>
-    <Confirm @ref="StartConfirmation" ConfirmationChanged="ConfirmStart" Action="Start"
+    <Confirm @ref="StartConfirmation" ConfirmationChanged="ConfirmStart" Action="Start" ConfirmationTitle="Start a budget plan"
              ConfirmationMessage=@($"{StartBudgetWarning} - Are you sure you want to start \"{selected?.Name}\"?")>
     </Confirm>
 
