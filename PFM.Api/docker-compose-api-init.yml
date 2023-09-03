@@ -40,3 +40,16 @@ services:
       - "50001:50001"
     networks:
       - local-network
+
+  iac-batch-movements:
+    build:
+      context: ./setup/iac-batch-movements
+      dockerfile: Dockerfile
+    environment:
+      AWS_ACCESS_KEY_ID: XXX
+      AWS_SECRET_ACCESS_KEY: XXX
+      AWS_ENDPOINT: http://localstack:4566
+      AWS_REGION: eu-west-2
+    container_name: iac-batch-movements
+    networks:
+      - local-network
