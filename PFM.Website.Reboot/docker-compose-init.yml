@@ -11,6 +11,7 @@ services:
     build:
       context: ./setup/iac
       dockerfile: Dockerfile
+    profiles: ["dev", "prod"]
     environment:
       AWS_ACCESS_KEY_ID: XX
       AWS_SECRET_ACCESS_KEY: XX
@@ -26,6 +27,7 @@ services:
       dockerfile: Dockerfile
       args:
         - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_URLS: https://+:4431
       ASPNETCORE_ENVIRONMENT: Development
@@ -48,6 +50,7 @@ services:
       dockerfile: Dockerfile
       args:
         - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
@@ -64,6 +67,7 @@ services:
       dockerfile: Dockerfile
       args:
         - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341

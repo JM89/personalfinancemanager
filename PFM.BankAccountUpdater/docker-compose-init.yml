@@ -11,6 +11,7 @@ services:
     build:
       context: ./setup/evs-sub
       dockerfile: dockerfile
+    profiles: ["dev", "prod"]
     environment:
       EVS_API_URL: http://eventstore:2113
     container_name: evs-sub

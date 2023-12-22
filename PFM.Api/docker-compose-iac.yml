@@ -11,6 +11,7 @@ services:
     build:
       context: ./setup/iac
       dockerfile: dockerfile
+    profiles: ["demo"]
     environment:
       AWS_ACCESS_KEY_ID: XX
       AWS_SECRET_ACCESS_KEY: XX

@@ -8,6 +8,7 @@ using Serilog;
 using Refit;
 using AutoMapper;
 using PFM.Website.Services.Mappers;
+using Microsoft.IdentityModel.Logging;
 
 namespace PFM.Website.Configurations
 {
@@ -17,7 +18,9 @@ namespace PFM.Website.Configurations
 		{
 			var authOptions = configuration.GetSection("AuthOptions").Get<AuthOptions>() ?? new AuthOptions();
 
-			services
+            IdentityModelEventSource.ShowPII = true;
+
+            services
                 .AddAuthentication(opt =>
                 {
                     opt.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
