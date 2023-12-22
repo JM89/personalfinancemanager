@@ -43,9 +43,11 @@ namespace PFM.Website.Configurations
                     options.UseTokenLifetime = false;
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
-                    options.TokenValidationParameters = new TokenValidationParameters { NameClaimType = "name" };
-
-                    options.SaveTokens = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "name",
+                        ValidateIssuer = false
+                    };
 
                     options.Events = new OpenIdConnectEvents
                     {

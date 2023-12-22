@@ -25,6 +25,14 @@ You will need the following tools installed on your development machine:
 [x] .NET 8
 [x] `jq` command line
 
+#### Changes on hosts file
+
+Add the following entries to your hosts file:
+
+```sh
+sudo sh -c 'echo 127.0.0.1 keycloak >> /etc/hosts'
+```
+
 #### GitHub Package Access
 
 To run from local machine, you will need a GitHub token to access the private GitHub packages. 
