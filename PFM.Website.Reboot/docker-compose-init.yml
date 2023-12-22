@@ -11,6 +11,7 @@ services:
     build:
       context: ./setup/iac
       dockerfile: Dockerfile
+    profiles: ["dev", "prod"]
     environment:
       AWS_ACCESS_KEY_ID: XX
       AWS_SECRET_ACCESS_KEY: XX
@@ -26,6 +27,7 @@ services:
       dockerfile: Dockerfile
       args:
         - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_URLS: https://+:4431
       ASPNETCORE_ENVIRONMENT: Development
@@ -48,6 +50,7 @@ services:
       dockerfile: Dockerfile
       args:
         - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
@@ -64,6 +67,7 @@ services:
       dockerfile: Dockerfile
       args:
         - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
@@ -71,5 +75,25 @@ services:
       APP_AuthApi__EndpointUrl: http://keycloak:8080/realms/pfm/protocol/openid-connect/token/
       APP_ApplicationSettings__DbConnection: Server=db-server,1433;Database=PFM_MVT_AGGR_DB;User Id=PFM_MVT_AGGR_SVC;Password=Helloworld123!;TrustServerCertificate=True
     container_name: pfm-mvt-aggregator
+    networks:
+      - local-network
+
+  pfm-website:
+    build:
+      context: ../PFM.Website.Reboot
+      dockerfile: Dockerfile
+      args:
+        - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    container_name: pfm-website
+    profiles: ["prod"]
+    environment:
+      ASPNETCORE_URLS: https://+:7143
+      ASPNETCORE_ENVIRONMENT: Development
+      APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
+      APP_AuthOptions__Authority: http://keycloak:8080/realms/pfm
+      APP_UsePfmApi: true
+      APP_PfmApi__EndpointUrl: https://pfm-api:4431/
+    ports:
+      - "7143:7143"
     networks:
       - local-network

@@ -58,7 +58,8 @@ resource "keycloak_openid_client" "openid_client" {
 
   access_type = "CONFIDENTIAL"
   valid_redirect_uris = [
-    "https://localhost:7142/signin-oidc"
+    "https://localhost:7142/signin-oidc",
+    "https://localhost:7143/signin-oidc"
   ]
 
   client_secret = var.openid_client_pfm_secret

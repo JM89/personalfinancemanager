@@ -11,6 +11,7 @@ services:
     build:
       context: ./setup/main_db
       dockerfile: dockerfile
+    profiles: ["dev", "prod"]
     environment:
       DB_SERVER_NAME: db-server
       DB_SERVER_PORT: 1433
@@ -25,6 +26,7 @@ services:
       dockerfile: Dockerfile
       args:
         - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_URLS: https://+:50001
       ASPNETCORE_ENVIRONMENT: Development
@@ -45,6 +47,7 @@ services:
     build:
       context: ./setup/iac-batch-movements
       dockerfile: Dockerfile
+    profiles: ["dev"]
     environment:
       AWS_ACCESS_KEY_ID: XXX
       AWS_SECRET_ACCESS_KEY: XXX

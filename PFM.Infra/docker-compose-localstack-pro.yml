@@ -10,6 +10,7 @@ services:
   # Simulating a centralized SQL Server instance
   db-server:
     image: mcr.microsoft.com/mssql/server:2017-latest
+    profiles: ["demo"]
     container_name: db-server
     environment:
       - ACCEPT_EULA=Y
@@ -26,6 +27,7 @@ services:
   seq:
     container_name: seq
     image: datalust/seq:2022.1
+    profiles: ["demo"]
     environment:
       - ACCEPT_EULA=Y
     ports:
@@ -37,6 +39,7 @@ services:
   # Simulating AWS cloud 
   localstack:
     container_name: localstack
+    profiles: ["demo"]
     build:
       dockerfile: pro.Dockerfile
       context: ./PFM.Infra/localstack
