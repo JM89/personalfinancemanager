@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
 ARG GH_PKG_TOKEN_ARG
@@ -11,7 +11,7 @@ RUN dotnet build ./PFM.BankAccountUpdater/PFM.BankAccountUpdater.csproj -c Relea
 RUN dotnet publish ./PFM.BankAccountUpdater/PFM.BankAccountUpdater.csproj -c Release -o out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/runtime:7.0
+FROM mcr.microsoft.com/dotnet/runtime:8.0
 WORKDIR /app/PFM.BankAccountUpdater
 COPY --from=build-env /app/out .
 
