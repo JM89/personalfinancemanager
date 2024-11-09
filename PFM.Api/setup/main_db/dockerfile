@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/mssql-tools:latest
+FROM --platform=${BUILDPLATFORM} mcr.microsoft.com/mssql-tools:latest
 
 COPY entrypoint.sh ./
 COPY ./scripts/ ./scripts
