@@ -21,16 +21,7 @@ docker buildx build ./PFM.Infra/terraform-aws-cli -f ./PFM.Infra/terraform-aws-c
 
 docker-compose -f ./PFM.Infra/docker-compose-infra.yml --profile $COMPOSE_PROFILE --env-file ./PFM.Infra/configs/.env up --build -d
 docker-compose -f ./PFM.Api/docker-compose-api-init.yml --profile $COMPOSE_PROFILE --env-file ./PFM.Infra/configs/.env up --build -d
-# cd ..
-# cd ./PFM.BankAccountUpdater
-# docker-compose -f docker-compose-init.yml --profile $COMPOSE_PROFILE up --build -d
-# cd ..
-# cd ./PFM.MovementAggregator
-# docker-compose -f docker-compose-init.yml --profile $COMPOSE_PROFILE up --build -d
-# cd ..
-# cd ./PFM.Bank.Api
-# docker-compose -f docker-compose-api-init.yml --profile $COMPOSE_PROFILE up --build -d
-# cd ..
-# cd ./PFM.Website.Reboot
-# docker-compose -f docker-compose-init.yml --profile $COMPOSE_PROFILE --env-file ../PFM.Infra/configs/.env  up --build -d
-# cd ..
+docker-compose -f ./PFM.BankAccountUpdater/docker-compose-init.yml --profile $COMPOSE_PROFILE up --build -d
+docker-compose -f ./PFM.MovementAggregator/docker-compose-init.yml --profile $COMPOSE_PROFILE up --build -d
+docker-compose -f ./PFM.Bank.Api/docker-compose-api-init.yml --profile $COMPOSE_PROFILE up --build -d
+docker-compose -f ./PFM.Website.Reboot/docker-compose-init.yml --profile $COMPOSE_PROFILE --env-file ./PFM.Infra/configs/.env  up --build -d
