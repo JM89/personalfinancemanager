@@ -1,5 +1,5 @@
 # Setup build arguments
-ARG AWS_CLI_VERSION=2.12.5
+ARG AWS_CLI_VERSION=linux-aarch64-2.19.4
 ARG TERRAFORM_VERSION=1.5.2
 ARG DEBIAN_VERSION=bookworm-20230612-slim
 ARG DEBIAN_FRONTEND=noninteractive
@@ -10,10 +10,10 @@ ARG TARGETARCH
 ARG TERRAFORM_VERSION
 RUN apt-get update
 # RUN apt-get install --no-install-recommends -y libcurl4=7.74.0-1.3+deb11u7
-RUN apt-get install --no-install-recommends -y ca-certificates=20230311
-RUN apt-get install --no-install-recommends -y curl=7.88.1-10
-RUN apt-get install --no-install-recommends -y gnupg=2.2.40-1.1
-RUN apt-get install --no-install-recommends -y unzip=6.0-28
+RUN apt-get install --no-install-recommends -y ca-certificates
+RUN apt-get install --no-install-recommends -y curl
+RUN apt-get install --no-install-recommends -y gnupg
+RUN apt-get install --no-install-recommends -y unzip
 WORKDIR /workspace
 RUN curl --silent --show-error --fail --remote-name https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${TARGETARCH}.zip
 COPY security/hashicorp.asc ./
@@ -27,16 +27,16 @@ RUN unzip -j terraform_${TERRAFORM_VERSION}_linux_${TARGETARCH}.zip
 FROM debian:${DEBIAN_VERSION} as aws-cli
 ARG AWS_CLI_VERSION
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends ca-certificates=20230311
-RUN apt-get install -y --no-install-recommends curl=7.88.1-10
-RUN apt-get install -y --no-install-recommends gnupg=2.2.40-1.1
-RUN apt-get install -y --no-install-recommends unzip=6.0-28
-RUN apt-get install -y --no-install-recommends git=1:2.39.2-1.1
-RUN apt-get install -y --no-install-recommends jq=1.6-2.1
+RUN apt-get install -y --no-install-recommends ca-certificates
+RUN apt-get install -y --no-install-recommends curl
+RUN apt-get install -y --no-install-recommends gnupg
+RUN apt-get install -y --no-install-recommends unzip
+RUN apt-get install -y --no-install-recommends git
+RUN apt-get install -y --no-install-recommends jq
 WORKDIR /workspace
-RUN curl --show-error --fail --output "awscliv2.zip" --remote-name "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip"
+RUN curl --show-error --fail --output "awscliv2.zip" --remote-name "https://awscli.amazonaws.com/awscli-exe-${AWS_CLI_VERSION}.zip"
 COPY security/awscliv2.asc ./
-COPY security/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip.sig ./awscliv2.sig
+COPY security/awscliv2-${AWS_CLI_VERSION}.sig ./awscliv2.sig
 RUN gpg --import awscliv2.asc
 RUN gpg --verify awscliv2.sig awscliv2.zip
 RUN unzip -u awscliv2.zip
@@ -47,11 +47,11 @@ FROM debian:${DEBIAN_VERSION} as build
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-    ca-certificates=20230311\
-    git=1:2.39.2-1.1 \
-    jq=1.6-2.1 \
-    curl=7.88.1-10 \
-    openssh-client=1:9.2p1-2 \
+    ca-certificates \
+    git \
+    jq \
+    curl \
+    openssh-client \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 WORKDIR /workspace

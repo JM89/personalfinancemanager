@@ -1,5 +1,3 @@
-version: "3.8"
-
 networks:
   local-network:
     name: local-network
@@ -9,7 +7,7 @@ services:
 
   # Simulating a centralized SQL Server instance
   db-server:
-    image: mcr.microsoft.com/mssql/server:2017-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     profiles: ["dev", "prod"]
     container_name: db-server
     environment:
@@ -42,7 +40,7 @@ services:
     profiles: ["dev", "prod", "frontend-dev"]
     build:
       dockerfile: Dockerfile
-      context: ./PFM.Infra/localstack
+      context: ./localstack
     environment:
       - SERVICES=ssm
       - DEBUG=${DEBUG-}
@@ -118,7 +116,7 @@ services:
     container_name: keycloak-init
     build:
       dockerfile: Dockerfile
-      context: ./PFM.Infra/keycloak-init
+      context: ./keycloak-init
     profiles: ["dev", "prod", "frontend-dev"]
     environment:
       AWS_ACCESS_KEY_ID: XX
