@@ -41,13 +41,6 @@ In the `./PFM.Infra/configs`, you will find an .env-example file. If you copy th
 
 :warning: This file is part of gitignore. It will contains sensitive data, do not commit the .env file. 
 
-To debug locally, you will need to set up the following environment variables:
-
-```sh
-export PFM_Dependencies_Username=
-export PFM_Dependencies_Token=
-```
-
 #### Local keycloak secrets
 
 To simplify the setup, the secrets for Keycloak have been hard-coded. In a normal setup, this would have to be stored in a secured fashion. 
