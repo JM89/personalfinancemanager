@@ -6,13 +6,13 @@ namespace PFM.DataAccessLayer.SearchParameters
 	{
         public int BankAccountId { get; set; }
 
-        public IList<string> MonthYearIdentifiers { get; set; }
+        public IList<string> MonthYearIdentifiers { get; set; } = null;
 
-        public string? OptionalType { get; set; }
+        public string OptionalType { get; set; } = null;
 
-        public string? OptionalCategory { get; set; }
+        public string OptionalCategory { get; set; } = null;
 
-        public IList<string>? ExcludedCategories { get; set; }
-    }
+        public IList<string> ExcludedCategories { get; set; } = null;
+	}
 }
 

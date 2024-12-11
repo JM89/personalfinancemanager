@@ -1,5 +1,5 @@
-﻿using System.Data.SqlClient;
-using Dapper;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
 using PFM.MovementAggregator.Persistence.Entities;
 using PFM.MovementAggregator.Settings;
 
@@ -41,7 +41,7 @@ namespace PFM.MovementAggregator.Persistence.Implementations
 		{
 			try
 			{
-				using var connection = new SqlConnection(_appSettings.DbConnection);
+				await using var connection = new SqlConnection(_appSettings.DbConnection);
 
                 var count = await connection.ExecuteAsync(MergeSql, movementAggregation);
 

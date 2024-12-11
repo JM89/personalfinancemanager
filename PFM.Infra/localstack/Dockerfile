@@ -1,4 +1,4 @@
-FROM localstack/localstack:1.2.0
+FROM localstack/localstack:3
 
 COPY ./setup/ /etc/localstack/init/ready.d/
 

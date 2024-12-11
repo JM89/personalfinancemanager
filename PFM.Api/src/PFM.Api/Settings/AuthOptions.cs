@@ -2,7 +2,7 @@
 {
 	public class AuthOptions
 	{
-		public string Authority { get; set; }
+		public string Authority { get; set; } = String.Empty;
 
 		public bool RequireHttpsMetadata { get; set; }
 
