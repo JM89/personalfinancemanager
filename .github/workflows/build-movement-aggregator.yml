@@ -26,6 +26,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_ENV }}
       - name: Log in to access GitHub Packages 
         run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.PAT_READ_PACKAGES }} "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" --store-password-in-clear-text
+        continue-on-error: true
       - name: Install dependencies
         run: dotnet restore
       - name: Build
