@@ -1,23 +1,6 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:41012",
-      "sslPort": 44327
-    }
-  },
   "profiles": {
-    "http": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "applicationUrl": "http://localhost:5110",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true
-    },
-    "https": {
+    "dev": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7142;http://localhost:5110",
@@ -26,12 +9,25 @@
       },
       "dotnetRunMessages": true
     },
-    "IIS Express": {
-      "commandName": "IISExpress",
+    "frontend-only": {
+      "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:7142;http://localhost:5110",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APP_UsePfmApi": "false"
+      },
+      "dotnetRunMessages": true
+    },
+    "debug": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:7142;http://localhost:5110",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APP_PfmApi__EndpointUrl": "https://localhost:7098/"
+      },
+      "dotnetRunMessages": true
     }
   }
 }

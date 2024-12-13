@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOTNET_ENV: '8.0.x'
+  DOTNET_ENV: '9.0.x'
   WORKDIR: PFM.Api/
   GITHUB_ORG: 'JM89'
 

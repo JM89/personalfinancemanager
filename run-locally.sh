@@ -23,5 +23,5 @@ docker-compose -f ./PFM.Infra/docker-compose-infra.yml --profile $COMPOSE_PROFIL
 docker-compose -f ./PFM.Api/docker-compose-api-init.yml --profile $COMPOSE_PROFILE --env-file ./PFM.Infra/configs/.env up --build -d
 docker-compose -f ./PFM.BankAccountUpdater/docker-compose-init.yml --profile $COMPOSE_PROFILE up --build -d
 docker-compose -f ./PFM.MovementAggregator/docker-compose-init.yml --profile $COMPOSE_PROFILE up --build -d
-docker-compose -f ./PFM.Bank.Api/docker-compose-api-init.yml --profile $COMPOSE_PROFILE up --build -d
+docker-compose -f ./PFM.Bank.Api/docker-compose-api-init.yml --profile $COMPOSE_PROFILE  --env-file ./PFM.Infra/configs/.env up --build -d
 docker-compose -f ./PFM.Website.Reboot/docker-compose-init.yml --profile $COMPOSE_PROFILE --env-file ./PFM.Infra/configs/.env  up --build -d
