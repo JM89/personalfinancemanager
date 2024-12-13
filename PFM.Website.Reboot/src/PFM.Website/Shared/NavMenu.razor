@@ -4,46 +4,65 @@
             <img src="/Resources/pfm_logo.png" style="width: 85px; border-radius: 5px;" />&nbsp;
             <label style="font-size:12px;"> Reboot</label>
         </a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+        <button title="Navigation menu" class="navbar-toggler">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+<div class="nav-scrollable">
     <nav class="flex-column">
+        
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Dashboard
+            <NavLink class="nav-link" @onclick="() => _collapseDashboardNavMenu = !_collapseDashboardNavMenu">
+                <span class="oi oi-home" aria-hidden="true"></span> <label style="font-size: small; font-weight: bold">Dashboard</label>
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="expense-types">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Expense Types
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="banks">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Banks
-            </NavLink>
+
+            @if (_collapseDashboardNavMenu)
+            {
+                <div class="@NavConfigurationMenuCssClass nav-item px-3">
+                    <NavLink class="nav-link" href="">
+                        <label style="font-size: smaller">Account Management</label>
+                    </NavLink>
+                </div>
+            }
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="bank-accounts">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Bank Accounts
+            <NavLink class="nav-link" @onclick="() => _collapseConfigurationNavMenu = !_collapseConfigurationNavMenu">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> <label style="font-size: small; font-weight: bold">Configurations</label>
             </NavLink>
+
+            @if (_collapseConfigurationNavMenu)
+            {
+                <div class="@NavConfigurationMenuCssClass nav-item px-3">
+                    <NavLink class="nav-link" href="expense-types">
+                        <label style="font-size: smaller">Expense Types</label>
+                    </NavLink>
+                </div>
+
+                <div class="@NavConfigurationMenuCssClass nav-item px-3">
+                    <NavLink class="nav-link" href="banks">
+                        <label style="font-size: smaller">Banks</label>
+                    </NavLink>
+                </div>
+
+                <div class="@NavConfigurationMenuCssClass nav-item px-3">
+                    <NavLink class="nav-link" href="bank-accounts">
+                        <label style="font-size: smaller">Bank Accounts</label>
+                    </NavLink>
+                </div>
+            }
         </div>
+
     </nav>
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool _collapseConfigurationNavMenu = false;
+    private bool _collapseDashboardNavMenu = false;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+    private string? NavConfigurationMenuCssClass => _collapseConfigurationNavMenu ? "collapse" : null;
+    private string? NavDashboardMenuCssClass => _collapseDashboardNavMenu ? "collapse" : null;
 }
 
