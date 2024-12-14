@@ -1,0 +1,19 @@
+configs:
+    - description: PFM.Infra
+      path: "./PFM.Infra/docker-compose-infra.yml"
+      type: "docker_compose"
+    - description: PFM.API
+      path: "./PFM.Api/docker-compose-api-init.yml"
+      type: "docker_compose"
+    - description: PFM.BankAccountUpdater
+      path: "./PFM.BankAccountUpdater/docker-compose-init.yml"
+      type: "docker_compose"
+    - description: PFM.MovementAggregator
+      path: "./PFM.MovementAggregator/docker-compose-init.yml"
+      type: "docker_compose"
+    - description: PFM.Bank.Api
+      path: "./PFM.Bank.Api/docker-compose-api-init.yml"
+      type: "docker_compose"
+    - description: PFM.Website.Reboot
+      path: "./PFM.Website.Reboot/docker-compose-init.yml"
+      type: "docker_compose"
