@@ -1,6 +1,7 @@
 ﻿@page "/expense-types"
 @using PFM.Website.Services
 @using PFM.Website.Models
+@using PFM.Website.Monitoring.Tracing
 @inject ExpenseTypeService ExpenseTypeService
 @inject NavigationManager NavigationManager
 
@@ -74,6 +75,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        using var activity = WebActivitySource.CreateListActivity(NavigationManager.ToBaseRelativePath(NavigationManager.Uri));
         expenseTypes = await ExpenseTypeService.GetAll();
     }
 

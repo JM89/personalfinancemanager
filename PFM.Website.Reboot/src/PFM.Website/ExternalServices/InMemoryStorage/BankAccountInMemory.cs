@@ -8,14 +8,14 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
     public class BankAccountInMemory : IBankAccountApi
     {
-        internal IList<AccountDetails> _storage;
-        private IList<CurrencyDetails> _currencies = new CurrencyInMemory()._storage.ToList();
-        private IList<BankDetails> _banks = new BankInMemory()._storage.ToList();
+        internal readonly IList<AccountDetails> Storage;
+        private readonly IList<CurrencyDetails> _currencies = new CurrencyInMemory().Storage.ToList();
+        private readonly IList<BankDetails> _banks = new BankInMemory().Storage.ToList();
 
         public BankAccountInMemory()
         {
             var rng = new Random();
-            _storage = new List<AccountDetails>();
+            Storage = new List<AccountDetails>();
             for (int i = 0; i <= 4; i++) {
                 var currency = _currencies.ElementAt(rng.Next(_currencies.Count()));
                 var item = new AccountDetails() {
@@ -28,7 +28,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                     IsFavorite = i == 1,
                     IsSavingAccount = false
                 };
-                _storage.Add(item);
+                Storage.Add(item);
             }
             for (int i = 5; i <= 9; i++)
             {
@@ -41,25 +41,25 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                     IsFavorite = false,
                     IsSavingAccount = true
                 };
-                _storage.Add(item);
+                Storage.Add(item);
             }
         }
 
         public async Task<ApiResponse> Create(string userId, AccountDetails obj)
         {
-            obj.Id = _storage.Max(x => x.Id) + 1;
-            _storage.Add(obj);
+            obj.Id = Storage.Max(x => x.Id) + 1;
+            Storage.Add(obj);
             return await Task.FromResult(new ApiResponse(true));
         }
 
         public async Task<ApiResponse> Delete(int id)
         {
-            var item = _storage.SingleOrDefault(x => x.Id == id);
+            var item = Storage.SingleOrDefault(x => x.Id == id);
 
             if (item == null)
                 return await Task.FromResult(new ApiResponse(false));
 
-            _storage.Remove(item);
+            Storage.Remove(item);
             return await Task.FromResult(new ApiResponse(true));
         }
 
@@ -70,7 +70,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> GetList(string userId)
         {
-            var extendedList = _storage.Select(x => new AccountList() {
+            var extendedList = Storage.Select(x => new AccountList() {
                 Id = x.Id,
                 Name = x.Name,
                 BankName = _banks.Single(b => b.Id == x.BankId).Name,
@@ -87,18 +87,18 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> Get(int id)
         {
-            var item = JsonConvert.SerializeObject(_storage.SingleOrDefault(x => x.Id == id));
+            var item = JsonConvert.SerializeObject(Storage.SingleOrDefault(x => x.Id == id));
             return await Task.FromResult(new ApiResponse((object)item));
         }
 
         public async Task<ApiResponse> SetAsFavorite(int id)
         {
-            foreach (var existingItem in _storage)
+            foreach (var existingItem in Storage)
             {
                 existingItem.IsFavorite = false;
             }
 
-            var item = _storage.SingleOrDefault(x => x.Id == id);
+            var item = Storage.SingleOrDefault(x => x.Id == id);
 
             if (item == null)
                 return await Task.FromResult(new ApiResponse(false));

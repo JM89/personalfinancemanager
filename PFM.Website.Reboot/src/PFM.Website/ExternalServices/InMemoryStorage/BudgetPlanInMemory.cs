@@ -7,8 +7,8 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
     public class BudgetPlanInMemory : IBudgetPlanApi
     {
-        internal IList<BudgetPlanDetails> _storage;
-        private IList<ExpenseTypeDetails> _expenseTypes = new ExpenseTypeInMemory()._storage.ToList();
+        private readonly IList<BudgetPlanDetails> _storage;
+        private readonly IList<ExpenseTypeDetails> _expenseTypes = new ExpenseTypeInMemory().Storage.ToList();
 
         public BudgetPlanInMemory()
         {

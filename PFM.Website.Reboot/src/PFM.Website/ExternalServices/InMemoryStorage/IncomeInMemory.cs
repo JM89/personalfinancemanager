@@ -6,7 +6,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
 	public class IncomeInMemory : IIncomeApi
 	{
-        internal IList<IncomeDetails> _storage;
+        private readonly IList<IncomeDetails> _storage;
 
         public IncomeInMemory()
         {

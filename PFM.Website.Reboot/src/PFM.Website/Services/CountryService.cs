@@ -6,28 +6,26 @@ using PFM.Website.Models;
 
 namespace PFM.Website.Services
 {
-    public class CountryService: CoreService
+    public class CountryService(
+        Serilog.ILogger logger,
+        IMapper mapper,
+        IHttpContextAccessor httpContextAccessor,
+        ApplicationSettings settings,
+        ICountryApi api)
+        : CoreService(logger, mapper, httpContextAccessor, settings)
     {
-        private readonly ICountryApi _api;
-
-        public CountryService(Serilog.ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, ApplicationSettings settings, ICountryApi api)
-            : base(logger, mapper, httpContextAccessor, settings)
-        {
-            _api = api;
-        }
-
         public async Task<List<CountryModel>> GetAll()
         {
-            var apiResponse = await _api.Get();
+            var apiResponse = await api.Get();
             var response = ReadApiResponse<List<CountryList>>(apiResponse) ?? new List<CountryList>();
-            return response.Select(_mapper.Map<CountryModel>).ToList();
+            return response.Select(Mapper.Map<CountryModel>).ToList();
         }
 
         public async Task<CountryModel> GetById(int id)
         {
-            var apiResponse = await _api.Get(id);
+            var apiResponse = await api.Get(id);
             var item = ReadApiResponse<CountryDetails>(apiResponse);
-            return _mapper.Map<CountryModel>(item);
+            return Mapper.Map<CountryModel>(item);
         }
     }
 }

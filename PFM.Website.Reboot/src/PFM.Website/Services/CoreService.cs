@@ -5,28 +5,26 @@ using PFM.Website.Configurations;
 
 namespace PFM.Website.Services
 {
-	public class CoreService
-	{
-        protected readonly Serilog.ILogger _logger;
-        protected IMapper _mapper;
-        protected readonly ApplicationSettings _settings;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public CoreService(Serilog.ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, ApplicationSettings settings)
-        {
-            _logger = logger;
-            _mapper = mapper;
-            _settings = settings;
-            _httpContextAccessor = httpContextAccessor;
-        }
+    /// <summary>
+    /// Base class that contains shared behaviors for all services.
+    /// </summary>
+	public abstract class CoreService(
+        Serilog.ILogger logger,
+        IMapper mapper,
+        IHttpContextAccessor httpContextAccessor,
+        ApplicationSettings settings)
+    {
+        protected readonly Serilog.ILogger Logger = logger;
+        protected readonly IMapper Mapper = mapper;
+        protected readonly ApplicationSettings Settings = settings;
 
         protected TResult? ReadApiResponse<TResult>(ApiResponse apiResponse)
         {
             if (apiResponse.Data == null)
             {
-                var flattenErrors = String.Join('-', apiResponse.Errors?.Select(x => $"{x.Key}-{String.Join(';', x.Value)}") ?? new List<string>() { "No errors" });
+                var flattenErrors = string.Join('-', apiResponse.Errors?.Select(x => $"{x.Key}-{string.Join(';', x.Value)}") ?? new List<string>() { "No errors" });
 
-                _logger.Error(flattenErrors);
+                Logger.Error(flattenErrors);
                 return default(TResult);
             }
 
@@ -40,15 +38,10 @@ namespace PFM.Website.Services
 
         protected string GetCurrentUserId()
         {
-            var userName = _httpContextAccessor.HttpContext?.User?.Claims.SingleOrDefault(x => x.Type == "preferred_username")?.Value;
-
-            if (userName != null) return userName;
-
-            userName = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-
-            if (userName != null) return userName;
-
-            return "No current user id";
+            var user = httpContextAccessor.HttpContext?.User;
+            var userId = user?.Claims.SingleOrDefault(x => x.Type == "preferred_username")
+                    ?.Value ?? user?.Identity?.Name ?? "Unknown";
+            return userId;
         }
     }
 }
