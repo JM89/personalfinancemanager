@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Logging;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using PFM.Website.Monitoring.Metrics;
+using PFM.Website.Monitoring.Tracing;
 
 namespace PFM.Website.Configurations
 {
@@ -66,43 +68,27 @@ namespace PFM.Website.Configurations
             return services;
 		}
 
-        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, string environmentName, ApplicationSettings appSettings)
+        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, 
+            IWebHostEnvironment environment, ApplicationSettings settings)
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
-                .Enrich.WithProperty("Environment", environmentName)
+                .Enrich.WithProperty("Environment", environment.EnvironmentName)
                 .CreateLogger();
 
             services.AddSingleton(Log.Logger);
 
-            services.AddOpenTelemetry()
+            services
+                .AddOpenTelemetry()
                 .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Website"))
-                .WithTracing(builder =>
-                {
-                    builder.AddAspNetCoreInstrumentation(x => 
-                        x.Filter = message => Filter(message.Request.Path.Value));
-                    builder.AddOtlpExporter();
-                })
-                .WithMetrics(builder =>
-                {
-                    builder.AddRuntimeInstrumentation();
-                    builder.AddOtlpExporter();
-                });
+                .WithTracing(builder => builder.AddOtlpExporter())
+                .WithMetrics(builder => builder.AddOtlpExporter());
+            
+            services.ConfigureTracing(settings.TracingOptions);
+            services.ConfigureMetrics(settings.MetricsOptions);
             
             return services;
-        }
-
-        private static readonly string[] FilterPaths = new[]
-        {
-            "/_blazor/initializers",
-            "/_blazor/negotiate",
-            "/css"
-        };
-
-        private static bool Filter(string? path)
-        {
-            return path == null || !FilterPaths.Any(x => x.StartsWith(path));
         }
         
         public static IServiceCollection AddPfmApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)

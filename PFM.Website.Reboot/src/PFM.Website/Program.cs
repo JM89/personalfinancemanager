@@ -62,7 +62,7 @@ builder.Services.AddTransient<AuthHeaderHandler>();
 builder.Services
     .AddAuth(builder.Configuration)
     .AddObjectMapper()
-    .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName, appSettings)
+    .AddMonitoring(builder.Configuration, builder.Environment, appSettings)
     .AddPfmApi(builder.Configuration, builder.Environment.EnvironmentName != "Production");
 
 var app = builder.Build();
