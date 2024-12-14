@@ -24,6 +24,7 @@ You will need the following tools installed on your development machine:
 - [x] Docker
 - [x] .NET 8
 - [x] `jq` command line
+- [x] `tilt` command line
 
 #### Changes on hosts file
 
@@ -74,7 +75,7 @@ The shared resources available in the PFM.Infra folder, contains the shared reso
 You can start all the backend services and dependencies using the command: 
 
 ```shell
-sh ./run-locally.sh
+tilt up
 ```
 
 From there, you can start the main website from Visual Studio. 

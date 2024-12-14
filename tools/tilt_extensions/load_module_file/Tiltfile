@@ -1,0 +1,11 @@
+v1alpha1.extension_repo(name='default', url='https://github.com/tilt-dev/tilt-extensions')
+load('ext://logger', 'logger')
+load('../docker_compose/Tiltfile', 'run_docker_compose')
+
+# https://github.com/bazelbuild/starlark > https://bazel.build/rules/lib/core/dict
+def load_config(configs):
+  for config in configs["configs"]:
+    if config["type"] == "docker_compose":
+      run_docker_compose(config)
+    else:
+      logger.error("Load Config error: type is not supported.")
