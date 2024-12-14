@@ -1,12 +1,17 @@
 using OpenTelemetry.Metrics;
-using PFM.Website.Configurations;
+using OpenTelemetry.Resources;
 
 namespace PFM.Website.Monitoring.Metrics;
 
 public static class ServiceCollectionExtensions
 {
-    public static void ConfigureMetrics(this IServiceCollection services, MetricsOptions options)
+    public static IServiceCollection ConfigureMetrics(this IServiceCollection services, MetricsOptions options)
     {
+        services
+            .AddOpenTelemetry()
+            .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Website"))
+            .WithMetrics(builder => builder.AddOtlpExporter());
+        
         services.AddSingleton<IDashboardMetrics, DashboardMetrics>();
         
         services.ConfigureOpenTelemetryMeterProvider(builder =>
@@ -22,5 +27,7 @@ public static class ServiceCollectionExtensions
                 builder.AddConsoleExporter();
             }
         });
+
+        return services;
     }
 }

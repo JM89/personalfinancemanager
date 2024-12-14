@@ -1,12 +1,17 @@
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using PFM.Website.Configurations;
 
 namespace PFM.Website.Monitoring.Tracing;
 
 public static class ServiceCollectionExtensions
 {
-    public static void ConfigureTracing(this IServiceCollection services, TracingOptions options)
+    public static IServiceCollection ConfigureTracing(this IServiceCollection services, TracingOptions options)
     {
+        services
+            .AddOpenTelemetry()
+            .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Website"))
+            .WithTracing(builder => builder.AddOtlpExporter());
+        
         services.ConfigureOpenTelemetryTracerProvider(builder =>
         {
             builder.AddAspNetCoreInstrumentation(x => 
@@ -19,6 +24,8 @@ public static class ServiceCollectionExtensions
                 builder.AddConsoleExporter();
             }
         });
+
+        return services;
     }
     
     private static readonly string[] FilterPaths = new[]

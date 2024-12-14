@@ -67,29 +67,6 @@ namespace PFM.Website.Configurations
 
             return services;
 		}
-
-        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, 
-            IWebHostEnvironment environment, ApplicationSettings settings)
-        {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .Enrich.FromLogContext()
-                .Enrich.WithProperty("Environment", environment.EnvironmentName)
-                .CreateLogger();
-
-            services.AddSingleton(Log.Logger);
-
-            services
-                .AddOpenTelemetry()
-                .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Website"))
-                .WithTracing(builder => builder.AddOtlpExporter())
-                .WithMetrics(builder => builder.AddOtlpExporter());
-            
-            services.ConfigureTracing(settings.TracingOptions);
-            services.ConfigureMetrics(settings.MetricsOptions);
-            
-            return services;
-        }
         
         public static IServiceCollection AddPfmApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
         {
