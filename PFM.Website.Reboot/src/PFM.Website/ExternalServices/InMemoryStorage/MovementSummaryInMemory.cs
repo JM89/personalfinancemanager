@@ -9,8 +9,8 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
     public class MovementSummaryInMemory : IMovementSummaryApi
     {
-        internal IList<MovementSummary> _storage;
-        private IList<ExpenseTypeDetails> _expenseTypes = new ExpenseTypeInMemory()._storage.ToList();
+        private readonly IList<MovementSummary> _storage;
+        private readonly IList<ExpenseTypeDetails> _expenseTypes = new ExpenseTypeInMemory().Storage.ToList();
         
         public MovementSummaryInMemory()
         {
@@ -18,7 +18,8 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
             var rng = new Random();
             _storage = new List<MovementSummary>();
 
-            foreach (var monthYear in historicData)
+            var monthYears = historicData as string[] ?? historicData.ToArray();
+            foreach (var monthYear in monthYears)
             {
                 foreach (var expenseType in _expenseTypes)
                 {
@@ -34,7 +35,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                 }
             }
 
-            foreach (var monthYear in historicData)
+            foreach (var monthYear in monthYears)
             {
                 var summary = new MovementSummary()
                 {
@@ -45,7 +46,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                 };
                 _storage.Add(summary);
             }
-            foreach (var monthYear in historicData)
+            foreach (var monthYear in monthYears)
             {
                 var summary = new MovementSummary()
                 {

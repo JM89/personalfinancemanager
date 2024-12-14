@@ -10,26 +10,22 @@ using PFM.Website.Persistence.Models;
 
 namespace PFM.Website.Services
 {
-    public class BankService: CoreService
+    public class BankService(
+        Serilog.ILogger logger,
+        IMapper mapper,
+        IHttpContextAccessor httpContextAccessor,
+        ApplicationSettings settings,
+        IBankApi api,
+        IObjectStorageService objectStorageService)
+        : CoreService(logger, mapper, httpContextAccessor, settings)
     {
-        private readonly IBankApi _api;
-        private readonly IObjectStorageService _objectStorageService;
-        private readonly ParallelOptions _defaultParallelOptions;
-
-        public BankService(Serilog.ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, ApplicationSettings settings,
-            IBankApi api, IObjectStorageService objectStorageService)
-            : base(logger, mapper, httpContextAccessor, settings)
-        {
-            _api = api;
-            _objectStorageService = objectStorageService;
-            _defaultParallelOptions = new ParallelOptions() { MaxDegreeOfParallelism = 4 };
-        }
+        private readonly ParallelOptions _defaultParallelOptions = new() { MaxDegreeOfParallelism = 4 };
 
         public async Task<List<BankListModel>> GetAll()
         {
-            var apiResponse = await _api.Get(GetCurrentUserId());
+            var apiResponse = await api.Get(GetCurrentUserId());
             var response = ReadApiResponse<List<BankList>>(apiResponse) ?? new List<BankList>();
-            var models = response.Select(_mapper.Map<BankListModel>).ToList();
+            var models = response.Select(Mapper.Map<BankListModel>).ToList();
             var dl = await DownloadBankIcons(models.Select(x => x.IconPath).ToArray());
             foreach (var model in models)
             {
@@ -40,9 +36,9 @@ namespace PFM.Website.Services
 
         public async Task<BankEditModel> GetById(int id)
         {
-            var apiResponse = await _api.Get(id);
+            var apiResponse = await api.Get(id);
             var item = ReadApiResponse<BankDetails>(apiResponse) ?? new BankDetails();
-            var model = _mapper.Map<BankEditModel>(item);
+            var model = Mapper.Map<BankEditModel>(item);
 
             var dl = await DownloadBankIcons(new string[] { model.IconPath });
             model.RenderedIcon = dl.ContainsKey(model.IconPath) ? dl[model.IconPath] : null;
@@ -55,43 +51,43 @@ namespace PFM.Website.Services
             var iconPath = await UploadBankIcon(bankIconFileInfo);
             if (string.IsNullOrEmpty(iconPath))
             {
-                _logger.Error("Could not upload image");
+                Logger.Error("Could not upload image");
                 return false;
             }
 
-            var request = _mapper.Map<BankDetails>(model);
+            var request = Mapper.Map<BankDetails>(model);
             request.IconPath = iconPath;
 
-            var apiResponse = await _api.Create(GetCurrentUserId(), request);
+            var apiResponse = await api.Create(GetCurrentUserId(), request);
             var result = ReadApiResponse<bool>(apiResponse);
             return result;
         }
 
         public async Task<bool> Edit(int id, BankEditModel model, IBrowserFile bankIconFileInfo)
         {
-            var request = _mapper.Map<BankDetails>(model);
+            var request = Mapper.Map<BankDetails>(model);
 
             if (bankIconFileInfo != null)
             {
                 var iconPath = await UploadBankIcon(bankIconFileInfo);
                 if (string.IsNullOrEmpty(iconPath))
                 {
-                    _logger.Error("Could not upload image");
+                    Logger.Error("Could not upload image");
                     return false;
                 }
                 request.IconPath = iconPath;
             }
 
-            var apiResponse = await _api.Edit(id, GetCurrentUserId(), request);
+            var apiResponse = await api.Edit(id, GetCurrentUserId(), request);
             var result = ReadApiResponse<bool>(apiResponse);
             return result;
         }
 
         private async Task<string> UploadBankIcon(IBrowserFile bankIconFileInfo)
         {
-            var bankIconParams = new ObjectStorageParams(_settings.BankIconLocation, string.Format("{0}.png", Guid.NewGuid()));
+            var bankIconParams = new ObjectStorageParams(Settings.BankIconLocation, string.Format("{0}.png", Guid.NewGuid()));
             using Stream imageStream = bankIconFileInfo.OpenReadStream(1024 * 1024 * 10);
-            var bankIconPath = await _objectStorageService.UploadFileAsync(bankIconParams, imageStream);
+            var bankIconPath = await objectStorageService.UploadFileAsync(bankIconParams, imageStream);
             return bankIconPath;
         }
 
@@ -101,10 +97,10 @@ namespace PFM.Website.Services
 
             await Parallel.ForEachAsync(iconPaths, _defaultParallelOptions, async (iconPath, ct) =>
             {
-                var p = new ObjectStorageParams(_settings.BankIconLocation, iconPath);
+                var p = new ObjectStorageParams(Settings.BankIconLocation, iconPath);
                 try
                 {
-                    var dl = await _objectStorageService.DownloadFileAsync(p);
+                    var dl = await objectStorageService.DownloadFileAsync(p);
                     if (dl != null)
                     {
                         dict.GetOrAdd(iconPath, $"data:image/png;base64,{Convert.ToBase64String(dl.Stream.ToArray())}");
@@ -112,7 +108,7 @@ namespace PFM.Website.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Image {IconPath} could not be downloaded", iconPath);
+                    Logger.Error(ex, "Image {IconPath} could not be downloaded", iconPath);
                 }
             });
             return dict;
@@ -124,19 +120,19 @@ namespace PFM.Website.Services
             if (existing == null)
                 return false;
 
-            var apiResponse = await _api.Delete(id);
+            var apiResponse = await api.Delete(id);
             var result = ReadApiResponse<bool>(apiResponse);
 
             if (result)
             {
                 try
                 {
-                    var p = new ObjectStorageParams(_settings.BankIconLocation, existing.IconPath);
-                    await _objectStorageService.DeleteFileAsync(p);
+                    var p = new ObjectStorageParams(Settings.BankIconLocation, existing.IconPath);
+                    await objectStorageService.DeleteFileAsync(p);
                 }
                 catch(Exception ex)
                 {
-                    _logger.Error(ex, "Image {IconPath} could not be deleted", existing.IconPath);
+                    Logger.Error(ex, "Image {IconPath} could not be deleted", existing.IconPath);
                 }
             }
 

@@ -25,7 +25,7 @@ else
         <div class="card-body">
             <p class="card-text">
                 <div class="col-lg-6">
-                    <EditForm Model="expenseType" OnSubmit="HandleSubmit">
+                    <EditForm Model="_expenseType" OnSubmit="HandleSubmit">
                         <DataAnnotationsValidator />
                         <div class="col-sm-8 text-danger">
                             <ValidationSummary />
@@ -33,7 +33,7 @@ else
                         <div class="form-group row" style="height:50px">
                             <label for="name" class="col-sm-3 col-form-label">Name</label>
                             <div class="col-sm-9">
-                                <InputText id="name" @bind-Value="expenseType.Name" class="form-control"></InputText>
+                                <InputText id="name" @bind-Value="_expenseType.Name" class="form-control"></InputText>
                             </div>
                             <br />
                         </div>
@@ -41,9 +41,9 @@ else
                             <label for="color" class="col-sm-3 col-form-label">Graph Color</label>
                             <div class="col-sm-9">
                                 <button type="button" class="btn btn-light btn-sm" @onclick="OpenGraphColorModal">
-                                    <div style="width:80px; background-color:#@expenseType.GraphColor" class="buttonColor"></div>
+                                    <div style="width:80px; background-color:#@_expenseType.GraphColor" class="buttonColor"></div>
                                 </button>
-                                <ColorPicker IsOpened="isGraphColorModalOpened" Closed="ClosedGraphColorModal" MyColor="@expenseType.GraphColor">
+                                <ColorPicker IsOpened="_isGraphColorModalOpened" Closed="ClosedGraphColorModal" MyColor="@_expenseType.GraphColor">
                                 </ColorPicker>
                             </div>
                             <br />
@@ -51,7 +51,7 @@ else
                         <div class="form-group row" style="height:50px">
                             <label for="showOnDashboard" class="col-sm-3 col-form-label">Show On Dashboard</label>
                             <div class="col-sm-9">
-                                <InputCheckbox id="showOnDashboard" @bind-Value="expenseType.ShowOnDashboard"></InputCheckbox>
+                                <InputCheckbox id="showOnDashboard" @bind-Value="_expenseType.ShowOnDashboard"></InputCheckbox>
                             </div>
                             <br />
                         </div>
@@ -74,19 +74,14 @@ else
     [Parameter]
     public int? Id { get; set; }
 
-    private ExpenseTypeModel expenseType = new ExpenseTypeModel() { GraphColor = "E5F0F4" };
+    private ExpenseTypeModel _expenseType = new () { GraphColor = "E5F0F4" };
 
     protected override async Task OnInitializedAsync()
     {
         if (!Id.HasValue)
             return;
-
-        var model = await ExpenseTypeService.GetById(Id.Value);
-
-        if (model == null)
-            return;
-
-        expenseType = model;
+        
+        _expenseType = await ExpenseTypeService.GetById(Id.Value);
     }
 
     void Back()
@@ -99,11 +94,11 @@ else
         bool result = false;
         if (!Id.HasValue)
         {
-            result = await ExpenseTypeService.Create(expenseType);
+            result = await ExpenseTypeService.Create(_expenseType);
         }
         else
         {
-            result = await ExpenseTypeService.Edit(Id.Value, expenseType);
+            result = await ExpenseTypeService.Edit(Id.Value, _expenseType);
         }
         if (result)
         {
@@ -111,17 +106,17 @@ else
         }
     }
 
-    bool isGraphColorModalOpened = false;
+    bool _isGraphColorModalOpened = false;
 
     void OpenGraphColorModal()
     {
-        isGraphColorModalOpened = true;
+        _isGraphColorModalOpened = true;
     }
 
     void ClosedGraphColorModal(string value)
     {
-        expenseType.GraphColor = value.Replace("#", "");
-        isGraphColorModalOpened = false;
+        _expenseType.GraphColor = value.Replace("#", "");
+        _isGraphColorModalOpened = false;
     }
 }
 

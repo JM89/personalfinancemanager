@@ -16,15 +16,15 @@
         <h3>Create Expense</h3>
         <hr />
     </div>
-    @if (selectedBankAccount != null)
+    @if (_selectedBankAccount != null)
     {
         <div class="col-lg-4" style="text-align: left">
             <div class="alert alert-info" role="alert">
                 <label><strong>Selected account: </strong></label>
                 <br />
-                <label>@selectedBankAccount.BankName - @selectedBankAccount?.Name</label>
+                <label>@_selectedBankAccount.BankName - @_selectedBankAccount?.Name</label>
                 <br />
-                <label>Balance: @selectedBankAccount?.DisplayedCurrentBalance</label>
+                <label>Balance: @_selectedBankAccount?.DisplayedCurrentBalance</label>
             </div>
         </div>
     }
@@ -66,7 +66,7 @@
                             <div class="col-sm-8">
                                 <select class="form-control" @bind="@m.ExpenseTypeId">
                                     <option value=""></option>
-                                    @foreach (var et in @AvailableExpenseTypes)
+                                    @foreach (var et in _availableExpenseTypes)
                                     {
                                         <option value="@et.Id">@et.Name</option>
                                     }
@@ -79,7 +79,7 @@
                             <div class="col-sm-8">
                                 <select class="form-control" value="@m.PaymentMethodId" @onchange="@((e) => UpdatePaymentMethodSelected(e))">
                                     <option value=""></option>
-                                    @foreach (var pm in @AvailablePaymentMethods)
+                                    @foreach (var pm in _availablePaymentMethods)
                                     {
                                         <option value="@pm.Id">@pm.Name</option>
                                     }
@@ -95,7 +95,7 @@
                                 <div class="col-sm-8">
                                     <select class="form-control" @bind="@m.AtmWithdrawId">
                                         <option value=""></option>
-                                        @foreach (var a in @AvailableAtmWithdraws)
+                                        @foreach (var a in _availableAtmWithdraws)
                                         {
                                             <option value="@a.Id">@a.Description</option>
                                         }
@@ -109,7 +109,7 @@
                                 <div class="col-sm-8">
                                     <select class="form-control" @bind="@m.TargetInternalAccountId">
                                         <option value=""></option>
-                                        @foreach (var ba in @AvailableBankAccounts)
+                                        @foreach (var ba in _availableBankAccounts)
                                         {
                                             <option value="@ba.Id">@ba.Name</option>
                                         }
@@ -144,22 +144,22 @@
     [Parameter]
     public int AccountId { get; set; }
 
-    private ExpenseEditModel m = new ExpenseEditModel() { DateExpense = DateTime.UtcNow, PaymentMethodId = 0 };
-    private BankAccountListModel? selectedBankAccount;
-    private IList<PaymentMethodListModel> AvailablePaymentMethods = new List<PaymentMethodListModel>();
-    private IList<AtmWithdrawListModel> AvailableAtmWithdraws = new List<AtmWithdrawListModel>();
-    private IList<BankAccountListModel> AvailableBankAccounts = new List<BankAccountListModel>();
-    private IList<ExpenseTypeModel> AvailableExpenseTypes = new List<ExpenseTypeModel>();
+    private ExpenseEditModel m = new () { DateExpense = DateTime.UtcNow, PaymentMethodId = 0 };
+    private BankAccountListModel? _selectedBankAccount;
+    private IList<PaymentMethodListModel> _availablePaymentMethods = new List<PaymentMethodListModel>();
+    private IList<AtmWithdrawListModel> _availableAtmWithdraws = new List<AtmWithdrawListModel>();
+    private IList<BankAccountListModel> _availableBankAccounts = new List<BankAccountListModel>();
+    private IList<ExpenseTypeModel> _availableExpenseTypes = new List<ExpenseTypeModel>();
 
     protected override async Task OnInitializedAsync()
     {
-        selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
-        AvailablePaymentMethods = await PaymentMethodService.GetAll();
+        _selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
+        _availablePaymentMethods = await PaymentMethodService.GetAll();
         var allAtmWithdraws = await AtmWithdrawService.GetAll(AccountId);
-        AvailableAtmWithdraws = allAtmWithdraws.Where(x => !x.IsClosed).ToList();
+        _availableAtmWithdraws = allAtmWithdraws.Where(x => !x.IsClosed).ToList();
         var allBankAccounts = await BankAccountService.GetAll();
-        AvailableBankAccounts = allBankAccounts.Where(x => x.Id != AccountId).ToList();
-        AvailableExpenseTypes = await ExpenseTypeService.GetAll();
+        _availableBankAccounts = allBankAccounts.Where(x => x.Id != AccountId).ToList();
+        _availableExpenseTypes = await ExpenseTypeService.GetAll();
     }
 
     void Back()

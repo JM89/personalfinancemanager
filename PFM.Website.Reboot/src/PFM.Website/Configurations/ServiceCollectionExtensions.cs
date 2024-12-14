@@ -9,6 +9,9 @@ using Refit;
 using AutoMapper;
 using PFM.Website.Services.Mappers;
 using Microsoft.IdentityModel.Logging;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace PFM.Website.Configurations
 {
@@ -63,7 +66,7 @@ namespace PFM.Website.Configurations
             return services;
 		}
 
-        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, string environmentName)
+        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, string environmentName, ApplicationSettings appSettings)
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
@@ -73,9 +76,35 @@ namespace PFM.Website.Configurations
 
             services.AddSingleton(Log.Logger);
 
+            services.AddOpenTelemetry()
+                .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Website"))
+                .WithTracing(builder =>
+                {
+                    builder.AddAspNetCoreInstrumentation(x => 
+                        x.Filter = message => Filter(message.Request.Path.Value));
+                    builder.AddOtlpExporter();
+                })
+                .WithMetrics(builder =>
+                {
+                    builder.AddRuntimeInstrumentation();
+                    builder.AddOtlpExporter();
+                });
+            
             return services;
         }
 
+        private static readonly string[] FilterPaths = new[]
+        {
+            "/_blazor/initializers",
+            "/_blazor/negotiate",
+            "/css"
+        };
+
+        private static bool Filter(string? path)
+        {
+            return path == null || !FilterPaths.Any(x => x.StartsWith(path));
+        }
+        
         public static IServiceCollection AddPfmApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
         {
             var useApi = configuration.GetValue<bool>("UsePfmApi");

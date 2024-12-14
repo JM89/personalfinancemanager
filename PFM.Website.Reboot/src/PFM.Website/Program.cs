@@ -4,6 +4,7 @@ using PFM.Website.Configurations;
 using PFM.Website.Persistence;
 using PFM.Website.Persistence.Implementations;
 using PFM.Website.Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,10 +62,15 @@ builder.Services.AddTransient<AuthHeaderHandler>();
 builder.Services
     .AddAuth(builder.Configuration)
     .AddObjectMapper()
-    .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName)
+    .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName, appSettings)
     .AddPfmApi(builder.Configuration, builder.Environment.EnvironmentName != "Production");
 
 var app = builder.Build();
+
+Log.Logger
+    .ForContext("PfmApiOptions.Enabled", appSettings.PfmApiOptions.Enabled)
+    .ForContext("PfmApiOptions.EndpointUrl", appSettings.PfmApiOptions.EndpointUrl)
+    .Information("PFM Website started");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
