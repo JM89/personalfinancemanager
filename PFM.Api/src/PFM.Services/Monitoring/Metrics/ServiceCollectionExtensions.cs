@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
+using PFM.CommonLibraries.Api.Monitoring;
 
 namespace PFM.Services.Monitoring.Metrics;
 
@@ -14,6 +15,7 @@ public static class ServiceCollectionExtensions
             .WithMetrics(builder => builder.AddOtlpExporter());
         
         services.AddSingleton<IExampleMetrics, ExampleMetrics>();
+        services.AddRequestMetrics();
         
         services.ConfigureOpenTelemetryMeterProvider(builder =>
         {

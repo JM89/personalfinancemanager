@@ -49,7 +49,6 @@ namespace PFM.Api
                 .AddBankApi(builder.Configuration, builder.Environment.EnvironmentName != "Production")
                 .ConfigureLogging(builder.Configuration, builder.Environment.EnvironmentName)
                 .ConfigureTracing(appSettings.TracingOptions)
-                .AddRequestMetrics()
                 .ConfigureMetrics(appSettings.MetricsOptions)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition()
