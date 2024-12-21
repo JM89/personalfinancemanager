@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PFM.Api.Extensions;
 using PFM.Api.Settings;
 using PFM.CommonLibraries.Api.MiddleWares;
+using PFM.CommonLibraries.Api.Monitoring;
 using PFM.DataAccessLayer;
 using PFM.Services.Caches;
 using PFM.Services.Caches.Interfaces;
@@ -48,6 +49,7 @@ namespace PFM.Api
                 .AddBankApi(builder.Configuration, builder.Environment.EnvironmentName != "Production")
                 .ConfigureLogging(builder.Configuration, builder.Environment.EnvironmentName)
                 .ConfigureTracing(appSettings.TracingOptions)
+                .AddRequestMetrics()
                 .ConfigureMetrics(appSettings.MetricsOptions)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition()
