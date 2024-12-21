@@ -8,7 +8,7 @@ on:
     types: [completed]
 
 env:
-  DOTNET_ENV: '2.0.x'
+  DOTNET_ENV: '9.0.x'
   WORKDIR: PFM.CommonLibraries/
   GITHUB_ORG: 'JM89'
 
