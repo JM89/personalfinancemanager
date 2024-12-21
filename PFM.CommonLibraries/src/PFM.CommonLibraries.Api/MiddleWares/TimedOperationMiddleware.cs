@@ -1,12 +1,12 @@
-﻿using App.Metrics;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using App.Metrics;
 using App.Metrics.ReservoirSampling.ExponentialDecay;
 using App.Metrics.Timer;
 using Microsoft.AspNetCore.Http;
 using Serilog.Context;
 using SerilogTimings;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PFM.CommonLibraries.Api.MiddleWares
 {
@@ -15,8 +15,9 @@ namespace PFM.CommonLibraries.Api.MiddleWares
         private readonly RequestDelegate _next;
         private readonly IMetrics _metrics;
 
-        private readonly string StatusCodeLogProperty = "StatusCode";
-        private readonly List<string> ignoreRules = new List<string> {
+        private const string StatusCodeLogProperty = "StatusCode";
+
+        private readonly List<string> _ignoreRules = new List<string> {
             "/metrics",
             "/metrics-text",
             "/swagger/v1/swagger.json",
@@ -25,8 +26,8 @@ namespace PFM.CommonLibraries.Api.MiddleWares
             "/favicon.ico"
         };
 
-        private TimerOptions _timerOptions;
-        private string[] _metricsKeys = new string[] { "controller", "method", "status_code" };
+        private readonly TimerOptions _timerOptions;
+        private readonly string[] _metricsKeys = { "controller", "method", "status_code" };
 
         public TimedOperationMiddleware(RequestDelegate next, IMetrics metrics)
         {
@@ -44,7 +45,7 @@ namespace PFM.CommonLibraries.Api.MiddleWares
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            if (httpContext.Request.Path.HasValue && ignoreRules.Any(x => httpContext.Request.Path.Value.StartsWith(x)))
+            if (httpContext.Request.Path.HasValue && _ignoreRules.Any(x => httpContext.Request.Path.Value.StartsWith(x)))
             {
                 await _next(httpContext);
                 return;
@@ -55,11 +56,19 @@ namespace PFM.CommonLibraries.Api.MiddleWares
             {
                 await _next(httpContext);
 
-                _timerOptions.Tags = new MetricTags(_metricsKeys, new string[] { httpContext.Request.Path, httpContext.Request.Method, httpContext.Response.StatusCode.ToString() });
+                _timerOptions.Tags = BuildMetricsTags(httpContext);
 
                 LogContext.PushProperty(StatusCodeLogProperty, httpContext.Response.StatusCode);
                 op.Complete();
             }
+        }
+
+        private MetricTags BuildMetricsTags(HttpContext httpContext)
+        {
+            var path = httpContext.Request.Path.Value == "" ? "empty_path" : httpContext.Request.Path.Value;
+            var method = httpContext.Request.Method == "" ? "empty_method" : httpContext.Request.Method;
+            var statusCode = httpContext.Response.StatusCode.ToString() == "" ? "empty_status_code" : httpContext.Response.StatusCode.ToString();
+            return new MetricTags(_metricsKeys, new[] { path, method, statusCode });
         }
     }
 }

@@ -16,7 +16,7 @@ namespace PFM.CommonLibraries.Api.MiddleWares
     {
         private readonly RequestDelegate _next;
         private readonly Serilog.ILogger _logger;
-        private readonly List<string> ignoreRules = new List<string> {
+        private readonly List<string> _ignoreRules = new List<string> {
             "/swagger/v1/swagger.json",
             "/swagger/index.html",
             "/swagger"
@@ -39,7 +39,7 @@ namespace PFM.CommonLibraries.Api.MiddleWares
 
             try
             {
-                if (context.Request.Path.HasValue && ignoreRules.Any(x => context.Request.Path.Value.StartsWith(x)))
+                if (context.Request.Path.HasValue && _ignoreRules.Any(x => context.Request.Path.Value.StartsWith(x)))
                 {
                     await _next(context);
                     return;
@@ -52,8 +52,6 @@ namespace PFM.CommonLibraries.Api.MiddleWares
 
             using (var memoryStream = new MemoryStream())
             {
-                context.Response.Body = memoryStream;
-
                 try
                 {
                     await _next(context);
@@ -61,7 +59,8 @@ namespace PFM.CommonLibraries.Api.MiddleWares
                     context.Response.Body = currentBody;
                     memoryStream.Seek(0, SeekOrigin.Begin);
 
-                    var readToEnd = new StreamReader(memoryStream).ReadToEnd();
+                    var streamReader = new StreamReader(memoryStream);
+                    var readToEnd = await streamReader.ReadToEndAsync();
 
                     // When calls are forwarded to another API and API response is returned.
                     var apiResponse = new ApiResponse();
@@ -69,7 +68,10 @@ namespace PFM.CommonLibraries.Api.MiddleWares
                     {
                         apiResponse = JsonConvert.DeserializeObject<ApiResponse>(readToEnd);
                     }
-                    catch (Exception) { }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
 
                     if (apiResponse?.Data == null && apiResponse?.Errors == null)
                     {

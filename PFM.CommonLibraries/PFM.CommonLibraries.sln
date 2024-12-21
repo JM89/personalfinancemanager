@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFM.CommonLibraries.EventPu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFM.CommonLibraries.DataAccessLayer", "src\PFM.CommonLibraries.DataAccessLayer\PFM.CommonLibraries.DataAccessLayer.csproj", "{E7B36AF2-74B0-46A8-8B13-00FDE8D6C015}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFM.CommonLibraries.Api.Tests", "test\PFM.CommonLibraries.Api.Tests\PFM.CommonLibraries.Api.Tests.csproj", "{A11851BF-A575-4D74-9EF6-32C9E73B48F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{76DCE65E-E658-47CD-BF66-1BF5BD1A7436}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,10 @@ Global
 		{E7B36AF2-74B0-46A8-8B13-00FDE8D6C015}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7B36AF2-74B0-46A8-8B13-00FDE8D6C015}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7B36AF2-74B0-46A8-8B13-00FDE8D6C015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A11851BF-A575-4D74-9EF6-32C9E73B48F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A11851BF-A575-4D74-9EF6-32C9E73B48F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A11851BF-A575-4D74-9EF6-32C9E73B48F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A11851BF-A575-4D74-9EF6-32C9E73B48F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +52,7 @@ Global
 		{C585A44B-71EB-47C7-9CA9-7433D690F6F7} = {0CA2EBAE-CA81-42DD-B7F5-934FE252BE7B}
 		{28F1A19B-D5F5-4355-8A62-3FB436C98DDE} = {0CA2EBAE-CA81-42DD-B7F5-934FE252BE7B}
 		{E7B36AF2-74B0-46A8-8B13-00FDE8D6C015} = {0CA2EBAE-CA81-42DD-B7F5-934FE252BE7B}
+		{A11851BF-A575-4D74-9EF6-32C9E73B48F4} = {76DCE65E-E658-47CD-BF66-1BF5BD1A7436}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {01BF939A-6479-4145-8B5B-D5DB4F3884F6}
