@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
-namespace PFM.Services.Monitoring.Tracing;
+namespace Services.Monitoring.Tracing;
 
 public static class ServiceCollectionExtensions
 {
@@ -12,28 +12,17 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddOpenTelemetry()
-            .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Api"))
+            .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Bank.Api"))
             .WithTracing(builder => builder.AddOtlpExporter());
         
         services.ConfigureOpenTelemetryTracerProvider(builder =>
         {
             builder
-                .AddHttpClientInstrumentation(opt =>
-                {
-                    opt.EnrichWithHttpRequestMessage = (activity, message) =>
-                    {
-                        if (message?.RequestUri?.AbsolutePath != "/event_store.client.streams.Streams/Append") 
-                            return;
-                        
-                        EnrichWithEventStorePublishTags(activity);
-                    };
-                })
                 .AddEntityFrameworkCoreInstrumentation(instrumentationOptions =>
                 {
                     instrumentationOptions.EnrichWithIDbCommand = (activity, command) =>
                     {
-                        var querySummary = Activity.Current?.GetBaggageItem("db.query.summary") ??
-                                           command.CommandType.ToString();
+                        var querySummary = Activity.Current?.GetBaggageItem("db.query.summary") ?? command.CommandType.ToString();
                         var operation = Activity.Current?.GetBaggageItem("db.operation.name") ?? "UNKNOWN";
 
                         activity.SetTag("db.name", activity.DisplayName);
@@ -43,10 +32,8 @@ public static class ServiceCollectionExtensions
                     };
                 })
                 .AddAspNetCoreInstrumentation(x => 
-                x.Filter = context => Filter(context.Request.Path));
+                    x.Filter = context => Filter(context.Request.Path));
             
-            builder.AddSource(ApiActivitySource.Source.Name);
-
             if (options.Debug)
             {
                 builder.AddConsoleExporter();
@@ -54,17 +41,6 @@ public static class ServiceCollectionExtensions
         });
 
         return services;
-    }
-
-    private const string EventStoreSystem = "eventstore";
-
-    private static void EnrichWithEventStorePublishTags(Activity activity)
-    {
-        activity?.AddTag("peer.service", EventStoreSystem);
-        activity?.AddTag("messaging.operation.type", "send");
-        activity?.AddTag("messaging.system", EventStoreSystem);
-        activity?.AddTag("db.operation.name", "APPEND");
-        activity?.AddTag("db.system", EventStoreSystem);
     }
     
     private static readonly string[] FilterPaths = new[]

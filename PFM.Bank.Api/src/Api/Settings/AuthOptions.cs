@@ -3,7 +3,7 @@ namespace Api.Settings
 {
     public class AuthOptions
     {
-        public string Authority { get; set; }
+        public string Authority { get; set; } = string.Empty;
 
         public bool RequireHttpsMetadata { get; set; }
 

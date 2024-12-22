@@ -3,6 +3,7 @@ using DataAccessLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -11,8 +12,16 @@ namespace DataAccessLayer.Repositories.Implementations
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
         where TEntity : PersistedEntity 
     {
-        protected readonly PFMContext _db;
-
+        private readonly PFMContext _db;
+        
+        private const string OperationTag = "db.operation.name";
+        private const string QuerySummary = "db.query.summary";
+        
+        private const string SelectOperation = "SELECT";
+        private const string DeleteOperation = "DELETE";
+        private const string CreateOperation = "CREATE";
+        private const string UpdateOperation = "UPDATE";
+        
         public BaseRepository(PFMContext db)
         {
             this._db = db;
@@ -20,16 +29,19 @@ namespace DataAccessLayer.Repositories.Implementations
 
         public DbSet<TEntity> GetList()
         {
+            EnrichActivity(SelectOperation);
             return _db.Set<TEntity>();
         }
 
         public IQueryable<TEntity> GetListAsNoTracking()
         {
+            EnrichActivity(SelectOperation);
             return _db.Set<TEntity>().AsNoTracking();
         }
 
         public TEntity GetById(int id, bool noTracking = false)
         {
+            EnrichActivity(SelectOperation);
             if (noTracking)
             {
                 return GetList().AsNoTracking().Single(x => x.Id == id);
@@ -39,6 +51,7 @@ namespace DataAccessLayer.Repositories.Implementations
 
         public TEntity Create(TEntity entity)
         {
+            EnrichActivity(CreateOperation);
             GetList().Add(entity);
             _db.SaveChanges();
             return entity;
@@ -46,6 +59,7 @@ namespace DataAccessLayer.Repositories.Implementations
 
         public TEntity Update(TEntity entity)
         {
+            EnrichActivity(UpdateOperation);
             _db.Entry(entity).State = EntityState.Modified;
             _db.SaveChanges();
             return entity;
@@ -53,6 +67,8 @@ namespace DataAccessLayer.Repositories.Implementations
 
         public void UpdateAll (List<TEntity> entities)
         {
+            EnrichActivity(UpdateOperation);
+            
             foreach(var entity in entities)
             {
                 _db.Entry(entity).State = EntityState.Modified;
@@ -62,13 +78,17 @@ namespace DataAccessLayer.Repositories.Implementations
 
         public bool Delete(TEntity entity)
         {
+            EnrichActivity(DeleteOperation);
+            
             GetList().Remove(entity);
             _db.SaveChanges();
             return true;
         }
-        
+
         public List<TEntity> GetList2(params Expression<Func<TEntity, object>>[] includeProperties)
         {
+            EnrichActivity(SelectOperation);
+            
             var result = _db.Set<TEntity>();
 
             IQueryable<TEntity> query = null;
@@ -82,6 +102,8 @@ namespace DataAccessLayer.Repositories.Implementations
 
         public TEntity GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties)
         {
+            EnrichActivity(SelectOperation);
+            
             var result = _db.Set<TEntity>().AsNoTracking();
 
             IQueryable<TEntity> query = null;
@@ -91,6 +113,12 @@ namespace DataAccessLayer.Repositories.Implementations
             }
 
             return query?.Single(x => x.Id == id) ?? result.Single(x => x.Id == id); 
+        }
+        
+        private void EnrichActivity(string operation)
+        {
+            Activity.Current?.SetBaggage(OperationTag, operation);
+            Activity.Current?.SetBaggage(QuerySummary, $"{operation}/{typeof(TEntity).Name}");
         }
 
         public void Refresh<T>(T entity)

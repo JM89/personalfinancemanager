@@ -2,34 +2,39 @@
 using PFM.DataAccessLayer.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace PFM.DataAccessLayer.Repositories.Implementations
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
-        where TEntity : PersistedEntity 
+    public class BaseRepository<TEntity>(PFMContext db) : IBaseRepository<TEntity>
+        where TEntity : PersistedEntity
     {
-        protected readonly PFMContext _db;
-
-        public BaseRepository(PFMContext db)
-        {
-            this._db = db;
-        }
+        private const string OperationTag = "db.operation.name";
+        private const string QuerySummary = "db.query.summary";
+        
+        private const string SelectOperation = "SELECT";
+        private const string DeleteOperation = "DELETE";
+        private const string CreateOperation = "CREATE";
+        private const string UpdateOperation = "UPDATE";
 
         public DbSet<TEntity> GetList()
         {
-            return _db.Set<TEntity>();
+            EnrichActivity(SelectOperation);
+            return db.Set<TEntity>();
         }
 
         public IQueryable<TEntity> GetListAsNoTracking()
         {
-            return _db.Set<TEntity>().AsNoTracking();
+            EnrichActivity(SelectOperation);
+            return db.Set<TEntity>().AsNoTracking();
         }
 
         public TEntity GetById(int id, bool noTracking = false)
-        {
+        {            
+            EnrichActivity(SelectOperation);
             if (noTracking)
             {
                 return GetList().AsNoTracking().Single(x => x.Id == id);
@@ -39,37 +44,43 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
 
         public TEntity Create(TEntity entity)
         {
+            EnrichActivity(CreateOperation);
             GetList().Add(entity);
-            _db.SaveChanges();
+            db.SaveChanges();
             return entity;
         }
 
         public TEntity Update(TEntity entity)
         {
-            _db.Entry(entity).State = EntityState.Modified;
-            _db.SaveChanges();
+            EnrichActivity(UpdateOperation);
+            db.Entry(entity).State = EntityState.Modified;
+            db.SaveChanges();
             return entity;
         }
 
         public void UpdateAll (List<TEntity> entities)
         {
+            EnrichActivity(UpdateOperation);
             foreach(var entity in entities)
             {
-                _db.Entry(entity).State = EntityState.Modified;
+                db.Entry(entity).State = EntityState.Modified;
             }
-            _db.SaveChanges();
+            db.SaveChanges();
         }
 
         public bool Delete(TEntity entity)
         {
+            EnrichActivity(DeleteOperation);
             GetList().Remove(entity);
-            _db.SaveChanges();
+            db.SaveChanges();
             return true;
         }
         
         public List<TEntity> GetList2(params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            var result = _db.Set<TEntity>();
+            EnrichActivity(SelectOperation);
+            
+            var result = db.Set<TEntity>();
 
             IQueryable<TEntity> query = null;
             foreach (var property in includeProperties)
@@ -82,7 +93,9 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
 
         public TEntity GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            var result = _db.Set<TEntity>();
+            EnrichActivity(SelectOperation);
+            
+            var result = db.Set<TEntity>();
 
             IQueryable<TEntity> query = null;
             foreach (var property in includeProperties)
@@ -98,6 +111,12 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
             //var ctx = ((IObjectContextAdapter)_db).ObjectContext;
             //ctx.Refresh(RefreshMode.StoreWins, entity);
             throw new NotImplementedException("Regression from migrations");
+        }
+        
+        private void EnrichActivity(string operation)
+        {
+            Activity.Current?.SetBaggage(OperationTag, operation);
+            Activity.Current?.SetBaggage(QuerySummary, $"{operation}/{typeof(TEntity).Name}");
         }
     }
 }

@@ -1,7 +1,5 @@
 using Api.Extensions;
-using App.Metrics;
-using App.Metrics.AspNetCore;
-using App.Metrics.Formatters.Prometheus;
+using Api.Settings;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
@@ -9,6 +7,9 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using PFM.CommonLibraries.Api.MiddleWares;
 using PFM.Services.Core.Automapper;
+using PFM.Services.Monitoring.Logging;
+using Services.Monitoring.Metrics;
+using Services.Monitoring.Tracing;
 
 namespace Api
 {
@@ -22,26 +23,18 @@ namespace Api
 
             builder.Services.AddControllers();
 
+            var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>() ?? new ApplicationSettings();
+            
             builder.Services
                 .AddAuthenticationAndAuthorization(builder.Configuration)
-                .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName, out IMetricsRoot metrics)
+                .ConfigureLogging(builder.Configuration, builder.Environment.EnvironmentName)
+                .ConfigureTracing(appSettings.TracingOptions)
+                .ConfigureMetrics(appSettings.MetricsOptions)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition()
                 .AddEventPublisherConfigurations(builder.Configuration);
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
-
-            builder.Host
-                .ConfigureMetrics(metrics)
-                .UseMetrics(
-                    options =>
-                    {
-                        options.EndpointOptions = endpointsOptions =>
-                        {
-                            endpointsOptions.MetricsTextEndpointOutputFormatter = metrics.OutputMetricsFormatters.OfType<MetricsPrometheusTextOutputFormatter>().First();
-                            endpointsOptions.MetricsEndpointOutputFormatter = metrics.OutputMetricsFormatters.OfType<MetricsPrometheusProtobufOutputFormatter>().First();
-                        };
-                    });
 
             builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
             builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacModule()));
@@ -49,7 +42,7 @@ namespace Api
             var app = builder.Build();
 
             app.UseMiddleware<TimedOperationMiddleware>();
-            app.UseMiddleware<ResponseWrapperMiddleware>();
+            app.UseMiddleware<Api.Middlewares.ResponseWrapperMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {
@@ -61,7 +54,6 @@ namespace Api
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseMetricsAllEndpoints();
 
             app.MapControllers();
 

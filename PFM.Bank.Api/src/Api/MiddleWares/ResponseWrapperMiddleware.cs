@@ -1,26 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Api.Contracts.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using PFM.CommonLibraries.Api.Contracts;
 using PFM.CommonLibraries.Services.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
-namespace PFM.CommonLibraries.Api.MiddleWares
+namespace Api.Middlewares
 {
     public class ResponseWrapperMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly Serilog.ILogger _logger;
-        private readonly List<string> _ignoreRules = new List<string> {
+        private readonly List<string> _ignoreRules =
+        [
             "/swagger/v1/swagger.json",
             "/swagger/index.html",
             "/swagger"
-        };
+        ];
 
         private readonly JsonSerializerSettings _serializeOptions = new JsonSerializerSettings
         {
@@ -52,6 +47,8 @@ namespace PFM.CommonLibraries.Api.MiddleWares
 
             using (var memoryStream = new MemoryStream())
             {
+                context.Response.Body = memoryStream;
+
                 try
                 {
                     await _next(context);
@@ -59,25 +56,10 @@ namespace PFM.CommonLibraries.Api.MiddleWares
                     context.Response.Body = currentBody;
                     memoryStream.Seek(0, SeekOrigin.Begin);
 
-                    var streamReader = new StreamReader(memoryStream);
-                    var readToEnd = await streamReader.ReadToEndAsync();
+                    var readToEnd = new StreamReader(memoryStream).ReadToEnd();
 
-                    // When calls are forwarded to another API and API response is returned.
-                    var apiResponse = new ApiResponse();
-                    try
-                    {
-                        apiResponse = JsonConvert.DeserializeObject<ApiResponse>(readToEnd);
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
-
-                    if (apiResponse?.Data == null && apiResponse?.Errors == null)
-                    {
-                        var objResult = JsonConvert.DeserializeObject(readToEnd);
-                        apiResponse = new ApiResponse(objResult);
-                    }
+                    var objResult = JsonConvert.DeserializeObject(readToEnd);
+                    var apiResponse = new ApiResponse(objResult);
 
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(apiResponse, _serializeOptions));
                 }
@@ -109,3 +91,4 @@ namespace PFM.CommonLibraries.Api.MiddleWares
         }
     }
 }
+

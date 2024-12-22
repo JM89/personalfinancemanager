@@ -21,19 +21,6 @@ services:
     networks:
       - local-network
 
-  # Simulating a logging system
-  seq:
-    container_name: seq
-    profiles: ["dev", "prod"]
-    image: datalust/seq:2022.1
-    environment:
-      - ACCEPT_EULA=Y
-    ports:
-      - "5341:5341"
-      - "80:80"
-    networks:
-      - local-network
-
   # Simulating AWS cloud 
   localstack:
     container_name: localstack

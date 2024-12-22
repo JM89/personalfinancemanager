@@ -7,13 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PFM.DataAccessLayer.Repositories.Implementations
 {
-    public class ExpenseRepository : BaseRepository<Expense>, IExpenseRepository
+    public class ExpenseRepository(PFMContext db) : BaseRepository<Expense>(db), IExpenseRepository
     {
-        public ExpenseRepository(PFMContext db) : base(db)
-        {
-
-        }
-
         public List<Expense> GetByParameters(ExpenseGetListSearchParameters search)
         {
             var expenditures = GetList()

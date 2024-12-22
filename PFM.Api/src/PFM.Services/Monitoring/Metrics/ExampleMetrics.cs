@@ -15,7 +15,7 @@ public interface IExampleMetrics
 
 public class ExampleMetrics(IMeterFactory factory) : IExampleMetrics
 {    
-    public static readonly string MeterName = "PFM.Website.Dashboard";
+    public static readonly string MeterName = "PFM.Api.Example";
     private static string FormattedMeterName => MeterName.ToSnakeCase();
     
     private readonly Counter<long> _counter = factory

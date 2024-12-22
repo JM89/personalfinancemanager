@@ -15,7 +15,7 @@ public static class ServiceCollectionExtensions
         services.ConfigureOpenTelemetryTracerProvider(builder =>
         {
             builder.AddAspNetCoreInstrumentation(x => 
-                x.Filter = context => Filter(context.Request.PathBase));
+                x.Filter = context => Filter(context.Request.Path));
             
             builder.AddSource(WebActivitySource.Source.Name);
 
@@ -38,7 +38,6 @@ public static class ServiceCollectionExtensions
 
     private static bool Filter(string? path)
     {
-        return true;
-        //return path == null || !FilterPaths.Any(x => x.StartsWith(path));
+        return path == null || !FilterPaths.Any(x => x.StartsWith(path));
     }
 }

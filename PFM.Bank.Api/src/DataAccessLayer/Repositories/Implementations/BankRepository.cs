@@ -3,11 +3,5 @@ using DataAccessLayer.Repositories.Interfaces;
 
 namespace DataAccessLayer.Repositories.Implementations
 {
-    public class BankRepository : BaseRepository<Bank>, IBankRepository
-    {
-        public BankRepository(PFMContext db) : base(db)
-        {
-
-        }
-    }
+    public class BankRepository(PFMContext db) : BaseRepository<Bank>(db), IBankRepository;
 }

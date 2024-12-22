@@ -9,17 +9,9 @@ using PFM.DataAccessLayer.SearchParameters;
 
 namespace PFM.DataAccessLayer.Repositories.Implementations
 {
-	public class MovementSummaryRepository : IMovementSummaryRepository
+	public class MovementSummaryRepository(Serilog.ILogger logger, DataSettings dataSettings)
+        : IMovementSummaryRepository
     {
-        private readonly Serilog.ILogger _logger;
-        private readonly DataSettings _dataSettings;
-
-        public MovementSummaryRepository(Serilog.ILogger logger, DataSettings dataSettings)
-		{
-            _logger = logger;
-            _dataSettings = dataSettings;
-        }
-
         private const string SelectSql =
             @"SELECT
 				BankAccountId,
@@ -40,7 +32,7 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
         {
             try
             {
-                using var connection = new SqlConnection(_dataSettings.DbConnection);
+                using var connection = new SqlConnection(dataSettings.DbConnection);
 
                 var entities = await connection.QueryAsync<MovementSummary>(SelectSql, search);
 
@@ -48,7 +40,7 @@ namespace PFM.DataAccessLayer.Repositories.Implementations
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unhandled exception while getting the movements");
+                logger.Error(ex, "Unhandled exception while getting the movements");
                 throw;
             }
         }

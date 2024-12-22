@@ -3,7 +3,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using PFM.CommonLibraries.Api.Monitoring;
 
-namespace PFM.Services.Monitoring.Metrics;
+namespace Services.Monitoring.Metrics;
 
 public static class ServiceCollectionExtensions
 {
@@ -11,16 +11,13 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddOpenTelemetry()
-            .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Api"))
+            .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Bank.Api"))
             .WithMetrics(builder => builder.AddOtlpExporter());
         
-        services.AddSingleton<IExampleMetrics, ExampleMetrics>();
         services.AddRequestMetrics();
         
         services.ConfigureOpenTelemetryMeterProvider(builder =>
         {
-            builder.AddMeter(ExampleMetrics.MeterName);
-
             if (!options.Debug)
             {
                 builder.AddRuntimeInstrumentation();
