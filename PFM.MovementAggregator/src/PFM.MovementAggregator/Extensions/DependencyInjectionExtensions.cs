@@ -1,5 +1,4 @@
 ﻿using EventStore.Client;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using PFM.Bank.Event.Contracts;
 using PFM.MovementAggregator.Caches;
 using PFM.MovementAggregator.Caches.Interfaces;
