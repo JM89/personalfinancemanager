@@ -1,10 +1,8 @@
 using System.Diagnostics;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
-namespace PFM.Services.Monitoring.Tracing;
+namespace PFM.Api.Configurations.Monitoring.Tracing;
 
 public static class ServiceCollectionExtensions
 {
@@ -45,8 +43,6 @@ public static class ServiceCollectionExtensions
                 .AddAspNetCoreInstrumentation(x => 
                 x.Filter = context => Filter(context.Request.Path));
             
-            builder.AddSource(ApiActivitySource.Source.Name);
-
             if (options.Debug)
             {
                 builder.AddConsoleExporter();

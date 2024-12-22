@@ -13,14 +13,10 @@ public static class ServiceCollectionExtensions
             .WithMetrics(builder => builder.AddOtlpExporter());
         
         services.AddSingleton<IRequestMetrics, RequestMetrics>();
-
-        services.ConfigureOpenTelemetryMeterProvider(builder =>
-        {
-            builder.AddMeter(RequestMetrics.MeterName);
-        });
         
         services.ConfigureOpenTelemetryMeterProvider(builder =>
         {
+            builder.AddMeter(RequestMetrics.MeterName);
             if (!options.Debug)
             {
                 builder.AddRuntimeInstrumentation();

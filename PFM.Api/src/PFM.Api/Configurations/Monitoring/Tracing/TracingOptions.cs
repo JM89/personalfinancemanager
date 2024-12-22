@@ -1,4 +1,4 @@
-namespace PFM.Services.Monitoring.Tracing;
+namespace PFM.Api.Configurations.Monitoring.Tracing;
 
 public class TracingOptions
 {

@@ -1,4 +1,4 @@
-namespace PFM.Services.Monitoring.Metrics;
+namespace PFM.Api.Configurations.Monitoring.Metrics;
 
 public class MetricsOptions
 {

@@ -2,17 +2,17 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using PFM.Api.Configurations.Monitoring.Logging;
+using PFM.Api.Configurations.Monitoring.Metrics;
+using PFM.Api.Configurations.Monitoring.Tracing;
 using PFM.Api.Extensions;
+using PFM.Api.Middlewares;
+using PFM.Api.MiddleWares;
 using PFM.Api.Settings;
-using PFM.CommonLibraries.Api.MiddleWares;
-using PFM.CommonLibraries.Api.Monitoring;
 using PFM.DataAccessLayer;
 using PFM.Services.Caches;
 using PFM.Services.Caches.Interfaces;
 using PFM.Services.Core.Automapper;
-using PFM.Services.Monitoring.Logging;
-using PFM.Services.Monitoring.Metrics;
-using PFM.Services.Monitoring.Tracing;
 using PFM.Services.MovementStrategy;
 
 namespace PFM.Api
@@ -65,7 +65,7 @@ namespace PFM.Api
             var app = builder.Build();
 
             app.UseMiddleware<TimedOperationMiddleware>();
-            app.UseMiddleware<PFM.Api.Middlewares.ResponseWrapperMiddleware>();
+            app.UseMiddleware<ResponseWrapperMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {

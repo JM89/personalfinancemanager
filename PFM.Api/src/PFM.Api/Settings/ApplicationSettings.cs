@@ -1,5 +1,5 @@
-using PFM.Services.Monitoring.Metrics;
-using PFM.Services.Monitoring.Tracing;
+using PFM.Api.Configurations.Monitoring.Metrics;
+using PFM.Api.Configurations.Monitoring.Tracing;
 
 namespace PFM.Api.Settings;
 
