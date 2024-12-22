@@ -1,4 +1,8 @@
 using PFM.MovementAggregator.Extensions;
+using PFM.MovementAggregator.Monitoring.Logging;
+using PFM.MovementAggregator.Monitoring.Metrics;
+using PFM.MovementAggregator.Monitoring.Tracing;
+using PFM.MovementAggregator.Settings;
 
 namespace PFM.MovementAggregator
 {
@@ -12,15 +16,19 @@ namespace PFM.MovementAggregator
                 .ConfigureAppConfiguration(c => {
                     c.AddEnvironmentVariables(prefix: "APP_");
                 })
-                .ConfigureServices((build, services) =>
+                .ConfigureServices((builder, services) =>
                 {
+                    var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>() ?? new ApplicationSettings();
+
                     services
                         .AddMemoryCache()
-                        .AddServices(build.Configuration)
-                        .AddMonitoring(build.Configuration, EnvironmentName)
-                        .AddAuthenticationAndAuthorization(build.Configuration)
+                        .AddServices(appSettings)
+                        .ConfigureLogging(builder.Configuration, EnvironmentName)
+                        .ConfigureTracing(appSettings.TracingOptions)
+                        .ConfigureMetrics(appSettings.MetricsOptions)    
+                        .AddAuthenticationAndAuthorization(builder.Configuration)
                         .AddEventHandlers()
-                        .AddEventConsumerConfigurations(build.Configuration);
+                        .AddEventConsumerConfigurations(builder.Configuration);
 
                     services.AddHostedService<Worker>();
                 })
