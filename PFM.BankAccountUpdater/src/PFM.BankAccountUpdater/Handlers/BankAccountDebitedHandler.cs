@@ -6,16 +6,10 @@ using SerilogTimings;
 
 namespace PFM.BankAccountUpdater.Handlers
 {
-    public class BankAccountDebitedHandler : IHandler<BankAccountDebited>
+    public class BankAccountDebitedHandler(IBankAccountService bankAccountService, Serilog.ILogger logger)
+        : IHandler<BankAccountDebited>
     {
-        private readonly Serilog.ILogger _logger;
-        private readonly IBankAccountService _bankAccountService;
-
-        public BankAccountDebitedHandler(IBankAccountService bankAccountService, Serilog.ILogger logger)
-        {
-            _logger = logger;
-            _bankAccountService = bankAccountService;
-        }
+        private readonly Serilog.ILogger _logger = logger;
 
         public async Task<bool> HandleEvent(BankAccountDebited evt)
         {
@@ -24,7 +18,7 @@ namespace PFM.BankAccountUpdater.Handlers
             using (LogContext.PushProperty(nameof(evt.Id), evt.Id))
             using (LogContext.PushProperty(nameof(evt.UserId), evt.UserId))
             {
-                await _bankAccountService.UpdateBalance(evt.Id, evt.UserId, evt.CurrentBalance);
+                await bankAccountService.UpdateBalance(evt.Id, evt.UserId, evt.CurrentBalance);
 
                 op.Complete();
             }
