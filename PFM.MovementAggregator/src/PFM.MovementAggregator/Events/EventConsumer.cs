@@ -6,6 +6,7 @@ using PFM.MovementAggregator.Events.Settings;
 using PFM.MovementAggregator.Handlers.Interfaces;
 using Polly;
 using System.Text.Json;
+using PFM.MovementAggregator.Monitoring.Tracing;
 
 namespace PFM.MovementAggregator.Events
 {
@@ -66,7 +67,20 @@ namespace PFM.MovementAggregator.Events
                 return;
 
             var type = Type.GetType($"{EventTypeNamespace}.{evt.Event.EventType}, {AssemblyName}");
-
+            
+            string? traceId = null;
+            try
+            {
+                Dictionary<string, string>? metadata =
+                    JsonSerializer.Deserialize<Dictionary<string, string>>(
+                        System.Text.Encoding.UTF8.GetString(evt.Event.Metadata.Span));
+                metadata?.TryGetValue("TraceId", out traceId);
+            }
+            catch (Exception)
+            {
+                _logger.Warning("Could not retrieve TraceId");
+            }
+            
             if (type == null)
             {
                 _logger.Debug($"Type '{evt.Event.EventType}' not handled, ignoring the event.");
@@ -82,7 +96,10 @@ namespace PFM.MovementAggregator.Events
                 throw new ArgumentNullException("Received event is null");
             }
 
-            _eventDispatcher.Dispatch(receivedEvent);
+            using (var _ = CustomActivitySource.StartDispatcherActivity(evt.Event.EventType, traceId))
+            {
+                _eventDispatcher.Dispatch(receivedEvent);
+            }
 
             await subscription.Ack(evt);
         }

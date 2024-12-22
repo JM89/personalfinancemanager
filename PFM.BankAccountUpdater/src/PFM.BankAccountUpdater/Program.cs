@@ -1,4 +1,8 @@
+using PFM.BankAccountUpdater.Configurations.Monitoring.Logging;
+using PFM.BankAccountUpdater.Configurations.Monitoring.Metrics;
+using PFM.BankAccountUpdater.Configurations.Monitoring.Tracing;
 using PFM.BankAccountUpdater.Extensions;
+using PFM.BankAccountUpdater.Settings;
 
 namespace PFM.BankAccountUpdater
 {
@@ -12,16 +16,20 @@ namespace PFM.BankAccountUpdater
                 .ConfigureAppConfiguration(c => {
                     c.AddEnvironmentVariables(prefix: "APP_");
                 })
-                .ConfigureServices((build, services) =>
-                {
+                .ConfigureServices((builder, services) =>
+                {            
+                    var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>() ?? new ApplicationSettings();
+
                     services
                         .AddMemoryCache()
                         .AddServices()
-                        .AddMonitoring(build.Configuration, EnvironmentName)
-                        .AddBankApi(build.Configuration, EnvironmentName != "Production")
-                        .AddAuthenticationAndAuthorization(build.Configuration)
+                        .ConfigureLogging(builder.Configuration, EnvironmentName)
+                        .ConfigureTracing(appSettings.TracingOptions)
+                        .ConfigureMetrics(appSettings.MetricsOptions)                        
+                        .AddBankApi(builder.Configuration, EnvironmentName != "Production")
+                        .AddAuthenticationAndAuthorization(builder.Configuration)
                         .AddEventHandlers()
-                        .AddEventConsumerConfigurations(build.Configuration);
+                        .AddEventConsumerConfigurations(builder.Configuration);
 
                     services.AddHostedService<Worker>();
                 })

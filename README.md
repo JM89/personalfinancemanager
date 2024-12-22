@@ -22,7 +22,7 @@ The evolution of the architecture is documented in this wiki page: [System Archi
 
 You will need the following tools installed on your development machine:
 - [x] Docker
-- [x] .NET 8
+- [x] .NET 9
 - [x] `jq` command line
 - [x] `tilt` command line
 

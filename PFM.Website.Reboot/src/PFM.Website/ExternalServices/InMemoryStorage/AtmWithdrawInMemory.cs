@@ -6,12 +6,12 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
 	public class AtmWithdrawInMemory : IAtmWithdrawApi
 	{
-        internal IList<AtmWithdrawDetails> _storage;
+        internal readonly IList<AtmWithdrawDetails> Storage;
 
         public AtmWithdrawInMemory()
         {
             var rng = new Random();
-            _storage = new List<AtmWithdrawDetails>();
+            Storage = new List<AtmWithdrawDetails>();
             for (int i = 1; i <= 5; i++)
             {
                 var item = new AtmWithdrawDetails()
@@ -23,38 +23,39 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
                     DateExpense = DateTime.UtcNow.AddDays(-i),
                     HasBeenAlreadyDebited = true
                 };
-                _storage.Add(item);
+                Storage.Add(item);
             }
         }
 
         public async Task<ApiResponse> Create(AtmWithdrawDetails obj)
         {
-            obj.Id = _storage.Any() ? _storage.Max(x => x.Id) + 1 : 1;
+            obj.Id = Storage.Any() ? Storage.Max(x => x.Id) + 1 : 1;
             obj.CurrentAmount = obj.InitialAmount;
-            _storage.Add(obj);
+            Storage.Add(obj);
             return await Task.FromResult(new ApiResponse(true));
         }
 
         public async Task<ApiResponse> Delete(int id)
         {
-            var item = _storage.SingleOrDefault(x => x.Id == id);
+            var item = Storage.SingleOrDefault(x => x.Id == id);
 
             if (item == null)
                 return await Task.FromResult(new ApiResponse(false));
 
-            _storage.Remove(item);
+            Storage.Remove(item);
             return await Task.FromResult(new ApiResponse(true));
         }
 
         public async Task<ApiResponse> GetList(int accountId)
         {
-            var result = JsonConvert.SerializeObject(_storage.Where(x => x.AccountId == accountId).ToList());
+            
+            var result = JsonConvert.SerializeObject(Storage.Where(x => x.AccountId == accountId).ToList());
             return await Task.FromResult(new ApiResponse((object)result));
         }
 
         public async Task<ApiResponse> Get(int id)
         {
-            var item = JsonConvert.SerializeObject(_storage.SingleOrDefault(x => x.Id == id));
+            var item = JsonConvert.SerializeObject(Storage.SingleOrDefault(x => x.Id == id));
             return await Task.FromResult(new ApiResponse((object)item));
         }
 
@@ -66,7 +67,7 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> ChangeDebitStatus(int id, bool debitStatus)
         {
-            var item = _storage.SingleOrDefault(x => x.Id == id);
+            var item = Storage.SingleOrDefault(x => x.Id == id);
 
             if (item == null)
                 return await Task.FromResult(new ApiResponse(false));

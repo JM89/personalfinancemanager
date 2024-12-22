@@ -1,5 +1,4 @@
 ﻿using EventStore.Client;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using PFM.Bank.Event.Contracts;
 using PFM.MovementAggregator.Caches;
 using PFM.MovementAggregator.Caches.Interfaces;
@@ -21,29 +20,8 @@ namespace PFM.MovementAggregator.Extensions
 {
     public static class DependencyInjectionExtensions
     {
-        /// <summary>
-        /// Set up logging.
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="configuration"></param>
-        /// <param name="environmentName"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, string environmentName)
+        public static IServiceCollection AddServices(this IServiceCollection services, ApplicationSettings appSettings)
         {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .Enrich.FromLogContext()
-                .Enrich.WithProperty("Environment", environmentName)
-                .CreateLogger();
-
-            services.AddSingleton(Log.Logger);
-            return services;
-        }
-
-        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            var appSettings = configuration.GetSection("ApplicationSettings").Get<ApplicationSettings>() ?? new ApplicationSettings();
-
             services
                 .AddSingleton(appSettings)
                 .AddSingleton<IMovementAggregatorRepository, MovementAggregatorRepository>();

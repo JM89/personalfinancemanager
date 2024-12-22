@@ -3,11 +3,5 @@ using DataAccessLayer.Repositories.Interfaces;
 
 namespace DataAccessLayer.Repositories.Implementations
 {
-    public class CountryRepository : BaseRepository<Country>, ICountryRepository
-    {
-        public CountryRepository(PFMContext db) : base(db)
-        {
-
-        }
-    }
+    public class CountryRepository(PFMContext db) : BaseRepository<Country>(db), ICountryRepository;
 }

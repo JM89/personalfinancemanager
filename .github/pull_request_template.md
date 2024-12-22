@@ -18,8 +18,5 @@
 ### Website
 - N/A
 
-### Common Libraries
-- N/A
-
 ## Comments
 - N/A

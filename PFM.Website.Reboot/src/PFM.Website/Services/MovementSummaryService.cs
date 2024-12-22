@@ -8,21 +8,18 @@ using PFM.Website.Utils;
 
 namespace PFM.Website.Services
 {
-    public class MovementSummaryService : CoreService
+    public class MovementSummaryService(
+        Serilog.ILogger logger,
+        IMapper mapper,
+        IHttpContextAccessor httpContextAccessor,
+        ApplicationSettings settings,
+        IMovementSummaryApi api)
+        : CoreService(logger, mapper, httpContextAccessor, settings)
     {
-        private readonly IMovementSummaryApi _api;
-
-        public MovementSummaryService(Serilog.ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor,
-            ApplicationSettings settings, IMovementSummaryApi api)
-            : base(logger, mapper, httpContextAccessor, settings)
-        {
-            _api = api;
-        }
-
         public async Task<DashboardExpenseTypeSummaryModel> GetExpenseTypeSummary(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParameters>(search);
-            var apiResponse = await _api.GetMovementSummaryOvertime(request);
+            var request = Mapper.Map<MovementSummarySearchParameters>(search);
+            var apiResponse = await api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
             var expenseTypeSummaryModel = response
@@ -35,8 +32,8 @@ namespace PFM.Website.Services
 
         public async Task<DashboardMovementTypeSummaryModel> GetMovementTypeSummary(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParameters>(search);
-            var apiResponse = await _api.GetMovementSummaryOvertime(request);
+            var request = Mapper.Map<MovementSummarySearchParameters>(search);
+            var apiResponse = await api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
             var expenses = response.Where(x => x.Type == "Expenses");
@@ -58,8 +55,8 @@ namespace PFM.Website.Services
 
         public async Task<DashboardMovementTypeOvertimeModel> GetMovementTypeOverTimeModel(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParameters>(search);
-            var apiResponse = await _api.GetMovementSummaryOvertime(request);
+            var request = Mapper.Map<MovementSummarySearchParameters>(search);
+            var apiResponse = await api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
             var movementOverTimeModel = response
@@ -77,8 +74,8 @@ namespace PFM.Website.Services
 
         public async Task<DashboardExpenseOvertimeModel> GetExpenseOvertime(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParameters>(search);
-            var apiResponse = await _api.GetMovementSummaryOvertime(request);
+            var request = Mapper.Map<MovementSummarySearchParameters>(search);
+            var apiResponse = await api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
             var expenseOvertimeModel = response
@@ -94,8 +91,8 @@ namespace PFM.Website.Services
 
         public async Task<DashboardExpenseTypeOvertimeModel> GetExpenseTypeOvertime(MovementSummarySearchParamModel search)
         {
-            var request = _mapper.Map<MovementSummarySearchParameters>(search);
-            var apiResponse = await _api.GetMovementSummaryOvertime(request);
+            var request = Mapper.Map<MovementSummarySearchParameters>(search);
+            var apiResponse = await api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
             var data = response
                 .GroupBy(x => x.MonthYearIdentifier)
@@ -111,8 +108,8 @@ namespace PFM.Website.Services
                 throw new InvalidOperationException($"{nameof(search.OptionalType)} must be set.");
             }
 
-            var request = _mapper.Map<MovementSummarySearchParameters>(search);
-            var apiResponse = await _api.GetMovementSummaryOvertime(request);
+            var request = Mapper.Map<MovementSummarySearchParameters>(search);
+            var apiResponse = await api.GetMovementSummaryOvertime(request);
             var response = ReadApiResponse<List<MovementSummary>>(apiResponse) ?? new List<MovementSummary>();
 
             var previousMonthIdentifier = MonthYearHelper.ConvertToYYYYMM(DateTime.UtcNow.AddMonths(-1));

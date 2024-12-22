@@ -5,23 +5,14 @@ using PFM.BankAccountUpdater.Services.Interfaces;
 
 namespace PFM.BankAccountUpdater.Services
 {
-    public class BankAccountService : IBankAccountService
+    public class BankAccountService(IBankAccountApi bankAccountApi, Serilog.ILogger logger) : IBankAccountService
     {
-        private readonly Serilog.ILogger _logger;
-        private readonly IBankAccountApi _bankAccountApi;
-
-        public BankAccountService(IBankAccountApi bankAccountApi, Serilog.ILogger logger)
-        {
-            _logger = logger;
-            _bankAccountApi = bankAccountApi;
-        }
-
         public async Task<bool> UpdateBalance(int bankAccountId, string userId, decimal newBalance)
         {
             AccountDetails? account = null;
             try
             {
-                var response = await _bankAccountApi.Get(bankAccountId);
+                var response = await bankAccountApi.Get(bankAccountId);
 
                 if (response == null || response.Data == null)
                     throw new Exception("Data is null");
@@ -33,7 +24,7 @@ namespace PFM.BankAccountUpdater.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error while retrieving the bank account");
+                logger.Error(ex, "Error while retrieving the bank account");
                 throw;
             }
 
@@ -41,14 +32,14 @@ namespace PFM.BankAccountUpdater.Services
 
             try
             {
-                var result = await _bankAccountApi.Edit(bankAccountId, userId, account);
+                var result = await bankAccountApi.Edit(bankAccountId, userId, account);
                 if (result.Data == null || (result.Data is bool && !(bool)result.Data))
                     throw new Exception("Result is invalid");
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error while updating the balance of the bank account");
+                logger.Error(ex, "Error while updating the balance of the bank account");
                 throw;
             }
         }

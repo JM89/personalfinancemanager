@@ -4,18 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PFM.DataAccessLayer.Repositories.Implementations
 {
-    public class TaxTypeRepository : ITaxTypeRepository
+    public class TaxTypeRepository(PFMContext db) : ITaxTypeRepository
     {
-        private readonly PFMContext _db;
-
-        public TaxTypeRepository(PFMContext db)
-        {
-            this._db = db;
-        }
-
         public DbSet<TaxType> GetList()
         {
-            return _db.Set<TaxType>();
+            return db.Set<TaxType>();
         }
     }
 }

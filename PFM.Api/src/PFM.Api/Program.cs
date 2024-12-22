@@ -1,13 +1,14 @@
-using App.Metrics;
-using App.Metrics.AspNetCore;
-using App.Metrics.Formatters.Prometheus;
 using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using PFM.Api.Configurations.Monitoring.Logging;
+using PFM.Api.Configurations.Monitoring.Metrics;
+using PFM.Api.Configurations.Monitoring.Tracing;
 using PFM.Api.Extensions;
-using PFM.CommonLibraries.Api.MiddleWares;
+using PFM.Api.Middlewares;
+using PFM.Api.MiddleWares;
+using PFM.Api.Settings;
 using PFM.DataAccessLayer;
 using PFM.Services.Caches;
 using PFM.Services.Caches.Interfaces;
@@ -29,6 +30,9 @@ namespace PFM.Api
                 Console.WriteLine(builder.Configuration.GetDebugView());
             }
 
+            var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>() ?? new ApplicationSettings();
+            builder.Services.AddSingleton(appSettings);
+            
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddTransient<AuthHeaderHandler>();
 
@@ -43,35 +47,25 @@ namespace PFM.Api
             builder.Services
                 .AddAuthenticationAndAuthorization(builder.Configuration)
                 .AddBankApi(builder.Configuration, builder.Environment.EnvironmentName != "Production")
-                .AddMonitoring(builder.Configuration, builder.Environment.EnvironmentName, out IMetricsRoot metrics)
+                .ConfigureLogging(builder.Configuration, builder.Environment.EnvironmentName)
+                .ConfigureTracing(appSettings.TracingOptions)
+                .ConfigureMetrics(appSettings.MetricsOptions)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition()
                 .AddEventPublisherConfigurations(builder.Configuration);
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
 
-            var appSettings = builder.Configuration.GetSection("DataSettings").Get<DataSettings>() ?? new DataSettings();
-            builder.Services.AddSingleton(appSettings);
-
-            builder.Host
-                .ConfigureMetrics(metrics)
-                .UseMetrics(
-                    options =>
-                    {
-                        options.EndpointOptions = endpointsOptions =>
-                        {
-                            endpointsOptions.MetricsTextEndpointOutputFormatter = metrics.OutputMetricsFormatters.OfType<MetricsPrometheusTextOutputFormatter>().First();
-                            endpointsOptions.MetricsEndpointOutputFormatter = metrics.OutputMetricsFormatters.OfType<MetricsPrometheusProtobufOutputFormatter>().First();
-                        };
-                    });
+            var dataSettings = builder.Configuration.GetSection("DataSettings").Get<DataSettings>() ?? new DataSettings();
+            builder.Services.AddSingleton(dataSettings);
 
             builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-            builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacModule()));
+            builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new AutoFacModule()));
 
             var app = builder.Build();
 
             app.UseMiddleware<TimedOperationMiddleware>();
-            app.UseMiddleware<PFM.Api.Middlewares.ResponseWrapperMiddleware>();
+            app.UseMiddleware<ResponseWrapperMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {
@@ -83,7 +77,6 @@ namespace PFM.Api
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseMetricsAllEndpoints();
 
             app.MapControllers();
 

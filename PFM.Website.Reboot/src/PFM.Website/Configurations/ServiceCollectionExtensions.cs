@@ -9,6 +9,11 @@ using Refit;
 using AutoMapper;
 using PFM.Website.Services.Mappers;
 using Microsoft.IdentityModel.Logging;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using PFM.Website.Monitoring.Metrics;
+using PFM.Website.Monitoring.Tracing;
 
 namespace PFM.Website.Configurations
 {
@@ -62,20 +67,7 @@ namespace PFM.Website.Configurations
 
             return services;
 		}
-
-        public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration, string environmentName)
-        {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .Enrich.FromLogContext()
-                .Enrich.WithProperty("Environment", environmentName)
-                .CreateLogger();
-
-            services.AddSingleton(Log.Logger);
-
-            return services;
-        }
-
+        
         public static IServiceCollection AddPfmApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
         {
             var useApi = configuration.GetValue<bool>("UsePfmApi");

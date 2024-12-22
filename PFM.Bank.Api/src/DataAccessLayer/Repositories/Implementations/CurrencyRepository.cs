@@ -3,11 +3,5 @@ using DataAccessLayer.Repositories.Interfaces;
 
 namespace DataAccessLayer.Repositories.Implementations
 {
-    public class CurrencyRepository : BaseRepository<Currency>, ICurrencyRepository
-    {
-        public CurrencyRepository(PFMContext db) : base(db)
-        {
-
-        }
-    }
+    public class CurrencyRepository(PFMContext db) : BaseRepository<Currency>(db), ICurrencyRepository;
 }

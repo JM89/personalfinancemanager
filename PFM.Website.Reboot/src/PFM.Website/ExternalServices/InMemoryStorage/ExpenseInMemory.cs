@@ -10,10 +10,10 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
 	public class ExpenseInMemory : IExpenseApi
 	{
-        internal IList<ExpenseDetails> _storage;
-        private IList<AtmWithdrawDetails> _atmWithdraws = new AtmWithdrawInMemory()._storage.ToList();
-        private IList<PaymentMethodList> _paymentMethods = new PaymentMethodInMemory()._storage.ToList();
-        private IList<ExpenseTypeDetails> _expenseTypes = new ExpenseTypeInMemory()._storage.ToList();
+        private readonly IList<ExpenseDetails> _storage;
+        private readonly IList<AtmWithdrawDetails> _atmWithdraws = new AtmWithdrawInMemory().Storage.ToList();
+        private readonly IList<PaymentMethodList> _paymentMethods = new PaymentMethodInMemory().Storage.ToList();
+        private readonly IList<ExpenseTypeDetails> _expenseTypes = new ExpenseTypeInMemory().Storage.ToList();
 
         public ExpenseInMemory()
         {

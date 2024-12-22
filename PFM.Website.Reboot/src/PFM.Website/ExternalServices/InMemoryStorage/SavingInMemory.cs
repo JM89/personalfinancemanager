@@ -7,8 +7,8 @@ namespace PFM.Website.ExternalServices.InMemoryStorage
 {
 	public class SavingInMemory : ISavingApi
 	{
-        internal IList<SavingDetails> _storage;
-        private IList<AccountDetails> _savingBankAccounts = new BankAccountInMemory()._storage.Where(x => x.IsSavingAccount).ToList();
+        private readonly IList<SavingDetails> _storage;
+        private readonly IList<AccountDetails> _savingBankAccounts = new BankAccountInMemory().Storage.Where(x => x.IsSavingAccount).ToList();
 
         public SavingInMemory()
         {

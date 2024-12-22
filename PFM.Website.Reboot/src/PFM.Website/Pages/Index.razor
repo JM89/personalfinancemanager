@@ -3,10 +3,11 @@
 @using PFM.Website.Services
 @using PFM.Website.Models
 @using PFM.Website.Components.Dashboard
+@using PFM.Website.Monitoring.Metrics
 
 @inject BankAccountService BankAccountService
-@inject ExpenseTypeService ExpenseTypeService
 @inject NavigationManager NavigationManager
+@inject IDashboardMetrics Metrics
 
 <AuthorizeView>
     <Authorized>
@@ -73,24 +74,25 @@
     protected BarChartMovementTypeOvertimeBase BarChartMovementTypeOvertime { get; set; }
     protected VignetteActionsBase VignetteActions { get; set; }
     protected TableExpenseTypeDiffsBase TableExpenseTypeDiffs { get; set; }
-
+    
     protected override async Task OnInitializedAsync()
     {
         SelectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
     }
 
-    protected async Task UpdateChartsForAccount(int accountId)
+    protected void UpdateChartsForAccount(int accountId)
     {
         SelectedBankAccount = null;
         SelectedCategory = null;
         NavigationManager.NavigateTo($"/{accountId}", true);
     }
 
-    public async Task UpdateChartsForCategory(ExpenseTypeModel category)
+    public async Task UpdateChartsForCategory(ExpenseTypeModel expenseType)
     {
-        await BarChartExpenseTypeOvertime.ReloadComponent(category.Id.Value);
-        await TableExpenseByType.ReloadComponent(category.Id.Value);
-        SelectedCategory = category;
+        await BarChartExpenseTypeOvertime.ReloadComponent(expenseType.Id!.Value);
+        await TableExpenseByType.ReloadComponent(expenseType.Id.Value);
+        SelectedCategory = expenseType;
+        Metrics.RecordClick(nameof(UpdateChartsForCategory), expenseType.Name);
         this.StateHasChanged();
     }
 }

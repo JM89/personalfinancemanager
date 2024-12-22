@@ -1,9 +1,10 @@
 {
   "profiles": {
-    "PFM.BankAccountUpdater": {
+    "debug": {
       "commandName": "Project",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "Development",
+        "APP_BankApi__EndpointUrl": "https://localhost:7099"
       },
       "dotnetRunMessages": true
     }

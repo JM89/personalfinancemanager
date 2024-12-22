@@ -1,4 +1,7 @@
-﻿using EventStore.Client;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using EventStore.Client;
 using PFM.Bank.Event.Contracts.Interfaces;
 using PFM.Services.Events.Interfaces;
 using System.Text.Json;
@@ -19,10 +22,16 @@ namespace PFM.Services.Events
         public async Task<bool> PublishAsync<T>(T evt, CancellationToken token)
             where T : IEvent
         {
+            var metadata = new Dictionary<string, object>()
+            {
+                { "TraceId", Activity.Current?.Id ?? string.Empty },
+            };
+            
             var eventData = new EventData(
                 Uuid.NewUuid(),
                 typeof(T).Name,
-                JsonSerializer.SerializeToUtf8Bytes(evt)
+                JsonSerializer.SerializeToUtf8Bytes(evt),
+                metadata: JsonSerializer.SerializeToUtf8Bytes(metadata)
             );
 
             var result = await _eventStoreClient.AppendToStreamAsync(

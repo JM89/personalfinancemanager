@@ -1,4 +1,5 @@
-﻿using EventStore.Client;
+﻿using System.Diagnostics;
+using EventStore.Client;
 using PFM.Bank.Event.Contracts;
 using PFM.Bank.Event.Contracts.Interfaces;
 using PFM.BankAccountUpdater.Events.Interface;
@@ -6,6 +7,8 @@ using PFM.BankAccountUpdater.Events.Settings;
 using PFM.BankAccountUpdater.Handlers.Interfaces;
 using Polly;
 using System.Text.Json;
+using PFM.BankAccountUpdater.Configurations.Monitoring.Tracing;
+using Serilog;
 
 namespace PFM.BankAccountUpdater.Events
 {
@@ -16,7 +19,7 @@ namespace PFM.BankAccountUpdater.Events
         private readonly EventStoreConsumerSettings _settings;
         private readonly AsyncPolicy _subscriptionRetryPolicy;
         private int _retryCount = 0;
-
+        
         private readonly IEventDispatcher _eventDispatcher;
 
         private static string AssemblyName = typeof(BankAccountCreated).Assembly.GetName().Name ?? "";
@@ -67,6 +70,19 @@ namespace PFM.BankAccountUpdater.Events
 
             var type = Type.GetType($"{EventTypeNamespace}.{evt.Event.EventType}, {AssemblyName}");
 
+            string? traceId = null;
+            try
+            {
+                Dictionary<string, string>? metadata =
+                    JsonSerializer.Deserialize<Dictionary<string, string>>(
+                        System.Text.Encoding.UTF8.GetString(evt.Event.Metadata.Span));
+                metadata?.TryGetValue("TraceId", out traceId);
+            }
+            catch (Exception)
+            {
+                Log.Logger.Warning("Could not retrieve TraceId");
+            }
+
             if (type == null)
             {
                 _logger.Debug($"Type '{evt.Event.EventType}' not handled, ignoring the event.");
@@ -82,7 +98,10 @@ namespace PFM.BankAccountUpdater.Events
                 throw new ArgumentNullException("Received event is null");
             }
 
-            _eventDispatcher.Dispatch(receivedEvent);
+            using (var _ = CustomActivitySource.StartDispatcherActivity(evt.Event.EventType, traceId))
+            {
+                _eventDispatcher.Dispatch(receivedEvent);
+            }
 
             await subscription.Ack(evt);
         }

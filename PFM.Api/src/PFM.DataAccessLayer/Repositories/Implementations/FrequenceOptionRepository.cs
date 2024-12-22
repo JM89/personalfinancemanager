@@ -4,18 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PFM.DataAccessLayer.Repositories.Implementations
 {
-    public class FrequenceOptionRepository : IFrequenceOptionRepository
+    public class FrequenceOptionRepository(PFMContext db) : IFrequenceOptionRepository
     {
-        private readonly PFMContext _db;
-
-        public FrequenceOptionRepository(PFMContext db)
-        {
-            this._db = db;
-        }
-
         public DbSet<FrequenceOption> GetList()
         {
-            return _db.Set<FrequenceOption>();
+            return db.Set<FrequenceOption>();
         }
     }
 }
