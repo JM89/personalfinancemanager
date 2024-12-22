@@ -68,7 +68,7 @@ builder.Services
     .ConfigureLogging(builder.Configuration, builder.Environment)
     .ConfigureTracing(appSettings.TracingOptions)
     .ConfigureMetrics(appSettings.MetricsOptions)
-    .AddPfmApi(builder.Configuration, builder.Environment.EnvironmentName != "Production");
+    .AddPfmApi(builder.Configuration, appSettings, builder.Environment.IsDevelopment());
 
 var app = builder.Build();
 
