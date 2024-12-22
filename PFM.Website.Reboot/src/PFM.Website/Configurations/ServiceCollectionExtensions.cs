@@ -68,11 +68,9 @@ namespace PFM.Website.Configurations
             return services;
 		}
         
-        public static IServiceCollection AddPfmApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
+        public static IServiceCollection AddPfmApi(this IServiceCollection services, IConfiguration configuration, ApplicationSettings appSettings, bool isDevelopmentEnvironment)
         {
-            var useApi = configuration.GetValue<bool>("UsePfmApi");
-
-            if (!useApi)
+            if (!appSettings.PfmApiOptions.Enabled)
             {
                 services
                     .AddSingleton<IExpenseTypeApi, ExpenseTypeInMemory>()
@@ -89,10 +87,6 @@ namespace PFM.Website.Configurations
                     .AddSingleton<IBudgetPlanApi, BudgetPlanInMemory>();
                 return services;
             }
-
-            var apiConfigs = configuration["PfmApi:EndpointUrl"];
-            if (apiConfigs == null)
-                throw new Exception("DI exception: PFM API config was not found");
 
             var refitSettings = new RefitSettings()
             {
@@ -115,6 +109,7 @@ namespace PFM.Website.Configurations
 
             var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
 
+            var apiConfigs = appSettings.PfmApiOptions.EndpointUrl;
             services
                 .AddPfmApiClient<IExpenseTypeApi>(apiConfigs, refitSettings, httpClientHandler)
                 .AddPfmApiClient<ICountryApi>(apiConfigs, refitSettings, httpClientHandler)
