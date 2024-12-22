@@ -1,4 +1,4 @@
-namespace Services.Monitoring.Metrics;
+namespace Api.Configurations.Monitoring.Metrics;
 
 public class MetricsOptions
 {

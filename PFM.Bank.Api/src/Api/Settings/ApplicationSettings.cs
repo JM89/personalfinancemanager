@@ -1,5 +1,5 @@
-using Services.Monitoring.Metrics;
-using Services.Monitoring.Tracing;
+using Api.Configurations.Monitoring.Metrics;
+using Api.Configurations.Monitoring.Tracing;
 
 namespace Api.Settings;
 

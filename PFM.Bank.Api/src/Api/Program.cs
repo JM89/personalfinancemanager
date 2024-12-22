@@ -1,15 +1,16 @@
+using Api.Configurations.Monitoring.Logging;
+using Api.Configurations.Monitoring.Metrics;
+using Api.Configurations.Monitoring.Tracing;
 using Api.Extensions;
+using Api.Middlewares;
+using Api.MiddleWares;
 using Api.Settings;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
-using PFM.CommonLibraries.Api.MiddleWares;
 using PFM.Services.Core.Automapper;
-using PFM.Services.Monitoring.Logging;
-using Services.Monitoring.Metrics;
-using Services.Monitoring.Tracing;
 
 namespace Api
 {
@@ -42,7 +43,7 @@ namespace Api
             var app = builder.Build();
 
             app.UseMiddleware<TimedOperationMiddleware>();
-            app.UseMiddleware<Api.Middlewares.ResponseWrapperMiddleware>();
+            app.UseMiddleware<ResponseWrapperMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {

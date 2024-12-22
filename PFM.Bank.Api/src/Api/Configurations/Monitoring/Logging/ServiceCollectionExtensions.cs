@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace PFM.Services.Monitoring.Logging;
+namespace Api.Configurations.Monitoring.Logging;
 
 public static class ServiceCollectionExtensions
 {

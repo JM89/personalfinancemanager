@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
-namespace Services.Monitoring.Tracing;
+namespace Api.Configurations.Monitoring.Tracing;
 
 public static class ServiceCollectionExtensions
 {

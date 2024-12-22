@@ -1,8 +1,8 @@
 ﻿using Api.Contracts.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using PFM.CommonLibraries.Services.Exceptions;
 using System.Net;
+using PFM.Services.Core.Exceptions;
 
 namespace Api.Middlewares
 {

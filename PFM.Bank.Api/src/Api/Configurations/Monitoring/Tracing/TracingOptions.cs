@@ -1,4 +1,4 @@
-namespace Services.Monitoring.Tracing;
+namespace Api.Configurations.Monitoring.Tracing;
 
 public class TracingOptions
 {
