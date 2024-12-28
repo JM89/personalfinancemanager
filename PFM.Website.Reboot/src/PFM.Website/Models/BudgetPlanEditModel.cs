@@ -7,13 +7,13 @@ namespace PFM.Website.Models
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public DateTime? StartDate { get; set; }
+        public DateTime? StartDate { get; set; } = DateTime.Today;
 
-        public DateTime? EndDate { get; set; }
+        public DateTime? EndDate { get; set; } = DateTime.Today.AddYears(1);
 
-        public DateTime? PlannedStartDate { get; set; }
+        public DateTime? PlannedStartDate { get; set; } = DateTime.Today;
 
         public decimal ExpectedExpenses
         {
@@ -23,25 +23,19 @@ namespace PFM.Website.Models
             }
         }
 
-        public decimal ExpectedIncomes { get; set; }
+        public decimal ExpectedIncomes { get; set; } = 0.0m;
 
-        public decimal ExpectedSavings { get; set; }
+        public decimal ExpectedSavings { get; set; } = 0.0m;
 
-        public decimal Total
-        {
-            get
-            {
-                return ExpectedIncomes - ExpectedExpenses - ExpectedSavings; 
-            }
-        }
+        public decimal Total => ExpectedIncomes - ExpectedExpenses - ExpectedSavings;
 
         // Coming from Movement Summary
-        public BudgetPlanValueSet PreviousMonth { get; set; } = new BudgetPlanValueSet();
-        public BudgetPlanValueSet AverageMonth { get; set; } = new BudgetPlanValueSet();
+        public BudgetPlanValueSet PreviousMonth { get; set; } = new ();
+        public BudgetPlanValueSet AverageMonth { get; set; } = new ();
 
-        public BudgetPlanEditModel? PreviousBudgetPlan { get; set; }
+        public BudgetPlanEditModel? PreviousBudgetPlan { get; set; } 
 
-        public IEnumerable<BudgetPlanExpenseTypeEditModel> ExpenseTypes { get; set; }
+        public IEnumerable<BudgetPlanExpenseTypeEditModel> ExpenseTypes { get; set; } = new List<BudgetPlanExpenseTypeEditModel>();
     }
 }
 

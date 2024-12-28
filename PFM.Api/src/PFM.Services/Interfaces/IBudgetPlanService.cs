@@ -6,19 +6,19 @@ namespace PFM.Services.Interfaces
 {
     public interface IBudgetPlanService : IBaseService
     {
-        IList<BudgetPlanList> GetBudgetPlans(int accountId);
+        Task<IEnumerable<BudgetPlanList>> GetBudgetPlans(int accountId);
 
-        BudgetPlanDetails GetCurrent(int accountId);
+        Task<BudgetPlanDetails> GetCurrent(int accountId);
 
-        BudgetPlanDetails GetById(int id);
+        Task<BudgetPlanDetails> GetById(int id);
 
-        void CreateBudgetPlan(BudgetPlanDetails budgetPlanDetails, int accountId);
+        Task<bool> CreateBudgetPlan(BudgetPlanDetails budgetPlanDetails, int accountId);
 
-        void EditBudgetPlan(BudgetPlanDetails budgetPlanDetails, int accountId);
+        Task<bool> EditBudgetPlan(BudgetPlanDetails budgetPlanDetails, int accountId);
 
-        void StartBudgetPlan(int value, int accountId);
+        Task<bool> StartBudgetPlan(int value, int accountId);
 
-        void StopBudgetPlan(int value);
+        Task<bool> StopBudgetPlan(int value);
 
         Task<BudgetPlanDetails> BuildBudgetPlan(int accountId, int? budgetPlanId = null);
     }
