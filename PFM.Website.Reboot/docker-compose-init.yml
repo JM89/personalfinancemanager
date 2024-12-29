@@ -29,7 +29,8 @@ services:
     environment:
       ASPNETCORE_URLS: https://+:4431
       ASPNETCORE_ENVIRONMENT: Development
-      APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # (logs via seq)
+      APP_OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # OTEL defaults
       APP_ConnectionStrings__PFMConnection: Server=db-server,1433;Database=PFM_MAIN_DB;User Id=PFM_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
       APP_ConnectionStrings__EventStoreConnection: esdb://eventstore:2113?tls=false
       APP_Auth__Authority: http://keycloak:8080/realms/pfm
@@ -51,7 +52,8 @@ services:
     profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # (logs via seq)
+      APP_OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # OTEL defaults
       APP_ConnectionStrings__EventStoreConnection: esdb://eventstore:2113?tls=false
       APP_AuthApi__EndpointUrl: http://keycloak:8080/realms/pfm/protocol/openid-connect/token/
       APP_BankApi__EndpointUrl: https://pfm-bank-api:50001
@@ -68,7 +70,8 @@ services:
     profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # (logs via seq)
+      APP_OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # OTEL defaults
       APP_ConnectionStrings__EventStoreConnection: esdb://eventstore:2113?tls=false
       APP_AuthApi__EndpointUrl: http://keycloak:8080/realms/pfm/protocol/openid-connect/token/
       APP_ApplicationSettings__DbConnection: Server=db-server,1433;Database=PFM_MVT_AGGR_DB;User Id=PFM_MVT_AGGR_SVC;Password=Helloworld123!;TrustServerCertificate=True
@@ -87,7 +90,8 @@ services:
     environment:
       ASPNETCORE_URLS: https://+:7143
       ASPNETCORE_ENVIRONMENT: Development
-      APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # (logs via seq)
+      APP_OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # OTEL defaults
       APP_AuthOptions__Authority: http://keycloak:8080/realms/pfm
       APP_UsePfmApi: true
       APP_PfmApi__EndpointUrl: https://pfm-api:4431/

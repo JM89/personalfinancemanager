@@ -9,11 +9,11 @@ namespace PFM.Website.Models
         [Required]
         public string Name { get; set; } = string.Empty;
 
-        public DateTime? StartDate { get; set; } = DateTime.Today;
+        public DateTime? StartDate { get; set; } = null;
 
-        public DateTime? EndDate { get; set; } = DateTime.Today.AddYears(1);
+        public DateTime? EndDate { get; set; } = null;
 
-        public DateTime? PlannedStartDate { get; set; } = DateTime.Today;
+        public DateTime? PlannedStartDate { get; set; } = null;
 
         public decimal ExpectedExpenses
         {
