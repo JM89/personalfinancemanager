@@ -56,7 +56,7 @@ public class TimedOperationMiddleware(RequestDelegate next, IRequestMetrics metr
         var statusCode = httpContext.Response.StatusCode.ToString() == "" ? "empty_status_code" : httpContext.Response.StatusCode.ToString();
         return
         [
-            new KeyValuePair<string, object>(ControllerTag, path),
+            new KeyValuePair<string, object>(ControllerTag, path!),
             new KeyValuePair<string, object>(MethodTag, method),
             new KeyValuePair<string, object>(StatusCodeTag, statusCode)
         ];

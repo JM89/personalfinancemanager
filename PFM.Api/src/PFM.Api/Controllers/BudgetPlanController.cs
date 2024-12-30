@@ -7,62 +7,49 @@ namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BudgetPlanController : ControllerBase
+    public class BudgetPlanController(IBudgetPlanService budgetPlanService) : ControllerBase
     {
-        private readonly IBudgetPlanService _budgetPlanService;
-
-        public BudgetPlanController(IBudgetPlanService BudgetPlanService)
-        {
-            _budgetPlanService = BudgetPlanService;
-        }
-
         [HttpGet("GetList/{accountId}")]
-        public IEnumerable<BudgetPlanList> GetList(int accountId)
+        public async Task<IEnumerable<BudgetPlanList>> GetList(int accountId)
         {
-            return _budgetPlanService.GetBudgetPlans(accountId);
+            return await budgetPlanService.GetBudgetPlans(accountId);
         }
 
         [HttpGet("Get/{id}")]
-        public BudgetPlanDetails Get(int id)
+        public async Task<BudgetPlanDetails> Get(int id)
         {
-            return _budgetPlanService.GetById(id);
+            return await budgetPlanService.GetById(id);
         }
 
         [HttpGet("GetCurrent/{accountId}")]
-        public IActionResult GetCurrent(int accountId)
+        public async Task<IActionResult> GetCurrent(int accountId)
         {
-            var current = _budgetPlanService.GetCurrent(accountId);
+            var current = await budgetPlanService.GetCurrent(accountId);
             return current != null ? Ok(current) : Ok();
         }
 
         [HttpPost("Create/{accountId}")]
-        public void Create(int accountId, [FromBody]BudgetPlanDetails budgetPlanDetails)
+        public async Task<bool> Create(int accountId, [FromBody]BudgetPlanDetails budgetPlanDetails)
         {
-            _budgetPlanService.CreateBudgetPlan(budgetPlanDetails, accountId);
+            return await budgetPlanService.CreateBudgetPlan(budgetPlanDetails, accountId);
         }
 
         [HttpPut("Edit/{accountId}")]
-        public void Edit(int accountId, [FromBody]BudgetPlanDetails budgetPlanDetails)
+        public async Task<bool> Edit(int accountId, [FromBody]BudgetPlanDetails budgetPlanDetails)
         {
-            _budgetPlanService.EditBudgetPlan(budgetPlanDetails, accountId);
+            return await budgetPlanService.EditBudgetPlan(budgetPlanDetails, accountId);
         }
 
         [HttpPost("Start/{value}/{accountId}")]
-        public void Start(int value, int accountId)
+        public async Task<bool> Start(int value, int accountId)
         {
-            _budgetPlanService.StartBudgetPlan(value, accountId);
+            return await budgetPlanService.StartBudgetPlan(value, accountId);
         }
 
         [HttpPost("Stop/{value}")]
-        public void Stop(int value)
+        public async Task<bool> Stop(int value)
         {
-            _budgetPlanService.StopBudgetPlan(value);
-        }
-
-        [HttpGet("BuildEmpty/{accountId}/{budgetPlanId?}")]
-        public async Task<BudgetPlanDetails> Build(int accountId, int? budgetPlanId = null)
-        {
-            return await _budgetPlanService.BuildBudgetPlan(accountId, budgetPlanId);
+            return await budgetPlanService.StopBudgetPlan(value);
         }
     }
 }
