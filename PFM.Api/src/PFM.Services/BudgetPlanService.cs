@@ -16,12 +16,7 @@ namespace PFM.Services
 {
     public class BudgetPlanService(
         IBudgetPlanRepository budgetPlanRepository,
-        IBudgetByExpenseTypeRepository budgetByExpenseTypeRepository,
-        IBankAccountCache bankAccountCache,
-        IExpenseRepository expenseRepository,
-        IExpenseTypeRepository expenseTypeRepository,
-        IIncomeRepository incomeRepository,
-        ISavingRepository savingRepository)
+        IBudgetByExpenseTypeRepository budgetByExpenseTypeRepository)
         : IBudgetPlanService
     {
         /// <summary>
@@ -121,7 +116,7 @@ namespace PFM.Services
             budgetPlanRepository.Update(budgetPlan);
 
             var existingBudgetPlanExpenses = budgetByExpenseTypeRepository.GetList2(x => x.ExpenseType)
-                  .Where(x => x.BudgetPlanId == budgetPlanDetails.Id);
+                  .Where(x => x.BudgetPlanId == budgetPlanDetails.Id).ToList();
 
             foreach (var budgetExpenseType in budgetPlanDetails.ExpenseTypes)
             {
@@ -176,148 +171,6 @@ namespace PFM.Services
             budgetPlan.EndDate = DateTime.Now;
             budgetPlanRepository.Update(budgetPlan);
             return Task.FromResult(true);
-        }
-
-        public async Task<BudgetPlanDetails> BuildBudgetPlan(int accountId, int? budgetPlanId = null)
-        {
-            var currencySymbol = (await bankAccountCache.GetById(accountId)).CurrencySymbol;
-
-            var today = DateTime.Now;
-            var over12MonthsInterval = new Interval(today, DateTimeUnitEnums.Years, 1);
-            var previousInterval = new Interval(today, DateTimeUnitEnums.Months, 1);
-            var firstOfNextMonth = DateTimeFormatHelper.GetFirstDayOfMonth(today.AddMonths(1));
-
-            // Retrieve the categories
-            var categories = expenseTypeRepository.GetList2().GroupBy(x => x.Id).ToDictionary(x => x.Key, y => y.Single());
-
-            // Retrieve the expenses over the last 12 months (excluding current month) 
-            var expensesOver12Months = expenseRepository.GetByParameters(new ExpenseGetListSearchParameters()
-            {
-                AccountId = accountId,
-                StartDate = over12MonthsInterval.StartDate,
-                EndDate = over12MonthsInterval.EndDate
-            });
-
-            // Group by category the expenses over the last 12 months
-            var expensesOver12MonthsByCategory = expensesOver12Months.GroupBy(x => x.ExpenseTypeId).ToDictionary(x => x.Key, y => y.ToList());
-
-            over12MonthsInterval.StartDate = DateTimeFormatHelper.GetFirstDayOfMonth(
-              expensesOver12Months.Any() ?
-              expensesOver12Months.OrderBy(x => x.DateExpense).First().DateExpense :
-              today);
-
-            var nbMonthInterval = over12MonthsInterval.Count(DateTimeUnitEnums.Months);
-            if (nbMonthInterval == 0)
-                nbMonthInterval = 1; // No expenses -> no division by zero
-
-            // Retrieve the expenses last months and group by category
-            var lastMonthExpenses = expensesOver12Months.Where(x => previousInterval.IsBetween(x.DateExpense)).ToList();
-            var lastMonthExpensesByCategory = lastMonthExpenses.GroupBy(x => x.ExpenseTypeId).ToDictionary(x => x.Key, y => y.ToList());
-
-            // Get the current Budget Plan for the account. If none, returns a default of cost of 0.00
-            var currentBudgetPlan = await GetCurrent(accountId);
-            var currentBudgetPlanByCategory = currentBudgetPlan?.ExpenseTypes
-                                                    .GroupBy(x => x.ExpenseType.Id)
-                                                    .ToDictionary(x => x.Key, y => y.Single().ExpectedValue);
-
-            // Get the existing Budget Plan for the provided ID. If none, returns a default of cost of 0.00
-            var existingBudgetPlan = budgetPlanId.HasValue ? await GetById(budgetPlanId.Value) : null;
-            var existingBudgetPlanByCategory = existingBudgetPlan?.ExpenseTypes.GroupBy(x => x.ExpenseType.Id).ToDictionary(x => x.Key, y => y.Single().ExpectedValue);
-
-            BudgetPlanDetails budgetPlan = null;
-
-            if (existingBudgetPlan != null)
-            {
-                budgetPlan = new BudgetPlanDetails()
-                {
-                    Id = existingBudgetPlan.Id,
-                    Name = existingBudgetPlan.Name,
-                    ExpenseTypes = new List<BudgetPlanExpenseType>(),
-                    CurrencySymbol = currencySymbol,
-                    StartDate = existingBudgetPlan.StartDate,
-                    EndDate = existingBudgetPlan.EndDate,
-                    PlannedStartDate = firstOfNextMonth,
-                    HasCurrentBudgetPlan = currentBudgetPlan != null,
-                    BudgetPlanName = currentBudgetPlan?.Name
-                };
-            }
-            else
-            {
-                budgetPlan = new BudgetPlanDetails()
-                {
-                    ExpenseTypes = new List<BudgetPlanExpenseType>(),
-                    CurrencySymbol = currencySymbol,
-                    HasCurrentBudgetPlan = currentBudgetPlan != null,
-                    BudgetPlanName = currentBudgetPlan?.Name
-                };
-            }
-
-            foreach (var category in categories)
-            {
-                var expectedValue = 0.00M; var currentBudgetPlanValue = 0.00M;
-
-                if (currentBudgetPlan != null)
-                {
-                    currentBudgetPlanValue = currentBudgetPlanByCategory.ContainsKey(category.Key)
-                                                ? currentBudgetPlanByCategory[category.Key]
-                                                : 0.00M;
-                }
-
-                if (existingBudgetPlan != null)
-                {
-                    expectedValue = existingBudgetPlanByCategory.ContainsKey(category.Key)
-                                        ? existingBudgetPlanByCategory[category.Key]
-                                        : 0.00M;
-                }
-                else if (currentBudgetPlan != null)
-                {
-                    expectedValue = currentBudgetPlanValue;
-                }
-
-                var previousMonthValue = lastMonthExpensesByCategory.ContainsKey(category.Key)
-                                            ? lastMonthExpensesByCategory[category.Key].Sum(x => x.Cost)
-                                            : 0.00M;
-
-                var averageMonthValue = expensesOver12MonthsByCategory.ContainsKey(category.Key)
-                                            ? expensesOver12MonthsByCategory[category.Key].Sum(x => x.Cost)
-                                            : 0.00M;
-
-                var mappedCategory = Mapper.Map<ExpenseTypeList>(category.Value);
-
-                var budgetPlanByCategory = new BudgetPlanExpenseType
-                {
-                    CurrencySymbol = budgetPlan.CurrencySymbol,
-                    ExpenseType = mappedCategory,
-                    ExpectedValue = expectedValue,
-                    PreviousMonthValue = previousMonthValue,
-                    CurrentBudgetPlanValue = currentBudgetPlanValue,
-                    AverageMonthValue = averageMonthValue / nbMonthInterval
-                };
-
-                budgetPlan.ExpenseTypes.Add(budgetPlanByCategory);
-            }
-
-            budgetPlan.ExpensePreviousMonthValue = lastMonthExpenses.Sum(x => x.Cost);
-            budgetPlan.ExpenseAverageMonthValue = expensesOver12Months.Sum(x => x.Cost) / nbMonthInterval;
-            budgetPlan.ExpenseCurrentBudgetPlanValue = currentBudgetPlan?.ExpenseTypes.Sum(x => x.ExpectedValue);
-
-            var incomes = incomeRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
-
-            budgetPlan.IncomeCurrentBudgetPlanValue = currentBudgetPlan?.ExpectedIncomes;
-            budgetPlan.IncomePreviousMonthValue = incomes.Where(x => previousInterval.IsBetween(x.DateIncome)).Sum(x => x.Cost);
-            budgetPlan.IncomeAverageMonthValue = incomes.Where(x => over12MonthsInterval.IsBetween(x.DateIncome)).Sum(x => x.Cost) / nbMonthInterval;
-
-            budgetPlan.ExpectedIncomes = existingBudgetPlan?.ExpectedIncomes ?? budgetPlan.IncomePreviousMonthValue;
-
-            var savings = savingRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
-
-            budgetPlan.SavingCurrentBudgetPlanValue = currentBudgetPlan?.ExpectedSavings;
-            budgetPlan.SavingPreviousMonthValue = savings.Where(x => previousInterval.IsBetween(x.DateSaving)).Sum(x => x.Amount);
-            budgetPlan.SavingAverageMonthValue = savings.Where(x => over12MonthsInterval.IsBetween(x.DateSaving)).Sum(x => x.Amount) / nbMonthInterval;
-
-            budgetPlan.ExpectedSavings = existingBudgetPlan?.ExpectedSavings ?? budgetPlan.SavingPreviousMonthValue;
-
-            return budgetPlan;
         }
     }
 }

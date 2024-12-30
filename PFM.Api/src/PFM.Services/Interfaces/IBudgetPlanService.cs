@@ -19,7 +19,5 @@ namespace PFM.Services.Interfaces
         Task<bool> StartBudgetPlan(int value, int accountId);
 
         Task<bool> StopBudgetPlan(int value);
-
-        Task<BudgetPlanDetails> BuildBudgetPlan(int accountId, int? budgetPlanId = null);
     }
 }
