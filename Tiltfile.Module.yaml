@@ -14,6 +14,9 @@ configs:
     - description: PFM.Bank.Api
       path: "./PFM.Bank.Api/docker-compose-api-init.yml"
       type: "docker_compose"
+    - description: PFM.TNP.Api
+      path: "./PFM.TNP.Api/docker-compose-api-init.yml"
+      type: "docker_compose"
     - description: PFM.Website.Reboot
       path: "./PFM.Website.Reboot/docker-compose-init.yml"
       type: "docker_compose"

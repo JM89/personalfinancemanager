@@ -100,3 +100,14 @@ services:
       DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: true # local setup only
     networks:
       - local-network
+  
+  mysql-db-server:
+    image: mysql:9.1
+    container_name: mysql-db-server
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ADMIN_PASSWORD}
+    ports:
+      - 3306:3306
+    networks:
+      - local-network
