@@ -10,8 +10,8 @@ using DataAccessLayer;
 using DataAccessLayer.Repositories.Implementations;
 using DataAccessLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using PFM.Services.Core.Automapper;
 using Services;
+using Services.Core.Automapper;
 using Services.Interfaces;
 
 namespace Api
