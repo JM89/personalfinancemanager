@@ -18,3 +18,10 @@ echo "Successful connection to DB server: $DB_SERVER_NAME,$DB_SERVER_PORT"
 
 echo "Run 01_create_main_db_if_not_exists.sql script"
 mysql --host=$DB_SERVER_NAME --port=$DB_SERVER_PORT -uroot --password="$DB_ROOT_PASSWORD" < scripts/01_create_main_db_if_not_exists.sql
+
+echo "Run 03_create_main_db_schema.sql script"
+mysql --host=$DB_SERVER_NAME --port=$DB_SERVER_PORT -uroot --password="$DB_ROOT_PASSWORD" < scripts/03_create_main_db_schema.sql
+
+echo "Run 05_add_test_data.sql script"
+mysql --host=$DB_SERVER_NAME --port=$DB_SERVER_PORT -uroot --password="$DB_ROOT_PASSWORD" < scripts/05_add_test_data.sql
+
