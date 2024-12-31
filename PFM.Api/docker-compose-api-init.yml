@@ -18,6 +18,19 @@ services:
     networks:
       - local-network
 
+  test-db:
+    build:
+      context: ./setup/test_db
+      dockerfile: dockerfile
+    profiles: ["dev", "prod"]
+    environment:
+      DB_SERVER_NAME: mysql-db-server
+      DB_SERVER_PORT: 3306
+      DB_ROOT_PASSWORD: ${MYSQL_ADMIN_PASSWORD}
+    container_name: test-db
+    networks:
+      - local-network
+
   pfm-bank-api:
     build:
       context: ../PFM.Bank.Api
