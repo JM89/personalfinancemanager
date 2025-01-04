@@ -7,7 +7,6 @@ namespace DataAccessLayer.Entities
     public class PersistedEntity
     {
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
     }
 }

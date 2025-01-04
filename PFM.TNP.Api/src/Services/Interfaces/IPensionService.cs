@@ -1,4 +1,5 @@
-﻿using PFM.Pension.Api.Contracts.Pension;
+﻿using System;
+using PFM.Pension.Api.Contracts.Pension;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,10 +11,10 @@ namespace Services.Interfaces
 
         Task<bool> Create(PensionDetails pensionDetails, string userId);
 
-        Task<PensionDetails> GetById(int id);
+        Task<PensionDetails> GetById(Guid id);
 
         Task<bool> Edit(PensionDetails pensionDetails, string userId);
 
-        Task<bool> Delete(int id);
+        Task<bool> Delete(Guid id);
     }
 }

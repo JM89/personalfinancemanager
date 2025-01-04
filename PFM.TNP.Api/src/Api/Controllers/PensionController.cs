@@ -15,7 +15,7 @@ public class PensionController(IPensionService pensionService) : ControllerBase
     }
 
     [HttpGet("Get/{id}")]
-    public async Task<PensionDetails> Get(int id)
+    public async Task<PensionDetails> Get(Guid id)
     {
         return await pensionService.GetById(id);
     }
@@ -34,7 +34,7 @@ public class PensionController(IPensionService pensionService) : ControllerBase
     }
         
     [HttpDelete("Delete/{id}")]
-    public async Task<bool> Delete(int id)
+    public async Task<bool> Delete(Guid id)
     {
         return await pensionService.Delete(id);
     }

@@ -26,7 +26,8 @@ public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog
     private const string UpdateOperation = "UPDATE";
 
     private const string SelectSql = "SELECT * FROM {0} WHERE UserId = @userId";
-
+    private const string SelectByIdSql = "SELECT * FROM {0} WHERE Id = @Id";
+    
     public async Task<IEnumerable<TEntity>> GetList(string userId)
     {
         EnrichActivity(SelectOperation);
@@ -49,19 +50,7 @@ public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog
             throw;
         }
     }
-
-    public Task<IQueryable<TEntity>> GetListAsNoTracking()
-    {
-        EnrichActivity(SelectOperation);
-        throw new NotImplementedException();
-    }
-
-    public Task<TEntity> GetById(int id, bool noTracking = false)
-    {
-        EnrichActivity(SelectOperation);
-        throw new NotImplementedException();
-    }
-
+    
     public Task<TEntity> Create(TEntity entity)
     {
         EnrichActivity(CreateOperation);
@@ -80,10 +69,26 @@ public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog
         throw new NotImplementedException();
     }
 
-    public Task<TEntity> GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties)
+    public async Task<TEntity> GetById(Guid id)
     {
         EnrichActivity(SelectOperation);
-        throw new NotImplementedException();
+        try
+        {
+            await using var connection = new MySqlConnection(dbOptions.ConnectionString);
+            
+            if (connection == null)
+                throw new NullReferenceException("connection is null");
+            
+            return await connection.QuerySingleOrDefaultAsync<TEntity>(string.Format(SelectByIdSql, TableName), new
+            {
+                id
+            });
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Unhandled exception while listing {EntityType}",typeof(TEntity).Name);
+            throw;
+        }
     }
     
     private void EnrichActivity(string operation)

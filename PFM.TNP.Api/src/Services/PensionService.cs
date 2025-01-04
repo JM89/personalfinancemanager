@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using DataAccessLayer.Repositories.Interfaces;
 using PFM.Pension.Api.Contracts.Pension;
 using Services.Interfaces;
@@ -24,21 +25,17 @@ public class PensionService(IPensionRepository pensionRepository) : IPensionServ
         return true;
     }
 
-    public Task<PensionDetails> GetById(int id)
+    public async Task<PensionDetails> GetById(Guid id)
     {
-        var pension = pensionRepository.GetById(id);
-        if (pension == null)
-        {
-            return null;
-        }
-        return Task.FromResult(Mapper.Map<PensionDetails>(pension));
+        var pension = await pensionRepository.GetById(id);
+        return pension == null ? null : Mapper.Map<PensionDetails>(pension);
     }
 
     public async Task<bool> Edit(PensionDetails objDetails, string userId)
     {
         // ReSharper disable once RedundantAssignment
         // Automapper will only reset some of the properties.
-        var existingEntity = (await pensionRepository.GetListAsNoTracking()).SingleOrDefault(x => x.Id == objDetails.Id);
+        var existingEntity = await pensionRepository.GetById(objDetails.Id);
         existingEntity = Mapper.Map<DataAccessLayer.Entities.Pension>(objDetails);
 
         await pensionRepository.Update(existingEntity);
@@ -46,7 +43,7 @@ public class PensionService(IPensionRepository pensionRepository) : IPensionServ
         return true;
     }
 
-    public async Task<bool> Delete(int id)
+    public async Task<bool> Delete(Guid id)
     {
         var existingEntity = await pensionRepository.GetById(id);
         return await pensionRepository.Delete(existingEntity);;
