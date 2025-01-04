@@ -13,31 +13,34 @@ namespace Api.Extensions
         /// Set up authentication and authorization.
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="authOptions"></param>
         /// <returns></returns>
-        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, AuthOptions authOptions)
         {
+            if (!authOptions.Enabled)
+                return services;
+            
             services.AddMvc(o =>
             {
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
-
-            var auth = configuration.GetSection("Auth").Get<AuthOptions>();
-            if (auth?.Authority == null)
+            
+            if (authOptions?.Authority == null)
                 throw new Exception("DI exception: Auth API config was not found");
 
-            Console.WriteLine($"Authority: {auth.Authority}");
+            Console.WriteLine($"Authority: {authOptions.Authority}");
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = auth.Authority;
+                    options.Authority = authOptions.Authority;
                     options.Audience = "account";
-                    options.RequireHttpsMetadata = auth.RequireHttpsMetadata;
+                    options.RequireHttpsMetadata = authOptions.RequireHttpsMetadata;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = auth.ValidateIssuer
+                        ValidateIssuer = authOptions.ValidateIssuer
                     };
                 });
 
@@ -48,11 +51,15 @@ namespace Api.Extensions
         /// Set up swagger.
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="applicationSettings"></param>
         /// <returns></returns>
-        public static IServiceCollection AddSwaggerDefinition(this IServiceCollection services)
+        public static IServiceCollection AddSwaggerDefinition(this IServiceCollection services, ApplicationSettings applicationSettings)
         {
             services.AddSwaggerGen(options =>
             {
+                if (!applicationSettings.AuthOptions.Enabled)
+                    return;
+                
                 options.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
                 {
                     Name = "Authorization",

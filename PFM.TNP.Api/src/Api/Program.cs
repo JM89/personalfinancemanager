@@ -14,7 +14,7 @@ using Services.Interfaces;
 
 namespace Api
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -27,12 +27,12 @@ namespace Api
             var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>() ?? new ApplicationSettings();
             
             builder.Services
-                .AddAuthenticationAndAuthorization(builder.Configuration)
+                .AddAuthenticationAndAuthorization(appSettings.AuthOptions)
                 .ConfigureLogging(builder.Configuration, builder.Environment.EnvironmentName)
                 .ConfigureTracing(appSettings.TracingOptions)
                 .ConfigureMetrics(appSettings.MetricsOptions)
                 .AddEndpointsApiExplorer()
-                .AddSwaggerDefinition();
+                .AddSwaggerDefinition(appSettings);
             
             builder.Services.AddTransient<IPensionRepository, PensionRepository>();
             builder.Services.AddTransient<IPensionService, PensionService>();
@@ -50,8 +50,11 @@ namespace Api
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            if (appSettings.AuthOptions.Enabled)
+            {
+                app.UseAuthentication();
+                app.UseAuthorization();
+            }
 
             app.MapControllers();
 
