@@ -2,32 +2,52 @@
 using DataAccessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Dapper;
+using DataAccessLayer.Configurations;
+using MySqlConnector;
 
 namespace DataAccessLayer.Repositories.Implementations;
 
-public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
-        where TEntity : PersistedEntity 
+public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog.ILogger logger) : IBaseRepository<TEntity>
+    where TEntity : PersistedEntity
 {
-    private const string OperationTag = "db.operation.name";
-    private const string QuerySummary = "db.query.summary";
+    public abstract string TableName {get; }
+    
+    private const string QuerySummaryTag = "db.query.summary";
     
     private const string SelectOperation = "SELECT";
     private const string DeleteOperation = "DELETE";
     private const string CreateOperation = "CREATE";
     private const string UpdateOperation = "UPDATE";
-    
-    public BaseRepository()
-    {
-    }
 
-    public Task<List<TEntity>> GetList()
+    private const string SelectSql = "SELECT * FROM {0} WHERE UserId = @userId";
+
+    public async Task<IEnumerable<TEntity>> GetList(string userId)
     {
         EnrichActivity(SelectOperation);
-        throw new NotImplementedException();
+        
+        try
+        {
+            await using var connection = new MySqlConnection(dbOptions.ConnectionString);
+            
+            if (connection == null)
+                throw new NullReferenceException("connection is null");
+            
+            return await connection.QueryAsync<TEntity>(string.Format(SelectSql, TableName), new
+            {
+                userId
+            });
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Unhandled exception while listing {EntityType}",typeof(TEntity).Name);
+            throw;
+        }
     }
 
     public Task<IQueryable<TEntity>> GetListAsNoTracking()
@@ -68,12 +88,10 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity>
     
     private void EnrichActivity(string operation)
     {
-        Activity.Current?.SetBaggage(OperationTag, operation);
-        Activity.Current?.SetBaggage(QuerySummary, $"{operation}/{typeof(TEntity).Name}");
+        // MySql Connector Activity.
+        var activity = Activity.Current;
         
-        // activity.SetTag("db.name", activity.DisplayName);
-        // activity.SetTag("db.query.summary", querySummary);
-        // activity.SetTag("db.operation", operation);
-        // activity.DisplayName = $"Run {querySummary}";
+        // Enrich with custom tags
+        activity?.SetTag(QuerySummaryTag, $"{operation}/{typeof(TEntity).Name}");
     }
 }

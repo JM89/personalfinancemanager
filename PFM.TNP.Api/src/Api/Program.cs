@@ -6,6 +6,9 @@ using Api.Middlewares;
 using Api.MiddleWares;
 using Api.Settings;
 using AutoMapper;
+using Dapper;
+using DataAccessLayer.Configurations;
+using DataAccessLayer.Mapping;
 using DataAccessLayer.Repositories.Implementations;
 using DataAccessLayer.Repositories.Interfaces;
 using Services;
@@ -33,8 +36,18 @@ namespace Api
                 .ConfigureMetrics(appSettings.MetricsOptions)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition(appSettings);
+
+            // Data Access Layer
             
+            builder.Services.AddSingleton(appSettings.DatabaseOptions);
             builder.Services.AddTransient<IPensionRepository, PensionRepository>();
+            
+            SqlMapper.AddTypeHandler(new MySqlGuidTypeHandler());
+            SqlMapper.RemoveTypeMap(typeof(Guid));
+            SqlMapper.RemoveTypeMap(typeof(Guid?));
+            
+            // Service Layer
+            
             builder.Services.AddTransient<IPensionService, PensionService>();
             
             var app = builder.Build();

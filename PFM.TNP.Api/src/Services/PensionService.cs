@@ -12,8 +12,8 @@ public class PensionService(IPensionRepository pensionRepository) : IPensionServ
 {
     public async Task<List<PensionList>> GetList(string userId)
     {
-        var entities = await pensionRepository.GetList();
-        var mapped = entities.Select(x => Mapper.Map<PensionList>(x)).ToList();
+        var entities = await pensionRepository.GetList(userId);
+        var mapped = entities.Select(Mapper.Map<PensionList>).ToList();
         return mapped;
     }
 

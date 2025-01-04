@@ -12,7 +12,7 @@ namespace DataAccessLayer.Repositories.Interfaces
     {
         Task<TEntity> GetById(int id, bool noTracking = false);
 
-        Task<List<TEntity>> GetList();
+        Task<IEnumerable<TEntity>> GetList(string userId);
 
         Task<IQueryable<TEntity>> GetListAsNoTracking();
 
