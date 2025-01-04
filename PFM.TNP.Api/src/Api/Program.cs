@@ -7,13 +7,10 @@ using Api.MiddleWares;
 using Api.Settings;
 using AutoMapper;
 using Dapper;
-using DataAccessLayer.Configurations;
 using DataAccessLayer.Mapping;
-using DataAccessLayer.Repositories.Implementations;
-using DataAccessLayer.Repositories.Interfaces;
+using DataAccessLayer.Repositories;
 using Services;
 using Services.Core.Automapper;
-using Services.Interfaces;
 
 namespace Api
 {

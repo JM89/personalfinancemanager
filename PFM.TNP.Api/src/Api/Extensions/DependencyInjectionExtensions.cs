@@ -1,9 +1,11 @@
-﻿using Api.Settings;
+﻿using System.Reflection;
+using Api.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace Api.Extensions
 {
@@ -55,8 +57,11 @@ namespace Api.Extensions
         /// <returns></returns>
         public static IServiceCollection AddSwaggerDefinition(this IServiceCollection services, ApplicationSettings applicationSettings)
         {
+            services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
             services.AddSwaggerGen(options =>
             {
+                options.ExampleFilters();
+                
                 if (!applicationSettings.AuthOptions.Enabled)
                     return;
                 

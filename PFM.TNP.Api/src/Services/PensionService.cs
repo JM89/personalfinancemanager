@@ -1,13 +1,25 @@
 ﻿using System;
 using AutoMapper;
-using DataAccessLayer.Repositories.Interfaces;
 using PFM.Pension.Api.Contracts.Pension;
-using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccessLayer.Repositories;
 
 namespace Services;
+
+public interface IPensionService 
+{
+    Task<List<PensionList>> GetList(string userId);
+
+    Task<bool> Create(PensionCreateRequest pensionDetails, string userId);
+
+    Task<PensionDetails> GetById(Guid id);
+
+    Task<bool> Edit(PensionDetails pensionDetails, string userId);
+
+    Task<bool> Delete(Guid id);
+}
 
 public class PensionService(IPensionRepository pensionRepository) : IPensionService
 {
@@ -18,9 +30,12 @@ public class PensionService(IPensionRepository pensionRepository) : IPensionServ
         return mapped;
     }
 
-    public async Task<bool> Create(PensionDetails pensionDetails, string userId)
+    public async Task<bool> Create(PensionCreateRequest pensionDetails, string userId)
     {
         var pension = Mapper.Map<DataAccessLayer.Entities.Pension>(pensionDetails);
+        pension.Id = Guid.NewGuid();
+        pension.UserId = userId;
+        pension.LastUpdated = DateTime.UtcNow;
         await pensionRepository.Create(pension);
         return true;
     }

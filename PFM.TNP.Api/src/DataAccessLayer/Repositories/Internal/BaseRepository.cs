@@ -1,17 +1,28 @@
 ﻿using DataAccessLayer.Entities;
-using DataAccessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Dapper;
 using DataAccessLayer.Configurations;
 using MySqlConnector;
 
-namespace DataAccessLayer.Repositories.Implementations;
+namespace DataAccessLayer.Repositories.Internal;
+
+public interface IBaseRepository<TEntity> 
+    where TEntity : PersistedEntity
+{
+    Task<IEnumerable<TEntity>> GetList(string userId);
+
+    Task<bool> Create(TEntity entity);
+
+    Task<TEntity> Update(TEntity entity);
+        
+    Task<bool> Delete(TEntity entity);
+        
+    Task<TEntity> GetById(Guid id);
+}
 
 public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog.ILogger logger) : IBaseRepository<TEntity>
     where TEntity : PersistedEntity
@@ -27,6 +38,8 @@ public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog
 
     private const string SelectSql = "SELECT * FROM {0} WHERE UserId = @userId";
     private const string SelectByIdSql = "SELECT * FROM {0} WHERE Id = @Id";
+    
+    private const string InsertSql = "INSERT INTO {0} ({1}) VALUES ({2})";
     
     public async Task<IEnumerable<TEntity>> GetList(string userId)
     {
@@ -51,10 +64,30 @@ public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog
         }
     }
     
-    public Task<TEntity> Create(TEntity entity)
+    public async Task<bool> Create(TEntity entity)
     {
         EnrichActivity(CreateOperation);
-        throw new NotImplementedException();
+        var props = typeof(TEntity).GetProperties();
+        var insertProps = string.Join(",", props.Select(x => x.Name));
+        var insertValues = string.Join(",", props.Select(x => $"@{x.Name}"));
+        var sql = string.Format(InsertSql, TableName, insertProps, insertValues);
+        
+        try
+        {
+            await using var connection = new MySqlConnection(dbOptions.ConnectionString);
+            
+            if (connection == null)
+                throw new NullReferenceException("connection is null");
+
+            var rowAffected = await connection.ExecuteAsync(sql, entity);
+            
+            return rowAffected == 1;
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Unhandled exception while listing {EntityType}",typeof(TEntity).Name);
+            throw;
+        }
     }
 
     public Task<TEntity> Update(TEntity entity)
@@ -86,7 +119,7 @@ public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog
         }
         catch (Exception ex)
         {
-            logger.Error(ex, "Unhandled exception while listing {EntityType}",typeof(TEntity).Name);
+            logger.Error(ex, "Unhandled exception while getting by id {EntityType}",typeof(TEntity).Name);
             throw;
         }
     }

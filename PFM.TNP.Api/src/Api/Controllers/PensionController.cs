@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Pension.Api.Contracts.Pension;
-using Services.Interfaces;
+using Services;
 
 namespace Api.Controllers;
 
@@ -21,7 +21,7 @@ public class PensionController(IPensionService pensionService) : ControllerBase
     }
         
     [HttpPost("Create/{userId}")]
-    public async Task<bool> Post(string userId, [FromBody]PensionDetails createdObj)
+    public async Task<bool> Post(string userId, [FromBody]PensionCreateRequest createdObj)
     {
         return await pensionService.Create(createdObj, userId);
     }
