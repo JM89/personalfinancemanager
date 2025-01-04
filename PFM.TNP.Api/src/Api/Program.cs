@@ -6,10 +6,8 @@ using Api.Middlewares;
 using Api.MiddleWares;
 using Api.Settings;
 using AutoMapper;
-using DataAccessLayer;
 using DataAccessLayer.Repositories.Implementations;
 using DataAccessLayer.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Core.Automapper;
 using Services.Interfaces;
@@ -35,11 +33,9 @@ namespace Api
                 .ConfigureMetrics(appSettings.MetricsOptions)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition();
-
-            builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
-
-            builder.Services.AddTransient<IBankRepository, BankRepository>();
-            builder.Services.AddTransient<IBankService, BankService>();
+            
+            builder.Services.AddTransient<IPensionRepository, PensionRepository>();
+            builder.Services.AddTransient<IPensionService, PensionService>();
             
             var app = builder.Build();
 

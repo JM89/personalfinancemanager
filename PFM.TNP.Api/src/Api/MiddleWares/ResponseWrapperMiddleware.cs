@@ -87,7 +87,7 @@ namespace Api.Middlewares
             _logger.Error(ex, "Unhandled exception occurred");
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiResponse("Unhandled exception occurred"), _serializeOptions));
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiResponse($"Unhandled exception occurred: {ex.Message}"), _serializeOptions));
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Services.Core.Automapper
     {
         public ModelToEntityMapping()
         {
-            CreateMap<PFM.Bank.Api.Contracts.Bank.BankDetails, DataAccessLayer.Entities.Bank>();
+            CreateMap<PFM.Pension.Api.Contracts.Pension.PensionDetails, DataAccessLayer.Entities.Pension>();
         }
     }
 }

@@ -1,131 +1,79 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
-namespace DataAccessLayer.Repositories.Implementations
-{
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
+namespace DataAccessLayer.Repositories.Implementations;
+
+public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
         where TEntity : PersistedEntity 
+{
+    private const string OperationTag = "db.operation.name";
+    private const string QuerySummary = "db.query.summary";
+    
+    private const string SelectOperation = "SELECT";
+    private const string DeleteOperation = "DELETE";
+    private const string CreateOperation = "CREATE";
+    private const string UpdateOperation = "UPDATE";
+    
+    public BaseRepository()
     {
-        private readonly PFMContext _db;
+    }
+
+    public Task<List<TEntity>> GetList()
+    {
+        EnrichActivity(SelectOperation);
+        throw new NotImplementedException();
+    }
+
+    public Task<IQueryable<TEntity>> GetListAsNoTracking()
+    {
+        EnrichActivity(SelectOperation);
+        throw new NotImplementedException();
+    }
+
+    public Task<TEntity> GetById(int id, bool noTracking = false)
+    {
+        EnrichActivity(SelectOperation);
+        throw new NotImplementedException();
+    }
+
+    public Task<TEntity> Create(TEntity entity)
+    {
+        EnrichActivity(CreateOperation);
+        throw new NotImplementedException();
+    }
+
+    public Task<TEntity> Update(TEntity entity)
+    {
+        EnrichActivity(UpdateOperation);
+        throw new NotImplementedException();
+    }
+    
+    public Task<bool> Delete(TEntity entity)
+    {
+        EnrichActivity(DeleteOperation);
+        throw new NotImplementedException();
+    }
+
+    public Task<TEntity> GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties)
+    {
+        EnrichActivity(SelectOperation);
+        throw new NotImplementedException();
+    }
+    
+    private void EnrichActivity(string operation)
+    {
+        Activity.Current?.SetBaggage(OperationTag, operation);
+        Activity.Current?.SetBaggage(QuerySummary, $"{operation}/{typeof(TEntity).Name}");
         
-        private const string OperationTag = "db.operation.name";
-        private const string QuerySummary = "db.query.summary";
-        
-        private const string SelectOperation = "SELECT";
-        private const string DeleteOperation = "DELETE";
-        private const string CreateOperation = "CREATE";
-        private const string UpdateOperation = "UPDATE";
-        
-        public BaseRepository(PFMContext db)
-        {
-            this._db = db;
-        }
-
-        public DbSet<TEntity> GetList()
-        {
-            EnrichActivity(SelectOperation);
-            return _db.Set<TEntity>();
-        }
-
-        public IQueryable<TEntity> GetListAsNoTracking()
-        {
-            EnrichActivity(SelectOperation);
-            return _db.Set<TEntity>().AsNoTracking();
-        }
-
-        public TEntity GetById(int id, bool noTracking = false)
-        {
-            EnrichActivity(SelectOperation);
-            if (noTracking)
-            {
-                return GetList().AsNoTracking().Single(x => x.Id == id);
-            }
-            return GetList().Find(id);
-        }
-
-        public TEntity Create(TEntity entity)
-        {
-            EnrichActivity(CreateOperation);
-            GetList().Add(entity);
-            _db.SaveChanges();
-            return entity;
-        }
-
-        public TEntity Update(TEntity entity)
-        {
-            EnrichActivity(UpdateOperation);
-            _db.Entry(entity).State = EntityState.Modified;
-            _db.SaveChanges();
-            return entity;
-        }
-
-        public void UpdateAll (List<TEntity> entities)
-        {
-            EnrichActivity(UpdateOperation);
-            
-            foreach(var entity in entities)
-            {
-                _db.Entry(entity).State = EntityState.Modified;
-            }
-            _db.SaveChanges();
-        }
-
-        public bool Delete(TEntity entity)
-        {
-            EnrichActivity(DeleteOperation);
-            
-            GetList().Remove(entity);
-            _db.SaveChanges();
-            return true;
-        }
-
-        public List<TEntity> GetList2(params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            EnrichActivity(SelectOperation);
-            
-            var result = _db.Set<TEntity>();
-
-            IQueryable<TEntity> query = null;
-            foreach (var property in includeProperties)
-            {
-                query = query == null ? result.Include(property) : query.Include(property);
-            }
-
-            return query?.ToList() ?? result.ToList();
-        }
-
-        public TEntity GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            EnrichActivity(SelectOperation);
-            
-            var result = _db.Set<TEntity>().AsNoTracking();
-
-            IQueryable<TEntity> query = null;
-            foreach (var property in includeProperties)
-            {
-                query = query == null ? result.Include(property).AsNoTracking() : query.Include(property).AsNoTracking();
-            }
-
-            return query?.Single(x => x.Id == id) ?? result.Single(x => x.Id == id); 
-        }
-        
-        private void EnrichActivity(string operation)
-        {
-            Activity.Current?.SetBaggage(OperationTag, operation);
-            Activity.Current?.SetBaggage(QuerySummary, $"{operation}/{typeof(TEntity).Name}");
-        }
-
-        public void Refresh<T>(T entity)
-        {
-            //var ctx = ((IObjectContextAdapter)_db).ObjectContext;
-            //ctx.Refresh(RefreshMode.StoreWins, entity);
-            throw new NotImplementedException("Regression from migrations");
-        }
+        // activity.SetTag("db.name", activity.DisplayName);
+        // activity.SetTag("db.query.summary", querySummary);
+        // activity.SetTag("db.operation", operation);
+        // activity.DisplayName = $"Run {querySummary}";
     }
 }

@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 
-namespace Services.Core.Automapper
+namespace Services.Core.Automapper;
+
+public class EntityToModelMapping : Profile
 {
-    public class EntityToModelMapping : Profile
+    public EntityToModelMapping()
     {
-        public EntityToModelMapping()
-        {
-            CreateMap<DataAccessLayer.Entities.Bank, PFM.Bank.Api.Contracts.Bank.BankList>();
-            CreateMap<DataAccessLayer.Entities.Bank, PFM.Bank.Api.Contracts.Bank.BankDetails>()
-                .ForMember(a => a.OwnerId, opt => opt.MapFrom(x => x.User_Id));
-        }
+        CreateMap<DataAccessLayer.Entities.Pension, PFM.Pension.Api.Contracts.Pension.PensionList>();
+        CreateMap<DataAccessLayer.Entities.Pension, PFM.Pension.Api.Contracts.Pension.PensionDetails>();
     }
 }

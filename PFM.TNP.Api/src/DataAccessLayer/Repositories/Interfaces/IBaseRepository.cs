@@ -1,33 +1,27 @@
 ﻿using DataAccessLayer.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.Interfaces
 {
     public interface IBaseRepository<TEntity> 
         where TEntity : PersistedEntity
     {
-        TEntity GetById(int id, bool noTracking = false);
+        Task<TEntity> GetById(int id, bool noTracking = false);
 
-        DbSet<TEntity> GetList();
+        Task<List<TEntity>> GetList();
 
-        IQueryable<TEntity> GetListAsNoTracking();
+        Task<IQueryable<TEntity>> GetListAsNoTracking();
 
-        TEntity Create(TEntity entity);
+        Task<TEntity> Create(TEntity entity);
 
-        TEntity Update(TEntity entity);
-
-        void UpdateAll(List<TEntity> entities);
-
-        bool Delete(TEntity entity);
-
-        List<TEntity> GetList2(params Expression<Func<TEntity, object>>[] includeProperties);
-
-        TEntity GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties);
-
-        void Refresh<T>(T entity);
+        Task<TEntity> Update(TEntity entity);
+        
+        Task<bool> Delete(TEntity entity);
+        
+        Task<TEntity> GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

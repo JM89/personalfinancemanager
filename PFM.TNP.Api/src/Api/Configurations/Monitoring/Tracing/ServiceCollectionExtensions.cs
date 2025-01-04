@@ -18,19 +18,7 @@ public static class ServiceCollectionExtensions
         services.ConfigureOpenTelemetryTracerProvider(builder =>
         {
             builder
-                .AddEntityFrameworkCoreInstrumentation(instrumentationOptions =>
-                {
-                    instrumentationOptions.EnrichWithIDbCommand = (activity, command) =>
-                    {
-                        var querySummary = Activity.Current?.GetBaggageItem("db.query.summary") ?? command.CommandType.ToString();
-                        var operation = Activity.Current?.GetBaggageItem("db.operation.name") ?? "UNKNOWN";
-
-                        activity.SetTag("db.name", activity.DisplayName);
-                        activity.SetTag("db.query.summary", querySummary);
-                        activity.SetTag("db.operation", operation);
-                        activity.DisplayName = $"Run {querySummary}";
-                    };
-                })
+                .AddSource("MySqlConnector")
                 .AddAspNetCoreInstrumentation(x => 
                     x.Filter = context => Filter(context.Request.Path));
             
