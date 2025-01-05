@@ -84,7 +84,6 @@ namespace PFM.Api
             {
                 cfg.AddProfile<ModelToEntityMapping>();
                 cfg.AddProfile<EntityToModelMapping>();
-                cfg.AddProfile<EntityToEntityMapping>();
                 cfg.AddProfile<SearchParametersMapping>();
             });
 

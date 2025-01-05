@@ -24,17 +24,8 @@ namespace PFM.Services.Core.Automapper
 
             CreateMap<Api.Contracts.BudgetPlan.BudgetPlanList, DataAccessLayer.Entities.BudgetPlan>();
             CreateMap<Api.Contracts.BudgetPlan.BudgetPlanDetails, DataAccessLayer.Entities.BudgetPlan>();
-
-            CreateMap<Api.Contracts.UserProfile.UserProfileDetails, DataAccessLayer.Entities.UserProfile>();
-
+            
             CreateMap<Api.Contracts.Saving.SavingDetails, DataAccessLayer.Entities.Saving>();
-
-            CreateMap<Api.Contracts.Pension.PensionDetails, DataAccessLayer.Entities.Pension>();
-
-            CreateMap<Api.Contracts.Tax.TaxDetails, DataAccessLayer.Entities.Tax>();
-
-            CreateMap<Api.Contracts.Salary.SalaryDetails, DataAccessLayer.Entities.Salary>();
-            CreateMap<Api.Contracts.Salary.SalaryDeductionDetails, DataAccessLayer.Entities.SalaryDeduction>();
         }
     }
 }
