@@ -10,5 +10,5 @@ public interface IPensionRepository : IBaseRepository<Pension>
 
 public class PensionRepository(DatabaseOptions dbOptions, Serilog.ILogger logger) : BaseRepository<Pension>(dbOptions, logger), IPensionRepository
 {
-    public override string TableName => "Pensions";
+    protected override string TableName => "Pensions";
 }

@@ -12,7 +12,6 @@ env:
   WORKDIR: PFM.TNP.Api/
   GITHUB_ORG: 'JM89'
   API_TARGET_LIB: Api.Contracts
-  EVT_TARGET_LIB: Event.Contracts
 
 jobs:
   check-if-publish-required:

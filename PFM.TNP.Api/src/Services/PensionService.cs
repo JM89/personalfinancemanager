@@ -60,7 +60,6 @@ public class PensionService(IPensionRepository pensionRepository) : IPensionServ
 
     public async Task<bool> Delete(Guid id)
     {
-        var existingEntity = await pensionRepository.GetById(id);
-        return await pensionRepository.Delete(existingEntity);;
+        return await pensionRepository.Delete(id);;
     }
 }
