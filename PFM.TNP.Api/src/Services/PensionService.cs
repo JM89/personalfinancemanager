@@ -1,10 +1,10 @@
 ﻿using System;
 using AutoMapper;
-using PFM.Pension.Api.Contracts.Pension;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccessLayer.Repositories;
+using PFM.TNP.Api.Contracts.Pension;
 
 namespace Services;
 
@@ -12,11 +12,11 @@ public interface IPensionService
 {
     Task<List<PensionList>> GetList(string userId);
 
-    Task<bool> Create(PensionSaveRequest pensionDetails, string userId);
+    Task<bool> Create(PensionSaveRequest request, string userId);
 
     Task<PensionDetails> GetById(Guid id);
 
-    Task<bool> Edit(Guid id, PensionSaveRequest objDetails);
+    Task<bool> Edit(Guid id, PensionSaveRequest request);
 
     Task<bool> Delete(Guid id);
 }
@@ -30,13 +30,13 @@ public class PensionService(IPensionRepository pensionRepository) : IPensionServ
         return mapped;
     }
 
-    public async Task<bool> Create(PensionSaveRequest pensionDetails, string userId)
+    public async Task<bool> Create(PensionSaveRequest request, string userId)
     {
-        var pension = Mapper.Map<DataAccessLayer.Entities.Pension>(pensionDetails);
-        pension.Id = Guid.NewGuid();
-        pension.UserId = userId;
-        pension.LastUpdated = DateTime.UtcNow;
-        await pensionRepository.Create(pension);
+        var entity = Mapper.Map<DataAccessLayer.Entities.Pension>(request);
+        entity.Id = Guid.NewGuid();
+        entity.UserId = userId;
+        entity.LastUpdated = DateTime.UtcNow;
+        await pensionRepository.Create(entity);
         return true;
     }
 
@@ -46,17 +46,17 @@ public class PensionService(IPensionRepository pensionRepository) : IPensionServ
         return pension == null ? null : Mapper.Map<PensionDetails>(pension);
     }
 
-    public async Task<bool> Edit(Guid id, PensionSaveRequest objDetails)
+    public async Task<bool> Edit(Guid id, PensionSaveRequest request)
     {
         // Automapper will only reset some of the properties.
-        var existingEntity = await pensionRepository.GetById(id);
-        existingEntity = Mapper.Map(objDetails, existingEntity);
-        existingEntity.LastUpdated = DateTime.UtcNow;
-        return await pensionRepository.Update(existingEntity);
+        var current = await pensionRepository.GetById(id);
+        current = Mapper.Map(request, current);
+        current.LastUpdated = DateTime.UtcNow;
+        return await pensionRepository.Update(current);
     }
 
     public async Task<bool> Delete(Guid id)
     {
-        return await pensionRepository.Delete(id);;
+        return await pensionRepository.Delete(id);
     }
 }

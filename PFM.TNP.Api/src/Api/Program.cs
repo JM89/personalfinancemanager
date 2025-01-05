@@ -38,6 +38,7 @@ namespace Api
             
             builder.Services.AddSingleton(appSettings.DatabaseOptions);
             builder.Services.AddTransient<IPensionRepository, PensionRepository>();
+            builder.Services.AddTransient<IIncomeTaxReportRepository, IncomeTaxReportRepository>();
             
             SqlMapper.AddTypeHandler(new MySqlGuidTypeHandler());
             SqlMapper.RemoveTypeMap(typeof(Guid));
@@ -46,6 +47,7 @@ namespace Api
             // Service Layer
             
             builder.Services.AddTransient<IPensionService, PensionService>();
+            builder.Services.AddTransient<IIncomeTaxReportService, IncomeTaxReportService>();
             
             var app = builder.Build();
 

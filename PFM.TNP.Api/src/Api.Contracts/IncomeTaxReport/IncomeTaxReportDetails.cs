@@ -2,15 +2,11 @@
 
 // ReSharper disable once CheckNamespace
 // Contracts are reused in different project and should not clash
-namespace PFM.TNP.Api.Contracts.Pension;
+namespace PFM.TNP.Api.Contracts.IncomeTaxReport;
 
-public class PensionDetails
+public class IncomeTaxReportDetails
 {
     public Guid Id { get; set; }
-    
-    public string SchemeName { get; set; }
-    
-    public string LoginUrl { get; set; }
     
     public string UserId { get; set; }
     
@@ -18,9 +14,11 @@ public class PensionDetails
     
     public int CountryId { get; set; } 
     
-    public decimal CurrentPot { get; set; } 
+    public decimal TaxableIncome { get; set; } 
     
-    public decimal CurrentContribution { get; set; } 
+    public decimal IncomeTaxPaid { get; set; } 
     
-    public DateTime LastUpdated  { get; set; }
+    public decimal NationalInsurancePaid { get; set; } 
+    
+    public DateOnly PayDay  { get; set; }
 }

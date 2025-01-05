@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PFM.Pension.Api.Contracts.Pension;
+using PFM.TNP.Api.Contracts.Pension;
 using Services;
 
 namespace Api.Controllers;

@@ -2,7 +2,7 @@
 
 // ReSharper disable once CheckNamespace
 // Contracts are reused in different project and should not clash
-namespace PFM.Pension.Api.Contracts.Pension;
+namespace PFM.TNP.Api.Contracts.Pension;
 
 public class PensionSaveRequest
 {

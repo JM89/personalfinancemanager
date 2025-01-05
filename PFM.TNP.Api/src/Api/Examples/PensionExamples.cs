@@ -1,9 +1,9 @@
-using PFM.Pension.Api.Contracts.Pension;
+using PFM.TNP.Api.Contracts.Pension;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Api.Examples;
 
-public class CreatePensionExample: IMultipleExamplesProvider<PensionSaveRequest>
+public class SavePensionExample: IMultipleExamplesProvider<PensionSaveRequest>
 {
     public IEnumerable<SwaggerExample<PensionSaveRequest>> GetExamples()
     {
