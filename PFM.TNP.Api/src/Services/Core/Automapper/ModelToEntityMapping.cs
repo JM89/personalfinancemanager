@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 
 namespace Services.Core.Automapper
 {
@@ -6,10 +7,14 @@ namespace Services.Core.Automapper
     {
         public ModelToEntityMapping()
         {
-            CreateMap<PFM.Pension.Api.Contracts.Pension.PensionDetails, DataAccessLayer.Entities.Pension>();
-            CreateMap<PFM.Pension.Api.Contracts.Pension.PensionSaveRequest, DataAccessLayer.Entities.Pension>()
+            CreateMap<PFM.TNP.Api.Contracts.Pension.PensionSaveRequest, DataAccessLayer.Entities.Pension>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.UserId, opt => opt.Ignore());
+            
+            CreateMap<PFM.TNP.Api.Contracts.IncomeTaxReport.IncomeTaxReportSaveRequest, DataAccessLayer.Entities.IncomeTaxReport>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.UserId, opt => opt.Ignore())
+                .ForMember(x => x.PayDay, y => y.MapFrom(x => x.PayDay.ToDateTime(TimeOnly.MinValue)));
         }
     }
 }
