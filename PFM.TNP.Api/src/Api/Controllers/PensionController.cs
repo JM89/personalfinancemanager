@@ -21,16 +21,15 @@ public class PensionController(IPensionService pensionService) : ControllerBase
     }
         
     [HttpPost("Create/{userId}")]
-    public async Task<bool> Post(string userId, [FromBody]PensionCreateRequest createdObj)
+    public async Task<bool> Post(string userId, [FromBody]PensionSaveRequest createdObj)
     {
         return await pensionService.Create(createdObj, userId);
     }
         
-    [HttpPut("Edit/{id}/{userId}")]
-    public async Task<bool> Put(Guid id, string userId, [FromBody]PensionDetails editedObj)
+    [HttpPut("Edit/{id}")]
+    public async Task<bool> Put(Guid id, [FromBody]PensionSaveRequest editedObj)
     {
-        editedObj.Id = id;
-        return await pensionService.Edit(editedObj, userId);
+        return await pensionService.Edit(id, editedObj);
     }
         
     [HttpDelete("Delete/{id}")]

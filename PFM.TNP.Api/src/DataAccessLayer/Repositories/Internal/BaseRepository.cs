@@ -17,7 +17,7 @@ public interface IBaseRepository<TEntity>
 
     Task<bool> Create(TEntity entity);
 
-    Task<TEntity> Update(TEntity entity);
+    Task<bool> Update(TEntity entity);
         
     Task<bool> Delete(Guid id);
         
@@ -40,6 +40,7 @@ public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog
     private const string SelectByIdSql = "SELECT * FROM {0} WHERE Id = @Id";
     
     private const string InsertSql = "INSERT INTO {0} ({1}) VALUES ({2})";
+    private const string UpdateSql = "UPDATE {0} SET {1} WHERE Id = @Id";
     private const string DeleteSql = "DELETE FROM {0} WHERE Id = @Id";
     
     public async Task<IEnumerable<TEntity>> GetList(string userId)
@@ -58,10 +59,13 @@ public abstract class BaseRepository<TEntity>(DatabaseOptions dbOptions, Serilog
         return await ApplyOperation(CreateOperation, async (connection, input) => await connection.ExecuteAsync(sql, input) == 1, entity); 
     }
     
-    public Task<TEntity> Update(TEntity entity)
+    public async Task<bool> Update(TEntity entity)
     {
-        EnrichActivity(UpdateOperation);
-        throw new NotImplementedException();
+        var props = typeof(TEntity).GetProperties().Where(x => x.Name != nameof(entity.Id));
+        var updatePropValues = string.Join(",", props.Select(x => $"{x.Name} = @{x.Name}"));
+        var sql = string.Format(UpdateSql, TableName, updatePropValues);
+        
+        return await ApplyOperation(CreateOperation, async (connection, input) => await connection.ExecuteAsync(sql, input) == 1, entity); 
     }
     
     public async Task<bool> Delete(Guid id)

@@ -4,7 +4,7 @@
 // Contracts are reused in different project and should not clash
 namespace PFM.Pension.Api.Contracts.Pension;
 
-public class PensionCreateRequest
+public class PensionSaveRequest
 {
     public string SchemeName { get; set; }
     

@@ -3,14 +3,14 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace Api.Examples;
 
-public class CreatePensionExample: IMultipleExamplesProvider<PensionCreateRequest>
+public class CreatePensionExample: IMultipleExamplesProvider<PensionSaveRequest>
 {
-    public IEnumerable<SwaggerExample<PensionCreateRequest>> GetExamples()
+    public IEnumerable<SwaggerExample<PensionSaveRequest>> GetExamples()
     {
         yield return SwaggerExample.Create(
             "Simple Example with initial port and contribution",
             "Set only mandatory properties with pot and contribution",
-            new PensionCreateRequest()
+            new PensionSaveRequest()
             {
                 SchemeName = "Simple Example",
                 CurrencyId = 1,

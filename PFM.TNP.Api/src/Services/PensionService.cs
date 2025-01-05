@@ -12,11 +12,11 @@ public interface IPensionService
 {
     Task<List<PensionList>> GetList(string userId);
 
-    Task<bool> Create(PensionCreateRequest pensionDetails, string userId);
+    Task<bool> Create(PensionSaveRequest pensionDetails, string userId);
 
     Task<PensionDetails> GetById(Guid id);
 
-    Task<bool> Edit(PensionDetails pensionDetails, string userId);
+    Task<bool> Edit(Guid id, PensionSaveRequest objDetails);
 
     Task<bool> Delete(Guid id);
 }
@@ -30,7 +30,7 @@ public class PensionService(IPensionRepository pensionRepository) : IPensionServ
         return mapped;
     }
 
-    public async Task<bool> Create(PensionCreateRequest pensionDetails, string userId)
+    public async Task<bool> Create(PensionSaveRequest pensionDetails, string userId)
     {
         var pension = Mapper.Map<DataAccessLayer.Entities.Pension>(pensionDetails);
         pension.Id = Guid.NewGuid();
@@ -46,16 +46,13 @@ public class PensionService(IPensionRepository pensionRepository) : IPensionServ
         return pension == null ? null : Mapper.Map<PensionDetails>(pension);
     }
 
-    public async Task<bool> Edit(PensionDetails objDetails, string userId)
+    public async Task<bool> Edit(Guid id, PensionSaveRequest objDetails)
     {
-        // ReSharper disable once RedundantAssignment
         // Automapper will only reset some of the properties.
-        var existingEntity = await pensionRepository.GetById(objDetails.Id);
-        existingEntity = Mapper.Map<DataAccessLayer.Entities.Pension>(objDetails);
-
-        await pensionRepository.Update(existingEntity);
-
-        return true;
+        var existingEntity = await pensionRepository.GetById(id);
+        existingEntity = Mapper.Map(objDetails, existingEntity);
+        existingEntity.LastUpdated = DateTime.UtcNow;
+        return await pensionRepository.Update(existingEntity);
     }
 
     public async Task<bool> Delete(Guid id)
