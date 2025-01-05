@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Authors>JM89</Authors>
+    <PackageId>PFM.TNP.Api.Contracts</PackageId>
+    <PackageDescription>Tax and Pension API Request and Response Contracts.</PackageDescription>
+  </PropertyGroup>
+
+</Project>

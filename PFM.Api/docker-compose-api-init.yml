@@ -28,7 +28,8 @@ services:
     environment:
       ASPNETCORE_URLS: https://+:50001
       ASPNETCORE_ENVIRONMENT: Development
-      APP_Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # (logs via seq)
+      APP_OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # OTEL defaults
       APP_ConnectionStrings__PFMConnection: Server=db-server,1433;Database=PFM_BANK_DB;User Id=PFM_BANK_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
       APP_ConnectionStrings__EventStoreConnection: esdb://eventstore:2113?tls=false
       APP_Auth__Authority: http://keycloak:8080/realms/pfm
@@ -38,6 +39,29 @@ services:
     container_name: pfm-bank-api
     ports:
       - "50001:50001"
+    networks:
+      - local-network
+
+  pfm-tnp-api:
+    build:
+      context: ../PFM.TNP.Api
+      dockerfile: Dockerfile
+      args:
+        - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
+    profiles: ["dev", "prod"]
+    environment:
+      ASPNETCORE_URLS: https://+:50002
+      ASPNETCORE_ENVIRONMENT: Development
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # (logs via seq)
+      APP_OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # OTEL defaults
+      APP_ConnectionStrings__PFMConnection: Server=db-server,1433;Database=PFM_BANK_DB;User Id=PFM_BANK_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
+      APP_Auth__Authority: http://keycloak:8080/realms/pfm
+      APP_Auth__ValidateIssuer: false
+      AWS_ACCESS_KEY_ID: XX
+      AWS_SECRET_ACCESS_KEY: XX
+    container_name: pfm-tnp-api
+    ports:
+      - "50002:50002"
     networks:
       - local-network
 

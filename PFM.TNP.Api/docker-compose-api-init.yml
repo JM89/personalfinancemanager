@@ -1,0 +1,22 @@
+version: "3.8"
+
+networks:
+  local-network:
+    name: local-network
+    external: true
+
+services:
+
+  # Tax and Pensions
+  tnp-db:
+    build:
+      context: ./setup/db
+      dockerfile: dockerfile
+    profiles: ["dev", "prod"]
+    environment:
+      DB_SERVER_NAME: mysql-db-server
+      DB_SERVER_PORT: 3306
+      DB_ROOT_PASSWORD: ${MYSQL_ADMIN_PASSWORD}
+    container_name: tnp-db
+    networks:
+      - local-network
