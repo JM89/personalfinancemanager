@@ -14,6 +14,7 @@
     <PackageReference Include="PFM.Authentication.Api.Contracts" Version="1.23.0" />
     <PackageReference Include="PFM.Bank.Api.Contracts" Version="5.14.0" />
     <PackageReference Include="PFM.Bank.Event.Contracts" Version="5.14.0" />
+    <PackageReference Include="pfm.tnp.api.contracts" Version="5.20.1-PullRequest0136.2" />
     <PackageReference Include="Refit" Version="8.0.0" />
   </ItemGroup>
 
