@@ -1,6 +1,6 @@
-﻿using Api.Contracts.Shared;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Bank.Api.Contracts.Account;
+using PFM.Bank.Api.Contracts.Shared;
 using PFM.Services.ExternalServices.BankApi;
 
 namespace PFM.Api.Controllers

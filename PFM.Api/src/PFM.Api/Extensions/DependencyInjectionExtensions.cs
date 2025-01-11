@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PFM.Api.Settings;
 using PFM.Services.Caches;
-using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events;
 using PFM.Services.Events.Interfaces;
 using Refit;

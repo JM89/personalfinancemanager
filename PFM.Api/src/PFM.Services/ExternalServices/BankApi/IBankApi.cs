@@ -1,7 +1,7 @@
-﻿using Api.Contracts.Shared;
-using PFM.Bank.Api.Contracts.Bank;
+﻿using PFM.Bank.Api.Contracts.Bank;
 using Refit;
 using System.Threading.Tasks;
+using PFM.Bank.Api.Contracts.Shared;
 
 namespace PFM.Services.ExternalServices.BankApi
 {
