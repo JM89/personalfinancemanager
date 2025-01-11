@@ -1,30 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Bank.Api.Contracts.Country;
-using Services.Interfaces;
+using Services;
 
 namespace Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CountryController : ControllerBase
+    public class CountryController(ICountryService service) : ControllerBase
     {
-        private readonly ICountryService _countryService;
-
-        public CountryController(ICountryService CountryService)
-        {
-            _countryService = CountryService;
-        }
-
         [HttpGet("GetList")]
         public async Task<IEnumerable<CountryList>> GetList()
         {
-            return await _countryService.GetCountries();
+            return await service.GetCountries();
         }
 
         [HttpGet("Get/{id}")]
         public async Task<CountryDetails> Get(int id)
         {
-            return await _countryService.GetById(id);
+            return await service.GetById(id);
         }
     }
 }

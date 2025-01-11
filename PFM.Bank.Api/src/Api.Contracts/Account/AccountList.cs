@@ -1,4 +1,5 @@
-﻿namespace PFM.Bank.Api.Contracts.Account
+﻿// ReSharper disable once CheckNamespace
+namespace PFM.Bank.Api.Contracts.Account
 {
     public class AccountList
     {

@@ -1,4 +1,5 @@
-﻿namespace Api.Contracts.Shared
+﻿// ReSharper disable once CheckNamespace
+namespace PFM.TNP.Api.Contracts.Shared
 {
     public interface ICanBeEdited
     {

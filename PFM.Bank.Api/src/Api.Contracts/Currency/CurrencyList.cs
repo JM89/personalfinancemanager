@@ -1,5 +1,6 @@
-﻿using Api.Contracts.Shared;
+﻿using PFM.Bank.Api.Contracts.Shared;
 
+// ReSharper disable once CheckNamespace
 namespace PFM.Bank.Api.Contracts.Currency
 {
     public class CurrencyList : ICanBeDeleted

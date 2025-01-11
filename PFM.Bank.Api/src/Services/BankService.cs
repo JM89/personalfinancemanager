@@ -1,28 +1,33 @@
 ﻿using AutoMapper;
-using DataAccessLayer.Repositories.Interfaces;
 using PFM.Bank.Api.Contracts.Bank;
 using PFM.Services.Core.Exceptions;
-using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccessLayer.Repositories;
+using Services.Core;
 
 namespace Services
 {
-    public class BankService : IBankService
+    public interface IBankService : IBaseService
     {
-        private readonly IBankRepository _bankRepository;
-        private readonly IBankAccountRepository _bankAccountRepository;
+        Task<List<BankList>> GetBanks(string userId);
 
-        public BankService(IBankRepository bankRepository, IBankAccountRepository bankAccountRepository)
-        {
-            this._bankRepository = bankRepository;
-            this._bankAccountRepository = bankAccountRepository;
-        }
+        Task<bool> CreateBank(BankDetails bankDetails, string userId);
 
+        Task<BankDetails> GetById(int id);
+
+        Task<bool> EditBank(BankDetails bankDetails, string userId);
+
+        Task<bool> DeleteBank(int id);
+    }
+    
+    public class BankService(IBankRepository repository, IBankAccountRepository bankAccountRepository)
+        : IBankService
+    {
         public Task<List<BankList>> GetBanks(string userId)
         {
-            var banks = _bankRepository
+            var banks = repository
                 .GetList2(u => u.Country)
                 .Where(x => x.User_Id == userId)
                 .ToList();
@@ -31,7 +36,7 @@ namespace Services
 
             mappedBanks.ForEach(bank =>
             {
-                var hasAccounts = _bankAccountRepository.GetList().Any(x => x.BankId == bank.Id);
+                var hasAccounts = bankAccountRepository.GetList().Any(x => x.BankId == bank.Id);
                 bank.CanBeDeleted = !hasAccounts;
             });
 
@@ -40,7 +45,7 @@ namespace Services
 
         public Task<bool> Validate(BankDetails bankDetails)
         {
-            var duplicateName = _bankRepository.GetList().Any(x => x.Name.ToLower() == bankDetails.Name.Trim().ToLower() && x.Id != bankDetails.Id);
+            var duplicateName = repository.GetList().Any(x => x.Name.ToLower() == bankDetails.Name.Trim().ToLower() && x.Id != bankDetails.Id);
             if (duplicateName)
             {
                 throw new BusinessException("Name", BusinessExceptionMessage.BankDuplicateName);
@@ -56,14 +61,14 @@ namespace Services
             var bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
             bank.User_Id = userId;
 
-            _bankRepository.Create(bank);
+            repository.Create(bank);
 
             return true;
         }
 
         public Task<BankDetails> GetById(int id)
         {
-            var bank = _bankRepository.GetById(id);
+            var bank = repository.GetById(id);
 
             if (bank == null)
             {
@@ -77,19 +82,19 @@ namespace Services
         {
             await Validate(bankDetails);
 
-            var bank = _bankRepository.GetListAsNoTracking().SingleOrDefault(x => x.Id == bankDetails.Id);
+            var bank = repository.GetListAsNoTracking().SingleOrDefault(x => x.Id == bankDetails.Id);
             bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
             bank.User_Id = userId;
 
-            _bankRepository.Update(bank);
+            repository.Update(bank);
 
             return true;
         }
 
         public Task<bool> DeleteBank(int id)
         {
-            var bank = _bankRepository.GetList().Find(id);
-            _bankRepository.Delete(bank);
+            var bank = repository.GetList().Find(id);
+            repository.Delete(bank);
             return Task.FromResult(true);
         }
     }

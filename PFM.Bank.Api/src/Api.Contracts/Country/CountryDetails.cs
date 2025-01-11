@@ -1,4 +1,5 @@
-﻿namespace PFM.Bank.Api.Contracts.Country
+﻿// ReSharper disable once CheckNamespace
+namespace PFM.Bank.Api.Contracts.Country
 {
     public class CountryDetails
     {

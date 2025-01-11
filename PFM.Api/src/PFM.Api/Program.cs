@@ -1,3 +1,4 @@
+using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
@@ -11,14 +12,15 @@ using PFM.Api.MiddleWares;
 using PFM.Api.Settings;
 using PFM.DataAccessLayer;
 using PFM.Services.Caches;
-using PFM.Services.Caches.Interfaces;
 using PFM.Services.Core.Automapper;
 using PFM.Services.MovementStrategy;
 
 namespace PFM.Api
 {
     public class Program
-    {
+    {        
+        internal static readonly string AssemblyVersion = Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString() ?? "0.0.1";
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -44,14 +46,17 @@ namespace PFM.Api
                 .AddSingleton<ContextMovementStrategy>()
                 .AddSingleton<IExpenseTypeCache, ExpenseTypeCache>();
 
+            var devMode = builder.Environment.EnvironmentName != "Production";
+            
             builder.Services
-                .AddAuthenticationAndAuthorization(builder.Configuration)
-                .AddBankApi(builder.Configuration, builder.Environment.EnvironmentName != "Production")
+                .AddAuthenticationAndAuthorization(appSettings.AuthOptions)
+                .AddPensionApi(appSettings.TaxAndPensionApiOptions, devMode)
+                .AddBankApi(appSettings.BankApiOptions, devMode)
                 .ConfigureLogging(builder.Configuration, builder.Environment.EnvironmentName)
                 .ConfigureTracing(appSettings.TracingOptions)
                 .ConfigureMetrics(appSettings.MetricsOptions)
                 .AddEndpointsApiExplorer()
-                .AddSwaggerDefinition()
+                .AddSwaggerDefinition(appSettings)
                 .AddEventPublisherConfigurations(builder.Configuration);
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
@@ -75,8 +80,11 @@ namespace PFM.Api
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            if (appSettings.AuthOptions.Enabled)
+            {
+                app.UseAuthentication();
+                app.UseAuthorization();
+            }
 
             app.MapControllers();
 

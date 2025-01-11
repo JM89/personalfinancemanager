@@ -1,6 +1,6 @@
 ﻿using PFM.DataAccessLayer.Enumerations;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Caches.Interfaces;
+using PFM.Services.Caches;
 using PFM.Services.Events.Interfaces;
 using System.Collections.Generic;
 

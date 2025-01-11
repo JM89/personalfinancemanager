@@ -7,10 +7,9 @@ using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.MovementStrategy;
 using PFM.Api.Contracts.Saving;
-using PFM.Services.Events.Interfaces;
 using System.Transactions;
 using System.Threading.Tasks;
-using PFM.Services.Caches.Interfaces;
+using PFM.Services.Caches;
 
 namespace PFM.Services
 {

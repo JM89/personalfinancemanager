@@ -1,14 +1,37 @@
-﻿using DataAccessLayer.Entities;
-using DataAccessLayer.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using DataAccessLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace DataAccessLayer.Repositories.Implementations
+namespace DataAccessLayer.Repositories
 {
+    public interface IBaseRepository<TEntity> 
+        where TEntity : PersistedEntity
+    {
+        TEntity GetById(int id, bool noTracking = false);
+
+        DbSet<TEntity> GetList();
+
+        IQueryable<TEntity> GetListAsNoTracking();
+
+        TEntity Create(TEntity entity);
+
+        TEntity Update(TEntity entity);
+
+        void UpdateAll(List<TEntity> entities);
+
+        bool Delete(TEntity entity);
+
+        List<TEntity> GetList2(params Expression<Func<TEntity, object>>[] includeProperties);
+
+        TEntity GetById(int id, params Expression<Func<TEntity, object>>[] includeProperties);
+
+        void Refresh<T>(T entity);
+    }
+    
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
         where TEntity : PersistedEntity 
     {

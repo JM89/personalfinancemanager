@@ -1,33 +1,28 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Caches.Interfaces;
 using System;
 using System.Threading.Tasks;
 
-namespace PFM.Services.Caches
+namespace PFM.Services.Caches;
+
+public interface IExpenseTypeCache
 {
-    public class ExpenseTypeCache : IExpenseTypeCache
+    Task<string> GetById(int id);
+}
+    
+public class ExpenseTypeCache(IMemoryCache memoryCache, IExpenseTypeRepository repository)
+    : IExpenseTypeCache
+{
+    private readonly MemoryCacheEntryOptions _options = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(30));
+
+    public Task<string> GetById(int id)
     {
-        private readonly IMemoryCache _memoryCache;
-        private readonly IExpenseTypeRepository _expenseTypeRepository;
-        private readonly MemoryCacheEntryOptions _options;
-
-        public ExpenseTypeCache(IMemoryCache memoryCache, IExpenseTypeRepository expenseTypeRepository)
+        if (!memoryCache.TryGetValue(id, out string value))
         {
-            this._memoryCache = memoryCache;
-            this._expenseTypeRepository = expenseTypeRepository;
-            this._options = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(30));
+            var response = repository.GetById(id);
+            value = response?.Name ?? "Unknown";
+            memoryCache.Set(id, value, _options);
         }
-
-        public Task<string> GetById(int id)
-        {
-            if (!this._memoryCache.TryGetValue(id, out string value))
-            {
-                var response = _expenseTypeRepository.GetById(id);
-                value = response?.Name ?? "Unknown";
-                _memoryCache.Set(id, value, _options);
-            }
-            return Task.FromResult(value);
-        }
+        return Task.FromResult(value);
     }
 }

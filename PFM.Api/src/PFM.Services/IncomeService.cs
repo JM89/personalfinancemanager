@@ -2,13 +2,13 @@
 using PFM.Api.Contracts.Income;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Caches.Interfaces;
 using PFM.Services.Interfaces;
 using PFM.Services.MovementStrategy;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
+using PFM.Services.Caches;
 
 namespace PFM.Services
 {

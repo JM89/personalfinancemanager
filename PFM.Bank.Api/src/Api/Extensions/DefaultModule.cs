@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using DataAccessLayer.Repositories.Interfaces;
-using Services.Interfaces;
 using System.Reflection;
+using DataAccessLayer.Repositories;
+using Services;
 
 namespace Api.Extensions
 {

@@ -7,7 +7,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7099;http://localhost:5141",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "App_ApplicationSettings__AuthOptions__Enabled": "false"
       },
       "dotnetRunMessages": true
     }

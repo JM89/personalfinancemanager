@@ -1,5 +1,6 @@
 ﻿using System;
 
+// ReSharper disable once CheckNamespace
 namespace PFM.Bank.Api.Contracts.Bank
 {
     public class BankDetails

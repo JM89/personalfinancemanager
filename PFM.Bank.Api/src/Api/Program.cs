@@ -1,3 +1,4 @@
+using System.Reflection;
 using Api.Configurations.Monitoring.Logging;
 using Api.Configurations.Monitoring.Metrics;
 using Api.Configurations.Monitoring.Tracing;
@@ -14,8 +15,9 @@ using PFM.Services.Core.Automapper;
 
 namespace Api
 {
-    public class Program
+    public static class Program
     {
+        internal static readonly string AssemblyVersion = Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString() ?? "0.0.1";
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -27,12 +29,12 @@ namespace Api
             var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>() ?? new ApplicationSettings();
             
             builder.Services
-                .AddAuthenticationAndAuthorization(builder.Configuration)
+                .AddAuthenticationAndAuthorization(appSettings.AuthOptions)
                 .ConfigureLogging(builder.Configuration, builder.Environment.EnvironmentName)
                 .ConfigureTracing(appSettings.TracingOptions)
                 .ConfigureMetrics(appSettings.MetricsOptions)
                 .AddEndpointsApiExplorer()
-                .AddSwaggerDefinition()
+                .AddSwaggerDefinition(appSettings)
                 .AddEventPublisherConfigurations(builder.Configuration);
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
@@ -53,8 +55,11 @@ namespace Api
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            if (appSettings.AuthOptions.Enabled)
+            {
+                app.UseAuthentication();
+                app.UseAuthorization();
+            }
 
             app.MapControllers();
 

@@ -1,7 +1,7 @@
 ﻿using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events.Interfaces;
 using System.Threading.Tasks;
+using PFM.Services.Caches;
 
 namespace PFM.Services.MovementStrategy
 {

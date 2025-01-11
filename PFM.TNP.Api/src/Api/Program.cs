@@ -1,3 +1,4 @@
+using System.Reflection;
 using Api.Configurations.Monitoring.Logging;
 using Api.Configurations.Monitoring.Metrics;
 using Api.Configurations.Monitoring.Tracing;
@@ -16,6 +17,7 @@ namespace Api
 {
     public static class Program
     {
+        internal static readonly string AssemblyVersion = Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString() ?? "0.0.1";
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);

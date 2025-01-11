@@ -1,30 +1,37 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Entities;
-using DataAccessLayer.Repositories.Interfaces;
 using PFM.Bank.Api.Contracts.Account;
 using PFM.Bank.Event.Contracts;
 using PFM.Services.Core.Exceptions;
 using Services.Events.Interfaces;
-using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
+using DataAccessLayer.Repositories;
+using Services.Core;
 
 namespace Services
 {
-    public class BankAccountService: IBankAccountService
+    public interface IBankAccountService : IBaseService
     {
-        private readonly IBankAccountRepository _bankAccountRepository;
-        private readonly IEventPublisher _eventPublisher;
+        Task<bool> CreateBankAccount(AccountDetails accountDetails, string userId);
 
+        Task<List<AccountList>> GetAccountsByUser(string userId);
+
+        Task<AccountDetails> GetById(int id);
+
+        Task<bool> EditBankAccount(AccountDetails accountDetails, string userId);
+
+        Task<bool> DeleteBankAccount(int id);
+
+        Task<bool> SetAsFavorite(int id);
+    }
+    
+    public class BankAccountService(IBankAccountRepository repository, IEventPublisher eventPublisher)
+        : IBankAccountService
+    {
         private readonly string PropertyCannotBeModified = "Property cannot be modified on an existing bank account.";
-
-        public BankAccountService(IBankAccountRepository bankAccountRepository, IEventPublisher eventPublisher)
-        {
-            this._bankAccountRepository = bankAccountRepository;
-            this._eventPublisher = eventPublisher;
-        }
 
         public async Task<bool> CreateBankAccount(AccountDetails accountDetails, string userId)
         {
@@ -34,13 +41,13 @@ namespace Services
 
                 account.User_Id = userId;
                 account.CurrentBalance = account.InitialBalance;
-                account.IsFavorite = !_bankAccountRepository.GetList().Any(x => x.User_Id == userId);
+                account.IsFavorite = !repository.GetList().Any(x => x.User_Id == userId);
 
-                _bankAccountRepository.Create(account);
+                repository.Create(account);
 
                 var evt = Mapper.Map<BankAccountCreated>(account);
 
-                var published = await _eventPublisher.PublishAsync(evt, default);
+                var published = await eventPublisher.PublishAsync(evt, default);
                 
                 scope.Complete();
 
@@ -50,7 +57,7 @@ namespace Services
 
         public Task<List<AccountList>> GetAccountsByUser(string userId)
         {
-            var accounts = _bankAccountRepository
+            var accounts = repository
                 .GetList2(u => u.Currency, u => u.Bank)
                 .Where(x => x.User_Id == userId)
                 .ToList();
@@ -68,7 +75,7 @@ namespace Services
         
         public Task<AccountDetails> GetById(int id)
         {
-            var account = _bankAccountRepository.GetList2(x => x.Currency, x => x.Bank).SingleOrDefault(x => x.Id == id);
+            var account = repository.GetList2(x => x.Currency, x => x.Bank).SingleOrDefault(x => x.Id == id);
 
             if (account == null)
             {
@@ -82,7 +89,7 @@ namespace Services
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var account = _bankAccountRepository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
+                var account = repository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
 
                 var businessException = new BusinessException();
 
@@ -111,9 +118,9 @@ namespace Services
 
                 account = Mapper.Map<Account>(accountDetails);
                 account.User_Id = userId;
-                _bankAccountRepository.Update(account);
+                repository.Update(account);
 
-                var updated = _bankAccountRepository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
+                var updated = repository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
 
                 scope.Complete();
 
@@ -125,12 +132,12 @@ namespace Services
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var account = _bankAccountRepository.GetById(id, a => a.Currency, a => a.Bank);
-                _bankAccountRepository.Delete(account);
+                var account = repository.GetById(id, a => a.Currency, a => a.Bank);
+                repository.Delete(account);
 
                 var evt = Mapper.Map<BankAccountDeleted>(account);
 
-                var published = await _eventPublisher.PublishAsync(evt, default);
+                var published = await eventPublisher.PublishAsync(evt, default);
 
                 scope.Complete();
 
@@ -140,14 +147,14 @@ namespace Services
         
         public Task<bool> SetAsFavorite(int id)
         {
-            var updatedList = _bankAccountRepository.GetList2();
+            var updatedList = repository.GetList2();
 
             foreach (var account in updatedList)
             {
                 account.IsFavorite = account.Id == id;
             }
 
-            _bankAccountRepository.UpdateAll(updatedList);
+            repository.UpdateAll(updatedList);
 
             return Task.FromResult(true);
         }

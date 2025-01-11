@@ -1,7 +1,7 @@
-﻿using Api.Contracts.Shared;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Net;
+using PFM.Bank.Api.Contracts.Shared;
 using PFM.Services.Core.Exceptions;
 
 namespace Api.Middlewares

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace Api.Contracts.Shared
+// ReSharper disable once CheckNamespace
+namespace PFM.TNP.Api.Contracts.Shared
 {
     public class ApiResponse
     {

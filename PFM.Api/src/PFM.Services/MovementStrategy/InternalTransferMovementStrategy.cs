@@ -2,7 +2,7 @@
 using PFM.Bank.Event.Contracts;
 using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Caches.Interfaces;
+using PFM.Services.Caches;
 using PFM.Services.Events.Interfaces;
 using System;
 using System.Threading.Tasks;

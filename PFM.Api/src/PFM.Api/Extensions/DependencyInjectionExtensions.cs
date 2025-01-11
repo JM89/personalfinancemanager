@@ -1,4 +1,5 @@
-﻿using EventStore.Client;
+﻿using System.Reflection;
+using EventStore.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -6,11 +7,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PFM.Api.Settings;
 using PFM.Services.Caches;
-using PFM.Services.Caches.Interfaces;
 using PFM.Services.Events;
 using PFM.Services.Events.Interfaces;
 using Refit;
 using System.Text.Json;
+using PFM.Services.ExternalServices.BankApi;
+using PFM.Services.ExternalServices.TaxAndPensionApi;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace PFM.Api.Extensions
 {
@@ -20,46 +23,71 @@ namespace PFM.Api.Extensions
         /// Set up authentication and authorization.
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="authOptions"></param>
         /// <returns></returns>
-        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, AuthOptions authOptions)
         {
+            if (!authOptions.Enabled)
+                return services;
+            
             services.AddMvc(o =>
             {
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
 
-            var auth = configuration.GetSection("Auth").Get<AuthOptions>();
-            if (auth?.Authority == null)
+            if (authOptions?.Authority == null)
                 throw new Exception("DI exception: Auth API config was not found");
 
-            Console.WriteLine($"Authority: {auth.Authority}");
+            Console.WriteLine($"Authority: {authOptions.Authority}");
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = auth.Authority;
+                    options.Authority = authOptions.Authority;
                     options.Audience = "account";
-                    options.RequireHttpsMetadata = auth.RequireHttpsMetadata;
+                    options.RequireHttpsMetadata = authOptions.RequireHttpsMetadata;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = auth.ValidateIssuer
+                        ValidateIssuer = authOptions.ValidateIssuer
                     };
                 });
                 
             return services;
         }
 
-        public static IServiceCollection AddBankApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
+        public static IServiceCollection AddBankApi(this IServiceCollection services, ApiOptions apiOptions, bool isDevelopmentEnvironment)
         {
-            var endpointUrl = configuration["BankApi:EndpointUrl"];
-            if (endpointUrl == null)
-                throw new Exception("DI exception: Bank API config was not found");
+            var refitSettings = SetDefaultRefitSettings();
 
-            Console.WriteLine($"Bank API endpoint: {endpointUrl}");
+            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
 
-            var refitSettings = new RefitSettings()
+            services
+                .SetApiClientWithCache<IBankAccountApi, IBankAccountCache, BankAccountCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
+                .SetApiClientWithCache<IBankApi, IBankCache, BankCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
+                .SetApiClientWithCache<ICurrencyApi, ICurrencyCache, CurrencyCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
+                .SetApiClientWithCache<ICountryApi, ICountryCache, CountryCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings);
+            
+            return services;
+        }
+
+        public static IServiceCollection AddPensionApi(this IServiceCollection services, ApiOptions apiOptions, bool isDevelopmentEnvironment)
+        {
+            var refitSettings = SetDefaultRefitSettings();
+
+            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
+
+            services
+                .SetApiClientWithCache<IPensionApi, IPensionCache, PensionCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
+                .SetApiClientWithCache<IIncomeTaxReportApi, IIncomeTaxReportCache, IncomeTaxReportCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings);
+
+            return services;
+        }
+
+        private static RefitSettings SetDefaultRefitSettings()
+        {
+            return new RefitSettings()
             {
                 ContentSerializer = new SystemTextJsonContentSerializer(
                     new JsonSerializerOptions()
@@ -72,41 +100,22 @@ namespace PFM.Api.Extensions
                         }
                     }
                 ),
-                ExceptionFactory = httpResponse =>
-                {
-                    return Task.FromResult<Exception?>(null);
-                }
+                ExceptionFactory = httpResponse => Task.FromResult<Exception?>(null)
             };
+        }
 
-            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
-
+        private static IServiceCollection SetApiClientWithCache<TApi, TICache, TCache>(this IServiceCollection services, HttpClientHandler httpClientHandler, string endpointUrl, RefitSettings refitSettings) 
+            where TApi : class
+            where TICache : class
+            where TCache : class, TICache
+        {
             services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankAccountApi>(refitSettings)
+                .AddRefitClient<TApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
-            services.AddSingleton<IBankAccountCache, BankAccountCache>();
-
-            services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
-                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
-                .AddHttpMessageHandler<AuthHeaderHandler>();
-            services.AddSingleton<IBankCache, BankCache>();
-
-            services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICurrencyApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
-                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
-                .AddHttpMessageHandler<AuthHeaderHandler>();
-            services.AddSingleton<ICurrencyCache, CurrencyCache>();
-
-            services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICountryApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
-                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
-                .AddHttpMessageHandler<AuthHeaderHandler>(); 
-            services.AddSingleton<ICountryCache, CountryCache>();
+            
+            services.AddSingleton<TICache, TCache>();
 
             return services;
         }
@@ -115,11 +124,27 @@ namespace PFM.Api.Extensions
         /// Set up swagger.
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="applicationSettings"></param>
         /// <returns></returns>
-        public static IServiceCollection AddSwaggerDefinition(this IServiceCollection services)
+        public static IServiceCollection AddSwaggerDefinition(this IServiceCollection services, ApplicationSettings applicationSettings)
         {
+            services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
             services.AddSwaggerGen(options =>
             {
+                options.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = applicationSettings.ApplicationName,
+                    Description = applicationSettings.ShortDescription,
+                    Version = Program.AssemblyVersion,
+                });
+
+                options.CustomSchemaIds( type => type.ToString() );
+                
+                options.ExampleFilters();
+                
+                if (!applicationSettings.AuthOptions.Enabled)
+                    return;
+                
                 options.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
                 {
                     Name = "Authorization",

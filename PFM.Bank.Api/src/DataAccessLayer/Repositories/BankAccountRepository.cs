@@ -1,7 +1,10 @@
 ﻿using DataAccessLayer.Entities;
-using DataAccessLayer.Repositories.Interfaces;
 
-namespace DataAccessLayer.Repositories.Implementations
+namespace DataAccessLayer.Repositories
 {
+    public interface IBankAccountRepository : IBaseRepository<Account>
+    {
+    }
+    
     public class BankAccountRepository(PFMContext db) : BaseRepository<Account>(db), IBankAccountRepository;
 }
