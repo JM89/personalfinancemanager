@@ -1,5 +1,5 @@
 ﻿using System;
-using Api.Contracts.Shared;
+using PFM.TNP.Api.Contracts.Shared;
 
 // ReSharper disable once CheckNamespace
 // Contracts are reused in different project and should not clash
