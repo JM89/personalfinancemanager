@@ -7,49 +7,42 @@ namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BankAccountController : ControllerBase
+    public class BankAccountController(IBankAccountApi api) : ControllerBase
     {
-        private readonly IBankAccountApi _bankAccountApi;
-
-        public BankAccountController(IBankAccountApi bankAccountApi)
-        {
-            _bankAccountApi = bankAccountApi;
-        }
-
         [HttpGet("GetList/{userId}")]
         public async Task<ApiResponse> GetList(string userId)
         {
-            return await _bankAccountApi.GetList(userId);
+            return await api.GetList(userId);
         }
 
         [HttpGet("Get/{id}")]
         public async Task<ApiResponse> Get(int id)
         {
-            return await _bankAccountApi.Get(id);
+            return await api.Get(id);
         }
         
         [HttpPost("Create/{userId}")]
-        public async Task<ApiResponse> Post(string userId, [FromBody]AccountDetails createdObj)
+        public async Task<ApiResponse> Post(string userId, [FromBody]AccountDetails request)
         {
-            return await _bankAccountApi.Create(userId, createdObj);
+            return await api.Create(userId, request);
         }
         
         [HttpPut("Edit/{id}/{userId}")]
-        public async Task<ApiResponse> Put(int id, string userId, [FromBody]AccountDetails editedObj)
+        public async Task<ApiResponse> Put(int id, string userId, [FromBody]AccountDetails request)
         {
-            return await _bankAccountApi.Edit(id, userId, editedObj);
+            return await api.Edit(id, userId, request);
         }
         
         [HttpDelete("Delete/{id}")]
         public async Task<ApiResponse> Delete(int id)
         {
-            return await _bankAccountApi.Delete(id);
+            return await api.Delete(id);
         }
 
         [HttpPost("SetAsFavorite/{id}")]
         public async Task<ApiResponse> SetAsFavorite(int id)
         {
-            return await _bankAccountApi.SetAsFavorite(id);
+            return await api.SetAsFavorite(id);
         }
     }
 }

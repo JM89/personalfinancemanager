@@ -12,6 +12,7 @@ using PFM.Services.Events;
 using PFM.Services.Events.Interfaces;
 using Refit;
 using System.Text.Json;
+using PFM.Services.ExternalServices.BankApi;
 using PFM.Services.ExternalServices.TaxAndPensionApi;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -57,69 +58,37 @@ namespace PFM.Api.Extensions
             return services;
         }
 
-        public static IServiceCollection AddBankApi(this IServiceCollection services, IConfiguration configuration, bool isDevelopmentEnvironment)
+        public static IServiceCollection AddBankApi(this IServiceCollection services, ApiOptions apiOptions, bool isDevelopmentEnvironment)
         {
-            var endpointUrl = configuration["BankApi:EndpointUrl"];
-            if (endpointUrl == null)
-                throw new Exception("DI exception: Bank API config was not found");
-
-            Console.WriteLine($"Bank API endpoint: {endpointUrl}");
-
-            var refitSettings = new RefitSettings()
-            {
-                ContentSerializer = new SystemTextJsonContentSerializer(
-                    new JsonSerializerOptions()
-                    {
-                        PropertyNameCaseInsensitive = true,
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        Converters =
-                        {
-                            new ObjectToInferredTypesConverter(),
-                        }
-                    }
-                ),
-                ExceptionFactory = httpResponse =>
-                {
-                    return Task.FromResult<Exception?>(null);
-                }
-            };
+            var refitSettings = SetDefaultRefitSettings();
 
             var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
 
             services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankAccountApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
-                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
-                .AddHttpMessageHandler<AuthHeaderHandler>();
-            services.AddSingleton<IBankAccountCache, BankAccountCache>();
-
-            services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.IBankApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
-                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
-                .AddHttpMessageHandler<AuthHeaderHandler>();
-            services.AddSingleton<IBankCache, BankCache>();
-
-            services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICurrencyApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
-                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
-                .AddHttpMessageHandler<AuthHeaderHandler>();
-            services.AddSingleton<ICurrencyCache, CurrencyCache>();
-
-            services
-                .AddRefitClient<PFM.Services.ExternalServices.BankApi.ICountryApi>(refitSettings)
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
-                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
-                .AddHttpMessageHandler<AuthHeaderHandler>(); 
-            services.AddSingleton<ICountryCache, CountryCache>();
-
+                .SetApiClientWithCache<IBankAccountApi, IBankAccountCache, BankAccountCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
+                .SetApiClientWithCache<IBankApi, IBankCache, BankCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
+                .SetApiClientWithCache<ICurrencyApi, ICurrencyCache, CurrencyCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
+                .SetApiClientWithCache<ICountryApi, ICountryCache, CountryCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings);
+            
             return services;
         }
 
         public static IServiceCollection AddPensionApi(this IServiceCollection services, ApiOptions apiOptions, bool isDevelopmentEnvironment)
         {
-            var refitSettings = new RefitSettings()
+            var refitSettings = SetDefaultRefitSettings();
+
+            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
+
+            services
+                .SetApiClientWithCache<IPensionApi, IPensionCache, PensionCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
+                .SetApiClientWithCache<IIncomeTaxReportApi, IIncomeTaxReportCache, IncomeTaxReportCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings);
+
+            return services;
+        }
+
+        private static RefitSettings SetDefaultRefitSettings()
+        {
+            return new RefitSettings()
             {
                 ContentSerializer = new SystemTextJsonContentSerializer(
                     new JsonSerializerOptions()
@@ -134,17 +103,9 @@ namespace PFM.Api.Extensions
                 ),
                 ExceptionFactory = httpResponse => Task.FromResult<Exception?>(null)
             };
-
-            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
-
-            services
-                .SetApiClient<IPensionApi, IPensionCache, PensionCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
-                .SetApiClient<IIncomeTaxReportApi, IIncomeTaxReportCache, IncomeTaxReportCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings);
-
-            return services;
         }
 
-        private static IServiceCollection SetApiClient<TApi, TICache, TCache>(this IServiceCollection services, HttpClientHandler httpClientHandler, string endpointUrl, RefitSettings refitSettings) 
+        private static IServiceCollection SetApiClientWithCache<TApi, TICache, TCache>(this IServiceCollection services, HttpClientHandler httpClientHandler, string endpointUrl, RefitSettings refitSettings) 
             where TApi : class
             where TICache : class
             where TCache : class, TICache
@@ -154,6 +115,7 @@ namespace PFM.Api.Extensions
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
+            
             services.AddSingleton<TICache, TCache>();
 
             return services;

@@ -26,11 +26,11 @@ internal class RequestMetrics : IRequestMetrics
 
     public void IncrementRequestCounter(KeyValuePair<string, object>[] tags)
     {
-        _counter.Add(1, tags);
+        _counter.Add(1, tags!);
     }
 
     public void RecordRequestDuration(long stopwatchElapsedMilliseconds, KeyValuePair<string, object>[] tags)
     {
-        _histogram.Record(stopwatchElapsedMilliseconds, tags);
+        _histogram.Record(stopwatchElapsedMilliseconds, tags!);
     }
 }

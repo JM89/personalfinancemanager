@@ -5,11 +5,8 @@ using AutoMapper;
 using PFM.Services.Interfaces;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.DataAccessLayer.Entities;
-using PFM.DataAccessLayer.SearchParameters;
 using PFM.Api.Contracts.BudgetPlan;
-using PFM.Services.Utils.Helpers;
 using PFM.Api.Contracts.ExpenseType;
-using PFM.Services.Caches.Interfaces;
 using System.Threading.Tasks;
 
 namespace PFM.Services

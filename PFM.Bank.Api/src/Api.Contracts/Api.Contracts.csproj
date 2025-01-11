@@ -5,6 +5,7 @@
     <Authors>JM89</Authors>
     <PackageId>PFM.Bank.Api.Contracts</PackageId>
     <PackageDescription>Bank API Request and Response Contracts.</PackageDescription>
+    <AssemblyName>PFM.Bank.Api.Contracts</AssemblyName>
   </PropertyGroup>
 
 </Project>

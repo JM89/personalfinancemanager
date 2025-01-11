@@ -1,4 +1,5 @@
-﻿namespace PFM.Bank.Api.Contracts.Currency
+﻿// ReSharper disable once CheckNamespace
+namespace PFM.Bank.Api.Contracts.Currency
 {
     public class CurrencyDetails
     {

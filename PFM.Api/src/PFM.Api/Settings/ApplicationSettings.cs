@@ -11,5 +11,7 @@ public class ApplicationSettings
     public MetricsOptions MetricsOptions { get; set; } = new ();
     public TracingOptions TracingOptions { get; set; } = new ();
     public AuthOptions AuthOptions { get; set; } = new ();
+    
+    public ApiOptions BankApiOptions { get; set; } = new ();
     public ApiOptions TaxAndPensionApiOptions { get; set; } = new ();
 }

@@ -1,7 +1,7 @@
 ﻿using PFM.Bank.Api.Contracts.Account;
 using PFM.Bank.Event.Contracts;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Caches.Interfaces;
+using PFM.Services.Caches;
 using PFM.Services.Events.Interfaces;
 using System;
 using System.Threading.Tasks;

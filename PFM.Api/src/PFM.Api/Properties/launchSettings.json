@@ -18,7 +18,7 @@
       "applicationUrl": "https://localhost:7098;http://localhost:5140",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "APP_BankApi__EndpointUrl": "https://localhost:7099",
+        "APP_ApplicationSettings__BankApi__EndpointUrl": "https://localhost:7099",
         "APP_ApplicationSettings__TaxAndPensionApiOptions__EndpointUrl": "https://localhost:7111",
         "App_ApplicationSettings__AuthOptions__Enabled": "false"
       },

@@ -1,13 +1,12 @@
-﻿namespace PFM.Bank.Api.Contracts.Account
+﻿// ReSharper disable once CheckNamespace
+namespace PFM.Bank.Api.Contracts.Account
 {
     public class AccountDetails
     {
         public int Id { get; set; }
-
+        
         public string Name { get; set; }
-
         public int BankId { get; set; }
-
         public int CurrencyId { get; set; }
 
         public string CurrencyName { get; set; }

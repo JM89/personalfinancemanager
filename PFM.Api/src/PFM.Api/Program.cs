@@ -12,7 +12,6 @@ using PFM.Api.MiddleWares;
 using PFM.Api.Settings;
 using PFM.DataAccessLayer;
 using PFM.Services.Caches;
-using PFM.Services.Caches.Interfaces;
 using PFM.Services.Core.Automapper;
 using PFM.Services.MovementStrategy;
 
@@ -52,7 +51,7 @@ namespace PFM.Api
             builder.Services
                 .AddAuthenticationAndAuthorization(appSettings.AuthOptions)
                 .AddPensionApi(appSettings.TaxAndPensionApiOptions, devMode)
-                .AddBankApi(builder.Configuration, devMode)
+                .AddBankApi(appSettings.BankApiOptions, devMode)
                 .ConfigureLogging(builder.Configuration, builder.Environment.EnvironmentName)
                 .ConfigureTracing(appSettings.TracingOptions)
                 .ConfigureMetrics(appSettings.MetricsOptions)

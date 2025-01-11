@@ -1,25 +1,25 @@
 ﻿using AutoMapper;
-using DataAccessLayer.Repositories.Interfaces;
 using PFM.Bank.Api.Contracts.Country;
-using Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccessLayer.Repositories;
+using Services.Core;
 
 namespace Services
 {
-    public class CountryService : ICountryService
+    public interface ICountryService : IBaseService
     {
-        private readonly ICountryRepository _countryRepository;
+        Task<List<CountryList>> GetCountries();
 
-        public CountryService(ICountryRepository countryRepository)
-        {
-            this._countryRepository = countryRepository;
-        }
-
+        Task<CountryDetails> GetById(int id);
+    }
+    
+    public class CountryService(ICountryRepository repository) : ICountryService
+    {
         public Task<List<CountryList>> GetCountries()
         {
-            var countries = _countryRepository.GetList().ToList();
+            var countries = repository.GetList().ToList();
 
             var mappedCountries = countries.Select(Mapper.Map<CountryList>).ToList();
 
@@ -33,7 +33,7 @@ namespace Services
 
         public Task<CountryDetails> GetById(int id)
         {
-            var country = _countryRepository.GetById(id);
+            var country = repository.GetById(id);
 
             if (country == null)
             {

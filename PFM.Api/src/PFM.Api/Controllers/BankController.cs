@@ -7,43 +7,36 @@ namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BankController : ControllerBase
+    public class BankController(IBankApi api) : ControllerBase
     {
-        private readonly IBankApi _bankApi;
-
-        public BankController(IBankApi bankApi)
-        {
-            _bankApi = bankApi;
-        }
-
         [HttpGet("GetList/{userId}")]
         public async Task<ApiResponse> GetList(string userId)
         {
-            return await _bankApi.GetList(userId);
+            return await api.GetList(userId);
         }
 
         [HttpGet("Get/{id}")]
         public async Task<ApiResponse> Get(int id)
         {
-            return await _bankApi.Get(id);
+            return await api.Get(id);
         }
         
         [HttpPost("Create/{userId}")]
-        public async Task<ApiResponse> Post(string userId, [FromBody]BankDetails createdObj)
+        public async Task<ApiResponse> Post(string userId, [FromBody]BankDetails request)
         {
-            return await _bankApi.Create(userId, createdObj);
+            return await api.Create(userId, request);
         }
         
         [HttpPut("Edit/{id}/{userId}")]
-        public async Task<ApiResponse> Put(int id, string userId, [FromBody]BankDetails editedObj)
+        public async Task<ApiResponse> Put(int id, string userId, [FromBody]BankDetails request)
         {
-            return await _bankApi.Edit(id, userId, editedObj);
+            return await api.Edit(id, userId, request);
         }
         
         [HttpDelete("Delete/{id}")]
         public async Task<ApiResponse> Delete(int id)
         {
-            return await _bankApi.Delete(id);
+            return await api.Delete(id);
         }
     }
 }

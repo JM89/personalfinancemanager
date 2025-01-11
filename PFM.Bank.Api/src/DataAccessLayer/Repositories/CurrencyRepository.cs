@@ -1,7 +1,10 @@
 ﻿using DataAccessLayer.Entities;
-using DataAccessLayer.Repositories.Interfaces;
 
-namespace DataAccessLayer.Repositories.Implementations
+namespace DataAccessLayer.Repositories
 {
+    public interface ICurrencyRepository : IBaseRepository<Currency>
+    {
+    }
+    
     public class CurrencyRepository(PFMContext db) : BaseRepository<Currency>(db), ICurrencyRepository;
 }

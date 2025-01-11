@@ -1,7 +1,10 @@
 ﻿using DataAccessLayer.Entities;
-using DataAccessLayer.Repositories.Interfaces;
 
-namespace DataAccessLayer.Repositories.Implementations
+namespace DataAccessLayer.Repositories
 {
+    public interface ICountryRepository : IBaseRepository<Country>
+    {
+    }
+    
     public class CountryRepository(PFMContext db) : BaseRepository<Country>(db), ICountryRepository;
 }

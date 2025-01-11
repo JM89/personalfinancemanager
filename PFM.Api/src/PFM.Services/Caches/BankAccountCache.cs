@@ -1,36 +1,30 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using PFM.Bank.Api.Contracts.Account;
-using PFM.Services.Caches.Interfaces;
 using PFM.Services.ExternalServices.BankApi;
 using System;
 using System.Threading.Tasks;
 
-namespace PFM.Services.Caches
+namespace PFM.Services.Caches;
+
+public interface IBankAccountCache
 {
-    public class BankAccountCache : IBankAccountCache
+    Task<AccountDetails> GetById(int id);
+}
+
+public class BankAccountCache(IMemoryCache memoryCache, IBankAccountApi api) : IBankAccountCache
+{
+    private readonly MemoryCacheEntryOptions _options = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(5));
+
+    public async Task<AccountDetails> GetById(int id)
     {
-        private readonly IMemoryCache _memoryCache;
-        private readonly IBankAccountApi _bankAccountApi;
-        private readonly MemoryCacheEntryOptions _options;
-
-        public BankAccountCache(IMemoryCache memoryCache, IBankAccountApi bankAccountApi)
+        if (!memoryCache.TryGetValue(id, out AccountDetails value))
         {
-            this._memoryCache = memoryCache;
-            this._bankAccountApi = bankAccountApi;
-            this._options = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(5));
+            var apiResponse = await api.Get(id);
+            value = JsonConvert.DeserializeObject<AccountDetails>(apiResponse.Data.ToString());
+            memoryCache.Set(id, value, _options);
         }
 
-        public async Task<AccountDetails> GetById(int id)
-        {
-            if (!this._memoryCache.TryGetValue(id, out AccountDetails value))
-            {
-                var apiResponse = await _bankAccountApi.Get(id);
-                value = JsonConvert.DeserializeObject<AccountDetails>(apiResponse.Data.ToString());
-                _memoryCache.Set(id, value, _options);
-            }
-
-            return value;
-        }
+        return value;
     }
 }
