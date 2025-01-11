@@ -1,4 +1,5 @@
-﻿using EventStore.Client;
+﻿using System.Reflection;
+using EventStore.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -11,6 +12,8 @@ using PFM.Services.Events;
 using PFM.Services.Events.Interfaces;
 using Refit;
 using System.Text.Json;
+using PFM.Services.ExternalServices.TaxAndPensionApi;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace PFM.Api.Extensions
 {
@@ -20,31 +23,34 @@ namespace PFM.Api.Extensions
         /// Set up authentication and authorization.
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="authOptions"></param>
         /// <returns></returns>
-        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, AuthOptions authOptions)
         {
+            if (!authOptions.Enabled)
+                return services;
+            
             services.AddMvc(o =>
             {
                 var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
 
-            var auth = configuration.GetSection("Auth").Get<AuthOptions>();
-            if (auth?.Authority == null)
+            if (authOptions?.Authority == null)
                 throw new Exception("DI exception: Auth API config was not found");
 
-            Console.WriteLine($"Authority: {auth.Authority}");
+            Console.WriteLine($"Authority: {authOptions.Authority}");
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = auth.Authority;
+                    options.Authority = authOptions.Authority;
                     options.Audience = "account";
-                    options.RequireHttpsMetadata = auth.RequireHttpsMetadata;
+                    options.RequireHttpsMetadata = authOptions.RequireHttpsMetadata;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = auth.ValidateIssuer
+                        ValidateIssuer = authOptions.ValidateIssuer
                     };
                 });
                 
@@ -111,15 +117,73 @@ namespace PFM.Api.Extensions
             return services;
         }
 
+        public static IServiceCollection AddPensionApi(this IServiceCollection services, ApiOptions apiOptions, bool isDevelopmentEnvironment)
+        {
+            var refitSettings = new RefitSettings()
+            {
+                ContentSerializer = new SystemTextJsonContentSerializer(
+                    new JsonSerializerOptions()
+                    {
+                        PropertyNameCaseInsensitive = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        Converters =
+                        {
+                            new ObjectToInferredTypesConverter(),
+                        }
+                    }
+                ),
+                ExceptionFactory = httpResponse => Task.FromResult<Exception?>(null)
+            };
+
+            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
+
+            services
+                .SetApiClient<IPensionApi, IPensionCache, PensionCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
+                .SetApiClient<IIncomeTaxReportApi, IIncomeTaxReportCache, IncomeTaxReportCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings);
+
+            return services;
+        }
+
+        private static IServiceCollection SetApiClient<TApi, TICache, TCache>(this IServiceCollection services, HttpClientHandler httpClientHandler, string endpointUrl, RefitSettings refitSettings) 
+            where TApi : class
+            where TICache : class
+            where TCache : class, TICache
+        {
+            services
+                .AddRefitClient<TApi>(refitSettings)
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
+                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
+                .AddHttpMessageHandler<AuthHeaderHandler>();
+            services.AddSingleton<TICache, TCache>();
+
+            return services;
+        }
+
         /// <summary>
         /// Set up swagger.
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="applicationSettings"></param>
         /// <returns></returns>
-        public static IServiceCollection AddSwaggerDefinition(this IServiceCollection services)
+        public static IServiceCollection AddSwaggerDefinition(this IServiceCollection services, ApplicationSettings applicationSettings)
         {
+            services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
             services.AddSwaggerGen(options =>
             {
+                options.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = applicationSettings.ApplicationName,
+                    Description = applicationSettings.ShortDescription,
+                    Version = Program.AssemblyVersion,
+                });
+
+                options.CustomSchemaIds( type => type.ToString() );
+                
+                options.ExampleFilters();
+                
+                if (!applicationSettings.AuthOptions.Enabled)
+                    return;
+                
                 options.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
                 {
                     Name = "Authorization",

@@ -59,7 +59,14 @@ namespace Api.Extensions
         {
             services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
             services.AddSwaggerGen(options =>
-            {
+            {   
+                options.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = applicationSettings.ApplicationName,
+                    Description = applicationSettings.ShortDescription,
+                    Version = Program.AssemblyVersion,
+                });
+                
                 options.ExampleFilters();
                 
                 if (!applicationSettings.AuthOptions.Enabled)
