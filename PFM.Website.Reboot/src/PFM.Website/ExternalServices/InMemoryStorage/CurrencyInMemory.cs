@@ -1,5 +1,4 @@
-﻿using Api.Contracts.Shared;
-using AutoFixture;
+﻿using PFM.Api.Contracts.Shared;
 using Newtonsoft.Json;
 using PFM.Bank.Api.Contracts.Currency;
 
