@@ -1,11 +1,13 @@
 version: 2
 updates:
   - package-ecosystem: "nuget" 
-    directories: "/*/" 
+    directories: 
+      - "/*/" 
     schedule:
       interval: "weekly"
   - package-ecosystem: "docker" 
-    directories: "/*/" 
+    directories:
+      - "/*/" 
     schedule:
       interval: "weekly"
   - package-ecosystem: "github-actions" 
