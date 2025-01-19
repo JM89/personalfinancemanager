@@ -6,7 +6,6 @@ using PFM.DataAccessLayer.Entities;
 using PFM.DataAccessLayer.Repositories.Interfaces;
 using PFM.Services.ExternalServices.BankApi;
 using PFM.Services.MovementStrategy;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,19 +13,13 @@ using System.Transactions;
 
 namespace PFM.Services.Interfaces.Services
 {
-    public class ExpenseService : IExpenseService
+    public class ExpenseService(
+        IMapper mapper,
+        IExpenseRepository expenseRepository,
+        IBankAccountApi bankAccountApi,
+        ContextMovementStrategy contextMovementStrategy)
+        : IExpenseService
     {
-        private readonly IExpenseRepository _expenseRepository;
-        private readonly IBankAccountApi _bankAccountApi;
-        private readonly ContextMovementStrategy _contextMovementStrategy;
-
-        public ExpenseService(IExpenseRepository expenseRepository, IBankAccountApi bankAccountApi, ContextMovementStrategy contextMovementStrategy)
-        {
-            this._expenseRepository = expenseRepository;
-            this._bankAccountApi = bankAccountApi;
-            this._contextMovementStrategy = contextMovementStrategy;
-        }
-
         public async Task<bool> CreateExpenses(List<ExpenseDetails> expenseDetails)
         {
             var resultBatch = true;
@@ -43,81 +36,72 @@ namespace PFM.Services.Interfaces.Services
 
         public async Task<bool> CreateExpense(ExpenseDetails expenseDetails)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                var expense = Mapper.Map<Expense>(expenseDetails);
+            using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            var expense = mapper.Map<Expense>(expenseDetails);
 
-                var movement = new Movement(expenseDetails);
+            var movement = new Movement(expenseDetails);
 
-                var strategy = _contextMovementStrategy.GetMovementStrategy(movement.PaymentMethod);
-                var result = await strategy.Debit(movement);
+            var strategy = contextMovementStrategy.GetMovementStrategy(movement.PaymentMethod);
+            var result = await strategy.Debit(movement);
 
-                if (movement.TargetIncomeId.HasValue)
-                    expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
+            if (movement.TargetIncomeId.HasValue)
+                expense.GeneratedIncomeId = movement.TargetIncomeId.Value;
 
-                _expenseRepository.Create(expense);
+            expenseRepository.Create(expense);
 
-                scope.Complete();
+            scope.Complete();
 
-                return result;
-            }
+            return result;
         }
         
         public async Task<bool> DeleteExpense(int id)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                var expense = _expenseRepository.GetById(id);
-                var expenseDetails = Mapper.Map<ExpenseDetails>(expense);
+            using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            var expense = expenseRepository.GetById(id);
+            var expenseDetails = mapper.Map<ExpenseDetails>(expense);
 
-                _expenseRepository.Delete(expense);
+            expenseRepository.Delete(expense);
 
-                var strategy = _contextMovementStrategy.GetMovementStrategy((PFM.DataAccessLayer.Enumerations.PaymentMethod)expenseDetails.PaymentMethodId);
-                var result = await strategy.Credit(new Movement(expenseDetails));
+            var strategy = contextMovementStrategy.GetMovementStrategy((PFM.DataAccessLayer.Enumerations.PaymentMethod)expenseDetails.PaymentMethodId);
+            var result = await strategy.Credit(new Movement(expenseDetails));
 
-                scope.Complete();
+            scope.Complete();
 
-                return result;
-            }
+            return result;
         }
 
         public Task<ExpenseDetails> GetById(int id)
         {
-            var expense = _expenseRepository
+            var expense = expenseRepository
                             .GetList2(u => u.ExpenseType, u => u.PaymentMethod)
                             .SingleOrDefault(x => x.Id == id);
 
-            if (expense == null)
-            {
-                return null;
-            }
-
-            return Task.FromResult(Mapper.Map<ExpenseDetails>(expense));
+            return expense == null ? null : Task.FromResult(mapper.Map<ExpenseDetails>(expense));
         }
 
         public Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            var Expense = _expenseRepository.GetById(id);
+            var Expense = expenseRepository.GetById(id);
             Expense.HasBeenAlreadyDebited = debitStatus;
-            _expenseRepository.Update(Expense);
+            expenseRepository.Update(Expense);
             return Task.FromResult(true);
         }
 
         public async Task<IList<ExpenseList>> GetExpenses(PFM.Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
         {
-            var searchParameters = Mapper.Map<PFM.DataAccessLayer.SearchParameters.ExpenseGetListSearchParameters>(search);
-            var expenses = _expenseRepository.GetByParameters(searchParameters).ToList();
+            var searchParameters = mapper.Map<PFM.DataAccessLayer.SearchParameters.ExpenseGetListSearchParameters>(search);
+            var expenses = expenseRepository.GetByParameters(searchParameters).ToList();
 
             if (!string.IsNullOrEmpty(search.UserId))
             {
-                var accountsForUserResponse = await _bankAccountApi.GetList(search.UserId);
-                var accountsForUser = JsonConvert.DeserializeObject<List<AccountDetails>>(accountsForUserResponse.Data.ToString());
+                var accountsForUserResponse = await bankAccountApi.GetList(search.UserId);
+                var accountsForUser = JsonConvert.DeserializeObject<List<AccountDetails>>(accountsForUserResponse.Data.ToString() ?? string.Empty);
                 var filterAccounts = accountsForUser.Select(x => x.Id);
 
                 expenses = expenses.Where(x => filterAccounts.Contains(x.AccountId)).ToList();
             }
 
-            var mappedExpenses = expenses.Select(Mapper.Map<ExpenseList>);
+            var mappedExpenses = expenses.Select(mapper.Map<ExpenseList>);
             return mappedExpenses.ToList();
         }
     }
