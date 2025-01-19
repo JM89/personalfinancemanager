@@ -1,5 +1,5 @@
-﻿using Api.Contracts.Shared;
-using PFM.Bank.Api.Contracts.Account;
+﻿using PFM.Bank.Api.Contracts.Account;
+using PFM.Bank.Api.Contracts.Shared;
 using Refit;
 
 namespace PFM.BankAccountUpdater.ExternalServices.BankApi
