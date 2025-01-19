@@ -21,18 +21,20 @@ public interface IIncomeTaxReportService
     Task<bool> Delete(Guid id);
 }
 
-public class IncomeTaxReportService(IIncomeTaxReportRepository repository) : IIncomeTaxReportService
+public class IncomeTaxReportService(
+    IMapper mapper,
+    IIncomeTaxReportRepository repository) : IIncomeTaxReportService
 {
     public async Task<List<IncomeTaxReportList>> GetList(string userId)
     {
         var entities = await repository.GetList(userId);
-        var mapped = entities.Select(Mapper.Map<IncomeTaxReportList>).ToList();
+        var mapped = entities.Select(mapper.Map<IncomeTaxReportList>).ToList();
         return mapped;
     }
 
     public async Task<bool> Create(IncomeTaxReportSaveRequest request, string userId)
     {
-        var pension = Mapper.Map<DataAccessLayer.Entities.IncomeTaxReport>(request);
+        var pension = mapper.Map<DataAccessLayer.Entities.IncomeTaxReport>(request);
         pension.Id = Guid.NewGuid();
         pension.UserId = userId;
         await repository.Create(pension);
@@ -42,14 +44,14 @@ public class IncomeTaxReportService(IIncomeTaxReportRepository repository) : IIn
     public async Task<IncomeTaxReportDetails> GetById(Guid id)
     {
         var entity = await repository.GetById(id);
-        return entity == null ? null : Mapper.Map<IncomeTaxReportDetails>(entity);
+        return entity == null ? null : mapper.Map<IncomeTaxReportDetails>(entity);
     }
 
     public async Task<bool> Edit(Guid id, IncomeTaxReportSaveRequest request)
     {
         // Automapper will only reset some of the properties.
         var current = await repository.GetById(id);
-        current = Mapper.Map(request, current);
+        current = mapper.Map(request, current);
         return await repository.Update(current);
     }
 

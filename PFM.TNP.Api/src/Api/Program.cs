@@ -50,7 +50,9 @@ namespace Api
             
             builder.Services.AddTransient<IPensionService, PensionService>();
             builder.Services.AddTransient<IIncomeTaxReportService, IncomeTaxReportService>();
-            
+
+            builder.Services.AddAutoMapper(typeof(ModelToEntityMapping).Assembly);
+                
             var app = builder.Build();
 
             app.UseMiddleware<TimedOperationMiddleware>();
@@ -71,12 +73,6 @@ namespace Api
             }
 
             app.MapControllers();
-
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<ModelToEntityMapping>();
-                cfg.AddProfile<EntityToModelMapping>();
-            });
 
             app.Run();
         }
