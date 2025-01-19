@@ -1,8 +1,0 @@
-v1alpha1.extension_repo(name='default', url='https://github.com/tilt-dev/tilt-extensions')
-load('ext://logger', 'logger')
-
-def docker_build_local(path):
-    tag = path.split("/")[len(path.split("/"))-1] + ":local"
-    logger.info("Build base docker image {} and tag {}".format(path, tag))
-    update_settings(suppress_unused_image_warnings=[tag])
-    docker_build(tag, path)
