@@ -22,7 +22,7 @@ namespace Services
         Task<bool> DeleteBank(int id);
     }
     
-    public class BankService(IBankRepository repository, IBankAccountRepository bankAccountRepository)
+    public class BankService(IMapper mapper, IBankRepository repository, IBankAccountRepository bankAccountRepository)
         : IBankService
     {
         public Task<List<BankList>> GetBanks(string userId)
@@ -32,7 +32,7 @@ namespace Services
                 .Where(x => x.User_Id == userId)
                 .ToList();
 
-            var mappedBanks = banks.Select(x => Mapper.Map<BankList>(x)).ToList();
+            var mappedBanks = banks.Select(mapper.Map<BankList>).ToList();
 
             mappedBanks.ForEach(bank =>
             {
@@ -58,7 +58,7 @@ namespace Services
         {
             await Validate(bankDetails);
 
-            var bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
+            var bank = mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
             bank.User_Id = userId;
 
             repository.Create(bank);
@@ -75,7 +75,7 @@ namespace Services
                 return null;
             }
 
-            return Task.FromResult(Mapper.Map<BankDetails>(bank));
+            return Task.FromResult(mapper.Map<BankDetails>(bank));
         }
 
         public async Task<bool> EditBank(BankDetails bankDetails, string userId)
@@ -83,7 +83,7 @@ namespace Services
             await Validate(bankDetails);
 
             var bank = repository.GetListAsNoTracking().SingleOrDefault(x => x.Id == bankDetails.Id);
-            bank = Mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
+            bank = mapper.Map<DataAccessLayer.Entities.Bank>(bankDetails);
             bank.User_Id = userId;
 
             repository.Update(bank);

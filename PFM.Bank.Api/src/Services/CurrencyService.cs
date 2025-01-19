@@ -15,13 +15,13 @@ namespace Services
         Task<CurrencyDetails> GetById(int id);
     }
     
-    public class CurrencyService(ICurrencyRepository repository) : ICurrencyService
+    public class CurrencyService(IMapper mapper, ICurrencyRepository repository) : ICurrencyService
     {
         public Task<List<CurrencyList>> GetCurrencies()
         {
             var currencies = repository.GetList().ToList();
 
-            var mappedCurrencies = currencies.Select(Mapper.Map<CurrencyList>).ToList();
+            var mappedCurrencies = currencies.Select(mapper.Map<CurrencyList>).ToList();
 
             mappedCurrencies.ForEach(currency =>
             {
@@ -40,7 +40,7 @@ namespace Services
                 return null;
             }
 
-            return Task.FromResult(Mapper.Map<CurrencyDetails>(currency));
+            return Task.FromResult(mapper.Map<CurrencyDetails>(currency));
         }
     }
 }

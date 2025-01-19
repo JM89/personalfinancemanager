@@ -15,13 +15,13 @@ namespace Services
         Task<CountryDetails> GetById(int id);
     }
     
-    public class CountryService(ICountryRepository repository) : ICountryService
+    public class CountryService(IMapper mapper, ICountryRepository repository) : ICountryService
     {
         public Task<List<CountryList>> GetCountries()
         {
             var countries = repository.GetList().ToList();
 
-            var mappedCountries = countries.Select(Mapper.Map<CountryList>).ToList();
+            var mappedCountries = countries.Select(mapper.Map<CountryList>).ToList();
 
             mappedCountries.ForEach(country =>
             {
@@ -40,7 +40,7 @@ namespace Services
                 return null;
             }
 
-            return Task.FromResult(Mapper.Map<CountryDetails>(country));
+            return Task.FromResult(mapper.Map<CountryDetails>(country));
         }
     }
 }

@@ -28,16 +28,16 @@ namespace Services
         Task<bool> SetAsFavorite(int id);
     }
     
-    public class BankAccountService(IBankAccountRepository repository, IEventPublisher eventPublisher)
+    public class BankAccountService(IMapper mapper, IBankAccountRepository repository, IEventPublisher eventPublisher)
         : IBankAccountService
     {
-        private readonly string PropertyCannotBeModified = "Property cannot be modified on an existing bank account.";
+        private const string PropertyCannotBeModified = "Property cannot be modified on an existing bank account.";
 
         public async Task<bool> CreateBankAccount(AccountDetails accountDetails, string userId)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var account = Mapper.Map<Account>(accountDetails);
+                var account = mapper.Map<Account>(accountDetails);
 
                 account.User_Id = userId;
                 account.CurrentBalance = account.InitialBalance;
@@ -45,7 +45,7 @@ namespace Services
 
                 repository.Create(account);
 
-                var evt = Mapper.Map<BankAccountCreated>(account);
+                var evt = mapper.Map<BankAccountCreated>(account);
 
                 var published = await eventPublisher.PublishAsync(evt, default);
                 
@@ -62,7 +62,7 @@ namespace Services
                 .Where(x => x.User_Id == userId)
                 .ToList();
 
-            var mappedAccounts = accounts.Select(x => Mapper.Map<AccountList>(x)).ToList();
+            var mappedAccounts = accounts.Select(mapper.Map<AccountList>).ToList();
 
             mappedAccounts.ForEach(account =>
             {
@@ -82,50 +82,49 @@ namespace Services
                 return null;
             }
 
-            return Task.FromResult(Mapper.Map<AccountDetails>(account));
+            return Task.FromResult(mapper.Map<AccountDetails>(account));
         }
 
         public Task<bool> EditBankAccount(AccountDetails accountDetails, string userId)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            
+            var account = repository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
+
+            var businessException = new BusinessException();
+
+            if (account.Currency.Id != accountDetails.CurrencyId)
             {
-                var account = repository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
-
-                var businessException = new BusinessException();
-
-                if (account.Currency.Id != accountDetails.CurrencyId)
-                {
-                    businessException.AddErrorMessage(nameof(account.Currency), PropertyCannotBeModified);
-                }
-
-                if (account.Bank.Id != accountDetails.BankId)
-                {
-                    businessException.AddErrorMessage(nameof(account.Bank), PropertyCannotBeModified);
-                }
-
-                if (account.User_Id != userId)
-                {
-                    businessException.AddErrorMessage(nameof(account.User_Id), PropertyCannotBeModified);
-                }
-
-                if (account.IsSavingAccount != accountDetails.IsSavingAccount)
-                {
-                    businessException.AddErrorMessage(nameof(account.IsSavingAccount), PropertyCannotBeModified);
-                }
-
-                if (businessException.HasError())
-                    throw businessException;
-
-                account = Mapper.Map<Account>(accountDetails);
-                account.User_Id = userId;
-                repository.Update(account);
-
-                var updated = repository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
-
-                scope.Complete();
-
-                return Task.FromResult(true);
+                businessException.AddErrorMessage(nameof(account.Currency), PropertyCannotBeModified);
             }
+
+            if (account.Bank.Id != accountDetails.BankId)
+            {
+                businessException.AddErrorMessage(nameof(account.Bank), PropertyCannotBeModified);
+            }
+
+            if (account.User_Id != userId)
+            {
+                businessException.AddErrorMessage(nameof(account.User_Id), PropertyCannotBeModified);
+            }
+
+            if (account.IsSavingAccount != accountDetails.IsSavingAccount)
+            {
+                businessException.AddErrorMessage(nameof(account.IsSavingAccount), PropertyCannotBeModified);
+            }
+
+            if (businessException.HasError())
+                throw businessException;
+
+            account = mapper.Map<Account>(accountDetails);
+            account.User_Id = userId;
+            repository.Update(account);
+
+            var updated = repository.GetById(accountDetails.Id, a => a.Currency, a => a.Bank);
+
+            scope.Complete();
+
+            return Task.FromResult(true);
         }
 
         public async Task<bool> DeleteBankAccount(int id)
@@ -135,7 +134,7 @@ namespace Services
                 var account = repository.GetById(id, a => a.Currency, a => a.Bank);
                 repository.Delete(account);
 
-                var evt = Mapper.Map<BankAccountDeleted>(account);
+                var evt = mapper.Map<BankAccountDeleted>(account);
 
                 var published = await eventPublisher.PublishAsync(evt, default);
 

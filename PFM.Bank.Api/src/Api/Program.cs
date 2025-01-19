@@ -8,7 +8,6 @@ using Api.MiddleWares;
 using Api.Settings;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using AutoMapper;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using PFM.Services.Core.Automapper;
@@ -38,9 +37,11 @@ namespace Api
                 .AddEventPublisherConfigurations(builder.Configuration);
 
             builder.Services.AddDbContext<PFMContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("PFMConnection")));
-
+            
+            builder.Services.AddAutoMapper(typeof(ModelToEntityMapping).Assembly);
+            
             builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-            builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacModule()));
+            builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new AutoFacModule()));
 
             var app = builder.Build();
 
@@ -62,13 +63,6 @@ namespace Api
             }
 
             app.MapControllers();
-
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<ModelToEntityMapping>();
-                cfg.AddProfile<EntityToModelMapping>();
-                cfg.AddProfile<EntityToContractMapping>();
-            });
 
             app.Run();
         }
