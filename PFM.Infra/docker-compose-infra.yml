@@ -5,6 +5,12 @@ networks:
 
 services:
 
+  base-img-terraform-aws-cli:
+    image: terraform-aws-cli:local
+    build:
+      context: ./terraform-aws-cli
+    entrypoint: echo "terraform-aws-cli:local - Build complete"
+
   # Simulating a centralized SQL Server instance
   db-server:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -72,6 +78,8 @@ services:
     command: start-dev
     networks:
       - local-network
+    depends_on:
+      - base-img-terraform-aws-cli
 
   keycloak-init:
     container_name: keycloak-init
