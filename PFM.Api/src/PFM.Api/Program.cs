@@ -64,6 +64,8 @@ namespace PFM.Api
             var dataSettings = builder.Configuration.GetSection("DataSettings").Get<DataSettings>() ?? new DataSettings();
             builder.Services.AddSingleton(dataSettings);
 
+            builder.Services.AddAutoMapper(typeof(ModelToEntityMapping).Assembly);
+            
             builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
             builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new AutoFacModule()));
 
@@ -87,14 +89,6 @@ namespace PFM.Api
             }
 
             app.MapControllers();
-
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<ModelToEntityMapping>();
-                cfg.AddProfile<EntityToModelMapping>();
-                cfg.AddProfile<SearchParametersMapping>();
-            });
-
             app.Run();
         }
     }

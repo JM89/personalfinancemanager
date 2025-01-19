@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using PFM.Services.Interfaces;
@@ -8,20 +9,13 @@ using PFM.Api.Contracts.PaymentMethod;
 
 namespace PFM.Services
 {
-    public class PaymentMethodService : IPaymentMethodService
+    public class PaymentMethodService(IMapper mapper, IPaymentMethodRepository paymentMethodRepository) : IPaymentMethodService
     {
-        private readonly IPaymentMethodRepository _paymentMethodRepository;
-
-        public PaymentMethodService(IPaymentMethodRepository paymentMethodRepository)
-        {
-            this._paymentMethodRepository = paymentMethodRepository;
-        }
-
         public IList<PaymentMethodList> GetPaymentMethods()
         {
-            var paymentMethods = _paymentMethodRepository.GetList().ToList();
+            var paymentMethods = paymentMethodRepository.GetList().ToList();
 
-            var mappedPaymentMethods = paymentMethods.Select(x => Mapper.Map<PaymentMethodList>(x)).ToList();
+            var mappedPaymentMethods = paymentMethods.Select(mapper.Map<PaymentMethodList>).ToList() ?? throw new ArgumentNullException("paymentMethods.Select(x => mapper.Map<PaymentMethodList>(x)).ToList()");
 
             mappedPaymentMethods.ForEach(paymentMethod =>
             {

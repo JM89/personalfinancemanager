@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace PFM.Services
 {
     public class BudgetPlanService(
+        IMapper mapper,
         IBudgetPlanRepository budgetPlanRepository,
         IBudgetByExpenseTypeRepository budgetByExpenseTypeRepository)
         : IBudgetPlanService
@@ -26,7 +27,7 @@ namespace PFM.Services
 
             var budgetPlans = budgetPlanRepository.GetList().Where(x => budgetPlansForAccount.Contains(x.Id)).ToList();
             
-            return Task.FromResult(budgetPlans.Select(Mapper.Map<BudgetPlanList>));
+            return Task.FromResult(budgetPlans.Select(mapper.Map<BudgetPlanList>));
         }
         
         public async Task<BudgetPlanDetails> GetCurrent(int accountId)
@@ -55,7 +56,7 @@ namespace PFM.Services
             foreach(var budgetPlanExpense in budgetPlanExpenses)
             {
                 var expenseType = budgetPlanExpense.ExpenseType;
-                var mappedeExpenseType = Mapper.Map<ExpenseTypeList>(expenseType);
+                var mappedeExpenseType = mapper.Map<ExpenseTypeList>(expenseType);
                 var budgetExpenseType = new BudgetPlanExpenseType()
                 {
                     ExpenseType = mappedeExpenseType,
@@ -64,7 +65,7 @@ namespace PFM.Services
                 budgetExpenseTypes.Add(budgetExpenseType);
             }
 
-            var mappedBudgetPlan = Mapper.Map<BudgetPlanDetails>(budgetPlan);
+            var mappedBudgetPlan = mapper.Map<BudgetPlanDetails>(budgetPlan);
             mappedBudgetPlan.ExpenseTypes = budgetExpenseTypes.ToList();
 
             return Task.FromResult(mappedBudgetPlan);
@@ -77,7 +78,7 @@ namespace PFM.Services
         /// <param name="accountId"></param>
         public Task<bool> CreateBudgetPlan(BudgetPlanDetails budgetPlanDetails, int accountId)
         {
-            var budgetPlan = Mapper.Map<BudgetPlan>(budgetPlanDetails);
+            var budgetPlan = mapper.Map<BudgetPlan>(budgetPlanDetails);
             budgetPlanRepository.Create(budgetPlan);
 
             foreach(var expenseType in budgetPlanDetails.ExpenseTypes)

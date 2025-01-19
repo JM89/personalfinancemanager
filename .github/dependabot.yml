@@ -5,6 +5,11 @@ updates:
       - "/*/" 
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "FluentAssertions"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "EventStore.Client.Grpc.Streams"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "docker" 
     directories:
       - "/*/" 

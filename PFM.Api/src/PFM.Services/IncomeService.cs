@@ -12,19 +12,13 @@ using PFM.Services.Caches;
 
 namespace PFM.Services
 {
-    public class IncomeService: IIncomeService
+    public class IncomeService(
+        IMapper mapper,
+        IIncomeRepository incomeRepository,
+        IBankAccountCache bankAccountCache,
+        ContextMovementStrategy contextMovementStrategy)
+        : IIncomeService
     {
-        private readonly IIncomeRepository _incomeRepository;
-        private readonly IBankAccountCache _bankAccountCache;
-        private readonly ContextMovementStrategy _contextMovementStrategy;
-
-        public IncomeService(IIncomeRepository incomeRepository, IBankAccountCache bankAccountCache, ContextMovementStrategy contextMovementStrategy)
-        {
-            this._incomeRepository = incomeRepository;
-            this._bankAccountCache = bankAccountCache;
-            this._contextMovementStrategy = contextMovementStrategy;
-        }
-
         public async Task<bool> CreateIncomes(List<IncomeDetails> incomeDetails)
         {
             var resultBatch = true;
@@ -43,14 +37,14 @@ namespace PFM.Services
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var income = Mapper.Map<Income>(incomeDetails);
+                var income = mapper.Map<Income>(incomeDetails);
 
                 var movement = new Movement(incomeDetails);
 
-                var strategy = _contextMovementStrategy.GetMovementStrategy(DataAccessLayer.Enumerations.PaymentMethod.Transfer);
+                var strategy = contextMovementStrategy.GetMovementStrategy(DataAccessLayer.Enumerations.PaymentMethod.Transfer);
                 var result = await strategy.Credit(movement);
 
-                _incomeRepository.Create(income);
+                incomeRepository.Create(income);
 
                 scope.Complete();
 
@@ -60,15 +54,15 @@ namespace PFM.Services
 
         public async Task<IList<IncomeList>> GetIncomes(int accountId)
         {
-            var incomes = _incomeRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
+            var incomes = incomeRepository.GetList2().Where(x => x.AccountId == accountId).ToList();
 
             var mappedIncomes = new List<IncomeList>();
             
             foreach (var income in incomes)
             {
-                var map = Mapper.Map<IncomeList>(income);
+                var map = mapper.Map<IncomeList>(income);
 
-                var account = await _bankAccountCache.GetById(income.AccountId);
+                var account = await bankAccountCache.GetById(income.AccountId);
                 map.AccountCurrencySymbol = account.CurrencySymbol;
 
                 mappedIncomes.Add(map);
@@ -79,27 +73,27 @@ namespace PFM.Services
 
         public Task<IncomeDetails> GetById(int id)
         {
-            var income = _incomeRepository.GetById(id);
+            var income = incomeRepository.GetById(id);
 
             if (income == null)
             {
                 return null;
             }
 
-            return Task.FromResult(Mapper.Map<IncomeDetails>(income));
+            return Task.FromResult(mapper.Map<IncomeDetails>(income));
         }
 
         public async Task<bool> DeleteIncome(int id)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var income = _incomeRepository.GetById(id);
-                var incomeDetails = Mapper.Map<IncomeDetails>(income);
+                var income = incomeRepository.GetById(id);
+                var incomeDetails = mapper.Map<IncomeDetails>(income);
 
-                var strategy = _contextMovementStrategy.GetMovementStrategy(DataAccessLayer.Enumerations.PaymentMethod.Transfer);
+                var strategy = contextMovementStrategy.GetMovementStrategy(DataAccessLayer.Enumerations.PaymentMethod.Transfer);
                 var result = await strategy.Debit(new Movement(incomeDetails));
 
-                _incomeRepository.Delete(income);
+                incomeRepository.Delete(income);
 
                 scope.Complete();
 
