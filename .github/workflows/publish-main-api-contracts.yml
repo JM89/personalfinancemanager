@@ -65,7 +65,7 @@ jobs:
         run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.PAT_WRITE_PACKAGES }} "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" --store-password-in-clear-text
 
       - name: Setup .NET Core SDK ${{ env.DOTNET_ENV }}
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_ENV }}
 
