@@ -33,9 +33,10 @@ services:
       APP_OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # OTEL defaults
       APP_ConnectionStrings__PFMConnection: Server=db-server,1433;Database=PFM_MAIN_DB;User Id=PFM_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
       APP_ConnectionStrings__EventStoreConnection: esdb://eventstore:2113?tls=false
-      APP_Auth__Authority: http://keycloak:8080/realms/pfm
-      APP_Auth__ValidateIssuer: false
-      APP_BankApi__EndpointUrl: https://pfm-bank-api:50001
+      APP_ApplicationSettings__AuthOptions__Authority: http://keycloak:8080/realms/pfm
+      APP_ApplicationSettings__AuthOptions__ValidateIssuer: false
+      APP_ApplicationSettings__BankApiOptions__EndpointUrl: https://pfm-bank-api:50001
+      APP_ApplicationSettings__TaxAndPensionApiOptions__EndpointUrl: https://pfm-tnp-api:50002
       APP_DataSettings__DbConnection: Server=db-server,1433;Database=PFM_MVT_AGGR_DB;User Id=PFM_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
     container_name: pfm-api
     ports:

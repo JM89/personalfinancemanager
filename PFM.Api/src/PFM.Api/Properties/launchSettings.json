@@ -20,7 +20,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "APP_ApplicationSettings__BankApiOptions__EndpointUrl": "https://localhost:7099",
         "APP_ApplicationSettings__TaxAndPensionApiOptions__EndpointUrl": "https://localhost:7111",
-        "App_ApplicationSettings__AuthOptions__Enabled": "false"
+        "APP_ApplicationSettings__AuthOptions__Enabled": "false"
       },
       "dotnetRunMessages": true
     }

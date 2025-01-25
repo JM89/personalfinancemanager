@@ -6,12 +6,12 @@ namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PaymentMethodController(IPaymentMethodService service) : ControllerBase
+    public class PaymentMethodController(IPaymentMethodService api) : ControllerBase
     {
         [HttpGet("GetList")]
         public IEnumerable<PaymentMethodList> GetList()
         {
-            return service.GetPaymentMethods();
+            return api.GetPaymentMethods();
         }
     }
 }

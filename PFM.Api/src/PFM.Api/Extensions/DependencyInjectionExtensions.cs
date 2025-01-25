@@ -13,6 +13,7 @@ using Refit;
 using System.Text.Json;
 using PFM.Services.ExternalServices.BankApi;
 using PFM.Services.ExternalServices.TaxAndPensionApi;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace PFM.Api.Extensions
@@ -59,6 +60,8 @@ namespace PFM.Api.Extensions
 
         public static IServiceCollection AddBankApi(this IServiceCollection services, ApiOptions apiOptions, bool isDevelopmentEnvironment)
         {
+            Log.Logger.Information($"Connecting to Bank API on {apiOptions.EndpointUrl}");
+            
             var refitSettings = SetDefaultRefitSettings();
 
             var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
@@ -74,8 +77,10 @@ namespace PFM.Api.Extensions
 
         public static IServiceCollection AddPensionApi(this IServiceCollection services, ApiOptions apiOptions, bool isDevelopmentEnvironment)
         {
+            Log.Logger.Information($"Connecting to Pension & Tax API on {apiOptions.EndpointUrl}");
+            
             var refitSettings = SetDefaultRefitSettings();
-
+            
             var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
 
             services

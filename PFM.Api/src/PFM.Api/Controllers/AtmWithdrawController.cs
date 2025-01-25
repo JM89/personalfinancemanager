@@ -6,50 +6,48 @@ namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AtmWithdrawController(IAtmWithdrawService service) : ControllerBase
+    public class AtmWithdrawController(IAtmWithdrawService api) : ControllerBase
     {
-        public IAtmWithdrawService _service { get; set; } = service;
-
         [HttpGet("GetList/{accountId}")]
         public async Task<IEnumerable<AtmWithdrawList>> GetList(int accountId)
         {
-            return await _service.GetAtmWithdrawsByAccountId(accountId);
+            return await api.GetAtmWithdrawsByAccountId(accountId);
         }
 
         [HttpGet("Get/{id}")]
         public async Task<AtmWithdrawDetails> Get(int id)
         {
-            return await _service.GetById(id);
+            return await api.GetById(id);
         }
         
         [HttpPost("Create")]
         public async Task<bool> Post([FromBody]AtmWithdrawDetails createdObj)
         {
-            return await _service.CreateAtmWithdraw(createdObj);
+            return await api.CreateAtmWithdraw(createdObj);
         }
         
         [HttpDelete("Delete/{id}")]
         public async Task<bool> Delete(int id)
         {
-            return await _service.DeleteAtmWithdraw(id);
+            return await api.DeleteAtmWithdraw(id);
         }
 
         [HttpPost("CreateAtmWithdraws")]
         public async Task<bool> CreateAtmWithdraws([FromBody]List<AtmWithdrawDetails> createdObj)
         {
-            return await _service.CreateAtmWithdraws(createdObj);
+            return await api.CreateAtmWithdraws(createdObj);
         }
 
         [HttpPost("CloseAtmWithdraw/{id}")]
         public async Task<bool> CloseAtmWithdraw(int id)
         {
-            return await _service.CloseAtmWithdraw(id);
+            return await api.CloseAtmWithdraw(id);
         }
 
         [HttpPost("ChangeDebitStatus/{id}")]
         public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            return await _service.ChangeDebitStatus(id, debitStatus);
+            return await api.ChangeDebitStatus(id, debitStatus);
         }
     }
 }

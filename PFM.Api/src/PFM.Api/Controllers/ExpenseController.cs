@@ -6,48 +6,48 @@ namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ExpenseController(IExpenseService service) : ControllerBase
+    public class ExpenseController(IExpenseService api) : ControllerBase
     {
         [HttpGet("Get/{id}")]
         public async Task<ExpenseDetails> Get(int id)
         {
-            return await service.GetById(id);
+            return await api.GetById(id);
         }
         
         [HttpPost("Create")]
         public async Task<bool> Post([FromBody]ExpenseDetails createdObj)
         {
-            return await service.CreateExpense(createdObj);
+            return await api.CreateExpense(createdObj);
         }
 
         [HttpPost("CreateExpenses")]
         public async Task<bool> CreateExpenses([FromBody]List<ExpenseDetails> createdObjs)
         {
-            return await service.CreateExpenses(createdObjs);
+            return await api.CreateExpenses(createdObjs);
         }
        
         [HttpDelete("Delete/{id}")]
         public async Task<bool> Delete(int id)
         {
-            return await service.DeleteExpense(id);
+            return await api.DeleteExpense(id);
         }
 
         [HttpPost("CreateMultiple")]
         public async Task<bool> CreateMultiple([FromBody]List<ExpenseDetails> ExpenseDetails)
         {
-            return await service.CreateExpenses(ExpenseDetails);
+            return await api.CreateExpenses(ExpenseDetails);
         }
 
         [HttpPost("ChangeDebitStatus/{id}/{debitStatus}")]
         public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            return await service.ChangeDebitStatus(id, debitStatus);
+            return await api.ChangeDebitStatus(id, debitStatus);
         }
 
         [HttpPost("GetExpenses")]
         public async Task<IList<ExpenseList>> GetExpenses([FromBody]Api.Contracts.SearchParameters.ExpenseGetListSearchParameters search)
         {
-            return await service.GetExpenses(search);
+            return await api.GetExpenses(search);
         }
     }
 }

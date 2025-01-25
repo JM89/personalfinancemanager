@@ -6,12 +6,12 @@ namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MovementSummaryController(IMovementSummaryService service) : ControllerBase
+    public class MovementSummaryController(IMovementSummaryService api) : ControllerBase
     {
         [HttpPost("GetList")]
         public async Task<IList<MovementSummary>> GetMovementSummaryOverTime([FromBody] Api.Contracts.SearchParameters.MovementSummarySearchParameters search)
         {
-            return await service.GetMovementSummaryOverTime(search);
+            return await api.GetMovementSummaryOverTime(search);
         }
     }
 }

@@ -2,18 +2,12 @@
 
 namespace PFM.Api.Extensions
 {
-    public class AuthHeaderHandler : DelegatingHandler
+    public class AuthHeaderHandler(IHttpContextAccessor httpContextAccessor, Serilog.ILogger logger) : DelegatingHandler
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public AuthHeaderHandler(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var bearerToken = _httpContextAccessor?.HttpContext?.Request.Headers.Authorization.FirstOrDefault() ?? null;
+            var context = httpContextAccessor.HttpContext ?? new DefaultHttpContext();
+            var bearerToken = context.Request.Headers.Authorization.FirstOrDefault() ?? null;
 
             if (bearerToken != null)
             {

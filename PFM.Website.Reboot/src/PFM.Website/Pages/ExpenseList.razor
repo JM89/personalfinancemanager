@@ -118,11 +118,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         selectedBankAccount = await BankAccountService.GetCurrentAccount(AccountId);
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
+        
+        if (selectedBankAccount != null)
         {
             await FetchExpenses(0);
         }

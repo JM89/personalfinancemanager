@@ -7,7 +7,7 @@
 		public bool RequireHttpsMetadata { get; set; }
 
 		/// <summary>
-		/// Disabled when working with docker as the issuer in token is localhost:8080, while the authority is keucloak:8080
+		/// Disabled when working with docker as the issuer in token is localhost:8080, while the authority is keycloak:8080
 		/// </summary>
         public bool ValidateIssuer { get; set; }
 		
