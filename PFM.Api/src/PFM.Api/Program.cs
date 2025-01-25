@@ -50,11 +50,11 @@ namespace PFM.Api
             
             builder.Services
                 .AddAuthenticationAndAuthorization(appSettings.AuthOptions)
-                .AddPensionApi(appSettings.TaxAndPensionApiOptions, devMode)
-                .AddBankApi(appSettings.BankApiOptions, devMode)
                 .ConfigureLogging(builder.Configuration, builder.Environment.EnvironmentName)
                 .ConfigureTracing(appSettings.TracingOptions)
                 .ConfigureMetrics(appSettings.MetricsOptions)
+                .AddPensionApi(appSettings.TaxAndPensionApiOptions, devMode)
+                .AddBankApi(appSettings.BankApiOptions, devMode)
                 .AddEndpointsApiExplorer()
                 .AddSwaggerDefinition(appSettings)
                 .AddEventPublisherConfigurations(builder.Configuration);

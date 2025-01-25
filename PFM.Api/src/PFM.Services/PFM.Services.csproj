@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Core\Automapper\" />
+    <Folder Include="Interfaces\" />
     <Folder Include="Utils\" />
   </ItemGroup>
 

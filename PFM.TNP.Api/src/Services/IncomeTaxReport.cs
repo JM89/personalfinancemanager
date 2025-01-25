@@ -3,7 +3,9 @@ using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
+using PFM.Services.Core.Exceptions;
 using PFM.TNP.Api.Contracts.IncomeTaxReport;
 
 namespace Services;
@@ -44,7 +46,11 @@ public class IncomeTaxReportService(
     public async Task<IncomeTaxReportDetails> GetById(Guid id)
     {
         var entity = await repository.GetById(id);
-        return entity == null ? null : mapper.Map<IncomeTaxReportDetails>(entity);
+        if (entity == null)
+        {
+            throw new BusinessException(nameof(IncomeTaxReport),$"No entity found for id {id}");
+        }
+        return mapper.Map<IncomeTaxReportDetails>(entity);
     }
 
     public async Task<bool> Edit(Guid id, IncomeTaxReportSaveRequest request)
