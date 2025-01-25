@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using PFM.DataAccessLayer.Repositories.Interfaces;
-using PFM.Services.Interfaces;
+using PFM.Services;
 using System.Reflection;
 
 namespace PFM.Api.Extensions

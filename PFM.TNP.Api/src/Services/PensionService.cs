@@ -3,7 +3,9 @@ using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
+using PFM.Services.Core.Exceptions;
 using PFM.TNP.Api.Contracts.Pension;
 
 namespace Services;
@@ -44,8 +46,12 @@ public class PensionService(
 
     public async Task<PensionDetails> GetById(Guid id)
     {
-        var pension = await pensionRepository.GetById(id);
-        return pension == null ? null : mapper.Map<PensionDetails>(pension);
+        var entity = await pensionRepository.GetById(id);
+        if (entity == null)
+        {
+            throw new BusinessException(nameof(Pension),$"No entity found for id {id}");
+        }
+        return mapper.Map<PensionDetails>(entity);
     }
 
     public async Task<bool> Edit(Guid id, PensionSaveRequest request)

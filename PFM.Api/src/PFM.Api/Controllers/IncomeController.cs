@@ -1,48 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.Income;
-using PFM.Services.Interfaces;
+using PFM.Services;
 
 namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class IncomeController : ControllerBase
+    public class IncomeController(IIncomeService service) : ControllerBase
     {
-        private readonly IIncomeService _incomeService;
-
-        public IncomeController(IIncomeService IncomeService)
-        {
-            _incomeService = IncomeService;
-        }
-
         [HttpGet("GetList/{accountId}")]
         public async Task<IEnumerable<IncomeList>> GetList(int accountId)
         {
-            return await _incomeService.GetIncomes(accountId);
+            return await service.GetIncomes(accountId);
         }
 
         [HttpGet("Get/{id}")]
         public async Task<IncomeDetails> Get(int id)
         {
-            return await _incomeService.GetById(id);
+            return await service.GetById(id);
         }
         
         [HttpPost("Create")]
         public async Task<bool> Post([FromBody]IncomeDetails createdObj)
         {
-            return await _incomeService.CreateIncome(createdObj);
+            return await service.CreateIncome(createdObj);
         }
         
         [HttpDelete("Delete/{id}")]
         public async Task<bool> Delete(int id)
         {
-            return await _incomeService.DeleteIncome(id);
+            return await service.DeleteIncome(id);
         }
         
         [HttpPost("CreateIncomes")]
         public async Task<bool> CreateIncomes([FromBody]List<IncomeDetails> createdObjs)
         {
-            return await _incomeService.CreateIncomes(createdObjs);
+            return await service.CreateIncomes(createdObjs);
         }
     }
 }

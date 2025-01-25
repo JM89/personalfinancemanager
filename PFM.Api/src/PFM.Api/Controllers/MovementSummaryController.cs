@@ -1,25 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.MovementSummary;
-using PFM.Services.Interfaces;
+using PFM.Services;
 
 namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MovementSummaryController : ControllerBase
+    public class MovementSummaryController(IMovementSummaryService service) : ControllerBase
     {
-        private readonly IMovementSummaryService _movementSummaryService;
-
-        public MovementSummaryController(IMovementSummaryService movementSummaryService)
-        {
-            _movementSummaryService = movementSummaryService;
-        }
-
-
         [HttpPost("GetList")]
         public async Task<IList<MovementSummary>> GetMovementSummaryOverTime([FromBody] Api.Contracts.SearchParameters.MovementSummarySearchParameters search)
         {
-            return await _movementSummaryService.GetMovementSummaryOverTime(search);
+            return await service.GetMovementSummaryOverTime(search);
         }
     }
 }

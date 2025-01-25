@@ -4,6 +4,7 @@ using PFM.Services.Core.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
 using Services.Core;
 
@@ -68,14 +69,14 @@ namespace Services
 
         public Task<BankDetails> GetById(int id)
         {
-            var bank = repository.GetById(id);
+            var entity = repository.GetById(id);
 
-            if (bank == null)
+            if (entity == null)
             {
-                return null;
+                throw new BusinessException(nameof(Bank),$"No entity found for id {id}");
             }
 
-            return Task.FromResult(mapper.Map<BankDetails>(bank));
+            return Task.FromResult(mapper.Map<BankDetails>(entity));
         }
 
         public async Task<bool> EditBank(BankDetails bankDetails, string userId)

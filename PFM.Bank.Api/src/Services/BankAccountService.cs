@@ -61,7 +61,7 @@ namespace Services
                 .GetList2(u => u.Currency, u => u.Bank)
                 .Where(x => x.User_Id == userId)
                 .ToList();
-
+            
             var mappedAccounts = accounts.Select(mapper.Map<AccountList>).ToList();
 
             mappedAccounts.ForEach(account =>
@@ -75,14 +75,14 @@ namespace Services
         
         public Task<AccountDetails> GetById(int id)
         {
-            var account = repository.GetList2(x => x.Currency, x => x.Bank).SingleOrDefault(x => x.Id == id);
+            var entity = repository.GetList2(x => x.Currency, x => x.Bank).SingleOrDefault(x => x.Id == id);
 
-            if (account == null)
+            if (entity == null)
             {
-                return null;
+                throw new BusinessException(nameof(Account),$"No entity found for id {id}");
             }
 
-            return Task.FromResult(mapper.Map<AccountDetails>(account));
+            return Task.FromResult(mapper.Map<AccountDetails>(entity));
         }
 
         public Task<bool> EditBankAccount(AccountDetails accountDetails, string userId)

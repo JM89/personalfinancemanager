@@ -1,60 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PFM.Api.Contracts.AtmWithdraw;
-using PFM.Services.Interfaces;
+using PFM.Services;
 
 namespace PFM.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AtmWithdrawController : ControllerBase
+    public class AtmWithdrawController(IAtmWithdrawService service) : ControllerBase
     {
-        public IAtmWithdrawService _atmWithdrawService { get; set; }
-
-        public AtmWithdrawController(IAtmWithdrawService AtmWithdrawService)
-        {
-            _atmWithdrawService = AtmWithdrawService;
-        }
+        public IAtmWithdrawService _service { get; set; } = service;
 
         [HttpGet("GetList/{accountId}")]
         public async Task<IEnumerable<AtmWithdrawList>> GetList(int accountId)
         {
-            return await _atmWithdrawService.GetAtmWithdrawsByAccountId(accountId);
+            return await _service.GetAtmWithdrawsByAccountId(accountId);
         }
 
         [HttpGet("Get/{id}")]
         public async Task<AtmWithdrawDetails> Get(int id)
         {
-            return await _atmWithdrawService.GetById(id);
+            return await _service.GetById(id);
         }
         
         [HttpPost("Create")]
         public async Task<bool> Post([FromBody]AtmWithdrawDetails createdObj)
         {
-            return await _atmWithdrawService.CreateAtmWithdraw(createdObj);
+            return await _service.CreateAtmWithdraw(createdObj);
         }
         
         [HttpDelete("Delete/{id}")]
         public async Task<bool> Delete(int id)
         {
-            return await _atmWithdrawService.DeleteAtmWithdraw(id);
+            return await _service.DeleteAtmWithdraw(id);
         }
 
         [HttpPost("CreateAtmWithdraws")]
         public async Task<bool> CreateAtmWithdraws([FromBody]List<AtmWithdrawDetails> createdObj)
         {
-            return await _atmWithdrawService.CreateAtmWithdraws(createdObj);
+            return await _service.CreateAtmWithdraws(createdObj);
         }
 
         [HttpPost("CloseAtmWithdraw/{id}")]
         public async Task<bool> CloseAtmWithdraw(int id)
         {
-            return await _atmWithdrawService.CloseAtmWithdraw(id);
+            return await _service.CloseAtmWithdraw(id);
         }
 
         [HttpPost("ChangeDebitStatus/{id}")]
         public async Task<bool> ChangeDebitStatus(int id, bool debitStatus)
         {
-            return await _atmWithdrawService.ChangeDebitStatus(id, debitStatus);
+            return await _service.ChangeDebitStatus(id, debitStatus);
         }
     }
 }
