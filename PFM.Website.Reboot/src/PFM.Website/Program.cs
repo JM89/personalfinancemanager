@@ -1,12 +1,9 @@
-﻿using Amazon;
-using Amazon.S3;
+﻿using PFM.Services.DependencyInjection;
+using PFM.Services.Monitoring.Logging;
+using PFM.Services.Monitoring.Metrics;
+using PFM.Services.Monitoring.Tracing;
+using PFM.Services.Persistence;
 using PFM.Website.Configurations;
-using PFM.Website.Monitoring.Logging;
-using PFM.Website.Monitoring.Metrics;
-using PFM.Website.Monitoring.Tracing;
-using PFM.Website.Persistence;
-using PFM.Website.Persistence.Implementations;
-using PFM.Website.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,45 +18,16 @@ var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).
 
 builder.Services.AddSingleton(appSettings);
 
-if (appSettings.UseRemoteStorageForBankIcons)
+if (appSettings.BankIconSettings.UseRemoteStorage)
 {
-    var s3Config = new AmazonS3Config() {
-        RegionEndpoint = RegionEndpoint.GetBySystemName(appSettings.AwsRegion)
-    };
-
-    if (!string.IsNullOrEmpty(appSettings.AwsEndpointUrl))
-    {
-        s3Config.ServiceURL = appSettings.AwsEndpointUrl;
-        s3Config.AuthenticationRegion = appSettings.AwsRegion;
-        s3Config.ForcePathStyle = true;
-    }
-
-    builder.Services.AddSingleton<IAmazonS3>(new AmazonS3Client(s3Config));
-
-    builder.Services
-        .AddSingleton<IObjectStorageService, AwsS3Service>();
+    builder.Services.AddRemoteStorage(appSettings.AwsEndpointUrl, appSettings.AwsRegion);
 }
 else
 {
-    builder.Services
-        .AddSingleton<IObjectStorageService, LocalStorageService>();
+    builder.Services.AddLocalStorage();
 }
 
-builder.Services
-    .AddSingleton<ExpenseTypeService>()
-    .AddSingleton<BankService>()
-    .AddSingleton<CountryService>()
-    .AddSingleton<BankAccountService>()
-    .AddSingleton<CurrencyService>()
-    .AddSingleton<IncomeService>()
-    .AddSingleton<SavingService>()
-    .AddSingleton<AtmWithdrawService>()
-    .AddSingleton<ExpenseService>()
-    .AddSingleton<PaymentMethodService>()
-    .AddSingleton<MovementSummaryService>()
-    .AddSingleton<BudgetPlanService>();
-
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddInternalServices();
 builder.Services.AddTransient<AuthHeaderHandler>();
 
 builder.Services

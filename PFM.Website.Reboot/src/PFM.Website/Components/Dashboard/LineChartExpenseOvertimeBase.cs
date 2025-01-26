@@ -5,8 +5,9 @@ using ChartJs.Blazor.Common.Enums;
 using ChartJs.Blazor.LineChart;
 using ChartJs.Blazor.Util;
 using Microsoft.AspNetCore.Components;
-using PFM.Website.Models;
-using PFM.Website.Services;
+using PFM.Models;
+using PFM.Services;
+using PFM.Utils;
 using PFM.Website.Utils;
 
 namespace PFM.Website.Components.Dashboard

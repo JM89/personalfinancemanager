@@ -2,18 +2,16 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
-using PFM.Website.ExternalServices;
-using PFM.Website.ExternalServices.InMemoryStorage;
 using Serilog;
 using Refit;
 using AutoMapper;
-using PFM.Website.Services.Mappers;
 using Microsoft.IdentityModel.Logging;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using PFM.Website.Monitoring.Metrics;
-using PFM.Website.Monitoring.Tracing;
+using PFM.Services.ExternalServices;
+using PFM.Services.ExternalServices.InMemoryStorage;
+using PFM.Services.Mappers;
 
 namespace PFM.Website.Configurations
 {

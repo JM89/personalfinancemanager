@@ -1,13 +1,12 @@
-﻿using System;
-using PFM.Website.Monitoring.Metrics;
-using PFM.Website.Monitoring.Tracing;
+﻿using PFM.Services.Configurations;
+using PFM.Services.Monitoring.Metrics;
+using PFM.Services.Monitoring.Tracing;
 
 namespace PFM.Website.Configurations
 {
 	public class ApplicationSettings
 	{
-		public bool UseRemoteStorageForBankIcons { get; init; }
-		public string BankIconLocation { get; init; } = string.Empty;
+		public BankIconSettings BankIconSettings { get; init; } = new();
         public string AwsRegion { get; init; } = "eu-west-2";
         public string AwsEndpointUrl { get; init; } = string.Empty;
         public PfmApiOptions PfmApiOptions { get; init; } = new ();
