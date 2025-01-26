@@ -1,15 +1,7 @@
-﻿namespace PFM.Models
+﻿namespace PFM.Models;
+
+public class PagedModel<T>(IList<T> list, int count)
 {
-	public class PagedModel<T>
-	{
-        public IList<T> List { get; }
-        public int Count { get; }
-
-        public PagedModel(IList<T> list, int count)
-        {
-            this.List = list;
-            this.Count = count;
-        }
-    }
+    public IList<T> List { get; } = list;
+    public int Count { get; } = count;
 }
-

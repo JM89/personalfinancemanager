@@ -29,6 +29,5 @@
   </ItemGroup>
 <ItemGroup>
   <ProjectReference Include="..\PFM.Models\PFM.Models.csproj" />
-  <ProjectReference Include="..\PFM.Utils\PFM.Utils.csproj" />
 </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
 using PFM.Models;
 using PFM.Services;
-using PFM.Utils;
+using PFM.Services.Utils;
 using PFM.Website.Utils;
 
 namespace PFM.Website.Components.Dashboard

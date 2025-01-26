@@ -8,7 +8,7 @@ using System.Drawing;
 using ChartJs.Blazor.Common.Enums;
 using PFM.Models;
 using PFM.Services;
-using PFM.Utils;
+using PFM.Services.Utils;
 
 namespace PFM.Website.Components.Dashboard
 {

@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace PFM.Utils;
+namespace PFM.Services.Utils;
 
 public static class StringExtensions
 {

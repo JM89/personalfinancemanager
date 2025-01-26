@@ -3,7 +3,7 @@ using PFM.Api.Contracts.ExpenseType;
 using PFM.Api.Contracts.MovementSummary;
 using PFM.Api.Contracts.SearchParameters;
 using PFM.Api.Contracts.Shared;
-using PFM.Utils;
+using PFM.Services.Utils;
 
 namespace PFM.Services.ExternalServices.InMemoryStorage
 {

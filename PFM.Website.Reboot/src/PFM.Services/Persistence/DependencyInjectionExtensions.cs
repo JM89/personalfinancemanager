@@ -3,27 +3,29 @@ using Amazon.Extensions.NETCore.Setup;
 using Amazon.Runtime;
 using Amazon.S3;
 using Microsoft.Extensions.DependencyInjection;
+using PFM.Services.Configurations;
 using PFM.Services.Persistence.Implementations;
 
 namespace PFM.Services.Persistence;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection AddLocalStorage(this IServiceCollection services)
+    public static IServiceCollection AddObjectStorage(this IServiceCollection services, ExternalServiceSettings settings)
     {
-        return services.AddSingleton<IObjectStorageService, LocalStorageService>();
-    }
-    
-    public static IServiceCollection AddRemoteStorage(this IServiceCollection services, string awsEndpointUrl, string awsRegion)
-    {
+        if (!settings.BankIconSettings.UseRemoteStorage)
+        {
+            services.AddSingleton<IObjectStorageService, LocalStorageService>();
+            return services;
+        }
+        
         var s3Config = new AmazonS3Config() {
-            RegionEndpoint = RegionEndpoint.GetBySystemName(awsRegion)
+            RegionEndpoint = RegionEndpoint.GetBySystemName(settings.AwsRegion)
         };
 
-        if (!string.IsNullOrEmpty(awsEndpointUrl))
+        if (!string.IsNullOrEmpty(settings.AwsEndpointUrl))
         {
-            s3Config.ServiceURL = awsEndpointUrl;
-            s3Config.AuthenticationRegion = awsRegion;
+            s3Config.ServiceURL = settings.AwsEndpointUrl;
+            s3Config.AuthenticationRegion = settings.AwsRegion;
             s3Config.ForcePathStyle = true;
         }
 

@@ -1,26 +1,26 @@
 using System.Text.Json;
-using Amazon;
-using Amazon.Extensions.NETCore.Setup;
-using Amazon.Runtime;
-using Amazon.S3;
-using Amazon.Util.Internal.PlatformServices;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PFM.Services.Configurations;
 using PFM.Services.ExternalServices;
 using PFM.Services.ExternalServices.InMemoryStorage;
 using PFM.Services.Mappers;
+using PFM.Services.Persistence;
 using PFM.Website.Configurations;
 using Refit;
 
-namespace PFM.Services.DependencyInjection;
+namespace PFM.Services.Configurations;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection AddInternalServices(this IServiceCollection services)
+    public static IServiceCollection AddExternalServices(this IServiceCollection services, ExternalServiceSettings settings, bool isDev)
     {
+        services.AddSingleton(settings);
         services.AddHttpContextAccessor();
+        services.AddObjectStorage(settings);
+        services.AddTransient<AuthHeaderHandler>();
+
+        services.AddPfmApi(settings.PfmApiOptions, isDev);
         
         return services
             .AddSingleton<ExpenseTypeService>()
@@ -37,7 +37,7 @@ public static class DependencyInjectionExtensions
             .AddSingleton<BudgetPlanService>();
     }
     
-    public static IServiceCollection AddPfmApi(this IServiceCollection services, IConfiguration configuration, PfmApiOptions options, bool isDevelopmentEnvironment)
+    private static IServiceCollection AddPfmApi(this IServiceCollection services, PfmApiOptions options, bool isDevelopmentEnvironment)
         {
             if (!options.Enabled)
             {
@@ -70,10 +70,7 @@ public static class DependencyInjectionExtensions
                         }
                     }
                 ),
-                ExceptionFactory = httpResponse =>
-                {
-                    return Task.FromResult<Exception?>(null);
-                }
+                ExceptionFactory = httpResponse => Task.FromResult<Exception?>(null)
             };
 
             var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };

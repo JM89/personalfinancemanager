@@ -4,7 +4,7 @@ using PFM.Api.Contracts.MovementSummary;
 using PFM.Api.Contracts.SearchParameters;
 using PFM.Models;
 using PFM.Services.ExternalServices;
-using PFM.Utils;
+using PFM.Services.Utils;
 
 namespace PFM.Services
 {

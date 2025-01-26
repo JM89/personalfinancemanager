@@ -37,7 +37,7 @@ namespace PFM.Website.Utils
             {
                 return ColorUtil.FromDrawingColor(Color.FromArgb(transparency.Value, ColorTranslator.FromHtml(graphColor)));
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return ColorUtil.FromDrawingColor(Color.Black);
             }

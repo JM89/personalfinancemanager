@@ -1,9 +1,7 @@
-﻿namespace PFM.Services.Persistence.Models
-{
-	public class TransferFile
-	{
-        public string Name { get; set; }
-        public MemoryStream Stream { get; set; }
-    }
-}
+﻿namespace PFM.Services.Persistence.Models;
 
+public class TransferFile
+{
+    public string Name { get; set; } = string.Empty;
+    public MemoryStream? Stream { get; set; }
+}

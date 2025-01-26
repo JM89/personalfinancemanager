@@ -1,4 +1,4 @@
-﻿using PFM.Services.DependencyInjection;
+﻿using PFM.Services.Configurations;
 using PFM.Services.Monitoring.Logging;
 using PFM.Services.Monitoring.Metrics;
 using PFM.Services.Monitoring.Tracing;
@@ -20,32 +20,18 @@ var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).
 
 builder.Services.AddSingleton(appSettings);
 
-if (appSettings.BankIconSettings.UseRemoteStorage)
-{
-    builder.Services.AddRemoteStorage(appSettings.AwsEndpointUrl, appSettings.AwsRegion);
-}
-else
-{
-    builder.Services.AddLocalStorage();
-}
-
-builder.Services.AddInternalServices();
-builder.Services.AddTransient<AuthHeaderHandler>();
+builder.Services.AddExternalServices(appSettings.ExternalServiceSettings, builder.Environment.IsDevelopment());
 
 builder.Services
     .AddAuth(builder.Configuration)
     .AddObjectMapper()
     .ConfigureLogging(builder.Configuration, builder.Environment)
     .ConfigureWebsiteTracing(appSettings.TracingOptions)
-    .ConfigureWebsiteMetrics(appSettings.MetricsOptions)
-    .AddPfmApi(builder.Configuration, appSettings.PfmApiOptions, builder.Environment.IsDevelopment());
+    .ConfigureWebsiteMetrics(appSettings.MetricsOptions);
 
 var app = builder.Build();
 
-Log.Logger
-    .ForContext("PfmApiOptions.Enabled", appSettings.PfmApiOptions.Enabled)
-    .ForContext("PfmApiOptions.EndpointUrl", appSettings.PfmApiOptions.EndpointUrl)
-    .Information("PFM Website started");
+Log.Logger.Information("PFM Website started");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

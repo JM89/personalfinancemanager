@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
+using PFM.Services.Configurations;
 
 namespace PFM.Website.Configurations
 {

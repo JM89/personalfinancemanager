@@ -16,7 +16,7 @@ namespace PFM.Services
         IMapper mapper,
         IHttpContextAccessor httpContextAccessor,
         IBankApi api,
-        BankIconSettings bankIconSettings,
+        ExternalServiceSettings settings,
         IObjectStorageService objectStorageService)
         : CoreService(logger, mapper, httpContextAccessor)
     {
@@ -86,7 +86,7 @@ namespace PFM.Services
 
         private async Task<string> UploadBankIcon(IBrowserFile bankIconFileInfo)
         {
-            var bankIconParams = new ObjectStorageParams(bankIconSettings.Location, string.Format("{0}.png", Guid.NewGuid()));
+            var bankIconParams = new ObjectStorageParams(settings.BankIconSettings.Location, string.Format("{0}.png", Guid.NewGuid()));
             using Stream imageStream = bankIconFileInfo.OpenReadStream(1024 * 1024 * 10);
             var bankIconPath = await objectStorageService.UploadFileAsync(bankIconParams, imageStream);
             return bankIconPath;
@@ -98,11 +98,11 @@ namespace PFM.Services
 
             await Parallel.ForEachAsync(iconPaths, _defaultParallelOptions, async (iconPath, ct) =>
             {
-                var p = new ObjectStorageParams(bankIconSettings.Location, iconPath);
+                var p = new ObjectStorageParams(settings.BankIconSettings.Location, iconPath);
                 try
                 {
                     var dl = await objectStorageService.DownloadFileAsync(p);
-                    if (dl != null)
+                    if (dl is { Stream: not null })
                     {
                         dict.GetOrAdd(iconPath, $"data:image/png;base64,{Convert.ToBase64String(dl.Stream.ToArray())}");
                     }
@@ -128,7 +128,7 @@ namespace PFM.Services
             {
                 try
                 {
-                    var p = new ObjectStorageParams(bankIconSettings.Location, existing.IconPath);
+                    var p = new ObjectStorageParams(settings.BankIconSettings.Location, existing.IconPath);
                     await objectStorageService.DeleteFileAsync(p);
                 }
                 catch(Exception ex)

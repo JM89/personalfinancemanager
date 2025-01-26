@@ -4,7 +4,7 @@ using ChartJs.Blazor.Common.Enums;
 using Microsoft.AspNetCore.Components;
 using PFM.Models;
 using PFM.Services;
-using PFM.Utils;
+using PFM.Services.Utils;
 using PFM.Website.Utils;
 
 namespace PFM.Website.Components.Dashboard
@@ -44,13 +44,13 @@ namespace PFM.Website.Components.Dashboard
 
         protected async Task FetchData()
         {
-            if (!AccountId.HasValue && SelectedExpenseType == null)
+            if (AccountId == null || !AccountId.HasValue && SelectedExpenseType == null)
                 return;
 
             var model = await MovementSummaryService.GetExpenseTypeOvertime(
                 new MovementSummarySearchParamModel(AccountId.Value, Months)
                 {
-                    OptionalCategory = SelectedExpenseType.Name,
+                    OptionalCategory = SelectedExpenseType?.Name ?? "Unknown Category",
                     OptionalType = "Expenses"
                 });
 
