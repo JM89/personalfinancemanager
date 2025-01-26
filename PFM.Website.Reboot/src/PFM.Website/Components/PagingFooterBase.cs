@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Components;
-using PFM.Website.Models;
+using PFM.Models;
 
 namespace PFM.Website.Components
 {
     public class PagingFooterBase<T> : ComponentBase
     {
-        public PagedModel<T> Model { get; set; }
+        public PagedModel<T>? Model { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int MaxPage { get; set; }
 

@@ -3,11 +3,12 @@ using ChartJs.Blazor.BarChart;
 using ChartJs.Blazor.Common;
 using ChartJs.Blazor.Util;
 using Microsoft.AspNetCore.Components;
-using PFM.Website.Models;
-using PFM.Website.Services;
 using PFM.Website.Utils;
 using System.Drawing;
 using ChartJs.Blazor.Common.Enums;
+using PFM.Models;
+using PFM.Services;
+using PFM.Services.Utils;
 
 namespace PFM.Website.Components.Dashboard
 {

@@ -1,8 +1,9 @@
 ﻿@page "/budget-plans/create/{accountId:int}"
 @page "/budget-plans/view/{accountId:int}/{id:int}"
 @page "/budget-plans/edit/{accountId:int}/{id:int}"
-@using PFM.Website.Services
-@using PFM.Website.Models
+@using PFM.Models
+@using PFM.Services
+@using PFM.Services.Utils
 @using PFM.Website.Utils
 @inject BankAccountService BankAccountService
 @inject BudgetPlanService BudgetPlanService

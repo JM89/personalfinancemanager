@@ -1,5 +1,5 @@
 using System.Diagnostics.Metrics;
-using PFM.Website.Utils;
+using PFM.Services.Utils;
 
 namespace PFM.Website.Monitoring.Metrics;
 

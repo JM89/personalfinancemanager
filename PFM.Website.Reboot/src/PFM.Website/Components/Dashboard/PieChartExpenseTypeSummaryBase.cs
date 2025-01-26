@@ -5,8 +5,9 @@ using ChartJs.Blazor.Interop;
 using ChartJs.Blazor.PieChart;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json.Linq;
-using PFM.Website.Models;
-using PFM.Website.Services;
+using PFM.Models;
+using PFM.Services;
+using PFM.Services.Utils;
 using PFM.Website.Utils;
 
 namespace PFM.Website.Components.Dashboard

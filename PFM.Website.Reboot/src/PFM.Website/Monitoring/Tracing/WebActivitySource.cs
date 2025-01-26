@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace PFM.Website.Monitoring.Tracing;
+namespace PFM.Services.Monitoring.Tracing;
 
 public static class WebActivitySource
 {

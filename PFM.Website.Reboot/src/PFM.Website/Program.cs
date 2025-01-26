@@ -1,12 +1,11 @@
-﻿using Amazon;
-using Amazon.S3;
+﻿using PFM.Services.Configurations;
+using PFM.Services.Monitoring.Logging;
+using PFM.Services.Monitoring.Metrics;
+using PFM.Services.Monitoring.Tracing;
+using PFM.Services.Persistence;
 using PFM.Website.Configurations;
-using PFM.Website.Monitoring.Logging;
 using PFM.Website.Monitoring.Metrics;
 using PFM.Website.Monitoring.Tracing;
-using PFM.Website.Persistence;
-using PFM.Website.Persistence.Implementations;
-using PFM.Website.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,61 +20,18 @@ var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).
 
 builder.Services.AddSingleton(appSettings);
 
-if (appSettings.UseRemoteStorageForBankIcons)
-{
-    var s3Config = new AmazonS3Config() {
-        RegionEndpoint = RegionEndpoint.GetBySystemName(appSettings.AwsRegion)
-    };
-
-    if (!string.IsNullOrEmpty(appSettings.AwsEndpointUrl))
-    {
-        s3Config.ServiceURL = appSettings.AwsEndpointUrl;
-        s3Config.AuthenticationRegion = appSettings.AwsRegion;
-        s3Config.ForcePathStyle = true;
-    }
-
-    builder.Services.AddSingleton<IAmazonS3>(new AmazonS3Client(s3Config));
-
-    builder.Services
-        .AddSingleton<IObjectStorageService, AwsS3Service>();
-}
-else
-{
-    builder.Services
-        .AddSingleton<IObjectStorageService, LocalStorageService>();
-}
-
-builder.Services
-    .AddSingleton<ExpenseTypeService>()
-    .AddSingleton<BankService>()
-    .AddSingleton<CountryService>()
-    .AddSingleton<BankAccountService>()
-    .AddSingleton<CurrencyService>()
-    .AddSingleton<IncomeService>()
-    .AddSingleton<SavingService>()
-    .AddSingleton<AtmWithdrawService>()
-    .AddSingleton<ExpenseService>()
-    .AddSingleton<PaymentMethodService>()
-    .AddSingleton<MovementSummaryService>()
-    .AddSingleton<BudgetPlanService>();
-
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<AuthHeaderHandler>();
+builder.Services.AddExternalServices(appSettings.ExternalServiceSettings, builder.Environment.IsDevelopment());
 
 builder.Services
     .AddAuth(builder.Configuration)
     .AddObjectMapper()
     .ConfigureLogging(builder.Configuration, builder.Environment)
-    .ConfigureTracing(appSettings.TracingOptions)
-    .ConfigureMetrics(appSettings.MetricsOptions)
-    .AddPfmApi(builder.Configuration, appSettings, builder.Environment.IsDevelopment());
+    .ConfigureWebsiteTracing(appSettings.TracingOptions)
+    .ConfigureWebsiteMetrics(appSettings.MetricsOptions);
 
 var app = builder.Build();
 
-Log.Logger
-    .ForContext("PfmApiOptions.Enabled", appSettings.PfmApiOptions.Enabled)
-    .ForContext("PfmApiOptions.EndpointUrl", appSettings.PfmApiOptions.EndpointUrl)
-    .Information("PFM Website started");
+Log.Logger.Information("PFM Website started");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

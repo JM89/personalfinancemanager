@@ -24,17 +24,9 @@
     <None Remove="Components\Dashboard\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="Configurations\" />
-    <Folder Include="ExternalServices\" />
-    <Folder Include="ExternalServices\InMemoryStorage\" />
     <Folder Include="wwwroot\Resources\" />
-    <Folder Include="Models\" />
-    <Folder Include="Services\Mappers\" />
     <Folder Include="Components\" />
-    <Folder Include="Persistence\" />
-    <Folder Include="Persistence\Implementations\" />
-    <Folder Include="Persistence\Models\" />
     <Folder Include="Components\Dashboard\" />
   </ItemGroup>
   <ItemGroup>
@@ -48,8 +40,6 @@
     <PackageReference Include="PFM.Bank.Api.Contracts" Version="5.21.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.1" />
     <PackageReference Include="BlazorColorPicker" Version="3.1.2" />
-    <PackageReference Include="Refit" Version="8.0.0" />
-    <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Serilog" Version="4.2.0" />
@@ -137,5 +127,8 @@
     <None Include="wwwroot\Resources\.DS_Store" />
     <None Include="wwwroot\Resources\bank_icons\.gitignore" />
     <None Include="wwwroot\Resources\pfm_logo_wb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PFM.Services\PFM.Services.csproj" />
   </ItemGroup>
 </Project>
