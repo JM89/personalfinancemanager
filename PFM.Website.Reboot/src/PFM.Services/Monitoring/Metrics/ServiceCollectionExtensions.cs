@@ -10,15 +10,11 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddOpenTelemetry()
-            .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Website"))
+            .ConfigureResource(builder => builder.AddService(serviceName: options.ServiceName))
             .WithMetrics(builder => builder.AddOtlpExporter());
-        
-        services.AddSingleton<IDashboardMetrics, DashboardMetrics>();
         
         services.ConfigureOpenTelemetryMeterProvider(builder =>
         {
-            builder.AddMeter(DashboardMetrics.MeterName);
-
             if (!options.Debug)
             {
                 builder.AddRuntimeInstrumentation();

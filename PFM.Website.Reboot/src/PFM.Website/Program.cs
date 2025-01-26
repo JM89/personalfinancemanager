@@ -4,6 +4,8 @@ using PFM.Services.Monitoring.Metrics;
 using PFM.Services.Monitoring.Tracing;
 using PFM.Services.Persistence;
 using PFM.Website.Configurations;
+using PFM.Website.Monitoring.Metrics;
+using PFM.Website.Monitoring.Tracing;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,9 +36,9 @@ builder.Services
     .AddAuth(builder.Configuration)
     .AddObjectMapper()
     .ConfigureLogging(builder.Configuration, builder.Environment)
-    .ConfigureTracing(appSettings.TracingOptions)
-    .ConfigureMetrics(appSettings.MetricsOptions)
-    .AddPfmApi(builder.Configuration, appSettings, builder.Environment.IsDevelopment());
+    .ConfigureWebsiteTracing(appSettings.TracingOptions)
+    .ConfigureWebsiteMetrics(appSettings.MetricsOptions)
+    .AddPfmApi(builder.Configuration, appSettings.PfmApiOptions, builder.Environment.IsDevelopment());
 
 var app = builder.Build();
 

@@ -13,11 +13,5 @@ namespace PFM.Website.Configurations
         public MetricsOptions MetricsOptions { get; init; } = new ();
         public TracingOptions TracingOptions { get; init; } = new ();
 	}
-
-	public class PfmApiOptions
-	{
-		public bool Enabled { get; init; } = false;
-		public string EndpointUrl { get; init; } = string.Empty;
-	}
 }
 

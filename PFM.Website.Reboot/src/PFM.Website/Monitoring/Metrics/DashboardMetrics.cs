@@ -1,7 +1,7 @@
 using System.Diagnostics.Metrics;
 using PFM.Utils;
 
-namespace PFM.Services.Monitoring.Metrics;
+namespace PFM.Website.Monitoring.Metrics;
 
 public interface IDashboardMetrics
 {

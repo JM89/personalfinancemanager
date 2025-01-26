@@ -10,7 +10,7 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddOpenTelemetry()
-            .ConfigureResource(builder => builder.AddService(serviceName: "PFM.Website"))
+            .ConfigureResource(builder => builder.AddService(serviceName: options.ServiceName))
             .WithTracing(builder => builder.AddOtlpExporter());
         
         services.ConfigureOpenTelemetryTracerProvider(builder =>
@@ -18,8 +18,6 @@ public static class ServiceCollectionExtensions
             builder.AddAspNetCoreInstrumentation(x => 
                 x.Filter = context => Filter(context.Request.Path));
             
-            builder.AddSource(WebActivitySource.Source.Name);
-
             if (options.Debug)
             {
                 builder.AddConsoleExporter();
