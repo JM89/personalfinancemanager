@@ -17,20 +17,35 @@ namespace PFM.Website.Configurations
 {
 	public static class ServiceCollectionExtensions
 	{
-		public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
 		{
 			var authOptions = configuration.GetSection("AuthOptions").Get<AuthOptions>() ?? new AuthOptions();
 
+            if (authOptions.DevOffline && !environment.IsDevelopment())
+                throw new InvalidOperationException("Offline authentication is only available in the Development environment.");
+
+            services.AddSingleton(authOptions);
+            var cookieScheme = authOptions.DevOffline ? AuthOptions.OfflineCookieScheme : CookieAuthenticationDefaults.AuthenticationScheme;
             IdentityModelEventSource.ShowPII = true;
 
             services
                 .AddAuthentication(opt =>
                 {
-                    opt.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opt.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opt.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                    opt.DefaultAuthenticateScheme = cookieScheme;
+                    opt.DefaultSignInScheme = cookieScheme;
+                    opt.DefaultChallengeScheme = authOptions.DevOffline
+                        ? cookieScheme
+                        : OpenIdConnectDefaults.AuthenticationScheme;
                 })
-                .AddCookie()
+                .AddCookie(cookieScheme, options =>
+                {
+                    if (authOptions.DevOffline)
+                    {
+                        options.Cookie.Name = ".PFM.DevOffline";
+                        options.LoginPath = "/login";
+                        options.ReturnUrlParameter = "redirectUri";
+                    }
+                })
                 .AddOpenIdConnect("oidc", options =>
                 {
                     options.Authority = authOptions.Authority;
@@ -67,4 +82,3 @@ namespace PFM.Website.Configurations
 		}
     }
 }
-

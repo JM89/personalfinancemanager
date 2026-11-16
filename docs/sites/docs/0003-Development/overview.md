@@ -11,7 +11,7 @@ sidebar_position: 1
 
 You will need the following tools installed on your development machine:
 - [x] Docker
-- [x] .NET 9
+- [x] .NET 11
 - [x] `jq` command line
 - [x] `tilt` command line
 
@@ -70,6 +70,16 @@ tilt up
 From there, you can start the main website from Visual Studio. 
 
 To speed up the development of the front-end part, I used an in-memory storage instead of calling the PFM.API. The flag is called UsePfmApi. All configurations can be found here:
+
+#### Frontend-only development
+
+Run the website without starting backend services:
+
+```shell
+dotnet run --project PFM.Website.Reboot/src/PFM.Website/PFM.Website.csproj --launch-profile frontend-only
+```
+
+Open https://localhost:7142 and select **Log in** to sign in as a local developer without Keycloak. This profile uses in-memory data, which is lost when the website stops. Offline authentication is enabled only for this profile and is restricted to the Development environment; it must not be used for a publicly accessible deployment. The other profiles continue to use Keycloak.
 
 #### Configurations
 
@@ -134,4 +144,3 @@ Some features of the system are only demo-able if there is some data. To generat
 ```shell
 sh ./generate-data.sh
 ```
-

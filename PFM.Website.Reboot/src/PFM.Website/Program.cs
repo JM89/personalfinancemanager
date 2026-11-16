@@ -23,7 +23,7 @@ builder.Services.AddSingleton(appSettings);
 builder.Services.AddExternalServices(appSettings.ExternalServiceSettings, builder.Environment.IsDevelopment());
 
 builder.Services
-    .AddAuth(builder.Configuration)
+    .AddAuth(builder.Configuration, builder.Environment)
     .AddObjectMapper()
     .ConfigureLogging(builder.Configuration, builder.Environment)
     .ConfigureWebsiteTracing(appSettings.TracingOptions)
@@ -50,8 +50,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapRazorPages();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
-
