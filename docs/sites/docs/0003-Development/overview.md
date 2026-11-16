@@ -69,17 +69,49 @@ tilt up
 
 From there, you can start the main website from Visual Studio. 
 
-To speed up the development of the front-end part, I used an in-memory storage instead of calling the PFM.API. The flag is called UsePfmApi. All configurations can be found here:
+For frontend development, the website can use in-memory storage instead of
+calling PFM.API. The setting is
+`ApplicationSettings:ExternalServiceSettings:PfmApiOptions:Enabled`.
 
 #### Frontend-only development
 
-Run the website without starting backend services:
+The React frontend-only profile uses the website's in-memory .NET services and
+does not start the backend APIs, Keycloak, or infrastructure. Install Node.js
+and npm, then from the repository root run:
 
 ```shell
+npm ci --prefix PFM.Website.Reboot/src/PFM.Website.Client
 dotnet run --project PFM.Website.Reboot/src/PFM.Website/PFM.Website.csproj --launch-profile frontend-only
 ```
 
-Open https://localhost:7142 and select **Log in** to sign in as a local developer without Keycloak. This profile uses in-memory data, which is lost when the website stops. Offline authentication is enabled only for this profile and is restricted to the Development environment; it must not be used for a publicly accessible deployment. The other profiles continue to use Keycloak.
+Open http://localhost:5110. The ASP.NET Core SPA proxy starts Vite on port
+5174 and redirects the browser there. Select **Log in** to sign in as a local
+developer without Keycloak. Data is lost when the website stops. Offline
+authentication is restricted to the Development environment and must not be
+used for a publicly accessible deployment. Other profiles continue to use the
+existing Blazor website and Keycloak.
+
+The existing in-memory implementations have limitations: some stores use
+separate seeded copies of related data, so newly created expense types may not
+be usable when creating expenses. Closing an ATM
+withdrawal is not implemented, and editing a budget does not update its
+expected income or savings. These are existing offline-service limitations;
+the React migration does not change the backend to address them.
+
+Alternatively, after `npm ci`, use the existing Tilt configuration:
+
+```shell
+tilt up -- --offline
+```
+
+Select the `pfm-frontend-offline` resource and open its link. This mode does not
+start the other Tilt resources. Port 5110 is the .NET host and port 5174 is
+the React development server; both must be available.
+
+To run the client tests, use `npm test --prefix PFM.Website.Reboot/src/PFM.Website.Client`.
+With the offline website running, set `PFM_OFFLINE_URL=http://localhost:5174`
+to include the in-memory integration test. The integration test creates and
+modifies temporary in-memory data and uploads then removes a test bank icon.
 
 #### Configurations
 

@@ -9,19 +9,31 @@ namespace PFM.Services.ExternalServices.InMemoryStorage
     public class BankAccountInMemory : IBankAccountApi
     {
         internal readonly IList<AccountDetails> Storage;
-        private readonly IList<CurrencyDetails> _currencies = new CurrencyInMemory().Storage.ToList();
-        private readonly IList<BankDetails> _banks = new BankInMemory().Storage.ToList();
+        private readonly IBankApi _banks;
+        private readonly ICurrencyApi _currencies;
+        private readonly Lazy<Task> _initialization;
 
-        public BankAccountInMemory()
+        public BankAccountInMemory(IBankApi banks, ICurrencyApi currencies)
         {
-            var rng = new Random();
+            _banks = banks;
+            _currencies = currencies;
             Storage = new List<AccountDetails>();
+            _initialization = new Lazy<Task>(InitializeAsync);
+        }
+
+        private async Task InitializeAsync()
+        {
+            var banks = await GetBanksAsync("offline");
+            var currencies = await GetCurrenciesAsync();
+            if (banks.Count == 0 || currencies.Count == 0)
+                throw new InvalidOperationException("Cannot initialize demo accounts without banks and currencies.");
+            var rng = new Random();
             for (int i = 0; i <= 4; i++) {
-                var currency = _currencies.ElementAt(rng.Next(_currencies.Count()));
+                var currency = currencies[rng.Next(currencies.Count)];
                 var item = new AccountDetails() {
                     Id = i,
                     Name = $"Current account {i}",
-                    BankId = _banks.ElementAt(rng.Next(_banks.Count())).Id,
+                    BankId = banks[rng.Next(banks.Count)].Id,
                     CurrencyId = currency.Id,
                     CurrencyName = currency.Name,
                     CurrencySymbol = currency.Symbol,
@@ -36,8 +48,8 @@ namespace PFM.Services.ExternalServices.InMemoryStorage
                 {
                     Id = i,
                     Name = $"Saving account {i}",
-                    BankId = _banks.ElementAt(rng.Next(_banks.Count())).Id,
-                    CurrencyId = _currencies.ElementAt(rng.Next(_currencies.Count())).Id,
+                    BankId = banks[rng.Next(banks.Count)].Id,
+                    CurrencyId = currencies[rng.Next(currencies.Count)].Id,
                     IsFavorite = false,
                     IsSavingAccount = true
                 };
@@ -47,6 +59,7 @@ namespace PFM.Services.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> Create(string userId, AccountDetails obj)
         {
+            await _initialization.Value;
             obj.Id = Storage.Max(x => x.Id) + 1;
             Storage.Add(obj);
             return await Task.FromResult(new ApiResponse(true));
@@ -54,6 +67,7 @@ namespace PFM.Services.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> Delete(int id)
         {
+            await _initialization.Value;
             var item = Storage.SingleOrDefault(x => x.Id == id);
 
             if (item == null)
@@ -70,11 +84,14 @@ namespace PFM.Services.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> GetList(string userId)
         {
+            await _initialization.Value;
+            var banks = await GetBanksAsync(userId);
+            var currencies = await GetCurrenciesAsync();
             var extendedList = Storage.Select(x => new AccountList() {
                 Id = x.Id,
                 Name = x.Name,
-                BankName = _banks.Single(b => b.Id == x.BankId).Name,
-                CurrencyName = _currencies.Single(c => c.Id == x.CurrencyId).Name,
+                BankName = banks.Single(b => b.Id == x.BankId).Name,
+                CurrencyName = currencies.Single(c => c.Id == x.CurrencyId).Name,
                 InitialBalance = 1000,
                 CurrentBalance = 1200,
                 IsSavingAccount = x.IsSavingAccount,
@@ -87,12 +104,14 @@ namespace PFM.Services.ExternalServices.InMemoryStorage
 
         public async Task<ApiResponse> Get(int id)
         {
+            await _initialization.Value;
             var item = JsonConvert.SerializeObject(Storage.SingleOrDefault(x => x.Id == id));
             return await Task.FromResult(new ApiResponse((object)item));
         }
 
         public async Task<ApiResponse> SetAsFavorite(int id)
         {
+            await _initialization.Value;
             foreach (var existingItem in Storage)
             {
                 existingItem.IsFavorite = false;
@@ -107,6 +126,19 @@ namespace PFM.Services.ExternalServices.InMemoryStorage
 
             return await Task.FromResult(new ApiResponse(true));
         }
+
+        private async Task<List<BankDetails>> GetBanksAsync(string userId) =>
+            ReadList<BankDetails>(await _banks.Get(userId), "banks");
+
+        private async Task<List<CurrencyDetails>> GetCurrenciesAsync() =>
+            ReadList<CurrencyDetails>(await _currencies.GetList(), "currencies");
+
+        internal static List<T> ReadList<T>(ApiResponse response, string name)
+        {
+            if (response.Data is null)
+                throw new InvalidOperationException($"Could not load {name}: {string.Join("; ", response.Errors?.Select(e => $"{e.Key}: {string.Join(", ", e.Value)}") ?? Array.Empty<string>())}");
+            return JsonConvert.DeserializeObject<List<T>>(response.Data.ToString()!)
+                ?? throw new InvalidOperationException($"The {name} response was empty.");
+        }
     }
 }
-

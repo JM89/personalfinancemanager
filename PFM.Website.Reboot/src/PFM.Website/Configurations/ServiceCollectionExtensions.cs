@@ -44,6 +44,14 @@ namespace PFM.Website.Configurations
                         options.Cookie.Name = ".PFM.DevOffline";
                         options.LoginPath = "/login";
                         options.ReturnUrlParameter = "redirectUri";
+                        options.Events.OnRedirectToLogin = context =>
+                        {
+                            if (context.Request.Path.StartsWithSegments("/api/frontend"))
+                                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            else
+                                context.Response.Redirect(context.RedirectUri);
+                            return Task.CompletedTask;
+                        };
                     }
                 })
                 .AddOpenIdConnect("oidc", options =>

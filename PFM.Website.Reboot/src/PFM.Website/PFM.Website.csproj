@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>1819c351-5b5c-4b8e-80f9-8b219b7a4d95</UserSecretsId>
+    <SpaRoot>..\PFM.Website.Client\</SpaRoot>
+    <SpaProxyWorkingDirectory>$(SpaRoot)</SpaProxyWorkingDirectory>
+    <SpaProxyServerUrl>http://localhost:5174</SpaProxyServerUrl>
+    <SpaProxyLaunchCommand>npm run dev -- --host 127.0.0.1 --port 5174</SpaProxyLaunchCommand>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
@@ -39,6 +43,7 @@
     <PackageReference Include="PFM.Api.Contracts" Version="5.21.0" />
     <PackageReference Include="PFM.Bank.Api.Contracts" Version="5.21.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="11.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="11.0.0" />
     <PackageReference Include="BlazorColorPicker" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="11.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
