@@ -44,8 +44,8 @@ workflow without starting the backend stack.
   handling; it must not expose development-only authentication in production.
 - The frontend requires Node.js and npm in addition to the .NET SDK.
 - In-memory data is temporary and is lost when the host stops.
-- The React dashboard uses tables and bars rather than the existing Blazor chart
-  components. Its in-memory movement summaries remain synthetic and do not
+- The React dashboard uses Chart.js rather than the Blazor chart components.
+  Its in-memory movement summaries remain synthetic and do not
   automatically recalculate after individual transactions change.
 - Existing in-memory implementations keep independent seeded copies of some
   related data; creating an expense type does not necessarily make it available

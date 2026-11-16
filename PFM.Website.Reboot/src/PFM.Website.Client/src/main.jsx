@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { request } from "./api";
+import { CategoryChart, CategoryTrendChart, ExpenseTrendChart, MovementChart } from "./DashboardCharts.jsx";
 import "./style.css";
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -133,29 +134,23 @@ function Dashboard({ selected }) {
 }
 
 function DashboardData({ accountId }) {
-  const state = useData([`/accounts/${accountId}/dashboard`]);
+  const state = useData([`/accounts/${accountId}/dashboard`, "/expense-types"]);
   const [category, setCategory] = useState(null);
-  return <Loader state={state}>{([data]) => <><div className="stats">
+  return <Loader state={state}>{([data, expenseTypes]) => <><div className="stats">
     {Object.entries(data.summary).map(([name, value]) => <div className="card" key={name}><small>{name.replace(/([A-Z])/g, " $1")}</small><strong>{money(value)}</strong></div>)}
-  </div><div className="grid"><section className="card"><h2>Expenses by category</h2><Bars values={data.categories.aggregates} /></section>
-    <section className="card"><h2>Movement over time</h2><div className="table-wrap"><table><thead><tr><th>Month</th><th>Expenses</th><th>Incomes</th><th>Savings</th></tr></thead><tbody>{Object.entries(data.movements.aggregates).map(([month, v]) => <tr key={month}><td>{month}</td><td>{money(v.expensesAmount)}</td><td>{money(v.incomesAmount)}</td><td>{money(v.savingsAmount)}</td></tr>)}</tbody></table></div></section>
-    <section className="card"><h2>Expenses over time</h2><Bars values={Object.fromEntries(Object.entries(data.expenses.aggregates).map(([month, value]) => [month, value.actual]))} /></section>
+  </div><div className="grid"><section className="card"><h2>Expenses by category</h2><CategoryChart aggregates={data.categories.aggregates} expenseTypes={expenseTypes} onSelect={setCategory} /></section>
+    <section className="card"><h2>Movement over time</h2><MovementChart aggregates={data.movements.aggregates} /><details><summary>View movement data</summary><div className="table-wrap"><table><thead><tr><th>Month</th><th>Expenses</th><th>Incomes</th><th>Savings</th></tr></thead><tbody>{Object.entries(data.movements.aggregates).map(([month, v]) => <tr key={month}><td>{month}</td><td>{money(v.expensesAmount)}</td><td>{money(v.incomesAmount)}</td><td>{money(v.savingsAmount)}</td></tr>)}</tbody></table></div></details></section>
+    <section className="card"><h2>Expenses over time</h2><ExpenseTrendChart aggregates={data.expenses.aggregates} /><details><summary>View expense data</summary><div className="table-wrap"><table><thead><tr><th>Month</th><th>Actual</th><th>Expected</th></tr></thead><tbody>{Object.entries(data.expenses.aggregates).sort(([a], [b]) => a.localeCompare(b)).map(([month, value]) => <tr key={month}><td>{month}</td><td>{money(value.actual)}</td><td>{money(value.expected)}</td></tr>)}</tbody></table></div></details></section>
     <section className="card"><h2>Category comparisons</h2><table><thead><tr><th>Category</th><th>Actual</th><th>Previous</th><th>Average</th></tr></thead><tbody>{data.categoryDiffs.pagedList.list.map((row) => <tr key={row.expenseTypeName}><td><button className="text-button" onClick={() => setCategory(row.expenseTypeName)}>{row.expenseTypeName}</button></td><td>{money(row.actual)}</td><td>{money(row.previousMonth)}</td><td>{money(row.average)}</td></tr>)}</tbody></table></section></div>
-    {category && <DashboardCategory key={`${accountId}-${category}`} accountId={accountId} category={category} />}</>}</Loader>;
+    {category && <DashboardCategory key={`${accountId}-${category}`} accountId={accountId} category={category} expenseTypes={expenseTypes} />}</>}</Loader>;
 }
 
-function DashboardCategory({ accountId, category }) {
+function DashboardCategory({ accountId, category, expenseTypes }) {
   const state = useData([`/accounts/${accountId}/dashboard/category?name=${encodeURIComponent(category)}`]);
   return <Loader state={state}>{([data]) => <section className="card"><h2>Details for {category}</h2><div className="grid">
-    <div><h3>Expenses over time</h3><Bars values={data.aggregates} /></div>
+    <div><h3>Expenses over time</h3><CategoryTrendChart aggregates={data.aggregates} category={category} expenseTypes={expenseTypes} /><details><summary>View category totals</summary><div className="table-wrap"><table><thead><tr><th>Month</th><th>Amount</th></tr></thead><tbody>{Object.entries(data.aggregates).sort(([a], [b]) => a.localeCompare(b)).map(([month, value]) => <tr key={month}><td>{month}</td><td>{money(value)}</td></tr>)}</tbody></table></div></details></div>
     <div><h3>Expenses</h3><Table rows={data.expenses} columns={[["dateExpense", "Date", (r) => date(r.dateExpense)], ["description", "Description"], ["cost", "Amount", (r) => money(r.cost)]]} /></div>
   </div></section>}</Loader>;
-}
-
-function Bars({ values }) {
-  const entries = Object.entries(values);
-  const max = Math.max(1, ...entries.map(([, value]) => value));
-  return entries.length ? entries.map(([name, value]) => <div className="bar-row" key={name}><span>{name}</span><div className="bar-track"><div className="bar" style={{ width: `${value / max * 100}%` }} /></div><span>{money(value)}</span></div>) : <p>No summary data for this account.</p>;
 }
 
 function ExpenseTypes({ parts }) {
