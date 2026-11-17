@@ -4,6 +4,7 @@ sidebar_position: 1
 
 # Getting Started
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ### Pre-requisites
 
@@ -143,6 +144,64 @@ profiles, authentication, API payloads, and service limitations are unchanged.
 There are no new packages, environment settings, infrastructure or CI steps:
 the existing client test and Vite build commands cover the affected delivery
 surface.
+
+#### Workspace walkthrough
+
+The following 32-second video demonstrates the offline React UI using local
+demo data. It is silent, with English captions, and does not autoplay.
+
+<video
+  controls
+  playsInline
+  preload="none"
+  poster={useBaseUrl('/img/pfm/react-expense-types.png')}
+  style={{width: '100%', borderRadius: '12px'}}
+  aria-label="PFM workspace walkthrough"
+>
+  <source src={useBaseUrl('/video/pfm-workspace.webm')} type="video/webm" />
+  <track default kind="captions" src={useBaseUrl('/video/pfm-workspace.en.vtt')} srcLang="en" label="English" />
+  Your browser does not support embedded video.
+</video>
+
+<a href={useBaseUrl('/video/pfm-workspace.webm')}>Download the video</a>.
+
+Text alternative:
+
+1. **Overview** shows your selected account, balance, monthly summaries and
+   spending charts. Select a chart category to explore its details.
+2. Open **Appearance** and choose **Pearl** or **Midnight**. The choice is saved
+   in this browser and applies to chart labels as well as the surrounding UI.
+3. **Bank accounts**, **Banks** and **Expense types** share compact tables
+   with strong headers. Hover an operation icon to see its action and item name.
+4. Open **Add expense type** to name a category, choose a chart color, and
+   decide whether it appears on the dashboard. **Cancel** leaves data unchanged.
+5. A bin icon opens a confirmation dialog. **Keep item** is focused initially;
+   cancel, Escape or the close button dismisses it without deleting anything.
+
+##### Configuration at a glance
+
+![Expense types with emphasized headers and left-aligned operation icons](../../static/img/pfm/react-expense-types.png)
+
+![Category form with required-field guidance, a color picker and dashboard visibility option](../../static/img/pfm/react-category-form.png)
+
+##### On smaller screens
+
+The same workspace adapts to a phone-sized viewport:
+
+<img src={useBaseUrl('/img/pfm/react-mobile-pearl.png')} alt="Pearl dashboard at a 390-pixel mobile viewport with top navigation" width="390" style={{maxWidth: '100%', height: 'auto'}} />
+
+##### Refreshing these captures
+
+These are captures of the offline React client, not replacements for the
+historical Blazor images embedded in the business specifications. Refresh the
+`react-*.png` assets and `video/pfm-workspace.webm` when the visible UI changes;
+keep the matching English WebVTT captions and the text alternative in sync.
+The current video was recorded locally using temporary
+[Playwright](https://playwright.dev/docs/videos) tooling
+([Apache-2.0 license](https://github.com/microsoft/playwright/blob/main/LICENSE))
+and installed Chrome. The recording uses only the loopback offline host, not
+connected accounts or real credentials. Playwright is not an application or
+documentation build dependency, and recording is not a CI requirement.
 
 #### Configurations
 
