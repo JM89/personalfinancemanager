@@ -85,7 +85,7 @@ dotnet run --project PFM.Website.Reboot/src/PFM.Website/PFM.Website.csproj --lau
 ```
 
 Open http://localhost:5110. The ASP.NET Core SPA proxy starts Vite on port
-5174 and redirects the browser there. Select **Log in** to sign in as a local
+5174 and redirects the browser there. Select **Enter your workspace** to sign in as a local
 developer without Keycloak. Data is lost when the website stops. Offline
 authentication is restricted to the Development environment and must not be
 used for a publicly accessible deployment. Other profiles continue to use the
@@ -112,6 +112,37 @@ To run the client tests, use `npm test --prefix PFM.Website.Reboot/src/PFM.Websi
 With the offline website running, set `PFM_OFFLINE_URL=http://localhost:5174`
 to include the in-memory integration test. The integration test creates and
 modifies temporary in-memory data and uploads then removes a test bank icon.
+
+#### React workspace appearance
+
+The React workspace retains PFM's original green piggy-bank identity as a
+redrawn SVG with a coin detail. The shared `public/pfm-mark.svg` asset is used
+in the sidebar, welcome screen and browser favicon; the original Blazor
+assets are unchanged.
+
+The offline React workspace has two built-in themes: **Pearl** (ivory and teal)
+and **Midnight** (navy and mint). Open **Appearance** in the sidebar (at the top
+on small screens) to preview and select one. The choice applies immediately,
+including chart labels and gridlines, and is saved under `pfm-appearance` in
+this browser's local storage. If browser storage is unavailable, the UI
+reports that the preference could not be saved.
+
+The dashboard retains the existing account selector, category drill-downs,
+data tables and movement routes. Configuration uses labelled forms with
+required-field indicators and contextual hints; expense colors use a color
+picker while still sending six-digit hexadecimal values without `#`.
+Deletion uses a keyboard-accessible confirmation dialog, with the cancel
+action initially focused and service errors displayed without closing it.
+Escape dismisses dialogs when no deletion is in progress.
+Configuration tables use emphasized headers and left-aligned edit, favorite
+and delete icons. Each operation has an item-specific accessible label and
+hover tooltip; delete still requires confirmation.
+
+This is a presentation-only redesign of the offline React client. The Blazor
+profiles, authentication, API payloads, and service limitations are unchanged.
+There are no new packages, environment settings, infrastructure or CI steps:
+the existing client test and Vite build commands cover the affected delivery
+surface.
 
 #### Configurations
 
