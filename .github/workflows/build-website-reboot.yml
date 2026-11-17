@@ -20,7 +20,7 @@ jobs:
       run:
         working-directory: PFM.Website.Reboot/src/PFM.Website.Client
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -40,7 +40,7 @@ jobs:
       run:
         working-directory: ${{ env.WORKDIR }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup .NET Core SDK ${{ env.DOTNET_ENV }}
         uses: actions/setup-dotnet@v4
         with:
