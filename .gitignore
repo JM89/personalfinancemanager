@@ -23,3 +23,5 @@ general.log
 .DS_Store
 
 summary.txt
+/PFM.Website.Reboot/src/PFM.Website.Client/node_modules/
+/PFM.Website.Reboot/src/PFM.Website.Client/dist/

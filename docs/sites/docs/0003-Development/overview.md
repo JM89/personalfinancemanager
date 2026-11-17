@@ -4,6 +4,7 @@ sidebar_position: 1
 
 # Getting Started
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ### Pre-requisites
 
@@ -11,7 +12,7 @@ sidebar_position: 1
 
 You will need the following tools installed on your development machine:
 - [x] Docker
-- [x] .NET 9
+- [x] .NET 11
 - [x] `jq` command line
 - [x] `tilt` command line
 
@@ -69,7 +70,108 @@ tilt up
 
 From there, you can start the main website from Visual Studio. 
 
-To speed up the development of the front-end part, I used an in-memory storage instead of calling the PFM.API. The flag is called UsePfmApi. All configurations can be found here:
+For frontend development, the website can use in-memory storage instead of
+calling PFM.API. The setting is
+`ApplicationSettings:ExternalServiceSettings:PfmApiOptions:Enabled`.
+
+#### Frontend-only development
+
+The React frontend-only profile uses the website's in-memory .NET services and
+does not start the backend APIs, Keycloak, or infrastructure. Install Node.js
+and npm, then from the repository root run:
+
+```shell
+npm ci --prefix PFM.Website.Reboot/src/PFM.Website.Client
+dotnet run --project PFM.Website.Reboot/src/PFM.Website/PFM.Website.csproj --launch-profile frontend-only
+```
+
+Open http://localhost:5110. The ASP.NET Core SPA proxy starts Vite on port
+5174 and redirects the browser there. Select **Enter your workspace** to sign in as a local
+developer without Keycloak. Data is lost when the website stops. Offline
+authentication is restricted to the Development environment and must not be
+used for a publicly accessible deployment. Other profiles continue to use the
+existing Blazor website and Keycloak.
+
+The existing in-memory implementations have limitations: some stores use
+separate seeded copies of related data, so newly created expense types may not
+be usable when creating expenses. Closing an ATM
+withdrawal is not implemented, and editing a budget does not update its
+expected income or savings. These are existing offline-service limitations;
+the React migration does not change the backend to address them.
+
+Alternatively, after `npm ci`, use the existing Tilt configuration:
+
+```shell
+tilt up -- --offline
+```
+
+Select the `pfm-frontend-offline` resource and open its link. This mode does not
+start the other Tilt resources. Port 5110 is the .NET host and port 5174 is
+the React development server; both must be available.
+
+To run the client tests, use `npm test --prefix PFM.Website.Reboot/src/PFM.Website.Client`.
+With the offline website running, set `PFM_OFFLINE_URL=http://localhost:5174`
+to include the in-memory integration test. The integration test creates and
+modifies temporary in-memory data and uploads then removes a test bank icon.
+
+#### React workspace appearance
+
+Choose **Pearl** or **Midnight** under **Appearance**. The choice is saved
+locally as `pfm-appearance`. The shared logo is `public/pfm-mark.svg`.
+
+#### Frontend CI and dependency updates
+
+- **Frontend CI:** Node.js 24; `npm ci`, `npm test`, `npm run build`.
+  Runs on PRs, pushes to `main` and manual dispatch. No package token needed.
+  Live offline integration tests are excluded.
+- **.NET CI:** SDK 11; requires the Actions secret `PAT_READ_PACKAGES`
+  (classic PAT with `read:packages` and access to PFM packages).
+- **npm updates:** Dependabot checks the client and docs weekly, grouping
+  React/React DOM and Docusaurus updates. No automerge is configured.
+- **Other updates:** Dependabot handles NuGet, Docker and GitHub Actions.
+
+#### Workspace walkthrough
+
+32 seconds, offline demo data, English captions.
+
+<video
+  controls
+  playsInline
+  preload="none"
+  poster={useBaseUrl('/img/pfm/react-expense-types.png')}
+  style={{width: '100%', borderRadius: '12px'}}
+  aria-label="PFM workspace walkthrough"
+>
+  <source src={useBaseUrl('/video/pfm-workspace.webm')} type="video/webm" />
+  <track default kind="captions" src={useBaseUrl('/video/pfm-workspace.en.vtt')} srcLang="en" label="English" />
+  Your browser does not support embedded video.
+</video>
+
+<a href={useBaseUrl('/video/pfm-workspace.webm')}>Download the video</a>.
+
+**Text alternative:** Review balances and charts in **Overview**, switch themes
+under **Appearance**, then browse configuration tables. **Add expense type**
+sets a name, color and dashboard visibility. Deletion requires confirmation;
+**Keep item** cancels. The tour saves and deletes nothing.
+
+##### Configuration at a glance
+
+![Expense types with emphasized headers and left-aligned operation icons](../../static/img/pfm/react-expense-types.png)
+
+![Category form with required-field guidance, a color picker and dashboard visibility option](../../static/img/pfm/react-category-form.png)
+
+##### On smaller screens
+
+<img src={useBaseUrl('/img/pfm/react-mobile-pearl.png')} alt="Pearl dashboard at a 390-pixel mobile viewport with top navigation" width="390" style={{maxWidth: '100%', height: 'auto'}} />
+
+##### Refreshing these captures
+
+Refresh `react-*.png`, `video/pfm-workspace.webm`, captions and the text
+alternative together. Use offline demo data only; preserve historical
+Blazor screenshots. Recording used temporary local
+[Playwright](https://playwright.dev/docs/videos)
+([license](https://github.com/microsoft/playwright/blob/main/LICENSE)) and Chrome,
+not a project dependency.
 
 #### Configurations
 
@@ -134,4 +236,3 @@ Some features of the system are only demo-able if there is some data. To generat
 ```shell
 sh ./generate-data.sh
 ```
-
