@@ -104,7 +104,7 @@ p { line-height: 1.65; }
 .account-tools h2 { font-size: 1.35rem; margin: 10px 0 0; }
 .account-tools p { margin: 10px 0 18px; max-width: 330px; }
 .account-select { display: grid; grid-template-columns: 1fr; gap: 7px; font-size: .7rem; color: var(--muted); max-width: 360px; }
-.account-select select { background: var(--surface); color: var(--text); }
+.account-select select { background-color: var(--surface); color: var(--text); }
 .movement-links { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; margin-bottom: 26px; }
 .movement-links a { display: flex; align-items: center; gap: 9px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 14px 12px; color: var(--text); font-size: .75rem; text-decoration: none; }
 .movement-links a > svg:first-child { color: var(--accent); width: 17px; }
@@ -177,6 +177,8 @@ td:first-child { font-weight: 500; }
 .field-label { font-size: .8rem; font-weight: 500; }
 .required-mark { color: var(--accent); }
 input, select { width: 100%; min-width: 0; min-height: 44px; border: 1px solid var(--line); border-radius: 9px; background: var(--background); color: var(--text); padding: 10px 12px; font-size: .83rem; }
+select { appearance: none; -webkit-appearance: none; display: block; box-sizing: border-box; height: 44px; line-height: normal; padding-right: 38px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23647975' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+[data-theme="midnight"] select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0b7b9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); }
 input::placeholder { color: var(--muted); opacity: .85; }
 input:disabled, select:disabled { opacity: .6; cursor: not-allowed; }
 .field-hint { grid-column: 2; font-size: .7rem; color: var(--muted); line-height: 1.6; }
@@ -299,3 +301,4 @@ dialog > p { font-size: .85rem; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 @media (pointer: coarse) { .row-actions button, .row-actions a { min-height: 40px; display: inline-flex; align-items: center; } .row-actions .operation-icon { width: 40px; height: 40px; } .configuration-page .row-actions { min-width: 136px; } }
+@media (forced-colors: active) { select { appearance: auto; -webkit-appearance: auto; background-image: none; } }

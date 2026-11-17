@@ -8,11 +8,32 @@ on:
   workflow_dispatch:
 
 env:
-  DOTNET_ENV: '9.0.x'
+  DOTNET_ENV: '11.0.x'
   WORKDIR: PFM.Website.Reboot/
   GITHUB_ORG: 'JM89'
 
 jobs:
+  frontend:
+    name: Frontend tests and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: PFM.Website.Reboot/src/PFM.Website.Client
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: PFM.Website.Reboot/src/PFM.Website.Client/package-lock.json
+      - name: Install frontend dependencies
+        run: npm ci
+      - name: Test frontend
+        run: npm test
+      - name: Build frontend
+        run: npm run build
+
   build:
     runs-on: ubuntu-latest
     defaults:
@@ -25,8 +46,14 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_ENV }}     
       - name: Log in to access GitHub Packages 
-        run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.PAT_READ_PACKAGES }} "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" --store-password-in-clear-text
-        continue-on-error: true
+        env:
+          PACKAGE_TOKEN: ${{ secrets.PAT_READ_PACKAGES }}
+        run: |
+          if [ -z "$PACKAGE_TOKEN" ]; then
+            echo "::error::PAT_READ_PACKAGES is missing or unavailable to this workflow. Add an Actions secret containing a classic PAT with read:packages."
+            exit 1
+          fi
+          dotnet nuget add source --username "$GITHUB_ORG" --password "$PACKAGE_TOKEN" "https://nuget.pkg.github.com/$GITHUB_ORG/index.json" --name "$GITHUB_ORG - GitHub Packages" --store-password-in-clear-text
       - name: Install dependencies
         run: dotnet restore
       - name: Build

@@ -116,39 +116,25 @@ modifies temporary in-memory data and uploads then removes a test bank icon.
 
 #### React workspace appearance
 
-The React workspace retains PFM's original green piggy-bank identity as a
-redrawn SVG with a coin detail. The shared `public/pfm-mark.svg` asset is used
-in the sidebar, welcome screen and browser favicon; the original Blazor
-assets are unchanged.
+Choose **Pearl** or **Midnight** under **Appearance**. The choice is saved
+locally as `pfm-appearance`. The shared logo is `public/pfm-mark.svg`.
 
-The offline React workspace has two built-in themes: **Pearl** (ivory and teal)
-and **Midnight** (navy and mint). Open **Appearance** in the sidebar (at the top
-on small screens) to preview and select one. The choice applies immediately,
-including chart labels and gridlines, and is saved under `pfm-appearance` in
-this browser's local storage. If browser storage is unavailable, the UI
-reports that the preference could not be saved.
+#### Frontend CI and dependency updates
 
-The dashboard retains the existing account selector, category drill-downs,
-data tables and movement routes. Configuration uses labelled forms with
-required-field indicators and contextual hints; expense colors use a color
-picker while still sending six-digit hexadecimal values without `#`.
-Deletion uses a keyboard-accessible confirmation dialog, with the cancel
-action initially focused and service errors displayed without closing it.
-Escape dismisses dialogs when no deletion is in progress.
-Configuration tables use emphasized headers and left-aligned edit, favorite
-and delete icons. Each operation has an item-specific accessible label and
-hover tooltip; delete still requires confirmation.
-
-This is a presentation-only redesign of the offline React client. The Blazor
-profiles, authentication, API payloads, and service limitations are unchanged.
-There are no new packages, environment settings, infrastructure or CI steps:
-the existing client test and Vite build commands cover the affected delivery
-surface.
+- **Frontend CI:** Node.js 24; `npm ci`, `npm test`, `npm run build`.
+  Runs on PRs, pushes to `main` and manual dispatch. No package token needed.
+  Live offline integration tests are excluded.
+- **.NET CI:** SDK 11; requires the Actions secret `PAT_READ_PACKAGES`
+  (classic PAT with `read:packages` and access to PFM packages).
+- **npm updates:** `renovate.json` covers the client and docs, without
+  automerge. Enable the [Renovate GitHub App](https://github.com/apps/renovate)
+  for this repository. [Manager docs](https://docs.renovatebot.com/modules/manager/npm/)
+  · [License](https://github.com/renovatebot/renovate/blob/main/license).
+- **Other updates:** Dependabot handles NuGet, Docker and GitHub Actions.
 
 #### Workspace walkthrough
 
-The following 32-second video demonstrates the offline React UI using local
-demo data. It is silent, with English captions, and does not autoplay.
+32 seconds, offline demo data, English captions.
 
 <video
   controls
@@ -165,18 +151,10 @@ demo data. It is silent, with English captions, and does not autoplay.
 
 <a href={useBaseUrl('/video/pfm-workspace.webm')}>Download the video</a>.
 
-Text alternative:
-
-1. **Overview** shows your selected account, balance, monthly summaries and
-   spending charts. Select a chart category to explore its details.
-2. Open **Appearance** and choose **Pearl** or **Midnight**. The choice is saved
-   in this browser and applies to chart labels as well as the surrounding UI.
-3. **Bank accounts**, **Banks** and **Expense types** share compact tables
-   with strong headers. Hover an operation icon to see its action and item name.
-4. Open **Add expense type** to name a category, choose a chart color, and
-   decide whether it appears on the dashboard. **Cancel** leaves data unchanged.
-5. A bin icon opens a confirmation dialog. **Keep item** is focused initially;
-   cancel, Escape or the close button dismisses it without deleting anything.
+**Text alternative:** Review balances and charts in **Overview**, switch themes
+under **Appearance**, then browse configuration tables. **Add expense type**
+sets a name, color and dashboard visibility. Deletion requires confirmation;
+**Keep item** cancels. The tour saves and deletes nothing.
 
 ##### Configuration at a glance
 
@@ -186,22 +164,16 @@ Text alternative:
 
 ##### On smaller screens
 
-The same workspace adapts to a phone-sized viewport:
-
 <img src={useBaseUrl('/img/pfm/react-mobile-pearl.png')} alt="Pearl dashboard at a 390-pixel mobile viewport with top navigation" width="390" style={{maxWidth: '100%', height: 'auto'}} />
 
 ##### Refreshing these captures
 
-These are captures of the offline React client, not replacements for the
-historical Blazor images embedded in the business specifications. Refresh the
-`react-*.png` assets and `video/pfm-workspace.webm` when the visible UI changes;
-keep the matching English WebVTT captions and the text alternative in sync.
-The current video was recorded locally using temporary
-[Playwright](https://playwright.dev/docs/videos) tooling
-([Apache-2.0 license](https://github.com/microsoft/playwright/blob/main/LICENSE))
-and installed Chrome. The recording uses only the loopback offline host, not
-connected accounts or real credentials. Playwright is not an application or
-documentation build dependency, and recording is not a CI requirement.
+Refresh `react-*.png`, `video/pfm-workspace.webm`, captions and the text
+alternative together. Use offline demo data only; preserve historical
+Blazor screenshots. Recording used temporary local
+[Playwright](https://playwright.dev/docs/videos)
+([license](https://github.com/microsoft/playwright/blob/main/LICENSE)) and Chrome,
+not a project dependency.
 
 #### Configurations
 
