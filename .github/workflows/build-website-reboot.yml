@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET Core SDK ${{ env.DOTNET_ENV }}
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: ${{ env.DOTNET_ENV }}     
       - name: Log in to access GitHub Packages 
