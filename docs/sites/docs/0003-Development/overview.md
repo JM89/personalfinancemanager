@@ -126,10 +126,8 @@ locally as `pfm-appearance`. The shared logo is `public/pfm-mark.svg`.
   Live offline integration tests are excluded.
 - **.NET CI:** SDK 11; requires the Actions secret `PAT_READ_PACKAGES`
   (classic PAT with `read:packages` and access to PFM packages).
-- **npm updates:** `renovate.json` covers the client and docs, without
-  automerge. Enable the [Renovate GitHub App](https://github.com/apps/renovate)
-  for this repository. [Manager docs](https://docs.renovatebot.com/modules/manager/npm/)
-  · [License](https://github.com/renovatebot/renovate/blob/main/license).
+- **npm updates:** Dependabot checks the client and docs weekly, grouping
+  React/React DOM and Docusaurus updates. No automerge is configured.
 - **Other updates:** Dependabot handles NuGet, Docker and GitHub Actions.
 
 #### Workspace walkthrough

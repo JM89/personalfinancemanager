@@ -1,5 +1,20 @@
 version: 2
 updates:
+  - package-ecosystem: "npm"
+    directories:
+      - "/PFM.Website.Reboot/src/PFM.Website.Client"
+      - "/docs/sites"
+    schedule:
+      interval: "weekly"
+    versioning-strategy: "increase"
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
   - package-ecosystem: "nuget" 
     directories: 
       - "/*/" 
