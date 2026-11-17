@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:11.0 AS build-env
 WORKDIR /app
 
 ARG GH_PKG_TOKEN_ARG
