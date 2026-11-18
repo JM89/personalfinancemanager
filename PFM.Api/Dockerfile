@@ -17,7 +17,7 @@ RUN dotnet publish ./PFM.Api/PFM.Api.csproj -c Release -o out
 RUN dotnet dev-certs https --trust
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
+FROM mcr.microsoft.com/dotnet/aspnet:11.0
 WORKDIR /app/PFM.Api
 COPY --from=build-env /app/out .
 COPY --from=build-env /root/.dotnet/corefx/cryptography/x509stores/my/* /root/.dotnet/corefx/cryptography/x509stores/my/
