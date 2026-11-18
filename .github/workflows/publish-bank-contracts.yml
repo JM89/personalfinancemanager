@@ -28,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Do not publish libraries if no changes mades
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         id: changes
         with:
           base: main
