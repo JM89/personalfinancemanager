@@ -73,7 +73,9 @@ public static class DependencyInjectionExtensions
                 ExceptionFactory = httpResponse => Task.FromResult<Exception?>(null)
             };
 
-            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
+            Func<HttpClientHandler> httpClientHandler = () => isDevelopmentEnvironment
+                ? new HttpClientHandler { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator }
+                : new HttpClientHandler();
 
             var apiConfigs = options.EndpointUrl;
             services
@@ -93,13 +95,13 @@ public static class DependencyInjectionExtensions
             return services;
         }
 
-        private static IServiceCollection AddPfmApiClient<T>(this IServiceCollection services, string baseUrl, RefitSettings refitSettings, HttpClientHandler httpClientHandler)
+        private static IServiceCollection AddPfmApiClient<T>(this IServiceCollection services, string baseUrl, RefitSettings refitSettings, Func<HttpClientHandler> httpClientHandler)
             where T : class
         {
             services
                .AddRefitClient<T>(refitSettings)
                .ConfigureHttpClient(c => c.BaseAddress = new Uri(baseUrl))
-               .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
+               .ConfigurePrimaryHttpMessageHandler(httpClientHandler)
                .AddHttpMessageHandler<AuthHeaderHandler>();
 
             return services;

@@ -10,9 +10,9 @@ PFM is a web application to manage your personal finance and visualise your expe
 
 ## The React workspace
 
-The offline React client offers two themes while preserving the existing
-backend contracts. These captures show temporary local demo data; the
-non-offline profiles still use the existing Blazor website.
+The React client offers two themes while preserving the existing backend
+contracts. It serves both live and offline users; these captures show
+temporary local demo data.
 
 ### Pearl
 

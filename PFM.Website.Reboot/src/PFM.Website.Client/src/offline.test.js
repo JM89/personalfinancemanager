@@ -4,6 +4,12 @@ import assert from "node:assert/strict";
 const base = process.env.PFM_OFFLINE_URL;
 
 test("offline API uses the existing in-memory implementations", { skip: !base }, async () => {
+  const deepLink = await fetch(`${base}/expenses/list/1`);
+  assert.equal(deepLink.status, 200);
+  assert.match(await deepLink.text(), /<div id="root">/);
+  const mode = await fetch(`${base}/api/frontend/mode`);
+  assert.deepEqual(await mode.json(), { offline: true });
+  assert.equal((await fetch(`${base}/api/frontend/does-not-exist`)).status, 404);
   const anonymous = await fetch(`${base}/api/frontend/accounts`, { redirect: "manual" });
   assert.equal(anonymous.status, 401);
   const login = await fetch(`${base}/login?redirectUri=/`, { redirect: "manual" });
@@ -16,8 +22,9 @@ test("offline API uses the existing in-memory implementations", { skip: !base },
       body = JSON.stringify(body);
     }
     const response = await fetch(`${base}/api/frontend${path}`, { method, headers, body });
+    // Development error bodies may include request headers, including the session cookie.
+    assert.ok(response.ok, `${method} ${path}: ${response.status}`);
     const text = await response.text();
-    assert.ok(response.ok, `${method} ${path}: ${response.status} ${text}`);
     return text ? JSON.parse(text) : null;
   };
   const suffix = Date.now();
@@ -28,6 +35,20 @@ test("offline API uses the existing in-memory implementations", { skip: !base },
     body: JSON.stringify({ name, graphColor: "123ABC", showOnDashboard: true }),
   });
   assert.equal(hostile.status, 403);
+  const allowedOriginPort = process.env.PFM_OFFLINE_TEST_ORIGIN_PORT ?? "5174";
+  for (const [origin, expected] of [
+    [`http://localhost:${allowedOriginPort}`, 400],
+    [`http://127.0.0.1:${allowedOriginPort}`, 400],
+    ["http://localhost:65535", 403],
+    [`http://example.com:${allowedOriginPort}`, 403],
+  ]) {
+    const response = await fetch(`${base}/api/frontend/expense-types`, {
+      method: "POST",
+      headers: { Cookie: cookie, Origin: origin, "Content-Type": "application/json" },
+      body: "{",
+    });
+    assert.equal(response.status, expected, origin);
+  }
 
   const bankName = `Test bank ${suffix}`;
   await api("/accounts");
@@ -51,8 +72,10 @@ test("offline API uses the existing in-memory implementations", { skip: !base },
   editedBank.set("iconPath", bank.iconPath);
   await api(`/banks/${bank.id}`, "PUT", editedBank);
   assert.equal((await api("/accounts")).find((item) => item.id === account.id).bankName, `${bankName} renamed`);
-  await api("/accounts/1/savings", "POST", { dateSaving: new Date().toISOString().slice(0, 10), amount: 10, targetInternalAccountId: account.id });
+  const savingDate = "2025-11-17";
+  await api("/accounts/1/savings", "POST", { dateSaving: savingDate, amount: 10, targetInternalAccountId: account.id });
   const linkedSaving = (await api("/accounts/1/savings")).at(-1);
+  assert.equal(linkedSaving.dateSaving, `${savingDate}T00:00:00`);
   assert.equal(linkedSaving.targetInternalAccountName, bankName);
   await api(`/savings/${linkedSaving.id}`, "DELETE");
   await api(`/accounts/${account.id}`, "DELETE");

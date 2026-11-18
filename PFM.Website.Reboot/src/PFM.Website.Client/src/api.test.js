@@ -6,6 +6,7 @@ test("request serializes JSON and returns parsed data", async (t) => {
   t.mock.method(globalThis, "fetch", async (url, options) => {
     assert.equal(url, "/api/frontend/accounts");
     assert.equal(options.headers.get("Content-Type"), "application/json");
+    assert.equal(options.headers.get("X-PFM-Frontend"), "1");
     assert.deepEqual(JSON.parse(options.body), { name: "Account" });
     return new Response(JSON.stringify({ id: 1 }), { status: 200 });
   });

@@ -58,5 +58,32 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      # - name: Test
-      #   run: dotnet test --no-restore --verbosity normal
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: PFM.Website.Reboot/src/PFM.Website.Client/package-lock.json
+      - name: Build React for publishing
+        working-directory: PFM.Website.Reboot/src/PFM.Website.Client
+        run: npm ci && npm run build
+      - name: Publish and smoke-test the website
+        run: |
+          publish_dir="$RUNNER_TEMP/pfm-website"
+          dotnet publish src/PFM.Website/PFM.Website.csproj --configuration Release --no-build --output "$publish_dir"
+          (
+            cd "$publish_dir"
+            exec env ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://127.0.0.1:5110 \
+              APP_AuthOptions__DevOffline=true dotnet PFM.Website.dll
+          ) &
+          host_pid=$!
+          (
+            cd "$publish_dir"
+            exec env ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://127.0.0.1:5111 \
+              APP_ApplicationSettings__ExternalServiceSettings__PfmApiOptions__Enabled=true dotnet PFM.Website.dll
+          ) &
+          live_pid=$!
+          trap 'kill "$host_pid" "$live_pid" 2>/dev/null || true' EXIT
+          curl --fail --silent --show-error --retry 20 --retry-connrefused --retry-delay 1 http://127.0.0.1:5110/health/frontend
+          curl --fail --silent --show-error --retry 20 --retry-connrefused --retry-delay 1 http://127.0.0.1:5111/health/frontend
+          PFM_OFFLINE_URL=http://127.0.0.1:5110 PFM_LIVE_URL=http://127.0.0.1:5111 npm --prefix src/PFM.Website.Client test

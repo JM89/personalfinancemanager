@@ -6,12 +6,12 @@ sidebar_position: 2
 
 ## Status
 
-Accepted for the offline development profile. Online migration and complete
-visual parity remain future work.
+Accepted for both live and offline use. React replaces the Blazor presentation;
+the .NET website host and downstream API contracts remain.
 
 ## Context
 
-The current website is a server-side Blazor application. It contains presentation
+The previous website was a server-side Blazor application. It contained presentation
 logic alongside .NET services that adapt the PFM API contracts to website models.
 The existing in-memory implementations allow frontend development without the
 backend APIs, while the development-only offline authentication mode avoids
@@ -27,8 +27,10 @@ Move the website presentation to React while keeping the existing .NET host,
 service layer and backend API contracts. In development, the host will start
 the React development server through ASP.NET Core SPA proxy, following the
 gateway example. The React application will call a local website API; that
-API will delegate to the existing .NET services and in-memory implementations
-rather than changing the PFM backend APIs or contract packages.
+API delegates to the existing .NET services. Live uses Keycloak and the real
+PFM API; offline uses the existing in-memory implementations. Tokens stay on
+the server and downstream calls use the signed-in request's access token.
+The published website serves the React build, including direct links to views.
 
 The initial migration targets offline development only: no backend APIs,
 Keycloak, database or other infrastructure services should be required.
@@ -51,11 +53,10 @@ workflow without starting the backend stack.
   related data; creating an expense type does not necessarily make it available
   when creating expenses. ATM withdrawal closing is not
   implemented and budget edits do not update expected income or savings.
-- Offline website endpoints adapt the existing .NET website models; they are not
-  a replacement for, or a change to, the backend API contracts.
-- Online authentication, backend integration and production deployment of the
-  React UI are outside this decision's initial scope. The existing Blazor
-  website remains in place for non-offline profiles.
+- Website endpoints adapt the existing .NET website models; they are not a
+  replacement for, or a change to, the backend API contracts.
+- Both modes use the same React pages. Live shows the authenticated user's
+  data and does not display offline demo messaging. Tax & Pension is deferred.
 
 ## Alternatives considered
 

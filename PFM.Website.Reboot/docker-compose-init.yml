@@ -87,15 +87,17 @@ services:
       args:
         - GH_PKG_TOKEN_ARG=${GH_PKG_TOKEN}
     container_name: pfm-website
-    profiles: ["prod"]
+    profiles: ["dev", "prod"]
     environment:
       ASPNETCORE_URLS: https://+:7143
       ASPNETCORE_ENVIRONMENT: Development
       OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # (logs via seq)
       APP_OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # OTEL defaults
       APP_AuthOptions__Authority: http://keycloak:8080/realms/pfm
-      APP_UsePfmApi: true
-      APP_PfmApi__EndpointUrl: https://pfm-api:4431/
+      APP_AuthOptions__PublicAuthority: http://localhost:8080/realms/pfm
+      APP_AuthOptions__ClientSecret: ${WEBSITE_OIDC_CLIENT_SECRET:-}
+      APP_ApplicationSettings__ExternalServiceSettings__PfmApiOptions__Enabled: "true"
+      APP_ApplicationSettings__ExternalServiceSettings__PfmApiOptions__EndpointUrl: https://pfm-api:4431/
     ports:
       - "7143:7143"
     networks:

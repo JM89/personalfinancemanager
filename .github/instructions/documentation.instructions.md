@@ -12,5 +12,5 @@ applyTo: "**/*.md,**/*.mdx"
 - Do not add sections or documents just to describe a small change.
 - Use a TL;DR only when the document is substantial.
 - Keep screenshots, captions and text alternatives useful and brief.
-- For dedicated writing tasks, use the guidance in
-  [SE: Tech Writer](../agents/se-technical-writer.agent.md).
+- For substantive documentation changes, follow the
+  [SE: Tech Writer handoff in the specialist table](../../AGENTS.md#specialist-handoffs).
