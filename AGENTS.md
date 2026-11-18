@@ -12,3 +12,4 @@ For every feature:
 6. Update the affected architecture and technical docs. If the architecture changes, update the [C4 model](docs/architecture/pfm.dsl) and [regenerate the diagrams](docs/sites/docs/0003-Development/overview.md#regenerate-the-c4-diagrams). Include the DSL and SVGs together.
 
 Summarize what changed and what was verified, including any step that required no changes.
+For substantial code additions, briefly explain the problem they solve and why a simpler approach or an existing helper wasn't sufficient.

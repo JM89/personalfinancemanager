@@ -8,6 +8,9 @@ namespace PFM.Website.Frontend;
 /// Enforces record-level authorization for the live website using the signed-in
 /// user's record lists. It does not audit requests or protect direct backend API calls.
 /// </summary>
+/// <remarks>
+/// If the backend needs to reuse these rules, prefer ASP.NET Core resource-based authorization handlers.
+/// </remarks>
 internal static class FrontendRecordAuthorizationFilter
 {
     /// <summary>

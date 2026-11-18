@@ -15,7 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables(prefix: "APP_");
 
 builder.Services.AddRazorPages();
-builder.Services.AddJsonErrorResponses();
+// Registers the standard JSON error format used by the production exception handler.
+builder.Services.AddProblemDetails();
 
 var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>() ?? new ApplicationSettings();
 var offline = builder.Configuration.GetValue<bool>("AuthOptions:DevOffline");
