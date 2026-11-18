@@ -7,6 +7,9 @@ namespace PFM.Website.Configurations
 {
 	public static class ServiceCollectionExtensions
 	{
+        public static IServiceCollection AddJsonErrorResponses(this IServiceCollection services) =>
+            services.AddProblemDetails();
+
 		public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
 		{
 			var authOptions = configuration.GetSection("AuthOptions").Get<AuthOptions>() ?? new AuthOptions();
@@ -21,6 +24,7 @@ namespace PFM.Website.Configurations
                 {
                     opt.DefaultAuthenticateScheme = cookieScheme;
                     opt.DefaultSignInScheme = cookieScheme;
+                    // Return 401 to React API calls; /login explicitly starts OIDC sign-in in live mode.
                     opt.DefaultChallengeScheme = cookieScheme;
                 })
                 .AddCookie(cookieScheme, options =>

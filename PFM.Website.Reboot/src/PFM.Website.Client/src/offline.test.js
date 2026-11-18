@@ -34,6 +34,20 @@ test("offline API uses the existing in-memory implementations", { skip: !base },
     body: JSON.stringify({ name, graphColor: "123ABC", showOnDashboard: true }),
   });
   assert.equal(hostile.status, 403);
+  const allowedOriginPort = process.env.PFM_OFFLINE_TEST_ORIGIN_PORT ?? "5174";
+  for (const [origin, expected] of [
+    [`http://localhost:${allowedOriginPort}`, 400],
+    [`http://127.0.0.1:${allowedOriginPort}`, 400],
+    ["http://localhost:65535", 403],
+    [`http://example.com:${allowedOriginPort}`, 403],
+  ]) {
+    const response = await fetch(`${base}/api/frontend/expense-types`, {
+      method: "POST",
+      headers: { Cookie: cookie, Origin: origin, "Content-Type": "application/json" },
+      body: "{",
+    });
+    assert.equal(response.status, expected, origin);
+  }
 
   const bankName = `Test bank ${suffix}`;
   await api("/accounts");

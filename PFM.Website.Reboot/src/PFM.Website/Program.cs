@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables(prefix: "APP_");
 
 builder.Services.AddRazorPages();
-builder.Services.AddProblemDetails();
+builder.Services.AddJsonErrorResponses();
 
 var appSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>() ?? new ApplicationSettings();
 var offline = builder.Configuration.GetValue<bool>("AuthOptions:DevOffline");
@@ -75,7 +75,7 @@ app.Use(async (context, next) =>
              offline && context.Request.Headers.TryGetValue("Origin", out var origin) &&
              (!Uri.TryCreate(origin.ToString(), UriKind.Absolute, out var uri) ||
               (uri.Host != "localhost" && uri.Host != "127.0.0.1") ||
-              (uri.Port != 5174 && uri.Port != 5110 && uri.Port != 7142))))
+              !appSettings.OfflineAllowedOriginPorts.Contains(uri.Port))))
         {
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             return;

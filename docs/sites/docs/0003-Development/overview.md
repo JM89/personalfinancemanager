@@ -89,10 +89,16 @@ Open http://localhost:5110. The ASP.NET Core SPA proxy starts Vite on port
 5174 and redirects the browser there. Select **Enter your workspace** to sign in as a local
 developer without Keycloak. Data is lost when the website stops. Offline
 authentication is restricted to the Development environment and must not be
-used for a publicly accessible deployment. Live profiles serve the same
+used for a publicly accessible deployment. To run the offline browser client
+on another port, add the port to `ApplicationSettings:OfflineAllowedOriginPorts`
+in `PFM.Website.Reboot/src/PFM.Website/appsettings.json`
+and restart the website. The default ports are `5174`, `5110`, and `7142`;
+only `localhost` and `127.0.0.1` are accepted by this check.
+
+Live profiles serve the same
 React app and sign in through Keycloak. Build the React client first for
 local live development. Default `tilt up` also builds and starts the
-`pfm-website` resource at <https://localhost:7143>; no separate Node or .NET
+`pfm-website` resource at [https://localhost:7143](https://localhost:7143); no separate Node or .NET
 process is needed. To enable sign-in, copy the secret for the `pfm` client
 from **Keycloak Admin Console → pfm realm → Clients → pfm → Credentials**.
 Set `WEBSITE_OIDC_CLIENT_SECRET` in the git-ignored `PFM.Infra/configs/.env`,
@@ -250,3 +256,16 @@ Some features of the system are only demo-able if there is some data. To generat
 ```shell
 sh ./generate-data.sh
 ```
+## Regenerate the C4 diagrams
+
+Edit `docs/architecture/pfm.dsl`, then run `sh tools/architecture/render-c4.sh`
+from the repository root with Docker running. The script reuses the platform
+toolkit's `tools/architecture/render-structurizr.sh` (available as of
+`94480056847cc812943673025abb1f077133652b`). It looks for a sibling checkout named
+`ai-platform-toolkit`; set `PLATFORM_TOOLKIT_DIR` to the checkout path if it
+lives elsewhere. The shared helper renders locally with its pinned
+Structurizr image.
+
+Review and commit the DSL and the generated SVGs under
+`docs/sites/static/img/pfm/Architecture/current/` together. Keep the older PNG
+snapshots unchanged.

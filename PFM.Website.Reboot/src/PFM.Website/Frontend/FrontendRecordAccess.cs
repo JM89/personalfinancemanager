@@ -4,8 +4,16 @@ using Microsoft.AspNetCore.Routing.Patterns;
 
 namespace PFM.Website.Frontend;
 
+/// <summary>
+/// Checks record ownership on live frontend requests. Sign-in identifies the user,
+/// but does not authorize the record IDs supplied by the browser.
+/// </summary>
 internal static class FrontendRecordAccess
 {
+    /// <summary>
+    /// Checks IDs in the route and request body against the user's records before
+    /// calling the endpoint. Returns 404 for inaccessible IDs without revealing whether they exist.
+    /// </summary>
     public static async ValueTask<object?> Check(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
         var http = context.HttpContext;
