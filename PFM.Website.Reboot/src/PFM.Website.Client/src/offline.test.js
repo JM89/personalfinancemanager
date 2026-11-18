@@ -22,8 +22,9 @@ test("offline API uses the existing in-memory implementations", { skip: !base },
       body = JSON.stringify(body);
     }
     const response = await fetch(`${base}/api/frontend${path}`, { method, headers, body });
+    // Development error bodies may include request headers, including the session cookie.
+    assert.ok(response.ok, `${method} ${path}: ${response.status}`);
     const text = await response.text();
-    assert.ok(response.ok, `${method} ${path}: ${response.status} ${text}`);
     return text ? JSON.parse(text) : null;
   };
   const suffix = Date.now();
@@ -71,8 +72,10 @@ test("offline API uses the existing in-memory implementations", { skip: !base },
   editedBank.set("iconPath", bank.iconPath);
   await api(`/banks/${bank.id}`, "PUT", editedBank);
   assert.equal((await api("/accounts")).find((item) => item.id === account.id).bankName, `${bankName} renamed`);
-  await api("/accounts/1/savings", "POST", { dateSaving: new Date().toISOString().slice(0, 10), amount: 10, targetInternalAccountId: account.id });
+  const savingDate = "2025-11-17";
+  await api("/accounts/1/savings", "POST", { dateSaving: savingDate, amount: 10, targetInternalAccountId: account.id });
   const linkedSaving = (await api("/accounts/1/savings")).at(-1);
+  assert.equal(linkedSaving.dateSaving, `${savingDate}T00:00:00`);
   assert.equal(linkedSaving.targetInternalAccountName, bankName);
   await api(`/savings/${linkedSaving.id}`, "DELETE");
   await api(`/accounts/${account.id}`, "DELETE");

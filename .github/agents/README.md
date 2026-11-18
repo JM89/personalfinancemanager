@@ -13,9 +13,9 @@ Original upstream inspiration: [Awesome Copilot](https://github.com/github/aweso
 | [Agent Governance Reviewer](./agent-governance-reviewer.agent.md) | Read-only agent-governance review. |
 | [Accessibility Runtime Tester](./accessibility-runtime-tester.agent.md) | Keyboard flows, focus, dialogs and form errors. |
 
-Select an agent in Chat or request it by name. Availability depends on the
-active workspace and harness; adding files does not guarantee immediate reload.
-Specialist recommendations do not approve architecture decisions.
+Follow the [required specialist handoffs](../../AGENTS.md#specialist-handoffs).
+Invoke the matching subagent by name. Availability depends on the active
+workspace and harness; adding files does not guarantee immediate reload.
 
 [Documentation instructions](../instructions/documentation.instructions.md)
 also apply when editing Markdown without selecting the writer.
