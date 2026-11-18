@@ -13,7 +13,11 @@ sidebar_position: 1
 ![React calls the ASP.NET Core website host, which signs users in through Keycloak and calls the existing PFM API. The APIs and workers use their existing data stores and account event stream.](../../static/img/pfm/Architecture/current/pfm-live-containers.svg)
 
 The website host keeps upstream tokens server-side. The Tax & Pension API
-remains part of the backend, but React does not expose it.
+remains part of the backend. The React UI provides Tax & Pension list, create,
+edit and delete screens. Live uses the existing authenticated PFM API
+boundary; offline uses temporary in-memory demo behavior. Offline acceptance
+is verified; live wiring is implemented but runtime behavior against external
+services was not exercised here.
 
 ## Offline containers
 

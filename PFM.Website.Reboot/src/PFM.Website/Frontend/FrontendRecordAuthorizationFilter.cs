@@ -26,10 +26,22 @@ internal static class FrontendRecordAuthorizationFilter
         var services = http.RequestServices;
         int? accountId = ReadId(http, "accountId");
         int? id = ReadId(http, "id");
+        Guid? recordId = ReadGuid(http, "id");
         var route = (RouteEndpoint)http.GetEndpoint()!;
         var resource = ((RoutePatternLiteralPart)route.RoutePattern.PathSegments[2].Parts[0]).Content;
-        if (accountId is null && id is null && resource != "accounts")
+        if (accountId is null && id is null && recordId is null && resource != "accounts")
             return await next(context);
+
+        if (recordId is Guid tnpId)
+        {
+            var allowed = resource switch
+            {
+                "pensions" => (await services.GetRequiredService<PensionService>().GetAll()).Any(row => row.Id == tnpId),
+                "income-tax-reports" => (await services.GetRequiredService<IncomeTaxReportService>().GetAll()).Any(row => row.Id == tnpId),
+                _ => false
+            };
+            return allowed ? await next(context) : Results.NotFound();
+        }
 
         if (resource is "banks" or "expense-types")
         {
@@ -75,4 +87,7 @@ internal static class FrontendRecordAuthorizationFilter
 
     private static int? ReadId(HttpContext context, string name) =>
         int.TryParse(context.Request.RouteValues[name]?.ToString(), out var id) ? id : null;
+
+    private static Guid? ReadGuid(HttpContext context, string name) =>
+        Guid.TryParse(context.Request.RouteValues[name]?.ToString(), out var id) ? id : null;
 }

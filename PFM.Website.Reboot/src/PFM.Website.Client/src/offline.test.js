@@ -97,6 +97,39 @@ test("offline API uses the existing in-memory implementations", { skip: !base },
   assert.ok(income);
   await api(`/incomes/${income.id}`, "DELETE");
 
+  const pensionName = `Pension ${suffix}`;
+  await api("/pensions", "POST", { schemeName: pensionName, loginUrl: "https://example.com/pension", currencyId: 1, countryId: 1, currentPot: 12500, currentContribution: 250 });
+  let pension = (await api("/pensions")).find((item) => item.schemeName === pensionName);
+  assert.ok(pension);
+  const pensionDetails = await api(`/pensions/${pension.id}`);
+  assert.equal(pensionDetails.currentPot, 12500);
+  await api(`/pensions/${pension.id}`, "PUT", { schemeName: `${pensionName} edited`, loginUrl: "", currencyId: 2, countryId: 2, currentPot: 13000, currentContribution: 275 });
+  pension = (await api("/pensions")).find((item) => item.id === pension.id);
+  assert.equal(pension.schemeName, `${pensionName} edited`);
+  assert.equal(pension.currentPot, 13000);
+  await api(`/pensions/${pension.id}`, "DELETE");
+  assert.equal((await api("/pensions")).some((item) => item.id === pension.id), false);
+
+  const report = { payDay: date, taxableIncome: 42000, incomeTaxPaid: 6200, nationalInsurancePaid: 3200, currencyId: 1, countryId: 1 };
+  await api("/income-tax-reports", "POST", report);
+  let taxReport = (await api("/income-tax-reports")).find((item) => item.payDay.startsWith(date));
+  assert.ok(taxReport);
+  const taxDetails = await api(`/income-tax-reports/${taxReport.id}`);
+  assert.equal(taxDetails.taxableIncome, 42000);
+  await api(`/income-tax-reports/${taxReport.id}`, "PUT", { ...report, payDay: "2025-01-15", taxableIncome: 45000 });
+  taxReport = (await api("/income-tax-reports")).find((item) => item.id === taxReport.id);
+  assert.equal(taxReport.payDay.slice(0, 10), "2025-01-15");
+  assert.equal(taxReport.taxableIncome, 45000);
+  await api(`/income-tax-reports/${taxReport.id}`, "DELETE");
+  assert.equal((await api("/income-tax-reports")).some((item) => item.id === taxReport.id), false);
+
+  const invalidPension = await fetch(`${base}/api/frontend/pensions`, {
+    method: "POST",
+    headers: { Cookie: cookie, "Content-Type": "application/json" },
+    body: JSON.stringify({ schemeName: "", loginUrl: "javascript:alert(1)", currencyId: 1, countryId: 1, currentPot: 0, currentContribution: 0 }),
+  });
+  assert.equal(invalidPension.status, 400);
+
   await api("/accounts/1/savings", "POST", { dateSaving: date, amount: 25, targetInternalAccountId: 5 });
   const savings = await api("/accounts/1/savings");
   const saving = savings.at(-1);
