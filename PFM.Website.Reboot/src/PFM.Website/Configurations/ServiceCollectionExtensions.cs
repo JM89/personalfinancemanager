@@ -7,9 +7,16 @@ namespace PFM.Website.Configurations
 {
 	public static class ServiceCollectionExtensions
 	{
+        /// <summary>
+        /// Registers ASP.NET Core's Problem Details JSON formatter. Does not install exception-handling middleware.
+        /// </summary>
         public static IServiceCollection AddJsonErrorResponses(this IServiceCollection services) =>
             services.AddProblemDetails();
 
+        /// <summary>
+        /// Configures website session cookies and live Keycloak sign-in. Unauthenticated
+        /// frontend API requests receive 401; only the login page starts the live OIDC flow.
+        /// </summary>
 		public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
 		{
 			var authOptions = configuration.GetSection("AuthOptions").Get<AuthOptions>() ?? new AuthOptions();

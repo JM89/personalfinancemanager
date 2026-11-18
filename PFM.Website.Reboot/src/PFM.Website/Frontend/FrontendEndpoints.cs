@@ -11,7 +11,7 @@ public static class FrontendEndpoints
     {
         var api = app.MapGroup("/api/frontend").RequireAuthorization();
         if (!offline)
-            api.AddEndpointFilter(FrontendRecordAccess.Check);
+            api.AddEndpointFilter(FrontendRecordAuthorizationFilter.AuthorizeAsync);
 
         api.MapGet("/session", (HttpContext context) => Results.Ok(new { name = context.User.Identity?.Name }));
         app.MapGet("/api/frontend/mode", () => Results.Ok(new { offline }));

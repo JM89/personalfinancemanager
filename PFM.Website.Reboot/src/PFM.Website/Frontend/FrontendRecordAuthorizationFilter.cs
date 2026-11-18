@@ -5,16 +5,19 @@ using Microsoft.AspNetCore.Routing.Patterns;
 namespace PFM.Website.Frontend;
 
 /// <summary>
-/// Checks record ownership on live frontend requests. Sign-in identifies the user,
-/// but does not authorize the record IDs supplied by the browser.
+/// Enforces record-level authorization for the live website using the signed-in
+/// user's record lists. It does not audit requests or protect direct backend API calls.
 /// </summary>
-internal static class FrontendRecordAccess
+internal static class FrontendRecordAuthorizationFilter
 {
     /// <summary>
-    /// Checks IDs in the route and request body against the user's records before
-    /// calling the endpoint. Returns 404 for inaccessible IDs without revealing whether they exist.
+    /// Validates applicable route IDs and references in bound request models before
+    /// invoking the endpoint. Returns 404 for missing or inaccessible records.
     /// </summary>
-    public static async ValueTask<object?> Check(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
+    /// <param name="context">The authenticated request, including route values and bound arguments.</param>
+    /// <param name="next">The next filter or endpoint, invoked only if the checks pass or none apply.</param>
+    /// <returns>The downstream result, or a 404 response if access is denied.</returns>
+    public static async ValueTask<object?> AuthorizeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
         var http = context.HttpContext;
         var services = http.RequestServices;

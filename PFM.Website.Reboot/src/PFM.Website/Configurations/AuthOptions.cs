@@ -6,7 +6,10 @@ namespace PFM.Website.Configurations
         public const string OfflineCookieScheme = "DevOfflineCookie";
         public bool DevOffline { get; set; }
 		public string Authority { get; set; } = string.Empty;
-        // Browser-facing OIDC URL and token issuer when it differs from the internal authority.
+        /// <summary>
+        /// Browser-facing OIDC URL and expected token issuer when they differ from
+        /// the internal <see cref="Authority"/> used for discovery.
+        /// </summary>
         public string? PublicAuthority { get; set; }
         public string ClientId { get; set; } = string.Empty;
         public string ClientSecret { get; set; } = string.Empty;
