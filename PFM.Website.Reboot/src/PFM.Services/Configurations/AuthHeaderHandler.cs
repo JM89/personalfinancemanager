@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
-using PFM.Services.Configurations;
+using Microsoft.AspNetCore.Authentication;
 
 namespace PFM.Website.Configurations
 {
@@ -16,15 +16,15 @@ namespace PFM.Website.Configurations
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var bearerToken = TokenProvider.AccessToken;
+            var context = _httpContextAccessor.HttpContext;
+            var bearerToken = context is null ? null : await context.GetTokenAsync("access_token");
 
-            if (bearerToken != null)
+            if (!string.IsNullOrEmpty(bearerToken))
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken.Replace("Bearer ", ""));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
             }
 
             return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }
     }
 }
-

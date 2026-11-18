@@ -72,10 +72,10 @@ function Action({ children, onClick, danger = false, confirmation, icon, label }
   };
   return <><button type="button" className={`${danger ? "danger" : "secondary"}${icon ? " operation-icon" : ""}`} aria-label={icon ? busy ? `Working: ${label}` : label : undefined} title={icon ? label : undefined} aria-busy={busy || undefined} disabled={busy} onClick={() => confirmation ? setOpen(true) : execute()}>{icon ? <Icon name={icon} /> : busy ? "Working..." : children}</button>
     {error && !open && <span className="error" role="alert">{error}</span>}
-    {open && <Dialog title="Delete this item?" onClose={() => { if (!busy) { setOpen(false); setError(""); } }}>
-      <div className="confirmation-icon"><Icon name="category" /></div><p>{confirmation}</p><p className="muted">This cannot be undone. Everything else will stay as it is.</p>
+    {open && <Dialog title={danger ? "Delete this item?" : "Confirm this action"} onClose={() => { if (!busy) { setOpen(false); setError(""); } }}>
+      <div className="confirmation-icon"><Icon name="category" /></div><p>{confirmation}</p>{danger && <p className="muted">This cannot be undone. Everything else will stay as it is.</p>}
       {error && <p className="error" role="alert">{error}</p>}
-      <div className="actions"><button type="button" className="secondary" disabled={busy} data-dialog-autofocus onClick={() => { setOpen(false); setError(""); }}>Keep item</button><button type="button" className="danger solid" disabled={busy} onClick={execute}>{busy ? "Deleting..." : "Yes, delete"}</button></div>
+      <div className="actions"><button type="button" className="secondary" disabled={busy} data-dialog-autofocus onClick={() => { setOpen(false); setError(""); }}>{danger ? "Keep item" : "Cancel"}</button><button type="button" className={danger ? "danger solid" : undefined} disabled={busy} onClick={execute}>{busy ? "Working..." : danger ? "Yes, delete" : children}</button></div>
     </Dialog>}
   </>;
 }
@@ -122,27 +122,29 @@ function Table({ columns, rows, actions }) {
 function App() {
   const path = usePath();
   const session = useData(["/session"]);
-  if (session.loading) return <main><p>Loading...</p></main>;
+  const mode = useData(["/mode"]);
+  const offline = mode.data?.[0].offline ?? false;
+  if (session.loading || mode.loading) return <main><p>Loading...</p></main>;
   if (session.error) return session.status === 401
-    ? <main className="login card"><BrandMark /><span className="eyebrow">A LITTLE CLARITY GOES A LONG WAY</span><h1>Your money.<br />A clearer picture.</h1><p className="muted">Welcome to Personal Finance Manager. Your space to spend thoughtfully, plan ahead, and see the bigger picture.</p><a className="button" href="/login?redirectUri=/">Enter your workspace <Icon name="arrow" /></a><p className="form-note"><Icon name="info" /> Offline development · Temporary local data</p><Appearance /></main>
+    ? <main className="login card"><BrandMark /><span className="eyebrow">A LITTLE CLARITY GOES A LONG WAY</span><h1>Your money.<br />A clearer picture.</h1><p className="muted">Welcome to Personal Finance Manager. Your space to spend thoughtfully, plan ahead, and see the bigger picture.</p><a className="button" href={`/login?redirectUri=${encodeURIComponent(path)}`}>{offline ? "Enter your workspace" : "Sign in"} <Icon name="arrow" /></a>{offline && <p className="form-note"><Icon name="info" /> Offline development · Temporary local data</p>}<Appearance /></main>
     : <main><p className="error" role="alert">Could not connect to the website: {session.error}</p></main>;
   const navigation = [["/", "overview", "Overview"], ["/bank-accounts", "wallet", "Bank accounts"], ["/banks", "bank", "Banks"], ["/expense-types", "category", "Expense types"]];
   const active = navigation.find(([to]) => to !== "/" && path.startsWith(to))?.[0] || "/";
   return <div className="layout"><aside className="sidebar"><Link className="brand" to="/"><BrandMark /><span>PFM<span className="brand-subtitle">PERSONAL FINANCE</span></span></Link><span className="nav-label">WORKSPACE</span><nav aria-label="Main navigation">
     {navigation.map(([to, icon, label]) => <Link key={to} to={to} className={active === to ? "active" : ""} aria-current={active === to ? "page" : undefined}><Icon name={icon} />{label}{active === to && <span className="active-dot" />}</Link>)}
-  </nav><div className="sidebar-bottom"><div className="workspace-note"><span className="status-dot" />Offline workspace<p>A little room to explore.<br />Data resets when the server stops.</p></div><Appearance /><a className="logout-link" href="/logout"><Icon name="logout" />Log out</a></div></aside><main><header className="topbar"><span className="breadcrumb">Workspace <span>/</span> <strong>{navigation.find(([to]) => to === active)?.[2]}</strong></span><div className="user-menu"><span className="offline-badge"><span className="status-dot" />Local mode</span><span className="avatar">{session.data[0].name?.slice(0, 1).toUpperCase() || "U"}</span><span>{session.data[0].name}</span></div></header>
-    <Page key={path} path={path} />
+  </nav><div className="sidebar-bottom">{offline && <div className="workspace-note"><span className="status-dot" />Offline workspace<p>A little room to explore.<br />Data resets when the server stops.</p></div>}<Appearance /><a className="logout-link" href="/logout"><Icon name="logout" />Log out</a></div></aside><main><header className="topbar"><span className="breadcrumb">Workspace <span>/</span> <strong>{navigation.find(([to]) => to === active)?.[2]}</strong></span><div className="user-menu">{offline && <span className="offline-badge"><span className="status-dot" />Local mode</span>}<span className="avatar">{session.data[0].name?.slice(0, 1).toUpperCase() || "U"}</span><span>{session.data[0].name}</span></div></header>
+    <Page key={path} path={path} offline={offline} />
   </main></div>;
 }
 
-function Page({ path }) {
+function Page({ path, offline }) {
   const parts = path.split("/").filter(Boolean);
   if (!parts.length || (parts.length === 1 && /^\d+$/.test(parts[0]))) return <Dashboard selected={parts[0]} />;
   if (parts[0] === "expense-types") return <div className="configuration-page"><ExpenseTypes parts={parts} /></div>;
   if (parts[0] === "banks") return <div className="configuration-page"><Banks parts={parts} /></div>;
   if (parts[0] === "bank-accounts") return <div className="configuration-page"><Accounts parts={parts} /></div>;
   const kinds = { expenses: "expenses", incomes: "incomes", savings: "savings", "atm-withdraws": "withdrawals", "budget-plans": "budgets" };
-  if (kinds[parts[0]] && parts[2]) return <Movements key={path} kind={kinds[parts[0]]} parts={parts} />;
+  if (Object.hasOwn(kinds, parts[0]) && parts[2]) return <Movements key={path} kind={kinds[parts[0]]} parts={parts} offline={offline} />;
   return <section><h1>Page not found</h1><Link to="/">Go to dashboard</Link></section>;
 }
 
@@ -232,7 +234,7 @@ const movementConfig = {
   budgets: { label: "Budget plans", slug: "budget-plans" },
 };
 
-function Movements({ kind, parts }) {
+function Movements({ kind, parts, offline }) {
   const config = movementConfig[kind];
   const accountId = Number(parts[2]);
   const base = `/${config.slug}/list/${accountId}`;
@@ -247,18 +249,19 @@ function Movements({ kind, parts }) {
     : [`/accounts/${accountId}/${kind}`];
   const state = useData(paths, refresh);
   return <Loader state={state}>{(data) => creating || editing
-    ? <MovementForm kind={kind} accountId={accountId} base={base} data={data} editing={editing} view={action === "view"} />
+    ? <MovementForm kind={kind} accountId={accountId} base={base} data={data} editing={editing} view={action === "view"} offline={offline} />
     : <section><div className="heading"><div><Link to={`/${accountId}`}>← Dashboard</Link><h1>{config.label}</h1></div><Link className="button" to={`/${config.slug}/create/${accountId}`}>Create</Link></div>
       <Table rows={kind === "expenses" ? data[0].slice(page * 10, page * 10 + 10) : data[0]} columns={kind === "budgets" ? [["name", "Name"], ["displayedStartDate", "Start"], ["displayedEndDate", "End"]] : [[config.date, "Date", (r) => date(r[config.date])], ["description", "Description"], [config.amount, "Amount", (r) => money(r[config.amount])], ...(kind === "expenses" ? [["expenseTypeName", "Category"]] : []), ...(kind === "withdrawals" ? [["currentAmount", "Remaining", (r) => money(r.currentAmount)], ["isClosed", "Closed", (r) => r.isClosed ? "Yes" : "No"]] : []), ...(kind === "savings" ? [["targetInternalAccountName", "Target account"]] : [])]}
         actions={(r) => kind === "budgets" ? <><Link to={`/budget-plans/view/${accountId}/${r.id}`}>View</Link>{r.canBeChanged && <><Link to={`/budget-plans/edit/${accountId}/${r.id}`}>Edit</Link><Action onClick={async () => { await request(`/accounts/${accountId}/budgets/${r.id}/start`, { method: "POST" }); setRefresh(refresh + 1); }}>Start</Action></>}{r.startDate && !r.endDate && <Action onClick={async () => { await request(`/budgets/${r.id}/stop`, { method: "POST" }); setRefresh(refresh + 1); }}>Stop</Action>}</>
           : <>{(kind === "withdrawals" || (kind === "expenses" && r.paymentMethodHasBeenAlreadyDebitedOption)) && <Action onClick={async () => { await request(`/${kind}/${r.id}/debit`, { method: "POST", body: { current: r.hasBeenAlreadyDebited } }); setRefresh(refresh + 1); }}>{r.hasBeenAlreadyDebited ? "Mark not debited" : "Mark debited"}</Action>}
-            {kind === "withdrawals" && !r.isClosed && <span>Closing is not available offline</span>}
+            {kind === "withdrawals" && !r.isClosed && (offline ? <span>Closing is not available offline</span>
+              : <Action confirmation="Close this ATM withdrawal?" onClick={async () => { await request(`/withdrawals/${r.id}/close`, { method: "POST" }); setRefresh(refresh + 1); }}>Close</Action>)}
             <Action danger confirmation={`This item${r.description ? ` (${r.description})` : ""} will be removed from ${config.label.toLowerCase()}.`} onClick={async () => { await request(`/${kind}/${r.id}`, { method: "DELETE" }); if (kind === "expenses" && page > 0 && data[0].length === page * 10 + 1) setPage(page - 1); setRefresh(refresh + 1); }}>Delete</Action></>} />
       {kind === "expenses" && <div className="pagination"><button className="secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>Previous</button><span>Page {page + 1} of {Math.max(1, Math.ceil(data[0].length / 10))}</span><button className="secondary" disabled={(page + 1) * 10 >= data[0].length} onClick={() => setPage(page + 1)}>Next</button></div>}
     </section>}</Loader>;
 }
 
-function MovementForm({ kind, accountId, base, data, editing, view }) {
+function MovementForm({ kind, accountId, base, data, editing, view, offline }) {
   const [accounts, expenseTypes, methods, withdrawals] = data;
   const existing = editing ? data[4] : null;
   const budgetContext = kind === "budgets" ? data[editing ? 5 : 4] : null;
@@ -266,14 +269,15 @@ function MovementForm({ kind, accountId, base, data, editing, view }) {
   const initial = existing || (kind === "budgets"
     ? { name: "", expectedIncomes: 0, expectedSavings: 0, expenseTypes: expenseTypes.filter((x) => x.showOnDashboard).map((expenseType) => ({ expenseType, expectedValue: 0 })) }
     : { [config.date]: today(), [config.amount]: 0, description: "", expenseTypeId: null, paymentMethodId: null, targetInternalAccountId: null, atmWithdrawId: null, hasBeenAlreadyDebited: false });
-  const fields = kind === "budgets" ? [{ name: "name", label: "Name", required: true }, { name: "plannedStartDate", label: "Planned start date", type: "date" }, { name: "expectedIncomes", label: "Expected incomes", type: "number", min: 0, step: "0.01", disabled: editing }, { name: "expectedSavings", label: "Expected savings", type: "number", min: 0, step: "0.01", disabled: editing }]
+  const amountsReadOnly = editing && offline;
+  const fields = kind === "budgets" ? [{ name: "name", label: "Name", required: true }, { name: "plannedStartDate", label: "Planned start date", type: "date" }, { name: "expectedIncomes", label: "Expected incomes", type: "number", min: 0, step: "0.01", disabled: amountsReadOnly }, { name: "expectedSavings", label: "Expected savings", type: "number", min: 0, step: "0.01", disabled: amountsReadOnly }]
     : [{ name: config.date, label: "Date", type: "date", required: true }, ...(kind === "expenses" || kind === "incomes" ? [{ name: "description", label: "Description", required: true }] : []), { name: config.amount, label: "Amount", type: "number", min: 0, step: "0.01", required: true }, ...(kind === "expenses" ? [{ name: "expenseTypeId", label: "Expense type", options: expenseTypes, required: true }, { name: "paymentMethodId", label: "Payment method", options: methods, required: true }] : []), ...(kind === "savings" ? [{ name: "targetInternalAccountId", label: "Saving account", options: accounts.filter((a) => a.isSavingAccount), required: true }] : []), ...(kind === "withdrawals" ? [{ name: "hasBeenAlreadyDebited", label: "Already debited", type: "checkbox" }] : [])];
   if (view) return <section><h1>Budget plan: {existing.name}</h1><p>Expected incomes: {money(existing.expectedIncomes)} · savings: {money(existing.expectedSavings)} · expenses: {money(existing.expectedExpenses)}</p><Table rows={existing.expenseTypes.map((e, i) => ({ id: i, name: e.expenseType.name, value: e.expectedValue }))} columns={[["name", "Expense type"], ["value", "Expected"]]} /><Link to={base}>Back</Link></section>;
   return <Form title={`${editing ? "Edit" : "Create"} ${config.label.toLowerCase()}`} initial={initial} fields={fields} cancel={base} onSave={(model) => request(`/accounts/${accountId}/${kind}${editing ? `/${model.id}` : ""}`, { method: editing ? "PUT" : "POST", body: model })}>
     {(model, setModel) => <>{kind === "expenses" && model.paymentMethodId === 2 && <Field label="ATM withdrawal" name="atmWithdrawId" model={model} setModel={setModel} options={withdrawals.filter((w) => !w.isClosed).map((w) => ({ ...w, name: w.description }))} required />}
       {kind === "expenses" && model.paymentMethodId === 5 && <Field label="Target account" name="targetInternalAccountId" model={model} setModel={setModel} options={accounts} required />}
       {kind === "expenses" && model.paymentMethodId && model.paymentMethodId !== 2 && model.paymentMethodId !== 5 && <Field label="Already debited" name="hasBeenAlreadyDebited" model={model} setModel={setModel} type="checkbox" />}
-      {kind === "budgets" && <>{editing && <p>Expected income and savings cannot be changed by the existing offline service.</p>}<h2>Expense type budgets</h2><p>Compare with the previous plan, last month and six-month average.</p><div className="table-wrap"><table><thead><tr><th>Category</th><th>Expected</th><th>Previous plan</th><th>Last month</th><th>Six-month average</th></tr></thead><tbody>{model.expenseTypes.map((entry, index) => <tr key={entry.expenseType.id}><td><label htmlFor={`budget-${entry.expenseType.id}`}>{entry.expenseType.name}</label></td><td><input id={`budget-${entry.expenseType.id}`} type="number" step="0.01" min="0" value={entry.expectedValue} onChange={(e) => setModel({ ...model, expenseTypes: model.expenseTypes.map((item, i) => i === index ? { ...item, expectedValue: Number(e.target.value) } : item) })} /></td><td>{money(budgetContext.previous?.expenseTypes.find((item) => item.expenseType.id === entry.expenseType.id)?.expectedValue)}</td><td>{money(budgetContext.lastMonth.aggregates[entry.expenseType.name])}</td><td>{money(budgetContext.average.aggregates[entry.expenseType.name])}</td></tr>)}</tbody></table></div>
+      {kind === "budgets" && <>{amountsReadOnly && <p>Expected income and savings cannot be changed offline.</p>}<h2>Expense type budgets</h2><p>Compare with the previous plan, last month and six-month average.</p><div className="table-wrap"><table><thead><tr><th>Category</th><th>Expected</th><th>Previous plan</th><th>Last month</th><th>Six-month average</th></tr></thead><tbody>{model.expenseTypes.map((entry, index) => <tr key={entry.expenseType.id}><td><label htmlFor={`budget-${entry.expenseType.id}`}>{entry.expenseType.name}</label></td><td><input id={`budget-${entry.expenseType.id}`} type="number" step="0.01" min="0" value={entry.expectedValue} onChange={(e) => setModel({ ...model, expenseTypes: model.expenseTypes.map((item, i) => i === index ? { ...item, expectedValue: Number(e.target.value) } : item) })} /></td><td>{money(budgetContext.previous?.expenseTypes.find((item) => item.expenseType.id === entry.expenseType.id)?.expectedValue)}</td><td>{money(budgetContext.lastMonth.aggregates[entry.expenseType.name])}</td><td>{money(budgetContext.average.aggregates[entry.expenseType.name])}</td></tr>)}</tbody></table></div>
         <p>Total: {money(model.expectedIncomes - model.expectedSavings - model.expenseTypes.reduce((sum, item) => sum + item.expectedValue, 0))}</p></>}</>}
   </Form>;
 }

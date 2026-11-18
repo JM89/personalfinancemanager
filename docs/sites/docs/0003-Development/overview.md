@@ -89,8 +89,22 @@ Open http://localhost:5110. The ASP.NET Core SPA proxy starts Vite on port
 5174 and redirects the browser there. Select **Enter your workspace** to sign in as a local
 developer without Keycloak. Data is lost when the website stops. Offline
 authentication is restricted to the Development environment and must not be
-used for a publicly accessible deployment. Other profiles continue to use the
-existing Blazor website and Keycloak.
+used for a publicly accessible deployment. Live profiles serve the same
+React app and sign in through Keycloak. Build the React client first for
+local live development. Default `tilt up` also builds and starts the
+`pfm-website` resource at <https://localhost:7143>; no separate Node or .NET
+process is needed. To enable sign-in, copy the secret for the `pfm` client
+from **Keycloak Admin Console → pfm realm → Clients → pfm → Credentials**.
+Set `WEBSITE_OIDC_CLIENT_SECRET` in the git-ignored `PFM.Infra/configs/.env`,
+then run `tilt trigger pfm-website` to apply it. The local website uses a
+self-signed development certificate.
+
+The website contacts Keycloak over Docker at `http://keycloak:8080/realms/pfm`.
+Keycloak is reached from the browser at `http://localhost:8080/realms/pfm`;
+the website explicitly trusts that configured public issuer while keeping
+issuer validation enabled. In this split-host setup, the website reads the
+user's identity from the validated ID token instead of calling Keycloak's
+internal UserInfo endpoint with a public-issuer token.
 
 The existing in-memory implementations have limitations: some stores use
 separate seeded copies of related data, so newly created expense types may not

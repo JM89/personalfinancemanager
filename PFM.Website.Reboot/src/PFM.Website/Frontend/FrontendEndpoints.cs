@@ -1,18 +1,20 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Components.Forms;
 using PFM.Models;
 using PFM.Services;
 using PFM.Services.Utils;
 
-namespace PFM.Website.Offline;
+namespace PFM.Website.Frontend;
 
-public static class OfflineEndpoints
+public static class FrontendEndpoints
 {
-    public static void MapOfflineEndpoints(this WebApplication app)
+    public static void MapFrontendEndpoints(this WebApplication app, bool offline)
     {
         var api = app.MapGroup("/api/frontend").RequireAuthorization();
+        if (!offline)
+            api.AddEndpointFilter(FrontendRecordAccess.Check);
 
         api.MapGet("/session", (HttpContext context) => Results.Ok(new { name = context.User.Identity?.Name }));
+        app.MapGet("/api/frontend/mode", () => Results.Ok(new { offline }));
         api.MapGet("/accounts", (BankAccountService service) => service.GetAll());
         api.MapPost("/accounts", async (BankAccountEditModel model, BankAccountService service) =>
             await Save(model, () => service.Create(model)));
@@ -149,22 +151,10 @@ public static class OfflineEndpoints
         var file = form.Files.GetFile("icon");
         if (!id.HasValue && file is null) return Results.BadRequest("A bank icon is required.");
         if (file is { Length: > 10485760 }) return Results.BadRequest("The bank icon must not exceed 10 MB.");
-        var icon = file is null ? null : new FormBrowserFile(file);
-        return await Save(model, () => id.HasValue ? service.Edit(id.Value, model, icon!) : service.Create(model, icon!));
+        using var icon = file?.OpenReadStream();
+        return await Save(model, () => id.HasValue ? service.Edit(id.Value, model, icon) : service.Create(model, icon!));
     }
 
     private sealed record DebitStatus(bool Current);
 
-    private sealed class FormBrowserFile(IFormFile file) : IBrowserFile
-    {
-        public string Name => file.FileName;
-        public DateTimeOffset LastModified => DateTimeOffset.UnixEpoch;
-        public long Size => file.Length;
-        public string ContentType => file.ContentType;
-        public Stream OpenReadStream(long maxAllowedSize = 512000, CancellationToken cancellationToken = default)
-        {
-            if (file.Length > maxAllowedSize) throw new InvalidOperationException("The bank icon is too large.");
-            return file.OpenReadStream();
-        }
-    }
 }

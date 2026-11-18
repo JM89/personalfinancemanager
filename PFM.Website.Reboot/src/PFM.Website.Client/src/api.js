@@ -7,6 +7,9 @@ export class RequestError extends Error {
 
 export async function request(path, options = {}) {
   const headers = new Headers(options.headers);
+  if (options.method && !["GET", "HEAD"].includes(options.method.toUpperCase())) {
+    headers.set("X-PFM-Frontend", "1");
+  }
   if (options.body && !(options.body instanceof FormData)) {
     headers.set("Content-Type", "application/json");
     options = { ...options, body: JSON.stringify(options.body) };

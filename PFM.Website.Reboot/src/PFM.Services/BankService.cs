@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using AutoMapper;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using PFM.Bank.Api.Contracts.Bank;
 using PFM.Models;
@@ -47,9 +46,9 @@ namespace PFM.Services
             return model;
         }
 
-        public async Task<bool> Create(BankEditModel model, IBrowserFile bankIconFileInfo)
+        public async Task<bool> Create(BankEditModel model, Stream icon)
         {
-            var iconPath = await UploadBankIcon(bankIconFileInfo);
+            var iconPath = await UploadBankIcon(icon);
             if (string.IsNullOrEmpty(iconPath))
             {
                 Logger.Error("Could not upload image");
@@ -64,13 +63,13 @@ namespace PFM.Services
             return result;
         }
 
-        public async Task<bool> Edit(int id, BankEditModel model, IBrowserFile bankIconFileInfo)
+        public async Task<bool> Edit(int id, BankEditModel model, Stream? icon)
         {
             var request = Mapper.Map<BankDetails>(model);
 
-            if (bankIconFileInfo != null)
+            if (icon is not null)
             {
-                var iconPath = await UploadBankIcon(bankIconFileInfo);
+                var iconPath = await UploadBankIcon(icon);
                 if (string.IsNullOrEmpty(iconPath))
                 {
                     Logger.Error("Could not upload image");
@@ -84,12 +83,10 @@ namespace PFM.Services
             return result;
         }
 
-        private async Task<string> UploadBankIcon(IBrowserFile bankIconFileInfo)
+        private Task<string> UploadBankIcon(Stream icon)
         {
             var bankIconParams = new ObjectStorageParams(settings.BankIconSettings.Location, string.Format("{0}.png", Guid.NewGuid()));
-            using Stream imageStream = bankIconFileInfo.OpenReadStream(1024 * 1024 * 10);
-            var bankIconPath = await objectStorageService.UploadFileAsync(bankIconParams, imageStream);
-            return bankIconPath;
+            return objectStorageService.UploadFileAsync(bankIconParams, icon);
         }
 
         private async Task<IDictionary<string,string?>> DownloadBankIcons(string[] iconPaths)
@@ -141,4 +138,3 @@ namespace PFM.Services
         }
     }
 }
-

@@ -6,6 +6,7 @@ namespace PFM.Website.Configurations
         public const string OfflineCookieScheme = "DevOfflineCookie";
         public bool DevOffline { get; set; }
 		public string Authority { get; set; } = string.Empty;
+        public string? PublicAuthority { get; set; }
         public string ClientId { get; set; } = string.Empty;
         public string ClientSecret { get; set; } = string.Empty;
 	}

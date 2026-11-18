@@ -4,9 +4,10 @@ PFM is a web application to manage your personal finance and visualise your expe
 
 ## A clearer picture of your finances
 
-The offline React workspace offers two themes, a refreshed piggy-bank identity,
+The React workspace offers two themes, a refreshed piggy-bank identity,
 interactive spending charts, and friendlier configuration forms.
-The existing Blazor profiles remain available.
+Use [the website setup](./PFM.Website.Reboot/README.md) to run it with live
+services or with offline demo data.
 
 ### Pearl
 

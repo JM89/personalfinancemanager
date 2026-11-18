@@ -1,139 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net11.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>1819c351-5b5c-4b8e-80f9-8b219b7a4d95</UserSecretsId>
-    <SpaRoot>..\PFM.Website.Client\</SpaRoot>
+    <SpaRoot>../PFM.Website.Client/</SpaRoot>
     <SpaProxyWorkingDirectory>$(SpaRoot)</SpaProxyWorkingDirectory>
     <SpaProxyServerUrl>http://localhost:5174</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm run dev -- --host 127.0.0.1 --port 5174</SpaProxyLaunchCommand>
   </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
-    <None Remove="Services\" />
-    <None Remove="Configurations\" />
-    <None Remove="ExternalServices\" />
-    <None Remove="ExternalServices\InMemoryStorage\" />
-    <None Remove="Models\" />
-    <None Remove="Services\Mappers\" />
-    <None Remove="Components\" />
-    <None Remove="Persistence\" />
-    <None Remove="Persistence\Implementations\" />
-    <None Remove="Persistence\Models\" />
-    <None Remove="Utils\" />
-    <None Remove="Components\Dashboard\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configurations\" />
-    <Folder Include="wwwroot\Resources\" />
-    <Folder Include="Components\" />
-    <Folder Include="Components\Dashboard\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="OpenTelemetry" Version="1.11.0" />
-    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.11.0" />
-    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.0" />
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.11.0" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.10.1" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.10.0" />
-    <PackageReference Include="PFM.Api.Contracts" Version="5.21.0" />
-    <PackageReference Include="PFM.Bank.Api.Contracts" Version="5.21.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="11.0.0" />
-    <PackageReference Include="BlazorColorPicker" Version="3.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="11.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Serilog" Version="4.2.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="AutoFixture" Version="4.18.1" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.412.2" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301" />
-    <PackageReference Include="ChartJs.Blazor.Fork" Version="2.0.2" />
+    <ProjectReference Include="../PFM.Services/PFM.Services.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Remove="wwwroot\Resources\.DS_Store" />
-    <Content Remove="wwwroot\Resources\bank_icons\.gitignore" />
-    <Content Remove="wwwroot\Resources\pfm_logo_wb.png" />
-    <Content Remove="wwwroot\Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="Pages\ExpenseTypeList.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\uiu.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\ExpenseTypeList %28copy%29.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\BankList.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\BankList %28copy%29.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\BankAccountList.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\IncomeCreate.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\IncomeList.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\IncomeList %28copy%29.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\SavingList.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\IncomeCreate %28copy%29.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\SavingCreate.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\AtwWithdrawList.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\SavingCreate %28copy%29.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\AtmWithdrawCreate.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\ExpenseList.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\AtwWithdrawList %28copy%29.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\AtmWithdrawCreate %28copy%29.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\ExpenseCreate.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\BankAccountList %28copy%29.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Pages\BudgetPlanList.razor">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\Resources\.DS_Store" />
-    <None Include="wwwroot\Resources\bank_icons\.gitignore" />
-    <None Include="wwwroot\Resources\pfm_logo_wb.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PFM.Services\PFM.Services.csproj" />
-  </ItemGroup>
+  <Target Name="PublishReact" AfterTargets="ComputeFilesToPublish">
+    <Error Condition="!Exists('$(SpaRoot)dist/index.html')" Text="Build the React app before publishing: run npm ci and npm run build in PFM.Website.Client." />
+    <ItemGroup>
+      <ReactDist Include="$(SpaRoot)dist/**/*" />
+      <ResolvedFileToPublish Include="@(ReactDist->'%(FullPath)')">
+        <RelativePath>wwwroot/%(RecursiveDir)%(Filename)%(Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
 </Project>

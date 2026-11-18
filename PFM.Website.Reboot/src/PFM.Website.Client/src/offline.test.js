@@ -4,6 +4,12 @@ import assert from "node:assert/strict";
 const base = process.env.PFM_OFFLINE_URL;
 
 test("offline API uses the existing in-memory implementations", { skip: !base }, async () => {
+  const deepLink = await fetch(`${base}/expenses/list/1`);
+  assert.equal(deepLink.status, 200);
+  assert.match(await deepLink.text(), /<div id="root">/);
+  const mode = await fetch(`${base}/api/frontend/mode`);
+  assert.deepEqual(await mode.json(), { offline: true });
+  assert.equal((await fetch(`${base}/api/frontend/does-not-exist`)).status, 404);
   const anonymous = await fetch(`${base}/api/frontend/accounts`, { redirect: "manual" });
   assert.equal(anonymous.status, 401);
   const login = await fetch(`${base}/login?redirectUri=/`, { redirect: "manual" });
