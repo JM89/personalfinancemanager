@@ -63,3 +63,7 @@ contain `CurrencyId`, `CountryId`, `TaxableIncome`, `IncomeTaxPaid`,
 `NationalInsurancePaid` and `PayDay`. Offline acceptance, including CRUD and
 validation for both record types, is verified. Live API wiring is implemented,
 but live runtime behavior against external services was not exercised here.
+
+## Proposals
+
+- [Monthly finance workflow proposal](./monthly-finance-workflow-proposal.md) — **PROPOSED**, not approved or implemented; assessed 2026-11-18. Existing requirement statuses are unchanged.
