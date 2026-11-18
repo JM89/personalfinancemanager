@@ -32,6 +32,12 @@ In the `./PFM.Infra/configs`, you will find an .env-example file. If you copy th
 
 :warning: This file is part of gitignore. It will contains sensitive data, do not commit the .env file. 
 
+`MYSQL_ADMIN_PASSWORD` configures both the MySQL server and the tax-and-pension
+API. The `tnp-db` initializer creates or widens monetary columns to retain
+pence/cents. For an existing database, apply
+[the monetary-column migration](../../../../PFM.TNP.Api/setup/db/scripts/04_widen_monetary_columns.sql)
+directly; rerunning the initializer also inserts demo data.
+
 #### Local keycloak secrets
 
 To simplify the setup, the secrets for Keycloak have been hard-coded. In a normal setup, this would have to be stored in a secured fashion. 

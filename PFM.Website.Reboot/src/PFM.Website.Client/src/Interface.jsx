@@ -26,6 +26,7 @@ export function Icon({ name, ...props }) {
     edit: "m16 3 5 5 M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14v6Z",
     delete: "M3 6h18 M9 6V3h6v3 M5 6l1 15h12l1-15 M10 10v7 M14 10v7",
     star: "m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z",
+    tax: "M5 3h10l4 4v14H5z M15 3v5h5 M8 12h8 M8 16h8",
   };
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}><path d={paths[name] || paths.overview} /></svg>;
 }

@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using PFM.Models;
 using PFM.Services;
 using PFM.Services.Utils;
+using PFM.TNP.Api.Contracts.IncomeTaxReport;
+using PFM.TNP.Api.Contracts.Pension;
 
 namespace PFM.Website.Frontend;
 
@@ -49,6 +51,30 @@ public static class FrontendEndpoints
         api.MapGet("/countries", (CountryService service) => service.GetAll());
         api.MapGet("/currencies", (CurrencyService service) => service.GetAll());
         api.MapGet("/payment-methods", (PaymentMethodService service) => service.GetAll());
+
+        api.MapGet("/pensions", (PensionService service) => service.GetAll());
+        api.MapGet("/pensions/{id:guid}", async (Guid id, PensionService service) =>
+        {
+            var item = await service.GetById(id);
+            return item is null ? Results.NotFound() : Results.Ok(item);
+        });
+        api.MapPost("/pensions", async (PensionSaveRequest model, PensionService service) =>
+            await SavePension(model, () => service.Create(model)));
+        api.MapPut("/pensions/{id:guid}", async (Guid id, PensionSaveRequest model, PensionService service) =>
+            await SavePension(model, () => service.Edit(id, model)));
+        api.MapDelete("/pensions/{id:guid}", async (Guid id, PensionService service) => Result(await service.Delete(id)));
+
+        api.MapGet("/income-tax-reports", (IncomeTaxReportService service) => service.GetAll());
+        api.MapGet("/income-tax-reports/{id:guid}", async (Guid id, IncomeTaxReportService service) =>
+        {
+            var item = await service.GetById(id);
+            return item is null ? Results.NotFound() : Results.Ok(item);
+        });
+        api.MapPost("/income-tax-reports", async (IncomeTaxReportSaveRequest model, IncomeTaxReportService service) =>
+            await SaveIncomeTaxReport(model, () => service.Create(model)));
+        api.MapPut("/income-tax-reports/{id:guid}", async (Guid id, IncomeTaxReportSaveRequest model, IncomeTaxReportService service) =>
+            await SaveIncomeTaxReport(model, () => service.Edit(id, model)));
+        api.MapDelete("/income-tax-reports/{id:guid}", async (Guid id, IncomeTaxReportService service) => Result(await service.Delete(id)));
 
         api.MapGet("/accounts/{accountId:int}/expenses", (int accountId, ExpenseService service) =>
             service.GetAll(new ExpenseSearchParamModel { AccountId = accountId }));
@@ -122,6 +148,34 @@ public static class FrontendEndpoints
             var items = await expenses.GetAll(new ExpenseSearchParamModel { AccountId = accountId });
             return Results.Ok(new { aggregates = overtime.Aggregates, expenses = items.Where(x => x.ExpenseTypeName == name) });
         });
+    }
+
+    private static Task<IResult> SavePension(PensionSaveRequest model, Func<Task<bool>> save)
+    {
+        var errors = new Dictionary<string, string[]>();
+        if (string.IsNullOrWhiteSpace(model.SchemeName))
+            errors[nameof(model.SchemeName)] = ["A scheme name is required."];
+        if (model.CurrencyId <= 0)
+            errors[nameof(model.CurrencyId)] = ["Choose a currency."];
+        if (model.CountryId <= 0)
+            errors[nameof(model.CountryId)] = ["Choose a country."];
+        if (!string.IsNullOrWhiteSpace(model.LoginUrl) &&
+            (!Uri.TryCreate(model.LoginUrl, UriKind.Absolute, out var loginUri) ||
+             loginUri.Scheme != Uri.UriSchemeHttp && loginUri.Scheme != Uri.UriSchemeHttps))
+            errors[nameof(model.LoginUrl)] = ["Enter a valid http or https URL."];
+        return errors.Count == 0 ? Save(model, save) : Task.FromResult<IResult>(Results.ValidationProblem(errors));
+    }
+
+    private static Task<IResult> SaveIncomeTaxReport(IncomeTaxReportSaveRequest model, Func<Task<bool>> save)
+    {
+        var errors = new Dictionary<string, string[]>();
+        if (model.PayDay == default)
+            errors[nameof(model.PayDay)] = ["Choose a payment date."];
+        if (model.CurrencyId <= 0)
+            errors[nameof(model.CurrencyId)] = ["Choose a currency."];
+        if (model.CountryId <= 0)
+            errors[nameof(model.CountryId)] = ["Choose a country."];
+        return errors.Count == 0 ? Save(model, save) : Task.FromResult<IResult>(Results.ValidationProblem(errors));
     }
 
     private static async Task<IResult> Save<T>(T model, Func<Task<bool>> save)

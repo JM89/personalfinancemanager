@@ -128,7 +128,7 @@ function App() {
   if (session.error) return session.status === 401
     ? <main className="login card"><BrandMark /><span className="eyebrow">A LITTLE CLARITY GOES A LONG WAY</span><h1>Your money.<br />A clearer picture.</h1><p className="muted">Welcome to Personal Finance Manager. Your space to spend thoughtfully, plan ahead, and see the bigger picture.</p><a className="button" href={`/login?redirectUri=${encodeURIComponent(path)}`}>{offline ? "Enter your workspace" : "Sign in"} <Icon name="arrow" /></a>{offline && <p className="form-note"><Icon name="info" /> Offline development · Temporary local data</p>}<Appearance /></main>
     : <main><p className="error" role="alert">Could not connect to the website: {session.error}</p></main>;
-  const navigation = [["/", "overview", "Overview"], ["/bank-accounts", "wallet", "Bank accounts"], ["/banks", "bank", "Banks"], ["/expense-types", "category", "Expense types"]];
+  const navigation = [["/", "overview", "Overview"], ["/bank-accounts", "wallet", "Bank accounts"], ["/banks", "bank", "Banks"], ["/expense-types", "category", "Expense types"], ["/tax-and-pension", "tax", "Tax & Pension"]];
   const active = navigation.find(([to]) => to !== "/" && path.startsWith(to))?.[0] || "/";
   return <div className="layout"><aside className="sidebar"><Link className="brand" to="/"><BrandMark /><span>PFM<span className="brand-subtitle">PERSONAL FINANCE</span></span></Link><span className="nav-label">WORKSPACE</span><nav aria-label="Main navigation">
     {navigation.map(([to, icon, label]) => <Link key={to} to={to} className={active === to ? "active" : ""} aria-current={active === to ? "page" : undefined}><Icon name={icon} />{label}{active === to && <span className="active-dot" />}</Link>)}
@@ -143,6 +143,7 @@ function Page({ path, offline }) {
   if (parts[0] === "expense-types") return <div className="configuration-page"><ExpenseTypes parts={parts} /></div>;
   if (parts[0] === "banks") return <div className="configuration-page"><Banks parts={parts} /></div>;
   if (parts[0] === "bank-accounts") return <div className="configuration-page"><Accounts parts={parts} /></div>;
+  if (parts[0] === "tax-and-pension") return <div className="configuration-page"><TaxAndPension parts={parts} /></div>;
   const kinds = { expenses: "expenses", incomes: "incomes", savings: "savings", "atm-withdraws": "withdrawals", "budget-plans": "budgets" };
   if (Object.hasOwn(kinds, parts[0]) && parts[2]) return <Movements key={path} kind={kinds[parts[0]]} parts={parts} offline={offline} />;
   return <section><h1>Page not found</h1><Link to="/">Go to dashboard</Link></section>;
@@ -224,6 +225,45 @@ function Accounts({ parts }) {
       fields={[{ name: "name", label: "Name", required: true, placeholder: "e.g. Everyday spending" }, { name: "bankId", label: "Bank", options: data[0], required: true }, { name: "currencyId", label: "Currency", options: data[1], required: true, hint: "Balances and activity use this account’s currency." }, { name: "initialBalance", label: "Initial balance", type: "number", step: "0.01", hint: "Your opening balance before adding any activity." }, { name: "isSavingAccount", label: "Saving account", type: "checkbox", hint: "Make this account available as a savings destination." }]}
       onSave={(model) => request("/accounts", { method: "POST", body: model })} />
     : <section><div className="heading"><div><span className="eyebrow">EVERY ACCOUNT, IN VIEW</span><h1>Bank accounts</h1><p className="muted">Your everyday essentials and tomorrow’s possibilities.</p></div><Link className="button" to="/bank-accounts/create"><Icon name="plus" />Add account</Link></div><Table rows={data[0]} columns={[["name", "Name", (r) => <Link className="account-name" to={`/${r.id}`}><span className="account-icon"><Icon name="wallet" /></span>{r.name}</Link>], ["bankName", "Bank"], ["currencyName", "Currency"], ["currentBalance", "Balance", (r) => r.displayedCurrentBalance || money(r.currentBalance)], ["isFavorite", "Favorite", (r) => r.isFavorite ? <span className="badge positive">Favorite</span> : "—"]]} actions={(r) => <><Action icon="star" label={`Set ${r.name} as favorite`} onClick={async () => { await request(`/accounts/${r.id}/favorite`, { method: "POST" }); setRefresh(refresh + 1); }}>Favorite</Action>{r.canBeDeleted && <Action danger icon="delete" label={`Delete ${r.name}`} confirmation={`“${r.name}” will be removed from your accounts.`} onClick={async () => { await request(`/accounts/${r.id}`, { method: "DELETE" }); setRefresh(refresh + 1); }}>Delete</Action>}</>} /></section>}</Loader>;
+}
+
+function TaxAndPension({ parts }) {
+  const kind = parts[1] === "income-tax-reports" ? "income-tax-reports" : "pensions";
+  const config = kind === "pensions"
+    ? { base: "/tax-and-pension/pensions", api: "/pensions", title: "Pensions", description: "Keep your pension schemes and latest balances together.", addLabel: "Add pension" }
+    : { base: "/tax-and-pension/income-tax-reports", api: "/income-tax-reports", title: "Income tax reports", description: "Keep a clear record of taxable income and tax paid.", addLabel: "Add tax report" };
+  const action = parts[2];
+  const id = parts[3];
+  const creating = action === "create";
+  const editing = action === "edit";
+  const [refresh, setRefresh] = useState(0);
+  const state = useData(creating || editing
+    ? ["/countries", "/currencies", ...(editing ? [`${config.api}/${id}`] : [])]
+    : [config.api], refresh);
+  return <><nav className="tnp-tabs" aria-label="Tax and pension records">
+    <Link to="/tax-and-pension/pensions" aria-current={kind === "pensions" ? "page" : undefined} className={kind === "pensions" ? "active" : ""}>Pensions</Link>
+    <Link to="/tax-and-pension/income-tax-reports" aria-current={kind === "income-tax-reports" ? "page" : undefined} className={kind === "income-tax-reports" ? "active" : ""}>Income tax reports</Link>
+  </nav><Loader state={state}>{(data) => creating || editing
+    ? <Form key={parts.join("/")} title={`${editing ? "Edit" : "Create"} ${kind === "pensions" ? "pension" : "income tax report"}`} initial={editing ? data[2] : {
+      currencyId: data[1][0]?.id ?? null,
+      countryId: data[0][0]?.id ?? null,
+      ...(kind === "pensions" ? { schemeName: "", loginUrl: "", currentPot: 0, currentContribution: 0 } : { payDay: today(), taxableIncome: 0, incomeTaxPaid: 0, nationalInsurancePaid: 0 })
+    }} cancel={config.base}
+    fields={kind === "pensions"
+      ? [{ name: "schemeName", label: "Scheme name", required: true, maxLength: 100 }, { name: "loginUrl", label: "Provider website", type: "url", placeholder: "https://", hint: "Optional link to your pension provider." }, { name: "currencyId", label: "Currency", options: data[1], required: true }, { name: "countryId", label: "Country", options: data[0], required: true }, { name: "currentPot", label: "Current pension pot", type: "number", step: "0.01", required: true }, { name: "currentContribution", label: "Current contribution", type: "number", step: "0.01", required: true }]
+      : [{ name: "payDay", label: "Payment date", type: "date", required: true }, { name: "taxableIncome", label: "Taxable income", type: "number", step: "0.01", required: true }, { name: "incomeTaxPaid", label: "Income tax paid", type: "number", step: "0.01", required: true }, { name: "nationalInsurancePaid", label: "National Insurance paid", type: "number", step: "0.01", required: true }, { name: "currencyId", label: "Currency", options: data[1], required: true }, { name: "countryId", label: "Country", options: data[0], required: true }]}
+    onSave={(model) => {
+      const body = kind === "pensions"
+        ? { schemeName: model.schemeName, loginUrl: model.loginUrl || "", currencyId: Number(model.currencyId), countryId: Number(model.countryId), currentPot: Number(model.currentPot), currentContribution: Number(model.currentContribution) }
+        : { payDay: model.payDay, taxableIncome: Number(model.taxableIncome), incomeTaxPaid: Number(model.incomeTaxPaid), nationalInsurancePaid: Number(model.nationalInsurancePaid), currencyId: Number(model.currencyId), countryId: Number(model.countryId) };
+      return request(editing ? `${config.api}/${id}` : config.api, { method: editing ? "PUT" : "POST", body });
+    }} />
+    : <section><div className="heading"><div><span className="eyebrow">PLAN FOR WHAT'S AHEAD</span><h1>{config.title}</h1><p className="muted">{config.description}</p></div><Link className="button" to={`${config.base}/create`}><Icon name="plus" />{config.addLabel}</Link></div>
+      <p className="form-note"><Icon name="info" /> Amounts use the currency saved with each record.</p>
+      <Table rows={data[0]} columns={kind === "pensions"
+        ? [["schemeName", "Scheme"], ["currentPot", "Current pot", (r) => money(r.currentPot)], ["currentContribution", "Contribution", (r) => money(r.currentContribution)], ["lastUpdated", "Last updated", (r) => date(r.lastUpdated)]]
+        : [["payDay", "Payment date", (r) => date(r.payDay)], ["taxableIncome", "Taxable income", (r) => money(r.taxableIncome)], ["incomeTaxPaid", "Income tax paid", (r) => money(r.incomeTaxPaid)], ["nationalInsurancePaid", "National Insurance", (r) => money(r.nationalInsurancePaid)]]}
+      actions={(row) => <><EditOperation to={`${config.base}/edit/${row.id}`} name={kind === "pensions" ? row.schemeName : "income tax report"} />{row.canBeDeleted && <Action danger icon="delete" label={`Delete ${kind === "pensions" ? row.schemeName : "income tax report"}`} confirmation={kind === "pensions" ? `“${row.schemeName}” will be removed from your pension records.` : `The report for ${date(row.payDay)} will be removed.`} onClick={async () => { await request(`${config.api}/${row.id}`, { method: "DELETE" }); setRefresh(refresh + 1); }}>Delete</Action>}</>} /></section>}</Loader></>;
 }
 
 const movementConfig = {

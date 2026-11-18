@@ -56,7 +56,11 @@ workflow without starting the backend stack.
 - Website endpoints adapt the existing .NET website models; they are not a
   replacement for, or a change to, the backend API contracts.
 - Both modes use the same React pages. Live shows the authenticated user's
-  data and does not display offline demo messaging. Tax & Pension is deferred.
+  data and does not display offline demo messaging. Tax & Pension screens
+  provide list, create, edit and delete for pensions and income tax reports.
+  Live uses the existing authenticated PFM API boundary; offline uses temporary
+  in-memory demo behavior. Offline CRUD and validation are verified; live
+  wiring is implemented but has not been exercised against external services.
 
 ## Alternatives considered
 

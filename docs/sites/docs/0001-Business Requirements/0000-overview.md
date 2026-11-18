@@ -42,5 +42,28 @@ The use cases are more or less detailed depending of the complexity of the funct
 | EI_08              | Movement Import                                      | Be able to import expenses and incomes by batch to an account                                    | :warning: [Issue #112](https://github.com/JM89/personalfinancemanager/issues/112) |
 | [BP_01](./BP_01)   | Budget Management                                    | Be able to create / update / view a budget plan and start/stop it.                               |                                                                                   |
 | AT_01              | Salary Management                                    | Be able to create / update / delete salary details.                                              | :heavy_minus_sign:                                                                |
-| AT_02              | Pension Management                                   | Be able to create / update / delete pension details.                                             | :warning: [Issue #115](https://github.com/JM89/personalfinancemanager/issues/115) |
-| AT_03              | Tax Management                                       | Be able to create / update / delete tax details.                                                 | :warning: [Issue #115](https://github.com/JM89/personalfinancemanager/issues/115) |
+| AT_02              | Pension Management                                   | Website users can list, create, edit and delete pension records.                                 | :heavy_check_mark: |
+| AT_03              | Tax Management                                       | Website users can list, create, edit and delete income tax reports.                              | :heavy_check_mark: |
+
+## Tax & Pension website scope
+
+**Use case:** As an authenticated PFM user, I want to manage my pension
+records and income tax reports in the website.
+
+| Given | When | Then |
+| ----- | ---- | ---- |
+| The user is signed in to the live website | They open Pension or Tax Management | The website lists their records through the existing authenticated PFM API boundary. |
+| The user is using either website mode | They create or edit a record | The saved record appears in the list with its updated values. |
+| The user is using either website mode | They delete a record | The record is removed from the list. |
+| The user is using offline demo mode | They manage either record type | The website uses in-memory demo behavior; changes are temporary and reset when the host stops. |
+
+Pension records contain `SchemeName`, `LoginUrl`, `CurrencyId`, `CountryId`,
+`CurrentPot`, `CurrentContribution` and `LastUpdated`. Income tax reports
+contain `CurrencyId`, `CountryId`, `TaxableIncome`, `IncomeTaxPaid`,
+`NationalInsurancePaid` and `PayDay`. Offline acceptance, including CRUD and
+validation for both record types, is verified. Live API wiring is implemented,
+but live runtime behavior against external services was not exercised here.
+
+## Proposals
+
+- [Monthly finance workflow proposal](./monthly-finance-workflow-proposal.md) — **PROPOSED**, not approved or implemented; assessed 2026-11-18. Existing requirement statuses are unchanged.

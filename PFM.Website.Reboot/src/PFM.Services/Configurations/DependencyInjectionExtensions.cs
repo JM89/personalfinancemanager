@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PFM.Services.ExternalServices;
 using PFM.Services.ExternalServices.InMemoryStorage;
+using PFM.Services.ExternalServices.TaxAndPensionApi;
 using PFM.Services.Mappers;
 using PFM.Services.Persistence;
 using PFM.Website.Configurations;
@@ -34,7 +35,9 @@ public static class DependencyInjectionExtensions
             .AddSingleton<ExpenseService>()
             .AddSingleton<PaymentMethodService>()
             .AddSingleton<MovementSummaryService>()
-            .AddSingleton<BudgetPlanService>();
+            .AddSingleton<BudgetPlanService>()
+            .AddSingleton<PensionService>()
+            .AddSingleton<IncomeTaxReportService>();
     }
     
     private static IServiceCollection AddPfmApi(this IServiceCollection services, PfmApiOptions options, bool isDevelopmentEnvironment)
@@ -53,7 +56,9 @@ public static class DependencyInjectionExtensions
                     .AddSingleton<IExpenseApi, ExpenseInMemory>()
                     .AddSingleton<IPaymentMethodApi, PaymentMethodInMemory>()
                     .AddSingleton<IMovementSummaryApi, MovementSummaryInMemory>()
-                    .AddSingleton<IBudgetPlanApi, BudgetPlanInMemory>();
+                    .AddSingleton<IBudgetPlanApi, BudgetPlanInMemory>()
+                    .AddSingleton<IPensionApi, PensionInMemory>()
+                    .AddSingleton<IIncomeTaxReportApi, IncomeTaxReportInMemory>();
                 return services;
             }
 
@@ -90,7 +95,9 @@ public static class DependencyInjectionExtensions
                 .AddPfmApiClient<IExpenseApi>(apiConfigs, refitSettings, httpClientHandler)
                 .AddPfmApiClient<IPaymentMethodApi>(apiConfigs, refitSettings, httpClientHandler)
                 .AddPfmApiClient<IMovementSummaryApi>(apiConfigs, refitSettings, httpClientHandler)
-                .AddPfmApiClient<IBudgetPlanApi>(apiConfigs, refitSettings, httpClientHandler);
+                .AddPfmApiClient<IBudgetPlanApi>(apiConfigs, refitSettings, httpClientHandler)
+                .AddPfmApiClient<IPensionApi>(apiConfigs, refitSettings, httpClientHandler)
+                .AddPfmApiClient<IIncomeTaxReportApi>(apiConfigs, refitSettings, httpClientHandler);
 
             return services;
         }
