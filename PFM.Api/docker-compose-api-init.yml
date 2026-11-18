@@ -54,9 +54,9 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # (logs via seq)
       APP_OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889 # OTEL defaults
-      APP_ConnectionStrings__PFMConnection: Server=db-server,1433;Database=PFM_BANK_DB;User Id=PFM_BANK_API_SVC;Password=Helloworld123!;TrustServerCertificate=True
       APP_ApplicationSettings__AuthOptions__Authority: http://keycloak:8080/realms/pfm
       APP_ApplicationSettings__AuthOptions__ValidateIssuer: false
+      APP_ApplicationSettings__DatabaseOptions__ConnectionString: 'Server=mysql-db-server;Port=3306;User ID=root;Password="${MYSQL_ADMIN_PASSWORD:?Set MYSQL_ADMIN_PASSWORD in PFM.Infra/configs/.env}";Database=PFM_TNP_DB'
       AWS_ACCESS_KEY_ID: XX
       AWS_SECRET_ACCESS_KEY: XX
     container_name: pfm-tnp-api

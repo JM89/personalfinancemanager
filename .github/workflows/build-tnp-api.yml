@@ -33,3 +33,5 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+      - name: Test database setup and Compose configuration
+        run: bash test/db-setup.test.sh

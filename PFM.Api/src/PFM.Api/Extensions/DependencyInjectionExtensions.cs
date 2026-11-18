@@ -64,7 +64,7 @@ namespace PFM.Api.Extensions
             
             var refitSettings = SetDefaultRefitSettings();
 
-            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
+            Func<HttpClientHandler> httpClientHandler = () => !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
 
             services
                 .SetApiClientWithCache<IBankAccountApi, IBankAccountCache, BankAccountCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
@@ -81,7 +81,7 @@ namespace PFM.Api.Extensions
             
             var refitSettings = SetDefaultRefitSettings();
             
-            var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
+            Func<HttpClientHandler> httpClientHandler = () => !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
 
             services
                 .SetApiClientWithCache<IPensionApi, IPensionCache, PensionCache>(httpClientHandler, apiOptions.EndpointUrl, refitSettings)
@@ -109,7 +109,7 @@ namespace PFM.Api.Extensions
             };
         }
 
-        private static IServiceCollection SetApiClientWithCache<TApi, TICache, TCache>(this IServiceCollection services, HttpClientHandler httpClientHandler, string endpointUrl, RefitSettings refitSettings) 
+        private static IServiceCollection SetApiClientWithCache<TApi, TICache, TCache>(this IServiceCollection services, Func<HttpClientHandler> httpClientHandler, string endpointUrl, RefitSettings refitSettings)
             where TApi : class
             where TICache : class
             where TCache : class, TICache
@@ -117,7 +117,7 @@ namespace PFM.Api.Extensions
             services
                 .AddRefitClient<TApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(endpointUrl))
-                .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
+                .ConfigurePrimaryHttpMessageHandler(httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
             
             services.AddSingleton<TICache, TCache>();
