@@ -11,7 +11,7 @@ RUN dotnet build ./PFM.MovementAggregator/PFM.MovementAggregator.csproj -c Relea
 RUN dotnet publish ./PFM.MovementAggregator/PFM.MovementAggregator.csproj -c Release -o out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/runtime:9.0
+FROM mcr.microsoft.com/dotnet/runtime:11.0
 WORKDIR /app/PFM.MovementAggregator
 COPY --from=build-env /app/out .
 
