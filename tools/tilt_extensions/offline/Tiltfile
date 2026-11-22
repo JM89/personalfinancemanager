@@ -1,0 +1,8 @@
+def run_offline_frontend():
+  local_resource(
+    'pfm-frontend-offline',
+    serve_cmd='dotnet run --project PFM.Website.Reboot/src/PFM.Website/PFM.Website.csproj --launch-profile frontend-only',
+    readiness_probe=probe(http_get=http_get_action(host='127.0.0.1', port=5110, path='/health/frontend')),
+    links=['http://localhost:5110'],
+    labels=['frontend'],
+  )

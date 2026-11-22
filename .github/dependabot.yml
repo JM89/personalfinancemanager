@@ -28,6 +28,7 @@ updates:
   - package-ecosystem: "docker" 
     directories:
       - "/*/" 
+      - "/docs/sites"
     schedule:
       interval: "weekly"
   - package-ecosystem: "github-actions" 

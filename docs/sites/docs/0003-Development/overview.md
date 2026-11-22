@@ -74,11 +74,33 @@ You can start all the backend services and dependencies using the command:
 tilt up
 ```
 
+In the Tilt dashboard, resources are grouped by `infrastructure`, `backend`,
+`frontend`, and `docs` labels.
+
 From there, you can start the main website from Visual Studio. 
 
 For frontend development, the website can use in-memory storage instead of
 calling PFM.API. The setting is
 `ApplicationSettings:ExternalServiceSettings:PfmApiOptions:Enabled`.
+
+#### Documentation site development
+
+With Docker running, use the default `tilt up` workflow to build and start the
+`pfm-docs` Docusaurus container. Dependencies are installed in the image; no
+local Node.js or npm installation is needed for the docs. Open
+[http://localhost:3000/](http://localhost:3000/) to preview the documentation.
+The docs server does not open a browser automatically. Changes hot-reload; use
+`tilt down` to stop the container.
+
+The `--offline` workflow is unchanged: `tilt up -- --offline` starts only the
+offline frontend resource, not `pfm-docs`.
+
+| Given | When | Then |
+| --- | --- | --- |
+| Docker is running | I run default `tilt up` | Tilt builds and starts `pfm-docs` at `http://localhost:3000/` without a local npm install or opening a browser |
+| `pfm-docs` is running | I change documentation | The preview hot-reloads |
+| `pfm-docs` is running | I run `tilt down` | The docs container stops |
+| I run `tilt up -- --offline` | The offline workflow starts | `pfm-docs` is not started; offline frontend behavior remains unchanged |
 
 #### Frontend-only development
 
