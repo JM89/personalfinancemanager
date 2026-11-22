@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PFM.BankAccountUpdater", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B12157A1-8C8C-4C16-A10E-BD7B7EB79459}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{72A11D77-9521-4C85-A6CF-7231C4E44A10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{56708BAA-9C3F-42BD-9BF3-B329957DCF1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56708BAA-9C3F-42BD-9BF3-B329957DCF1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56708BAA-9C3F-42BD-9BF3-B329957DCF1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72A11D77-9521-4C85-A6CF-7231C4E44A10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72A11D77-9521-4C85-A6CF-7231C4E44A10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72A11D77-9521-4C85-A6CF-7231C4E44A10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72A11D77-9521-4C85-A6CF-7231C4E44A10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
