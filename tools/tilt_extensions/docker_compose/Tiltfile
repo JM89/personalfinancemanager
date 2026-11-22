@@ -4,3 +4,8 @@ load('ext://logger', 'logger')
 def run_docker_compose(config):
   logger.info("Load docker-compose " + config["description"])
   docker_compose(config["path"], profiles=["dev"], env_file="./PFM.Infra/configs/.env")
+  build = config.get("build")
+  if build:
+    docker_build(build["image"], build["context"], only=build["only"])
+  for resource in config.get("resources", []):
+    dc_resource(resource["name"], links=resource.get("links", []), labels=resource.get("labels", []))

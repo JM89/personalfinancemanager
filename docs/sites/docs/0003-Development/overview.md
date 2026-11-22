@@ -35,7 +35,7 @@ In the `./PFM.Infra/configs`, you will find an .env-example file. If you copy th
 `MYSQL_ADMIN_PASSWORD` configures both the MySQL server and the tax-and-pension
 API. The `tnp-db` initializer creates or widens monetary columns to retain
 pence/cents. For an existing database, apply
-[the monetary-column migration](../../../../PFM.TNP.Api/setup/db/scripts/04_widen_monetary_columns.sql)
+[the monetary-column migration](https://github.com/JM89/personalfinancemanager/blob/main/PFM.TNP.Api/setup/db/scripts/04_widen_monetary_columns.sql)
 directly; rerunning the initializer also inserts demo data.
 
 #### Local keycloak secrets
@@ -74,11 +74,33 @@ You can start all the backend services and dependencies using the command:
 tilt up
 ```
 
+In the Tilt dashboard, resources are grouped by `infrastructure`, `backend`,
+`frontend`, and `docs` labels.
+
 From there, you can start the main website from Visual Studio. 
 
 For frontend development, the website can use in-memory storage instead of
 calling PFM.API. The setting is
 `ApplicationSettings:ExternalServiceSettings:PfmApiOptions:Enabled`.
+
+#### Documentation site development
+
+With Docker running, use the default `tilt up` workflow to build and start the
+`pfm-docs` Docusaurus container. Dependencies are installed in the image; no
+local Node.js or npm installation is needed for the docs. Open
+[http://localhost:3000/](http://localhost:3000/) to preview the documentation.
+The docs server does not open a browser automatically. Changes hot-reload; use
+`tilt down` to stop the container.
+
+The `--offline` workflow is unchanged: `tilt up -- --offline` starts only the
+offline frontend resource, not `pfm-docs`.
+
+| Given | When | Then |
+| --- | --- | --- |
+| Docker is running | I run default `tilt up` | Tilt builds and starts `pfm-docs` at `http://localhost:3000/` without a local npm install or opening a browser |
+| `pfm-docs` is running | I change documentation | The preview hot-reloads |
+| `pfm-docs` is running | I run `tilt down` | The docs container stops |
+| I run `tilt up -- --offline` | The offline workflow starts | `pfm-docs` is not started; offline frontend behavior remains unchanged |
 
 #### Frontend-only development
 
@@ -158,27 +180,11 @@ locally as `pfm-appearance`. The shared logo is `public/pfm-mark.svg`.
 
 #### Workspace walkthrough
 
-32 seconds, offline demo data, English captions.
-
-<video
-  controls
-  playsInline
-  preload="none"
-  poster={useBaseUrl('/img/pfm/react-expense-types.png')}
-  style={{width: '100%', borderRadius: '12px'}}
-  aria-label="PFM workspace walkthrough"
->
-  <source src={useBaseUrl('/video/pfm-workspace.webm')} type="video/webm" />
-  <track default kind="captions" src={useBaseUrl('/video/pfm-workspace.en.vtt')} srcLang="en" label="English" />
-  Your browser does not support embedded video.
-</video>
-
-<a href={useBaseUrl('/video/pfm-workspace.webm')}>Download the video</a>.
-
-**Text alternative:** Review balances and charts in **Overview**, switch themes
-under **Appearance**, then browse configuration tables. **Add expense type**
-sets a name, color and dashboard visibility. Deletion requires confirmation;
-**Keep item** cancels. The tour saves and deletes nothing.
+Review balances and charts in **Overview**, switch themes under
+**Appearance**, then browse configuration tables. **Add expense type** sets a
+name, color and dashboard visibility. Deletion requires confirmation; **Keep
+item** cancels. The walkthrough uses temporary offline demo data and saves or
+deletes nothing.
 
 ##### Configuration at a glance
 
@@ -192,9 +198,8 @@ sets a name, color and dashboard visibility. Deletion requires confirmation;
 
 ##### Refreshing these captures
 
-Refresh `react-*.png`, `video/pfm-workspace.webm`, captions and the text
-alternative together. Use offline demo data only; preserve historical
-Blazor screenshots. Recording used temporary local
+Refresh `react-*.png` and the text walkthrough together. Use offline demo data
+only; preserve historical Blazor screenshots. Captures used temporary local
 [Playwright](https://playwright.dev/docs/videos)
 ([license](https://github.com/microsoft/playwright/blob/main/LICENSE)) and Chrome,
 not a project dependency.

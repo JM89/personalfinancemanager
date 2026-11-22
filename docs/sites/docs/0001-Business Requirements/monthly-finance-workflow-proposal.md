@@ -41,10 +41,10 @@ The contribution-total header also says **"15th next month"**, whose meaning rem
 | Tax review | Create/list/edit/delete date-based reports: currency, country, taxable income, tax paid, NI paid and payday. No combined April-March grid, annual totals or threshold view. | Review monthly tax values alongside pension information and agreed period totals; any threshold indicator must use an agreed, labelled rule. |
 | Pension review | Scheme name/link, country/currency, current pot/contribution and last-updated snapshot; edits overwrite current values. | Preserve monthly sacrifice, percentage and contribution history associated with the relevant reporting month, rather than replacing it with the latest snapshot. |
 
-Implementation evidence: [website workflows](../../../../PFM.Website.Reboot/src/PFM.Website.Client/src/main.jsx),
-[live transfer behavior](../../../../PFM.Api/src/PFM.Services/MovementStrategy/InternalTransferMovementStrategy.cs),
-[tax-report fields](../../../../PFM.TNP.Api/src/Api.Contracts/IncomeTaxReport/IncomeTaxReportSaveRequest.cs),
-and [pension snapshot updates](../../../../PFM.TNP.Api/src/Services/PensionService.cs).
+Implementation evidence: [website workflows](https://github.com/JM89/personalfinancemanager/blob/main/PFM.Website.Reboot/src/PFM.Website.Client/src/main.jsx),
+[live transfer behavior](https://github.com/JM89/personalfinancemanager/blob/main/PFM.Api/src/PFM.Services/MovementStrategy/InternalTransferMovementStrategy.cs),
+[tax-report fields](https://github.com/JM89/personalfinancemanager/blob/main/PFM.TNP.Api/src/Api.Contracts/IncomeTaxReport/IncomeTaxReportSaveRequest.cs),
+and [pension snapshot updates](https://github.com/JM89/personalfinancemanager/blob/main/PFM.TNP.Api/src/Services/PensionService.cs).
 
 ## Draft user stories and acceptance criteria
 

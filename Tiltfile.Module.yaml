@@ -2,21 +2,61 @@ configs:
     - description: PFM.Infra
       path: "./PFM.Infra/docker-compose-infra.yml"
       type: "docker_compose"
+      resources:
+        - {name: "base-img-terraform-aws-cli", labels: ["infrastructure"]}
+        - {name: "db-server", labels: ["infrastructure"]}
+        - {name: "localstack", labels: ["infrastructure"]}
+        - {name: "eventstore", labels: ["infrastructure"]}
+        - {name: "keycloak", labels: ["infrastructure"]}
+        - {name: "keycloak-init", labels: ["infrastructure"]}
+        - {name: "aspire-dashboard", labels: ["infrastructure"]}
+        - {name: "mysql-db-server", labels: ["infrastructure"]}
     - description: PFM.API
       path: "./PFM.Api/docker-compose-api-init.yml"
       type: "docker_compose"
+      resources:
+        - {name: "main-db", labels: ["infrastructure"]}
+        - {name: "pfm-bank-api", labels: ["backend"]}
+        - {name: "pfm-tnp-api", labels: ["backend"]}
+        - {name: "iac-batch-movements", labels: ["infrastructure"]}
     - description: PFM.BankAccountUpdater
       path: "./PFM.BankAccountUpdater/docker-compose-init.yml"
       type: "docker_compose"
+      resources:
+        - {name: "evs-sub", labels: ["infrastructure"]}
     - description: PFM.MovementAggregator
       path: "./PFM.MovementAggregator/docker-compose-init.yml"
       type: "docker_compose"
+      resources:
+        - {name: "evs-sub-mvt-aggregator", labels: ["infrastructure"]}
+        - {name: "mvt-aggregator-db", labels: ["infrastructure"]}
     - description: PFM.Bank.Api
       path: "./PFM.Bank.Api/docker-compose-api-init.yml"
       type: "docker_compose"
+      resources:
+        - {name: "bank-db", labels: ["infrastructure"]}
     - description: PFM.TNP.Api
       path: "./PFM.TNP.Api/docker-compose-api-init.yml"
       type: "docker_compose"
+      resources:
+        - {name: "tnp-db", labels: ["infrastructure"]}
     - description: PFM.Website.Reboot
       path: "./PFM.Website.Reboot/docker-compose-init.yml"
       type: "docker_compose"
+      resources:
+        - {name: "pfm-website-iac", labels: ["infrastructure"]}
+        - {name: "pfm-api", labels: ["backend"]}
+        - {name: "pfm-bank-updater", labels: ["backend"]}
+        - {name: "pfm-mvt-aggregator", labels: ["backend"]}
+        - {name: "pfm-website", labels: ["frontend"]}
+    - description: PFM.Documentation
+      path: "./docs/sites/docker-compose.yml"
+      type: "docker_compose"
+      build:
+        image: "pfm-docs"
+        context: "./docs/sites"
+        only: ["Dockerfile", "package.json", "package-lock.json"]
+      resources:
+        - name: "pfm-docs"
+          links: ["http://localhost:3000"]
+          labels: ["docs"]

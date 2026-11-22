@@ -2,8 +2,6 @@
 
 ## List
  
-![MET_01 (1).png](../../static/img/pfm/MET_01%20(1).png)
-
 Actions available: 
 * Sort
 * Create
@@ -12,8 +10,6 @@ Actions available:
 * Set as Favorite
 
 ## Create / Edit account
-
-![MET_01 (2).png](../../static/img/pfm/MET_01%20(2).png)
 
 | Property        | Type     | Description                                 | Required | Size    | Other constraints              |
 | --------------- | -------- | ------------------------------------------- | -------- | ------- | ------------------------------ |

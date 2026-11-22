@@ -1,0 +1,34 @@
+name: Build documentation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs/sites
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: docs/sites/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
+      - name: Smoke-test docs container
+        run: |
+          trap 'docker compose down' EXIT
+          docker compose up --build --detach --wait --wait-timeout 180
+          curl --fail --silent --show-error http://127.0.0.1:3000/ > /dev/null
