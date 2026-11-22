@@ -1,5 +1,7 @@
 FROM node:24-alpine
 
+RUN npm install --global npm@12.2.3
+
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
