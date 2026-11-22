@@ -13,7 +13,7 @@ Actions available:
 
 ## Create / Edit account
 
-![MET_01 (2).png](../../static/img/pfm/MET_01%20(2).png)
+![MET_01 (2).PNG](../../static/img/pfm/MET_01%20(2).PNG)
 
 | Property        | Type     | Description                                 | Required | Size    | Other constraints              |
 | --------------- | -------- | ------------------------------------------- | -------- | ------- | ------------------------------ |
