@@ -48,7 +48,7 @@ configs:
         - {name: "pfm-api", labels: ["backend"]}
         - {name: "pfm-bank-updater", labels: ["backend"]}
         - {name: "pfm-mvt-aggregator", labels: ["backend"]}
-        - {name: "pfm-website", labels: ["frontend"]}
+        - {name: "pfm-website", labels: ["frontend"], links: ["https://localhost:7143/index.html"]}
     - description: PFM.Documentation
       path: "./docs/sites/docker-compose.yml"
       type: "docker_compose"

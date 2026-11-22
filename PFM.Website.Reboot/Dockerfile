@@ -1,4 +1,4 @@
-FROM node:24-alpine AS frontend
+FROM node:26-alpine AS frontend
 WORKDIR /app
 COPY src/PFM.Website.Client/package*.json ./
 RUN npm ci

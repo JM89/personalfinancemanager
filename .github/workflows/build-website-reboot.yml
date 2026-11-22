@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '26'
           cache: npm
           cache-dependency-path: PFM.Website.Reboot/src/PFM.Website.Client/package-lock.json
       - name: Install frontend dependencies
@@ -61,7 +61,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '26'
           cache: npm
           cache-dependency-path: PFM.Website.Reboot/src/PFM.Website.Client/package-lock.json
       - name: Build React for publishing
