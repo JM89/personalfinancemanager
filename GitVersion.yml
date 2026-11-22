@@ -1,7 +1,11 @@
-mode: Mainline
-branches:
-  main:
-    tag: ''
-    increment: Minor
-    prevent-increment-of-merged-branch-version: true 
-    track-merge-target: false
+workflow: GitFlow/v1
+calculation:
+  tag-prefix: '[vV]'
+  branches:
+    main:
+      label: ''
+      mode: ContinuousDeployment
+      increment: Minor
+      prevent-increment:
+        of-merged-branch: true
+      track-merge-target: false

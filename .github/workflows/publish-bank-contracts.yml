@@ -49,20 +49,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup GitVersion
-        uses: gittools/actions/gitversion/setup@v3.1.3
+      - name: Setup .NET SDK for GitVersion
+        uses: actions/setup-dotnet@v4
         with:
-          versionSpec: '5.x'
+          dotnet-version: '10.0.x'
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v5.0.0
+        with:
+          versionSpec: '7.0.x'
 
       - name: Execute GitVersion
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v3.1.3
-        with:
-          useConfigFile: true
+        uses: gittools/actions/gitversion/execute@v5.0.0
         
       - name: Display GitVersion outputs (step output)
         run: |
-          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+          echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
 
       - name: Log in to access GitHub Packages 
         run: dotnet nuget add source --username ${{ env.GITHUB_ORG }} --password ${{ secrets.PAT_WRITE_PACKAGES }} "https://nuget.pkg.github.com/${{ env.GITHUB_ORG }}/index.json" --name "${{ env.GITHUB_ORG }} - GitHub Packages" --store-password-in-clear-text
@@ -80,11 +83,11 @@ jobs:
 
       - name: Pack API Contracts
         working-directory: ${{ env.WORKDIR }}/src/${{ env.API_TARGET_LIB }}
-        run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.fullSemVer }}
+        run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.semVer }}
       
       - name: Pack Event Contracts
         working-directory: ${{ env.WORKDIR }}/src/${{ env.EVT_TARGET_LIB }}
-        run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.fullSemVer }}
+        run: dotnet pack --configuration Release /p:Version=${{ steps.gitversion.outputs.semVer }}
 
       - name: Publish Contracts
         run: dotnet nuget push "**/*.nupkg" --api-key ${{ secrets.PAT_WRITE_PACKAGES }} --source "${{ env.GITHUB_ORG }} - GitHub Packages" --skip-duplicate
