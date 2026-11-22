@@ -75,7 +75,7 @@ public static class DependencyInjectionExtensions
                         }
                     }
                 ),
-                ExceptionFactory = httpResponse => Task.FromResult<Exception?>(null)
+                ExceptionFactory = httpResponse => ValueTask.FromResult<Exception?>(null)
             };
 
             Func<HttpClientHandler> httpClientHandler = () => isDevelopmentEnvironment

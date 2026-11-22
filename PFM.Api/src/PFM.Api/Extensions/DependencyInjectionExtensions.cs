@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using PFM.Api.Settings;
 using PFM.Services.Caches;
 using PFM.Services.Events;
@@ -105,7 +105,7 @@ namespace PFM.Api.Extensions
                         }
                     }
                 ),
-                ExceptionFactory = httpResponse => Task.FromResult<Exception?>(null)
+                ExceptionFactory = httpResponse => ValueTask.FromResult<Exception?>(null)
             };
         }
 
@@ -158,19 +158,10 @@ namespace PFM.Api.Extensions
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
                 {
                     {
-                        new OpenApiSecurityScheme
-                        {
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
-                            Reference = new OpenApiReference
-                            {
-                                Id = "Bearer",
-                                Type = ReferenceType.SecurityScheme
-                            }
-                        },
+                        new OpenApiSecuritySchemeReference("Bearer", document),
                         new List<string>()
                     }
                 });
