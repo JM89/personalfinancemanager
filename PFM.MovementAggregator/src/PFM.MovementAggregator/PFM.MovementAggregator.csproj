@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-PFM.MovementAggregator-324c1c51-3256-4fa1-b427-40b67db975f8</UserSecretsId>
@@ -13,10 +13,10 @@
   <ItemGroup>
     <PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="23.3.9" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.15" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.15" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.15" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.15" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="11.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="PFM.Bank.Api.Contracts" Version="5.21.0" />
     <PackageReference Include="PFM.Bank.Event.Contracts" Version="5.21.0" />

@@ -109,7 +109,7 @@ namespace PFM.BankAccountUpdater.Extensions
             var httpClientHandler = !isDevelopmentEnvironment ? new HttpClientHandler() : new HttpClientHandler { ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true };
 
             services
-                .AddRefitClient<IBankAccountApi>(refitSettings)
+                .AddRefitGeneratedClient<IBankAccountApi>(refitSettings)
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfigs))
                 .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler)
                 .AddHttpMessageHandler<AuthHeaderHandler>();
