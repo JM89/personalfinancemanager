@@ -2,8 +2,6 @@
 
 ## List
  
-![MET_05 (1).png](../../static/img/pfm/MET_05%20(1).png)
-
 Actions available: 
 * Sort
 * Create
@@ -12,8 +10,6 @@ Actions available:
 
 ## Create / Edit expense type
 
-![MET_05 (2).png](../../static/img/pfm/MET_05%20(2).png)
- 
 | Property          | Type       | Description                                                                            | Required | Size | Other constraints |
 | ----------------- | ---------- | -------------------------------------------------------------------------------------- | -------- | ---- | ----------------- |
 | Name              | Text       | Expense name                                                                       | Yes      | 50   | Unique.           |

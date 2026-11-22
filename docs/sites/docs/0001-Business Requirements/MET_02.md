@@ -2,8 +2,6 @@
  
 ## List
 
-![MET_02 (1).png](../../static/img/pfm/MET_02%20(1).png)
-
 Actions available: 
 * Sort
 * Create
@@ -11,8 +9,6 @@ Actions available:
 * Delete (with confirmation): disabled if the bank is used by at least one account. Delete the favourite branch object too. 
 
 ## Create / Edit bank
-
-![MET_02 (2).png](../../static/img/pfm/MET_02%20(2).png)
 
 | Property      | Type                   | Description                                                                                                                                            | Required | Size | Other constraints                                                                                                                                                     |
 | ------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

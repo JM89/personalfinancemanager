@@ -180,27 +180,11 @@ locally as `pfm-appearance`. The shared logo is `public/pfm-mark.svg`.
 
 #### Workspace walkthrough
 
-32 seconds, offline demo data, English captions.
-
-<video
-  controls
-  playsInline
-  preload="none"
-  poster={useBaseUrl('/img/pfm/react-expense-types.png')}
-  style={{width: '100%', borderRadius: '12px'}}
-  aria-label="PFM workspace walkthrough"
->
-  <source src={useBaseUrl('/video/pfm-workspace.webm')} type="video/webm" />
-  <track default kind="captions" src={useBaseUrl('/video/pfm-workspace.en.vtt')} srcLang="en" label="English" />
-  Your browser does not support embedded video.
-</video>
-
-<a href={useBaseUrl('/video/pfm-workspace.webm')}>Download the video</a>.
-
-**Text alternative:** Review balances and charts in **Overview**, switch themes
-under **Appearance**, then browse configuration tables. **Add expense type**
-sets a name, color and dashboard visibility. Deletion requires confirmation;
-**Keep item** cancels. The tour saves and deletes nothing.
+Review balances and charts in **Overview**, switch themes under
+**Appearance**, then browse configuration tables. **Add expense type** sets a
+name, color and dashboard visibility. Deletion requires confirmation; **Keep
+item** cancels. The walkthrough uses temporary offline demo data and saves or
+deletes nothing.
 
 ##### Configuration at a glance
 
@@ -214,9 +198,8 @@ sets a name, color and dashboard visibility. Deletion requires confirmation;
 
 ##### Refreshing these captures
 
-Refresh `react-*.png`, `video/pfm-workspace.webm`, captions and the text
-alternative together. Use offline demo data only; preserve historical
-Blazor screenshots. Recording used temporary local
+Refresh `react-*.png` and the text walkthrough together. Use offline demo data
+only; preserve historical Blazor screenshots. Captures used temporary local
 [Playwright](https://playwright.dev/docs/videos)
 ([license](https://github.com/microsoft/playwright/blob/main/LICENSE)) and Chrome,
 not a project dependency.

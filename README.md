@@ -9,25 +9,10 @@ interactive spending charts, and friendlier configuration forms.
 Use [the website setup](./PFM.Website.Reboot/README.md) to run it with live
 services or with offline demo data.
 
-### Pearl
+![PFM dashboard showing a sample financial overview](./docs/sites/static/img/pfm/react-dashboard-midnight.png)
 
-![PFM React dashboard in the light Pearl theme](./docs/sites/static/img/pfm/react-dashboard-pearl.png)
-
-### Midnight
-
-![PFM React dashboard in the dark Midnight theme](./docs/sites/static/img/pfm/react-dashboard-midnight.png)
-
-### Quick walkthrough
-
-[![Watch the PFM walkthrough: themes, configuration and safe deletion](./docs/sites/static/img/pfm/react-expense-types.png)](./docs/sites/static/video/pfm-workspace.webm)
-
-[Watch or download the 32-second walkthrough (WebM, about 3 MB)](./docs/sites/static/video/pfm-workspace.webm).
-The documentation site's Getting Started page includes an inline player with
-English captions. This repository-relative video link is provided because
-GitHub README Markdown does not reliably embed repository video files inline.
-
-All screenshots and the silent walkthrough use local offline demo data.
-Historical Blazor screenshots remain in the business specifications.
+A video walkthrough is available
+on the PFM Website page when you run the [Docusaurus documentation site](./docs/sites/docs/0003-Development/overview.md#documentation-site-development).
 
 Check the documentation here:
 
