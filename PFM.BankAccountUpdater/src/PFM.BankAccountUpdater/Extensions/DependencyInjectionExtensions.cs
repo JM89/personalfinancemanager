@@ -102,7 +102,7 @@ namespace PFM.BankAccountUpdater.Extensions
                 ),
                 ExceptionFactory = httpResponse =>
                 {
-                    return Task.FromResult<Exception?>(null);
+                    return ValueTask.FromResult<Exception?>(null);
                 }
             };
 
