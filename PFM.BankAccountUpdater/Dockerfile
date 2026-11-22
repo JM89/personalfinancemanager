@@ -11,7 +11,7 @@ RUN dotnet build ./PFM.BankAccountUpdater/PFM.BankAccountUpdater.csproj -c Relea
 RUN dotnet publish ./PFM.BankAccountUpdater/PFM.BankAccountUpdater.csproj -c Release -o out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/runtime:9.0
+FROM mcr.microsoft.com/dotnet/runtime:11.0
 WORKDIR /app/PFM.BankAccountUpdater
 COPY --from=build-env /app/out .
 
